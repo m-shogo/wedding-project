@@ -4,28 +4,48 @@ Status: `CURRENT_POINTER / V30_ONLY / 2026-09-02`
 
 The only current Rurubu WEDDING production version is **V30**.
 
-This file is the entry point. Do not infer current production state from an older chat/report alone.
+Do not infer current production state from an older chat/report alone.
 
 ## REQUIRED READ SET — every production run
 
 Read in this order before changing a V30 page:
 
-1. **This file** — current version / scope / hard boundaries
-2. **The actual page Visual Master image** — `assets/rurubu-v30/pXX/PXX.png`
-3. **Root machine-readable production authority** — `assets/rurubu-v30/manifest.json`
-4. **Current visual-polish / carry-over authority** — `assets/rurubu-v30/visual-polish-manifest.json`
-5. **Page-specific authority** — `assets/rurubu-v30/pXX/manifest.json`
-6. **Page polish/carry-over authority when present** — `assets/rurubu-v30/pXX/polish-manifest.json`
-7. **Pre-build understanding audit** — `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
-8. **Post-build Figma acceptance + feedback gate** — `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
-9. **Page README** if that page already has production work — `assets/rurubu-v30/pXX/README.md`
+1. **This file**
+2. **actual page Visual Master** — `assets/rurubu-v30/pXX/PXX.png`
+3. **Root manifest** — `assets/rurubu-v30/manifest.json`
+4. **V30 visual-polish/execution overrides** — `assets/rurubu-v30/visual-polish-manifest.json`
+5. **page manifest** — `assets/rurubu-v30/pXX/manifest.json`
+6. **page polish manifest when present** — `assets/rurubu-v30/pXX/polish-manifest.json`
+7. **pre-build visual audit** — `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
+8. **post-build acceptance** — `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
+9. **page README** when production already exists
 10. broader V30 docs only as needed.
 
-Do **not** treat a manifest alone as sufficient visual authority.
-
-Do **not** treat a clean layer tree as proof that old visual language is gone.
+Do not treat one manifest alone as sufficient visual authority.
 
 `VISUAL_MASTER_LOCKED ≠ FIGMA_STRUCTURE_READY ≠ FIGMA_DESIGN_COMPLETE`.
+
+## Current work ownership — USER LOCKED
+
+Current workflow:
+
+### ChatGPT
+- analyze user feedback;
+- improve Root/shared/page manifests;
+- remove contradictory older rules;
+- complete review/acceptance design;
+- prepare the Codex handoff prompt;
+- review Codex output afterward.
+
+### Codex
+- production ImageGen;
+- key-background/cutout/alpha preparation;
+- Figma writes and cleanup;
+- photo proxy placement;
+- Figma screenshots/exports;
+- Drive/Git production evidence when instructed.
+
+**ChatGPT must not jump ahead into production Figma/ImageGen while manifest/feedback work is open unless the user explicitly reassigns that work.**
 
 ## Current Git / Figma authority
 
@@ -42,7 +62,7 @@ Figma page:
 `V30_FINAL_PRODUCTION`
 
 Board:
-`V30 / FINAL PRODUCTION / 2026-09-01` — `3535:2`
+`3535:2`
 
 Page frames:
 - P01 `3535:7`
@@ -54,212 +74,185 @@ Page frames:
 - P07 `3535:19`
 - P08 `3535:21`
 
-## Locked facts / page roles
+### Known temporary Figma cleanup
 
-- A5 portrait, 8 pages
+A mistaken temporary duplicate exists:
+
+- `3708:2` — `V30 P01 / CARRYOVER REWORK / TEMP`
+
+It overlaps the P02 area and can make P02 look occupied/confusing.
+
+**Codex must delete `3708:2` before the next P01 production pass.**
+
+Do not delete or overwrite the real P02 frame `3535:9`.
+
+## Locked facts / roles
+
+- A5 portrait / 8 pages
 - trim `148 × 210 mm`
 - bleed `3 mm`
 - wedding date `2026.10.24`
-- couple names `Shogo` / `Shiori`
-- P08 decorative barcode digits `2026102400000`
+- names `Shogo` / `Shiori`
+- P08 barcode digits exactly `2026102400000`
 
-Current page roles:
+Roles:
 - P01 Cover / `るるぶ WEDDING`
 - P02 Profile + Q1/Q2
 - P03 Our Story + Q3/Q4
 - P04 All Travel Memories / Our Journey
-- P05 Friends Memories only — SHOGO FRIENDS + SHIORI FRIENDS
+- P05 Friends Memories only
 - P06 Real Life / Favorites / Best Shots + Q5/Q6
 - P07 Closing Message / Thank You
 - P08 Magazine Back Cover
 
-V20 is frozen history/reference only. Do not create V31 unless explicitly requested.
+V20 = frozen history/reference only.
 
-## Core production doctrine
+Do not create V31 unless explicitly requested.
 
-The target is:
+## New hard rule: bundled fixed display modules
 
-`REAL / REPRESENTATIVE PHOTOS`
-+
-`PAGE-SPECIFIC AUTHORED IMAGE-GENERATED / PREPARED ART`
-+
-`PRECISE FIGMA COMPOSITION / MASKS / SOURCE-OF-TRUTH TEXT`
-+
-`DIRECT VISUAL-MASTER COMPARISON`
-+
-`VISUAL CARRY-OVER AUDIT`
-+
-`A5 / PRINT QA`
-+
-`HUMAN FEEDBACK WRITEBACK`.
+If short fixed text/numbers visually belong to one authored object with its:
+- background/vessel;
+- badge;
+- icon;
+- route/doodle;
+- flower/heart/sparkle;
+- local outline/shadow;
 
-Figma is the compositor. It must not invent a cheaper/generic publication personality merely because native primitives are easier to edit.
+then **the complete visible module may be generated/prepared as one production asset**.
 
-Image generation is not a quota. Use it where authored visual character is the job; use native Figma where precision/editability is the job.
+Visible fixed text does **not** need to remain editable in Figma.
 
-## Fixed short display text / Identity Anchor rule — HARD
-
-Short fixed text whose visible treatment is part of page identity may use generated/prepared display art. This is not limited to names.
+Exact approved strings/numbers must instead be preserved in manifest/asset metadata and QA-checked.
 
 Examples:
-- `るるぶ`
-- `WEDDING`
-- `Shogo & Shiori`
-- `OUR STORY`
-- `OUR JOURNEY`
-- Q1–Q6 labels
-- short fixed badge/feature/page labels
+- `2026` badge;
+- Date ticket;
+- Feature `1 + heading + icon + vessel`;
+- Q-number shell;
+- story-hook vessel;
+- `OUR JOURNEY / TAKE A TRIP` stamp;
+- `PAGE / 01` badge;
+- masthead/title/name lockups when fixed/approved.
 
-Keep exact FACT/source strings separately as native/source-of-truth data and QA the visible rendering.
+Keep separate/native:
+- long body copy;
+- unapproved Q&A;
+- personal/TBD facts;
+- frequently changing text;
+- replaceable real photographs.
 
-Ordinary body copy, long answers and frequently changing text remain native/editable.
+`ONE INDEPENDENT EDITORIAL OBJECT = ONE IMAGE`.
 
-`EDITABLE` does not mean `GENERIC`.
+A bundled fixed display module is **one object**, even if it contains several internal visible elements.
 
-## Photo proxy rule — HARD
+## New hard rule: clean standalone photo proxies
 
-There are two proxy jobs:
+The Visual Master is comparison authority, **not photo-slot source material**.
 
-### STRUCTURAL_PROXY
-For clipping / swap / fill-crop / frame independence only.
+Do not crop `P01.png`, `P02.png`, etc. and use those crops inside photo slots.
 
-### VISUAL_PROXY
-For hierarchy / visual mass / crop / face/focal relationship / Reference Delta.
+Do not use page screenshots as proxy photos.
 
-A people-dominant Hero requires a people-dominant visual proxy. An unrelated object/landscape can test a mask but cannot prove visual hierarchy.
+Reason:
+- page decorations/background may be baked into the crop;
+- the same flower/title/frame can appear twice;
+- photo vs page-part boundaries become unclear;
+- Reference Delta can falsely improve.
 
-## Replaceable-photo structure — HARD
+Allowed proxy sources:
+1. suitable user-provided real photo;
+2. clean standalone representative photo;
+3. clean generated standalone photo proxy with no page-layout decoration.
 
-For every real-photo slot:
-- independent clipped/masked replaceable container;
-- image separate from decorative frame/backing;
-- photo never spills beyond its slot;
-- replacement does not require rebuilding surrounding art;
-- actual swap behavior tested.
+For visual QA, the proxy must still match the slot's subject role/count/orientation/focal mass.
 
-P05 remains exactly 4 SHOGO FRIENDS + 4 SHIORI FRIENDS = 8 independent friend-photo slots.
+## Replaceable-photo structure
 
-## Generated asset granularity — HARD
+Every real-photo slot:
+- independent clipped/masked container;
+- real/proxy photo separate from decoration/frame;
+- non-destructive replacement;
+- photo never spills outside mask;
+- replacement must not remove page decoration.
 
-`ONE INDEPENDENT EDITORIAL OBJECT = ONE IMAGE FILE.`
+P05 remains 4 SHOGO FRIENDS + 4 SHIORI FRIENDS = 8 independent slots.
 
-Do not pack unrelated independently movable parts into one production bitmap.
+## Visual Carry-over Audit
 
-Simple precision geometry may remain native Figma when that preserves the Visual Master.
+Layer cleanup and visual freshness are different.
 
-## Visual Carry-over Audit — HARD
-
-This is separate from stale-layer cleanup.
-
-A page can have:
-- no hidden old layers;
-- clean Figma structure;
-- valid production PNGs;
-
-and still look old because visible FIRST BUILD assets were intentionally reused.
-
-Therefore any targeted REWORK/promotion must audit **every visible inherited production asset**.
-
-Each inherited asset must become one of:
+Every inherited visible asset after a REWORK must be:
 - `KEEP_REQUALIFIED`
 - `REWORK_REQUIRED`
 - `REPLACE_REQUIRED`
 - `SUPERSEDED`
 
-Until current-build comparison exists, status is `UNREVIEWED_CARRYOVER`.
+until checked: `UNREVIEWED_CARRYOVER`.
 
-`ADOPTED` / `PRODUCTION_RGBA` / previous PASS / unchanged status do not grant permanent visual acceptance.
+`ADOPTED`, prior PASS, unchanged, or `PRODUCTION_RGBA` do not grant permanent visual approval.
 
-When a high-saliency title/Hero/identity anchor is improved, reopen neighboring support assets automatically because the new quality bar can expose them as stale.
+## P01 current state
 
-A better REWORK may remain CURRENT while this debt is open, but label it:
+The promoted P01 REWORK at `3535:7` remains the **best CURRENT**. Do not roll back to FIRST BUILD.
 
-`PROMOTED_CURRENT_WITH_CARRYOVER_DEBT`
+But final acceptance is reopened because:
+- Feature 1/2/3 inherited modules remain stale;
+- Date ticket remains stale;
+- Bottom Story remains stale;
+- names ribbon/lower stamp/page area need requalification;
+- current Hero/Feature Visual-Master-crop proxies are now deprecated because they contain page-layout contamination risk.
 
-and do not claim final `REFERENCE_DELTA_PASS` / `FIGMA_DESIGN_COMPLETE` until material carry-over debt is resolved or explicitly deferred by the user.
-
-## Anti-UI / anti-template rule
-
-Do not equalize editorial modules merely for reuse.
-
-Preserve Visual-Master-supported differences in:
-- width/height;
-- photo sizes;
-- local offsets;
-- icon positions;
-- overlap;
-- negative space;
-- tilt only where evidenced.
-
-Do not add random scrapbook rotation just to look handmade.
-
-## Mandatory post-build acceptance
-
-After Figma work:
-1. capture the **current Figma screenshot**;
-2. representative visual-proxy check;
-3. identity-anchor check;
-4. Visual Carry-over Audit;
-5. direct Visual Master Reference Delta;
-6. anti-UI/coherence check;
-7. photo-swap/editability check;
-8. A5/print check;
-9. human feedback writeback.
-
-Do not accept a technically clean Figma file that fails the first impression or mixed-generation coherence test.
-
-## Current P01 state — IMPORTANT
-
-The targeted P01 REWORK was a clear improvement over FIRST BUILD and was validly promoted into CURRENT `3535:7`.
-
-**Do not roll back to FIRST BUILD.**
-
-However, later owner review + direct live Figma inspection confirmed multiple visible FIRST BUILD production assets were intentionally carried forward. This was not a hidden-layer deletion bug.
-
-Current P01 state is therefore:
+Current P01 state:
 
 `BEST CURRENT PROMOTED`
 +
-`VISUAL CARRYOVER DEBT OPEN`
+`CARRY-OVER DEBT OPEN`
++
+`CLEAN-PROXY DEBT OPEN`
++
+`DISPLAY-MODULE REWORK OPEN`
 +
 `FINAL PHOTO QA PENDING`.
 
-Known inherited assets requiring requalification/rework are tracked in:
-`assets/rurubu-v30/p01/polish-manifest.json`.
+Detailed next-build requirements:
+`assets/rurubu-v30/p01/polish-manifest.json`
 
-Highest-priority remaining carry-over work:
-- Feature 1/2/3 vessels;
-- Date ticket backing;
-- Bottom story vessel;
-- explicit review of names ribbon backing;
-- local requalification of OUR JOURNEY stamp / PAGE 01 around any bottom-area changes.
+## Mandatory acceptance order
 
-P02 production should not scale this partial-rework method until P01 carry-over debt is resolved or explicitly deferred.
+After Codex production:
 
-## Completion terminology
+1. current Figma screenshot
+2. `CLEAN_PROXY_PASS`
+3. `BUNDLED_DISPLAY_MODULE_PASS`
+4. `IDENTITY_ANCHOR_PASS`
+5. `VISUAL_CARRYOVER_PASS`
+6. direct Visual Master `REFERENCE_DELTA_PASS`
+7. anti-UI/coherence check
+8. photo swap / face-safe check
+9. A5 / grayscale / print checks
+10. human feedback writeback
 
-Use explicit states:
-- `FIGMA_STRUCTURE_READY`
-- `REPRESENTATIVE_VISUAL_PROXY_READY`
-- `IDENTITY_ANCHOR_PASS`
-- `VISUAL_CARRYOVER_PASS`
-- `REFERENCE_DELTA_PASS`
-- `PHOTO_SWAP_PASS`
-- `A5_PRINT_QA_PASS`
-- `HUMAN_FEEDBACK_REVIEWED`
-- `FIGMA_DESIGN_COMPLETE`
-- `FINAL_PHOTO_QA_PENDING`
-- `FINAL_PHOTO_QA_PASS`
-- `COMPLETE`
+Technical QA cannot override visual failure.
+
+## P02/P03 prevention already modeled
+
+Page polish manifests now exist:
+- `assets/rurubu-v30/p02/polish-manifest.json`
+- `assets/rurubu-v30/p03/polish-manifest.json`
+
+They explicitly define bundled fixed display-module candidates and prohibit Visual-Master-crop photo proxies.
+
+P04–P08 manifests now require the same classification during their Visual Master review before part generation; their exact module list must not be invented before PASS A/PASS B.
 
 ## Stop condition for governance
 
-Add a rule only when a concrete/repeated failure exposed a real gap, or truth/print/editability risk requires it.
+Add rules only for real/repeatable failures or truth/print/editability risk.
 
-This carry-over rule qualifies because P01 produced a real failure that stale-layer cleanup and prior Reference Delta reporting did not catch.
+The current rules were added because P01 exposed real implementation failures.
 
-Otherwise:
+When all relevant feedback is represented and contradictions are removed:
 
-`STOP WRITING RULES → MAKE THE BOOK BETTER.`
+`STOP WRITING RULES → HAND OFF TO CODEX → MAKE THE BOOK BETTER.`
 
 **CURRENT = V30. V20 = FROZEN HISTORY.**
