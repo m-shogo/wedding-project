@@ -1,14 +1,22 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "Rurubu WEDDING V30",
   "page": "P01",
-  "status": "CURRENT_REQUIRED_P01_POLISH_EXTENSION",
+  "status": "CURRENT_P01_PROMOTED_WITH_CARRYOVER_DEBT",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
     "assets/rurubu-v30/p01/manifest.json"
   ],
-  "purpose": "Convert P01 first-build human feedback into concrete visual-polish requirements without rewriting the whole page or randomizing the reference.",
+  "purpose": "Keep P01 as the best current working version while explicitly reopening inherited FIRST BUILD assets for visual requalification. Promotion is retained; final visual acceptance is not.",
+  "currentInterpretation": {
+    "promotion": "VALID_BEST_CURRENT",
+    "finalReferenceDelta": "PROVISIONAL_CARRYOVER_AUDIT_OPEN",
+    "figmaDesignComplete": false,
+    "finalPhotoQaPending": true,
+    "systemicFeedbackDebt": "OPEN_VISUAL_CARRYOVER",
+    "rule": "The promoted REWORK is clearly better than FIRST BUILD and remains CURRENT, but a better CURRENT can still contain stale inherited design language."
+  },
   "fixedShortDisplayOverrides": {
     "rule": "P01 fixed short display text may use image-generated/prepared display art when needed for fidelity; native/source-of-truth values remain separately controlled.",
     "targets": {
@@ -94,15 +102,111 @@
     ],
     "referenceDeltaRule": "Material treatment is supporting evidence only. It must never outweigh title, couple Hero, names/date or Feature readability."
   },
+  "carryOverAudit": {
+    "trigger": "Owner visually noticed previous parts remaining after REWORK promotion; direct live Figma inspection confirmed multiple visible FIRST BUILD production assets were intentionally carried into CURRENT.",
+    "importantFinding": "This is not a hidden-layer/graveyard bug. It is visible inherited production-art debt. The prior stale-layer scan passed correctly but answered the wrong question.",
+    "currentLiveEvidence": {
+      "figmaFrame": "3535:7",
+      "visibleInheritedNodesConfirmed": [
+        "P01_NAMES_RIBBON / PRODUCTION_RGBA",
+        "P01_DATE_TICKET / PRODUCTION_RGBA",
+        "P01_FEATURE_1_VESSEL / PRODUCTION_RGBA",
+        "P01_FEATURE_2_VESSEL / PRODUCTION_RGBA",
+        "P01_FEATURE_3_VESSEL / PRODUCTION_RGBA",
+        "P01_JOURNEY_STAMP / PRODUCTION_RGBA",
+        "P01_BOTTOM_STORY_VESSEL / PRODUCTION_RGBA",
+        "P01_PAGE_BADGE / PRODUCTION_RGBA",
+        "P01_BOTTOM_FLORAL_CLUSTER / PRODUCTION_RGBA",
+        "P01_AIRMAIL_BORDER / PRODUCTION_RGBA"
+      ],
+      "hiddenOldGraveyardDetected": false,
+      "meaning": "The problem is carry-over acceptance, not deletion hygiene."
+    },
+    "provisionalDecisions": [
+      {
+        "asset": "P01_WEDDING_TITLE / PRODUCTION_RGBA",
+        "decision": "KEEP_REQUALIFIED",
+        "reason": "Promoted comparison explicitly reported WEDDING PASS / MAINTAINED and current screenshot remains visually coherent with the improved masthead/Hero."
+      },
+      {
+        "asset": "P01_RIGHT_DESTINATION_CLUSTER / PRODUCTION_RGBA",
+        "decision": "KEEP_REQUALIFIED",
+        "reason": "Destination cluster was reported PASS / MAINTAINED and still reads as chapel + sea + palms + flowers in current screenshot."
+      },
+      {
+        "asset": "P01_LEFT_TROPICAL_CLUSTER / PRODUCTION_RGBA",
+        "decision": "KEEP_REQUALIFIED",
+        "reason": "Still supports the title/hero composition and does not currently read as obvious prior-build UI language."
+      },
+      {
+        "asset": "P01_AIRMAIL_BORDER / PRODUCTION_RGBA",
+        "decision": "KEEP_REQUALIFIED",
+        "reason": "Border remains consistent with the Visual Master and current page identity."
+      },
+      {
+        "asset": "P01_BOTTOM_FLORAL_CLUSTER / PRODUCTION_RGBA",
+        "decision": "KEEP_REQUALIFIED",
+        "reason": "Bottom floral closure remains visually compatible; recheck again if bottom story vessel is rebuilt."
+      },
+      {
+        "asset": "P01_NAMES_RIBBON / PRODUCTION_RGBA",
+        "decision": "UNREVIEWED_CARRYOVER",
+        "reason": "Visible names lettering improved substantially, but the older ribbon backing itself was carried forward and needs explicit coherence review against the new lockup."
+      },
+      {
+        "asset": "P01_DATE_TICKET / PRODUCTION_RGBA",
+        "decision": "REWORK_REQUIRED",
+        "reason": "Direct isolated/live review shows the same FIRST BUILD ticket backing is still used; earlier feedback already identified it as weak/compressed and postal-object physicality remains behind the stronger reworked anchors."
+      },
+      {
+        "asset": "P01_FEATURE_1_VESSEL / PRODUCTION_RGBA",
+        "decision": "REWORK_REQUIRED",
+        "reason": "Same FIRST BUILD white/pink vessel remains visible and still reads more like a compact UI module than the Visual Master teaser treatment."
+      },
+      {
+        "asset": "P01_FEATURE_2_VESSEL / PRODUCTION_RGBA",
+        "decision": "REWORK_REQUIRED",
+        "reason": "Same FIRST BUILD blue vessel remains visible; asymmetry improved at page level but inherited vessel language is still visibly old."
+      },
+      {
+        "asset": "P01_FEATURE_3_VESSEL / PRODUCTION_RGBA",
+        "decision": "REWORK_REQUIRED",
+        "reason": "Same FIRST BUILD green vessel remains visible and should be re-authored rather than merely repositioned."
+      },
+      {
+        "asset": "P01_BOTTOM_STORY_VESSEL / PRODUCTION_RGBA",
+        "decision": "REWORK_REQUIRED",
+        "reason": "Same FIRST BUILD story backing remains; earlier feedback identified insufficient occupied area/physicality and current stronger Hero/title makes that weakness more apparent."
+      },
+      {
+        "asset": "P01_JOURNEY_STAMP / PRODUCTION_RGBA",
+        "decision": "UNREVIEWED_CARRYOVER",
+        "reason": "Not obviously broken, but old material/outline language must be requalified beside any revised bottom story treatment."
+      },
+      {
+        "asset": "P01_PAGE_BADGE / PRODUCTION_RGBA",
+        "decision": "UNREVIEWED_CARRYOVER",
+        "reason": "Subordinate and possibly acceptable, but previous-pass maintenance is not enough evidence under the new carry-over rule."
+      }
+    ],
+    "adjacencyRules": [
+      "If Feature vessels are rebuilt, recheck Feature number badges/headings/photo-frame fronts as one local system.",
+      "If Date ticket is rebuilt, recheck nearby Feature 1 spacing and Hero-left collision.",
+      "If Bottom story is rebuilt, recheck bottom floral cluster, OUR JOURNEY stamp and PAGE 01 together.",
+      "If names ribbon backing changes, preserve the accepted Shogo & Shiori display-art spelling/source-of-truth and title/Hero overlap."
+    ],
+    "completionRule": "P01 carry-over debt closes only when every material inherited visible asset is KEEP_REQUALIFIED, REWORKED, REPLACED, SUPERSEDED, or explicitly deferred by the user with a reason.",
+    "blockP02ProductionUntilResolved": true
+  },
   "nextBuildPriority": [
-    "るるぶ identity anchor",
-    "Shogo & Shiori visible display lockup",
-    "representative two-person Hero visual proxy",
-    "2026 badge",
-    "Feature 1/2/3 irregular editorial rhythm",
-    "Date ticket physicality",
-    "bottom story physicality",
+    "Feature 1/2/3 inherited vessel rework",
+    "Date ticket inherited backing rework",
+    "Bottom story inherited vessel rework",
+    "Names ribbon backing explicit requalification",
+    "OUR JOURNEY stamp + PAGE 01 local requalification",
     "fresh current Figma screenshot",
-    "Reference Delta rerun"
+    "Visual Master / current coherence comparison",
+    "carry-over audit closure",
+    "then continue final-photo QA later"
   ]
 }
