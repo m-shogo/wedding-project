@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "Rurubu WEDDING V30",
   "status": "CURRENT_REQUIRED_POLISH_EXTENSION",
-  "scope": "P01-P08 systemic visual-polish rules",
+  "scope": "P01-P08 systemic visual-polish and carry-over requalification rules",
   "inherits": "assets/rurubu-v30/manifest.json",
-  "reason": "Added after P01 first-build feedback exposed visually generic native text, over-regularized editorial modules and insufficient material/print character despite structurally valid Figma output.",
+  "reason": "P01 exposed two distinct failure classes: first, visually generic native text / over-regularized modules; second, a later REWORK improved identity anchors while preserving several structurally valid FIRST BUILD assets whose older design language remained visible in CURRENT. Layer cleanliness alone did not prevent visual carry-over debt.",
   "fixedShortDisplayTextPolicy": {
     "rule": "Short fixed display text may be image-generated or prepared display art when its visual treatment is part of the page identity. This permission is not limited to personal names.",
     "eligibleExamples": [
@@ -94,5 +94,73 @@
     ],
     "qa": "Texture/material treatment must survive A5 readability and Reference Delta; if it becomes the first thing noticed, it is too strong."
   },
-  "acceptanceRule": "These policies are evaluated during docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md. Structural QA cannot waive them when they materially affect the Visual Master."
+  "visualCarryOverPolicy": {
+    "status": "MANDATORY_AFTER_ANY_TARGETED_REWORK_OR_PROMOTION",
+    "principle": "A clean Figma layer tree can still contain visually stale production assets. Existing assets receive no grandfathered visual approval merely because they were previously ADOPTED, technically valid, or unchanged in a newer build.",
+    "coreDistinctions": {
+      "layerCleanliness": "No hidden/rejected/stale nodes remain in LIVE Figma.",
+      "assetFreshness": "Every visible inherited asset still matches the current Visual Master and current page quality bar.",
+      "pageCoherence": "New and inherited assets read as one authored design language rather than different production eras mixed together."
+    },
+    "grandfatheringForbidden": true,
+    "triggers": [
+      "a REWORK/CURRENT promotion reuses any production asset from an earlier build",
+      "a high-saliency identity anchor or Hero is regenerated/replaced",
+      "the page quality bar materially increases after owner feedback",
+      "a previously weak area is fixed while neighboring assets are left unchanged",
+      "the user reports that old parts still look visible even when stale-layer scan passes"
+    ],
+    "mandatoryAuditScope": "Audit every visible inherited production asset, not only files whose node names contain OLD/FIRST/V20. Provenance and appearance both matter.",
+    "auditViews": [
+      "isolated asset where practical",
+      "asset in current page context",
+      "full-page current screenshot",
+      "Visual Master side-by-side/overlay",
+      "A5-size thumbnail when the asset affects readability or rhythm"
+    ],
+    "statuses": {
+      "UNREVIEWED_CARRYOVER": "Inherited visible asset has not yet been requalified against the current Visual Master/current quality bar.",
+      "KEEP_REQUALIFIED": "Inherited asset was explicitly rechecked in the current composition and still fits both Visual Master and current design language.",
+      "REWORK_REQUIRED": "Asset job remains valid but its current visual execution is weaker/staler than the current page.",
+      "REPLACE_REQUIRED": "Asset's visual concept/job no longer fits and should be rebuilt/replaced rather than patched.",
+      "SUPERSEDED": "Asset has been removed from CURRENT and retained only as history/QA evidence."
+    },
+    "requiredAuditFieldsPerInheritedAsset": [
+      "assetId/path",
+      "carriedFrom build or provenance",
+      "current Figma node when applicable",
+      "current status",
+      "Visual Master comparison result",
+      "coherence with newly improved neighboring assets",
+      "KEEP / REWORK / REPLACE decision",
+      "reason",
+      "last current-build acceptance evidence"
+    ],
+    "adjacencyRequalificationRule": "When a high-saliency anchor/Hero is materially improved, automatically reopen nearby supporting assets for requalification. Improving a title can make an old ribbon, ticket, feature vessel or badge visibly obsolete even if that asset did not itself regress.",
+    "maintainedDefinition": "MAINTAINED is allowed only after explicit current-build requalification. 'Unchanged since first build' is not evidence. 'No regression' is insufficient if the asset remains materially behind the Visual Master or newly raised surrounding quality bar.",
+    "coherenceGate": {
+      "question": "Does the page look like one authored magazine cover/page, or like new identity anchors placed on top of older UI-like production parts?",
+      "failExamples": [
+        "new expressive masthead + old generic feature-card vessels",
+        "new premium display lettering + old flat/cheap ticket or badge",
+        "new people-led Hero + support modules whose scale/material/rhythm still belong to the previous draft",
+        "mixed outline/shadow/material systems that reveal different production eras"
+      ],
+      "blocking": true
+    },
+    "promotionRule": "A candidate may become the best CURRENT working version while carry-over debt remains, but it must be labeled PROMOTED_CURRENT_WITH_CARRYOVER_DEBT and cannot claim final REFERENCE_DELTA_PASS / FIGMA_DESIGN_COMPLETE until all material inherited assets are KEEP_REQUALIFIED, REWORKED, REPLACED or explicitly user-deferred.",
+    "hardRejects": [
+      "treating ADOPTED as permanent visual approval",
+      "passing carry-over because node names are clean",
+      "keeping an old asset only because generation effort was already spent",
+      "marking an inherited asset PASS/MAINTAINED without explicit current-build comparison",
+      "allowing new and old design languages to coexist because the page is technically layered/editable"
+    ]
+  },
+  "feedbackDebtPolicy": {
+    "rule": "A newly discovered systemic failure pattern reopens FEEDBACK_DEBT even if the previous feedback cycle was closed. Closing one debt does not freeze future acceptance rules.",
+    "currentP01Lesson": "P01 REWORK improved major anchors and was a valid better CURRENT, but the later visual carry-over review found inherited FIRST BUILD vessels/ticket/story assets still visible. Therefore page promotion and page completion must be treated as separate decisions.",
+    "blockScalingRule": "Do not scale a production method to later pages while a newly discovered systemic carry-over failure remains unmodeled or unaudited."
+  },
+  "acceptanceRule": "These policies are evaluated during docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md. Structural QA, stale-layer scans, prior ADOPTED status, or a locally improved REWORK cannot waive visual carry-over/coherence review."
 }
