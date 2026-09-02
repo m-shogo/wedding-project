@@ -1,90 +1,95 @@
 # V30 P01 production assets
 
-Status: `P01_DESIGN_LOCKED / GIT_BINARY_SYNC_COMPLETE / FINAL_PHOTO_QA_PENDING`
+Status: `P01_BEST_CURRENT / TARGETED_POST_LOCK_PATCH_OPEN / FINAL_PHOTO_QA_PENDING`
 
 P01 CURRENT remains Figma node `3535:7`. Do not roll back to FIRST BUILD and do not create another P01 frame.
 
-The large REWORK plus 2026-09-02 targeted micro-polish are visually accepted.
+The large REWORK and first 2026-09-02 micro-polish remain the accepted baseline for:
+- clean standalone Hero + Feature photo proxies;
+- Feature 1–3 opaque-paper fix;
+- Feature 1–3 left-edge safety;
+- top-left gold rings + diamond + yellow sparkles;
+- stale/duplicate LIVE cleanup;
+- first micro-polish production binary sync.
 
-## Current accepted structure
+## Latest owner review — TARGETED PATCH OPEN
 
-Fixed display modules include:
-- `るるぶ`
-- `WEDDING`
-- `Shogo & Shiori` + ribbon
-- `2026`
-- Date ticket using `WEDDING DATE / 2026.10.24 / SAT`
-- Feature 1 / 2 / 3 display shells
-- Bottom Story
-- `OUR JOURNEY / TAKE A TRIP`
-- `PAGE / 01`
+### 1. Date + PAGE 01 internal opacity
 
-Replaceable photo slots remain separate:
-- Hero
-- Feature 1
-- Feature 2
-- Feature 3
+Targets:
+- `P01_WEDDING_DATE_2026_10_24_SAT / FINAL_REWORK_COMPLETE_MODULE`
+- `P01_PAGE_01 / FINAL_REWORK_COMPLETE_MODULE`
 
-P01.png/page screenshots remain comparison references only and must never be used as active photo fills.
+Both still appear internally translucent.
 
-## Micro-polish resolution — PASS
+Required:
+- one quick source-alpha/composite discriminator;
+- intended paper core alpha `>= 0.95`, preferably `1.00`;
+- if asset-side, regenerate/re-cut immediately;
+- no rescue white rectangle;
+- after a failure, run one sibling sweep across Date / Feature 1–3 / Bottom Story / PAGE 01 before closing page alpha integrity.
 
-Feature 1–3 interior opacity, left-edge safety and top-left ring/diamond/sparkle fidelity were fixed and reviewed from the fresh Figma CURRENT screenshot.
+### 2. Feature 3 teaser copy
 
-Reported checks:
-- intended Feature paper-core samples: alpha `255`;
-- outside transparency retained;
-- Figma node/image opacity: `1.0`;
-- Hero/background no longer visually bleeds through intended white Feature paper;
-- Feature badges/headings no longer read as accidentally clipped by the airmail border;
-- ring support cue now reads as gold wedding rings + visible diamond + yellow sparkles;
-- hidden obsolete layers: `0`;
-- duplicate same-job layers: `0`;
-- P02 `3535:9`: untouched.
+Superseded/rejected:
+- `家族と友達`
+- bare `友達`
 
-## Design gate state
+Current approved exact visible heading:
 
+**`友達との思い出`**
+
+This keeps the P01 teaser editorially descriptive while remaining friends-only and consistent with P05 Friends Memories.
+
+### 3. Airmail border depth / z-order
+
+Target:
+- `P01_AIRMAIL_BORDER / PRODUCTION_RGBA`
+
+Required layer depth:
+
+`background → airmail border → Hero/photos → authored display modules → major stickers/badges`
+
+The border frames the page. It must not read as a stronger foreground overlay cutting across content unless the Visual Master clearly requires a local overlap.
+
+## Current gate state
+
+- `BEST_CURRENT = YES`
 - `FIGMA_STRUCTURE_READY = PASS`
 - `CLEAN_PROXY_PASS = PASS`
-- `BUNDLED_DISPLAY_MODULE_PASS = PASS`
-- `MICRO_POLISH_DEBT = CLOSED`
-- `INTERNAL_OPACITY_PASS = YES`
-- `ALPHA_INTEGRITY_PASS = PASS`
-- `EDGE_SAFETY_PASS = PASS`
-- `RING_CLUSTER_PASS = YES`
-- `IDENTITY_ANCHOR_PASS = PASS`
-- `VISUAL_CARRYOVER_PASS = PASS`
-- `REFERENCE_DELTA_PASS = PASS_AFTER_MICRO_POLISH`
-- `PHOTO_SWAP_PASS = PASS`
-- `A5_GRAYSCALE_PASS = PASS`
-- `HUMAN_FEEDBACK_REVIEWED = PASS`
-- `FIGMA_DESIGN_COMPLETE = YES`
+- `FEATURE_ALPHA_FIX_PASS = PASS`
+- `FEATURE_LEFT_EDGE_PASS = PASS`
+- `RING_CLUSTER_PASS = PASS`
+- `ALPHA_INTEGRITY_PASS = REOPENED_FOR_DATE_AND_PAGE01_PLUS_SIBLING_SWEEP`
+- `COPY_SYNC_PASS = REOPENED_FOR_FEATURE_3`
+- `BORDER_Z_ORDER_PASS = REOPENED_FOR_AIRMAIL_BORDER`
+- `REFERENCE_DELTA_PASS = REOPENED_FOR_TARGETED_PATCH`
+- `FIGMA_DESIGN_COMPLETE = NO`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-## Repository sync — COMPLETE
+P02 `3535:9` remains untouched and production is blocked until the three targeted issues above are resolved or explicitly deferred by the owner.
 
-The PR branch contains the four production PNGs:
+## Fast-fail rule
 
-- `V30_P01_FEATURE_1_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
-- `V30_P01_FEATURE_2_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
-- `V30_P01_FEATURE_3_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
-- `V30_P01_TOP_LEFT_RING_DIAMOND_SPARKLE_MICRO_POLISH_RGBA.png`
+For cheap generated-asset defects:
 
-Accepted positions are Feature x `21 / 23 / 22` and ring node `3681:137` at `27,40,92×76`. Fresh screenshot SHA-256: `f83e608d943fb15131042edb43d59a503b171ca427902428e140789b134989a3`. QA Drive folder: `1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d`.
+`one quick discriminator → asset-side failureなら即 regenerate/re-cut → sibling sweep when same-family alpha failed → replace affected module only → one integrated final QA`
 
-## Fast-fail rule retained
+Do not burn context on repeated identical diagnosis.
 
-For future V30 generated-asset defects:
+## Next P01 work — CODEX ONLY
 
-`one quick discriminator → asset-side failureなら即 regenerate/re-cut → replace affected module only → one integrated final QA`.
+1. update CURRENT `3535:7` only;
+2. preserve existing Feature opacity/edge fixes and ring improvement;
+3. fix Date and PAGE 01 inside opacity if needed;
+4. run the one-time P01 white-paper sibling sweep;
+5. replace Feature 3 heading with exact `友達との思い出`;
+6. move the airmail border behind main content / just above background;
+7. remove superseded LIVE layers after replacement;
+8. capture one fresh full-page + A5 screenshot set;
+9. rerun `ALPHA_INTEGRITY → COPY_SYNC → BORDER_Z_ORDER → REFERENCE_DELTA` once;
+10. commit/push any new production PNGs and verify remote paths;
+11. only then restore `FIGMA_DESIGN_COMPLETE = YES` and allow P02.
 
-Do not waste repeated diagnosis/context on a cheap asset-side defect when regeneration is faster.
-
-## Next P01 work
-
-No further P01 design work is required until owner-approved final photographs arrive.
-
-Then replace only the four photo fills and run final-photo crop/face-safe/effective-resolution/A5/print QA.
-
-**P02 production may begin.**
+Historical baseline/rejected/superseded assets belong in Drive/Git history, not active Figma LIVE.
