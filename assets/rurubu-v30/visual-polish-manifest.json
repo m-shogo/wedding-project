@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "project": "Rurubu WEDDING V30",
   "status": "CURRENT_REQUIRED_POLISH_EXTENSION",
   "scope": "P01-P08 systemic visual-polish, display-module, photo-proxy, alpha-integrity, carry-over and execution-ownership rules",
@@ -45,6 +45,23 @@
     "hardRejects": ["checkerboard preview treated as proof of correct alpha", "outer transparency pass while intended paper/vessel interior is semi-transparent", "white/cream paper deleted by key-color cutout", "large unexplained alpha holes inside tickets/cards/labels", "Figma opacity used to hide incorrect source alpha", "placing a white rectangle behind a broken module merely to fake the intended vessel when it changes silhouette or overlap"],
     "repairRule": "If interior opacity is wrong, fix/regenerate the source/cutout alpha for the affected module. Do not normalize the whole page or add generic Figma rescue shapes."
   },
+  "fastFailRegenerationPolicy": {
+    "status": "HARD / DEFAULT_EXECUTION_BEHAVIOR",
+    "principle": "When a visible defect is likely asset-side, do not spend prolonged time diagnosing a cheap-to-regenerate module. Run one quick discriminator and regenerate/re-cut immediately when asset-side failure is likely or confirmed.",
+    "decisionRule": "If diagnosis cost or context cost is likely to exceed regeneration/cutout cost, prefer regeneration/cutout.",
+    "workflow": [
+      "run one quick asset-vs-Figma discriminator",
+      "if source/RGBA/cutout is visibly or numerically wrong, regenerate or redo cutout immediately",
+      "inspect Figma opacity/blend/mask only when the asset itself passes the quick check",
+      "replace only the affected module and delete the superseded LIVE node",
+      "after replacement run one integrated final QA pass; repeat only if that pass fails"
+    ],
+    "quickDiscriminatorExamples": ["inspect one representative interior alpha sample or alpha mask", "check source asset over one dark/high-contrast background", "confirm Figma node opacity/blend is normal when source passes"],
+    "immediateRegenerationExamples": ["paper/ticket/label interior translucency", "broken or contaminated cutout alpha", "key-color halo or lost white/cream material", "clearly weak or corrupted generated display rendering", "wrong bundled module treatment that is cheaper to regenerate than patch"],
+    "doNotWasteTimeOn": ["repeated midpoint screenshots for the same known defect", "multiple rounds of identical alpha diagnosis", "long back-and-forth status reports before fixing a cheap asset", "manual micro-patching of a broken generated module when regeneration is faster", "context-heavy reporting of every intermediate check"],
+    "reportingRule": "Prefer one concise final report with cause, replacement, QA result and remaining debt. Report mid-process only for a real blocker, destructive-risk decision, or repeated regeneration failure.",
+    "safetyBoundary": "Do not skip canonical copy/fact checks, destructive Figma safety, or final integrated QA merely to be fast."
+  },
   "editorialIrregularityPolicy": {
     "principle": "Preserve authored local irregularity; do not normalize the page into UI components and do not manufacture random messiness.",
     "check": ["module width/height differences", "photo-slot size differences", "local x/y offsets", "icon positions", "overlap depth", "edge activation", "padding/negative-space differences"],
@@ -76,8 +93,8 @@
   },
   "feedbackDebtPolicy": {
     "rule": "A newly discovered repeatable failure reopens FEEDBACK_DEBT even if an earlier cycle was closed.",
-    "newP01Lesson": "P01 showed that alpha QA must verify intended opaque interiors, not merely the existence of an alpha channel, and that A5 edge safety can fail even after structural/carry-over gates pass.",
+    "newP01Lesson": "P01 showed that alpha QA must verify intended opaque interiors, not merely the existence of an alpha channel, that A5 edge safety can fail even after structural/carry-over gates pass, and that cheap asset-side defects should fast-fail into targeted regeneration rather than prolonged diagnosis.",
     "blockScalingRule": "Do not scale a newly discovered failure mode to later pages before it is modeled and the current affected page is rechecked or explicitly deferred by the user."
   },
-  "acceptanceRule": "Structural QA, stale-layer scans, prior ADOPTED status, editable-text preference, or an alpha-channel existence check cannot waive visual fidelity, clean-proxy, intended-interior-opacity, edge-safety, carry-over or coherence review."
+  "acceptanceRule": "Structural QA, stale-layer scans, prior ADOPTED status, editable-text preference, an alpha-channel existence check, or prolonged diagnostic effort cannot waive visual fidelity, clean-proxy, intended-interior-opacity, edge-safety, carry-over or coherence review. Cheap asset-side failures should be regenerated promptly under the fast-fail policy."
 }
