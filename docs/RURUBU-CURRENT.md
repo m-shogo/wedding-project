@@ -177,9 +177,28 @@ P02 production may proceed. P01 still requires owner-photo replacement and final
 
 Replace only the four clean photo fills with final owner photos, then run final-photo and print-readiness QA. Do not change the accepted modules, masks, copy, alpha, or z-order.
 
-## P02/P03
+## P02 — FIGMA PRODUCTION COMPLETE
 
-P02/P03 have direct Visual Master/page-polish authorities already. The P01 targeted patch no longer blocks P02.
+P02 CURRENT is the official frame `3535:9`, built directly without creating a duplicate/TEMP frame.
+
+- SHOGO = left / blue;
+- SHIORI = right / pink;
+- Q1 has one clean replaceable couple-photo inset;
+- Q2 has no photo slot;
+- all three photo fills use clean standalone proxies;
+- personal profile values, Japanese readings and Q&A answers remain unapproved/TBD rather than guest-facing facts;
+- profile/Q paper interiors are opaque;
+- the airmail border is background-adjacent;
+- one full-page comparison and one targeted polish cycle completed;
+- `FIGMA_DESIGN_COMPLETE = YES`;
+- `FINAL_PHOTO_QA_PENDING = YES`;
+- `PRINT_READY = NO`.
+
+Production metadata: `assets/rurubu-v30/p02/production/manifest.json`.
+
+## P03
+
+P03 has direct Visual Master/page-polish authority but production has not started.
 
 ## P04–P08
 

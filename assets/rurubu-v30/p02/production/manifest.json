@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P02",
+  "status": "FIGMA_PRODUCTION_COMPLETE_FINAL_PHOTO_QA_PENDING",
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "currentNode": "3535:9",
+    "frameName": "V30 P02 / PROFILE / CURRENT",
+    "childCount": 76
+  },
+  "cleanStandaloneProxies": [
+    {
+      "role": "SHOGO portrait",
+      "path": "assets/rurubu-v30/p02/production/proxies/V30_P02_SHOGO_CLEAN_STANDALONE_PROXY.png",
+      "sha256": "515d903cf615be2b28d1873d166ecc7a39c2ddfd8eb5d4961dbe99b721ccad53",
+      "figmaNodeId": "3753:44",
+      "figmaImageHash": "fe7112ecb180ec8fcf8d8c7e58ff8d71be3f7ec2"
+    },
+    {
+      "role": "SHIORI portrait",
+      "path": "assets/rurubu-v30/p02/production/proxies/V30_P02_SHIORI_CLEAN_STANDALONE_PROXY.png",
+      "sha256": "c3e98ead1e61ef2cb6685e3c9d02ea40d913ebc999140ae7d3894c7a4d229e26",
+      "figmaNodeId": "3753:48",
+      "figmaImageHash": "25b9d2440b7bc4b199652b721104729c3028600b"
+    },
+    {
+      "role": "Q1 couple inset",
+      "path": "assets/rurubu-v30/p02/production/proxies/V30_P02_Q1_COUPLE_CLEAN_STANDALONE_PROXY.png",
+      "sha256": "63e143353862972d1e98748255fd591225c83867644d83a5eaa91d45e361ba57",
+      "figmaNodeId": "3753:110",
+      "figmaImageHash": "9bb700e0a39e65f53790fc320d39855665b4a082"
+    }
+  ],
+  "copySafety": {
+    "lockedVisibleCopy": ["ふたりの", "プロフィール", "SHOGO", "SHIORI", "Q1", "Q2", "PAGE", "02"],
+    "japaneseNameReadingsFactized": false,
+    "personalProfileValuesFactized": false,
+    "qaAnswersFactized": false,
+    "profileValues": "TBD em-dash placeholders, native and separately controllable",
+    "qaQuestions": "REFERENCE_ONLY native text, separately controllable",
+    "qaAnswers": "TBD native text, separately controllable"
+  },
+  "acceptance": {
+    "FIGMA_STRUCTURE_READY": "PASS",
+    "CLEAN_PROXY_PASS": "PASS",
+    "BUNDLED_DISPLAY_MODULE_PASS": "PASS",
+    "ALPHA_INTEGRITY_PASS": "PASS",
+    "COPY_SAFETY_PASS": "PASS",
+    "EDGE_SAFETY_PASS": "PASS",
+    "BORDER_Z_ORDER_PASS": "PASS",
+    "REFERENCE_DELTA_PASS": "PASS_AFTER_ONE_TARGETED_POLISH",
+    "A5_GRAYSCALE_PASS": "PASS",
+    "HIDDEN_OBSOLETE_COUNT": 0,
+    "DUPLICATE_SAME_JOB_LIVE_COUNT": 0,
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  },
+  "safety": {
+    "q1InsetPhotoSlotCount": 1,
+    "q2PhotoSlotCount": 0,
+    "borderTopLevelIndex": 1,
+    "officialP02FrameOnly": true,
+    "p01Untouched": true,
+    "p03ToP08Untouched": true
+  },
+  "evidence": {
+    "finalScreenshotSha256": "514f14b17650ecabbd60e2c570303117f0361479bea2d5563bdd5b7514050689",
+    "a5ColorSha256": "728fbbe784668f42edea464bd92f389b608734569fbf3a336b7e239e07140532",
+    "a5GrayscaleSha256": "4b716ae30310c17dadfe63de0457acede2899f39da28e4182ec1c147fdc0fced",
+    "visualMasterComparisonSha256": "b3cf7131dab506d1415860b2389117f66fe2cda0afcc2853c3b791edc3367871",
+    "driveProductionFolderId": "10TnlGlA7OEUVzv3lKGRLMGyXZ21jnpaU",
+    "driveQaFolderId": "1fvDQl2Rpe6H1JufWxtbnWc9zng8437MN"
+  }
+}
