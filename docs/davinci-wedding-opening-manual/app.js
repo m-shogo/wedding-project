@@ -3,6 +3,9 @@
   const checks = [...document.querySelectorAll('[data-progress]')];
   const progressText = document.getElementById('progressText');
   const progressBar = document.getElementById('progressBar');
+  const nowSection = document.querySelector('.now-section');
+  const todayCard = document.querySelector('.today-card');
+  const musicCheck = document.querySelector('[data-progress="music-on-timeline"]');
 
   const load = () => {
     try {
@@ -16,6 +19,40 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   };
 
+  const renderStudioState = () => {
+    if (!musicCheck || !nowSection) return;
+
+    const done = musicCheck.checked;
+    nowSection.classList.toggle('is-complete', done);
+
+    const pill = nowSection.querySelector('.status-pill');
+    if (pill) pill.textContent = done ? 'DONE ✓' : 'STEP 01';
+
+    if (!todayCard) return;
+    const kicker = todayCard.querySelector('.today-kicker');
+    const title = todayCard.querySelector(':scope > strong');
+    const text = todayCard.querySelector(':scope > p:not(.today-kicker)');
+    const link = todayCard.querySelector('.primary-button');
+
+    if (done) {
+      if (kicker) kicker.textContent = 'NEXT';
+      if (title) title.textContent = '次は、曲に目印。';
+      if (text) text.textContent = 'WELCOME、サビ、ラストの位置を曲の上に見えるようにする。';
+      if (link) {
+        link.textContent = '曲の流れを見る →';
+        link.setAttribute('href', '#timeline');
+      }
+    } else {
+      if (kicker) kicker.textContent = 'TODAY';
+      if (title) title.textContent = 'まず、曲を置く。';
+      if (text) text.textContent = 'StaRtをA1に置いて、再生できるところまで。今日はここから。';
+      if (link) {
+        link.textContent = 'やる →';
+        link.setAttribute('href', '#now');
+      }
+    }
+  };
+
   const render = () => {
     const done = checks.filter((check) => check.checked).length;
     const total = checks.length;
@@ -25,6 +62,8 @@
     checks.forEach((check) => {
       check.closest('.step')?.classList.toggle('is-done', check.checked);
     });
+
+    renderStudioState();
   };
 
   const state = load();
