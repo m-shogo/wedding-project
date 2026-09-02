@@ -1,14 +1,18 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "project": "Rurubu WEDDING V30",
   "page": "P08",
   "role": "MAGAZINE BACK COVER",
   "status": "AWAITING_VISUAL_REVIEW",
+  "productionState": "VISUAL_MASTER_PENDING",
   "inherits": "assets/rurubu-v30/manifest.json",
-  "visualMaster": {"path": "assets/rurubu-v30/p08/P08.png", "authority": "PRIMARY_VISUAL_AUTHORITY_PENDING_CHAT_REVIEW", "rule": "Do not infer page-specific geometry from prose. Fill this manifest only after visually reviewing the page master."},
+  "visualMaster": {"path": "assets/rurubu-v30/p08/P08.png", "authority": "PRIMARY_VISUAL_AUTHORITY_PENDING_CHAT_REVIEW", "rule": "Do not infer page-specific geometry or styling from prose. Fill page-specific constraints only after visually reviewing the actual page master."},
   "canonicalFacts": {"names": {"Shogo": "LOCKED", "Shiori": "LOCKED"}, "weddingDate": "2026.10.24", "barcodeDigits": "2026102400000"},
   "hardRoleRejects": ["primary thank-you-page role", "barcode digits other than 2026102400000"],
-  "requiredAfterVisualReview": ["threeSecondReadOrder", "pageSpec confirmation", "visualAuthority", "backgroundSystem", "frameSystem", "objects with normalized + Figma geometry", "layerOrder/zIndex", "overlap and mustNotCover rules", "photo masks and replaceability", "renderMode per object", "factClass per text object", "assetDecompositionPlan", "hardRejects", "ordered QA gates"],
-  "photoPolicy": {"inheritRoot": true, "rule": "Every real-photo slot must be a separate clipped/masked replaceable image; dummy sources must not spill outside frames."},
-  "qa": {"gate0": "Pending visual review of the actual page master."}
+  "constraintProfile": {"visualMasterWins": true, "defaultPositionLevel": "TARGET", "defaultSizeLevel": "TARGET", "decorativeMicroPlacementLevel": "FLEXIBLE", "locked": ["page role", "canonical facts", "barcode digits", "three-second hierarchy after review", "mustNotCover", "photo masks", "hard rejects"]},
+  "requiredAfterVisualReview": ["threeSecondReadOrder", "saliency weights 0-100", "quiet zones", "relational constraints", "pageSpec confirmation", "visualAuthority", "backgroundSystem", "frameSystem", "objects with normalized + Figma geometry", "constraintLevel and tolerance per major object", "layerOrder/zIndex", "overlap and mustNotCover rules", "photo masks, face-safe zones and replaceability", "renderMode per object", "factClass per text object", "assetDecompositionPlan only after part-generation gate", "asset padding/visual-bounds contract", "hardRejects", "ordered QA gates", "reference-delta comparison targets"],
+  "pageSpecificPending": {"relationalConstraints": "AWAITING_VISUAL_REVIEW", "quietZones": "AWAITING_VISUAL_REVIEW", "saliency": "AWAITING_VISUAL_REVIEW", "faceSafeZones": "AWAITING_VISUAL_REVIEW", "geometryTolerances": "INHERIT_ROOT_UNTIL_REVIEW"},
+  "photoPolicy": {"inheritRoot": true, "rule": "Every real-photo slot must be a separate clipped/masked replaceable image; dummy sources must not spill outside frames; face/eye safety overrides TARGET geometry when necessary."},
+  "partGenerationGate": "BLOCKED_UNTIL_VISUAL_REVIEW",
+  "qa": {"gate0": "Pending visual review of the actual page master.", "technicalQaCannotPassBeforeVisualQa": true}
 }
