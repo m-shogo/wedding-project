@@ -945,8 +945,9 @@ Rule:
 
 Page-level exception:
 
-- `P01 FIGMA_COMPLETE = YES / MAGAZINE_REBUILD / DUMMY_PHOTOS`
-- P01 final review export: `assets/rurubu-v30/p01/V30_P01_FIGMA_COMPLETE_MAGAZINE_REBUILD_2X.png`
+- `P01 FIGMA_COMPLETE = YES / VISUAL_MASTER_REBUILD / DUMMY_PHOTOS`
+- P01 final review export: `assets/rurubu-v30/p01/V30_P01_FIGMA_COMPLETE_2X.png`
+- P01 source, production, QA and rejected assets are separated into page-specific Google Drive `P01` folders and recorded in `assets/rurubu-v30/p01/README.md`.
 - P01 real-photo installation and print-ready approval remain pending.
 
 This is expected. The next work is production-quality visual execution, not another architecture rewrite.

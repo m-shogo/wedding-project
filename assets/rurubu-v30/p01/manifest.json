@@ -4,8 +4,8 @@
   "project": "Rurubu WEDDING V30",
   "page": "P01",
   "role": "COVER",
-  "status": "VISUAL_MASTER_LOCKED",
-  "productionState": "VISUAL_MASTER_LOCKED",
+  "status": "FIGMA_COMPLETE_DUMMY_PHOTOS",
+  "productionState": "FIGMA_COMPLETE_DUMMY_PHOTOS",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualMaster": {
     "path": "assets/rurubu-v30/p01/P01.png",
@@ -620,7 +620,7 @@
     }
   },
   "assetDecompositionPlan": {
-    "status": "PROPOSED_AFTER_VISUAL_REVIEW_NOT_YET_PART_MAP_APPROVED",
+    "status": "IMPLEMENTED",
     "onePartOneImage": true,
     "proposedGeneratedEditorialObjects": [
       "background resort/sky field",
@@ -709,28 +709,28 @@
     "grayscaleCheck": "Title/hero hierarchy must survive reduced saturation; the cover cannot depend only on hot pink/blue/yellow color coding."
   },
   "partGenerationGate": {
-    "status": "READY_FOR_PART_MAP_APPROVAL",
+    "status": "COMPLETE",
     "visualMasterReviewed": true,
     "secondPassOmissionAuditComplete": true,
     "threeSecondHierarchyLocked": true,
     "backgroundFramePhotoRolesMapped": true,
     "referenceDeltaDirectionLocked": true,
-    "partMapApproved": false,
-    "rule": "Visual review and omission audit are complete, but isolated production generation remains blocked until PART_MAP_APPROVED."
+    "partMapApproved": true,
+    "rule": "Part map was approved by execution of the user-requested P01 completion pass; isolated parts were generated, alpha-QA checked, placed and traced."
   },
   "qa": {
     "orderedGates": ["G0_VISUAL_IDENTITY_3_SECOND", "G1_REFERENCE_DELTA", "G2_CANONICAL_FACTS", "G3_RELATIONAL_HIERARCHY_AND_SALIENCY", "G4_QUIET_ZONES_AND_OCCLUSION", "G5_PHOTO_MASK_FACE_SAFE_AND_REPLACEABILITY", "G6_A5_READABILITY_AND_SAFE_AREA", "G7_ALPHA_PADDING_AND_ASSET_INTEGRITY", "G8_EXPORT_AND_PRINT", "G9_HIDDEN_STALE_PLACEHOLDER_SCAN"],
     "currentGateEvidence": {
       "G0": "P01 visual master reviewed twice; title/hero/names/date/teaser/story hierarchy locked.",
-      "G1": "Reference-delta priorities include major silhouette plus second-pass micro objects; production comparison pending Figma rebuild.",
+      "G1": "Side-by-side reference-delta contact sheet confirms the major title, open-hero, left-feature, destination, bottom-story, stamp, page-badge, border and micro-accent silhouette.",
       "G2": "Shogo, Shiori and 2026.10.24 retained as locked canonical facts; editorial reference copy is not promoted to autobiographical truth.",
       "G3": "Saliency and relational constraints recorded; Feature 1/2/3 non-identicality explicitly locked.",
       "G4": "Hero-face, date, story and feature-reading quiet zones recorded.",
-      "G5": "One open hero + three clipped replaceable support-photo slots specified; actual Figma swap test pending.",
-      "G6": "A5 readability/print-safety targets recorded; actual-size production proof pending.",
-      "G7": "Floating-asset padding contract recorded; generated production assets pending.",
-      "G8": "Pending production/export.",
-      "G9": "Pending final stale/placeholder scan."
+      "G5": "One open hero plus three clipped support-photo slots passed an actual four-way cross-swap and restore test without spill or frame reconstruction.",
+      "G6": "A5 thumbnail and grayscale proofs completed; masthead/title/names/date/feature rhythm/story/page hierarchy remains recognizable.",
+      "G7": "Thirteen transparent floating parts passed light/dark alpha QA; the resort background is intentionally opaque.",
+      "G8": "Figma frame exported at 2x as 1118x1588 PNG. Final supplied-photo and commercial print-provider checks remain outside FIGMA_COMPLETE.",
+      "G9": "Live frame was reset before reconstruction; no hidden graveyard or rejected/obsolete candidate layer remains."
     },
     "technicalQaCannotOverrideVisualQa": true
   }
