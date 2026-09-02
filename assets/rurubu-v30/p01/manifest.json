@@ -1,11 +1,11 @@
 {
   "schemaVersion": 4,
-  "reviewRevision": 3,
+  "reviewRevision": 4,
   "project": "Rurubu WEDDING V30",
   "page": "P01",
   "role": "COVER",
-  "status": "FIGMA_STRUCTURE_READY_VISUAL_REWORK_REQUIRED",
-  "productionState": "FIGMA_STRUCTURE_READY_VISUAL_REWORK_REQUIRED",
+  "status": "REFERENCE_DELTA_PASS_FINAL_PHOTO_QA_PENDING",
+  "productionState": "REFERENCE_DELTA_PASS_FINAL_PHOTO_QA_PENDING",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualLockAuditPolicy": "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
   "executionAcceptancePolicy": "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md",
@@ -20,7 +20,7 @@
   "reviewCompleteness": {
     "passA24PointReview": "COMPLETE",
     "passBReverseOmissionAudit": "COMPLETE",
-    "postBuildScreenshotReview": "COMPLETE_FIRST_BUILD_FOUND_VISUAL_FAILURES",
+    "postBuildScreenshotReview": "COMPLETE_REWORK_PROMOTED_CLEAR_WIN_OVER_FIRST_BUILD",
     "requiredChecklist": [
       "3-second read order",
       "background",
@@ -67,16 +67,16 @@
       "Feature 1/2/3 trend toward compact UI modules",
       "Date ticket and bottom story hook are visually weaker/compressed"
     ],
-    "rule": "Visual Master understanding remains locked, but actual Figma design acceptance is reopened until the post-build failures are corrected and a fresh current screenshot passes Reference Delta."
+    "rule": "Visual Master understanding remains locked. The targeted P01 rework passed direct CURRENT screenshot comparison and was promoted; real-photo and final print-raster QA remain pending."
   },
   "feedbackDebt": {
-    "status": "OPEN_P01_VISUAL_REWORK_REQUIRED",
+    "status": "CLOSED_P01_REWORK_PROMOTED",
     "systemicWritebackCompleted": true,
     "rootManifestUpdated": true,
     "executionAcceptanceGuideUpdated": true,
     "pageManifestUpdated": true,
-    "blockNextProductionPage": true,
-    "rule": "Do not use the first P01 implementation method as the template for P02/P03 production until this debt is closed or the user explicitly defers it."
+    "blockNextProductionPage": false,
+    "rule": "The first-build method remains rejected as a template. Future pages may reuse only the corrected lessons: representative visual proxies, identity-anchor fidelity, direct screenshot comparison, editorial asymmetry and verified real alpha."
   },
   "canonicalFacts": {
     "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
@@ -327,13 +327,21 @@
     "support": {"count": 3, "replaceable": true, "maskRequired": true, "clipsContent": true, "frameAndPhotoSeparate": true, "mustNotBleedOutsideMask": true, "visualProxyRoleMatchRequiredForReferenceDelta": true}
   },
   "assetDecompositionPlan": {
-    "status": "FIRST_BUILD_IMPLEMENTED_BUT_VISUAL_REVISIONS_REQUIRED",
+    "status": "TARGETED_REWORK_IMPLEMENTED_AND_PROMOTED",
     "onePartOneImage": true,
-    "identityAnchorsRequiringTargetedRevision": ["P01_MASTHEAD_RURUBU", "P01_NAMES_LOCKUP", "P01_YEAR_BADGE"],
-    "otherLikelyRevisionTargets": ["P01_FEATURE_1", "P01_FEATURE_2", "P01_FEATURE_3", "P01_DATE_TICKET", "P01_BOTTOM_STORY_VESSEL"],
+    "identityAnchorRevisionsCompleted": ["P01_MASTHEAD_RURUBU", "P01_NAMES_LOCKUP", "P01_YEAR_BADGE"],
+    "otherRevisionsCompleted": ["P01_FEATURE_1", "P01_FEATURE_2", "P01_FEATURE_3", "P01_DATE_TICKET", "P01_BOTTOM_STORY_VESSEL"],
     "stableRule": "Revise weak parts individually while preserving accepted relationships. Do not regenerate whole P01 merely to fix one anchor.",
     "nativePrecisionObjects": ["source-of-truth Shogo", "source-of-truth Shiori", "2026", "2026.10.24", "feature headings/copy", "bottom story copy", "PAGE 01", "photo masks/clipping frames"]
   },
+  "promotedReworkAssets": [
+    {"assetId": "P01_MASTHEAD_RURUBU_REWORK", "path": "assets/rurubu-v30/p01/V30_P01_MASTHEAD_RURUBU_REWORK_FINAL_RGBA.png", "renderMode": "generated-art + deterministic alpha cleanup", "status": "ADOPTED", "provenance": "imagegen built-in, Visual Master referenced", "dimensionsPx": {"width": 1466, "height": 827}, "alphaMode": "RGBA_TRUE_ALPHA", "sha256": "5218885f840843e8b9463a0884d2ac7b866acf96a353155e9430db8373502c7f", "layerGroup": "display-art", "page": "P01"},
+    {"assetId": "P01_NAMES_LOCKUP_REWORK", "path": "assets/rurubu-v30/p01/V30_P01_NAMES_LOCKUP_REWORK_FINAL_RGBA.png", "renderMode": "generated-art + deterministic alpha cleanup", "status": "ADOPTED", "provenance": "imagegen built-in, Visual Master referenced", "dimensionsPx": {"width": 2091, "height": 530}, "alphaMode": "RGBA_TRUE_ALPHA", "sha256": "af9e10fa4aaf1a17e995bc08d206208699bf3bccd5d23923842e64947320814b", "layerGroup": "display-art", "page": "P01"},
+    {"assetId": "P01_HERO_VISUAL_PROXY_CALIBRATION", "path": "assets/rurubu-v30/p01/V30_P01_HERO_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png", "renderMode": "Visual Master calibration crop", "status": "ADOPTED_TEMPORARY", "dimensionsPx": {"width": 750, "height": 730}, "sha256": "4992aeb4551c753514d88cf963d50768cbc4e784d03d6ab7348349f3d1e2631d", "replaceBeforeFinalPrint": true, "page": "P01"},
+    {"assetId": "P01_FEATURE_1_VISUAL_PROXY_CALIBRATION", "path": "assets/rurubu-v30/p01/V30_P01_FEATURE_1_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png", "renderMode": "Visual Master calibration crop", "status": "ADOPTED_TEMPORARY", "dimensionsPx": {"width": 162, "height": 88}, "sha256": "536c5acddaf060ac99962abf40c85747a01fb8a66dd1cc8574d971acfd10d49e", "replaceBeforeFinalPrint": true, "page": "P01"},
+    {"assetId": "P01_FEATURE_2_VISUAL_PROXY_CALIBRATION", "path": "assets/rurubu-v30/p01/V30_P01_FEATURE_2_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png", "renderMode": "Visual Master calibration crop", "status": "ADOPTED_TEMPORARY", "dimensionsPx": {"width": 160, "height": 92}, "sha256": "9db976ba34c010fa52f5af346e8f6ec2e3d50a452d92921f48e15d80f9c2859b", "replaceBeforeFinalPrint": true, "page": "P01"},
+    {"assetId": "P01_FEATURE_3_VISUAL_PROXY_CALIBRATION", "path": "assets/rurubu-v30/p01/V30_P01_FEATURE_3_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png", "renderMode": "Visual Master calibration crop", "status": "ADOPTED_TEMPORARY", "dimensionsPx": {"width": 165, "height": 88}, "sha256": "8e3ea6b9cf194bac9d209bd2f3ba568d0204ef01745896bca4037d3392ff2d18", "replaceBeforeFinalPrint": true, "page": "P01"}
+  ],
   "hardRejects": [
     "generic wedding brochure aesthetics",
     "minimal luxury cover",
@@ -392,7 +400,7 @@
       "bottom story hook is materially compressed",
       "right destination cue loses chapel/sea/palm identity"
     ],
-    "currentStatus": "FAIL_FIRST_BUILD_VISUAL_REWORK_REQUIRED"
+    "currentStatus": "PASS_REWORK_PROMOTED_2026-09-02"
   },
   "a5Qa": {
     "threeSecondTest": "At actual A5 size the cover must read immediately as るるぶ WEDDING, then the two-person couple Hero, then names/date, then Feature 1/2/3 and lower story hook.",
@@ -415,47 +423,53 @@
     "currentScreenshotReviewed": true,
     "reviewDate": "2026-09-02",
     "FIGMA_STRUCTURE_READY": true,
-    "REPRESENTATIVE_VISUAL_PROXY_READY": false,
-    "IDENTITY_ANCHOR_PASS": false,
-    "REFERENCE_DELTA_PASS": false,
+    "REPRESENTATIVE_VISUAL_PROXY_READY": true,
+    "IDENTITY_ANCHOR_PASS": true,
+    "REFERENCE_DELTA_PASS": true,
     "PHOTO_SWAP_PASS": true,
     "A5_PRINT_QA_PASS": false,
     "HUMAN_FEEDBACK_REVIEWED": true,
     "FIGMA_DESIGN_COMPLETE": false,
     "FINAL_PHOTO_QA_PENDING": true,
     "nextRequiredActions": [
-      "targeted るるぶ masthead revision",
-      "targeted Shogo & Shiori visible lockup revision",
-      "install representative two-person Hero visual proxy",
-      "targeted 2026 badge revision",
-      "restore Feature 1/2/3 editorial irregularity",
-      "strengthen Date ticket and bottom story vessel",
-      "capture fresh current Figma screenshot",
-      "rerun identity-anchor and Reference Delta gates"
-    ]
+      "replace Visual Master calibration crops with user-supplied real photos",
+      "recheck face-safe crops and photo semantics",
+      "verify effective raster resolution and final print export at A5"
+    ],
+    "promotionEvidence": {
+      "decision": "PROMOTE_REWORK",
+      "temporaryReworkNodeRemoved": "3674:2",
+      "currentNodePreserved": "3535:7",
+      "driveQaFolder": "https://drive.google.com/drive/folders/1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d",
+      "firstBuildBaselineFolder": "https://drive.google.com/drive/folders/1ggtQ4j0TCqBKm8O3hwVqkC0wbPDhZAKW",
+      "a5Readability": "PASS",
+      "grayscaleHierarchy": "PASS",
+      "photoSwap": "PASS",
+      "finalPhotoQa": "PENDING"
+    }
   },
   "qa": {
     "orderedGates": ["G0_VISUAL_IDENTITY_3_SECOND", "G1_REFERENCE_DELTA", "G2_CANONICAL_FACTS", "G3_RELATIONAL_HIERARCHY_AND_SALIENCY", "G4_QUIET_ZONES_AND_OCCLUSION", "G5_PHOTO_MASK_FACE_SAFE_AND_REPLACEABILITY", "G6_A5_READABILITY_AND_SAFE_AREA", "G7_ALPHA_PADDING_AND_ASSET_INTEGRITY", "G8_EXPORT_AND_PRINT", "G9_HIDDEN_STALE_PLACEHOLDER_SCAN"],
     "currentGateEvidence": {
-      "G0": "Visual Master understanding locked, but first Figma screenshot does not yet reproduce all identity anchors/people-led hierarchy; execution rework required.",
-      "G1": "FAIL: current screenshot diverges materially in るるぶ character, names lockup, Hero semantics, year badge and editorial rhythm.",
+      "G0": "PASS: CURRENT reads immediately as るるぶ WEDDING with a people-led couple Hero and restored identity anchors.",
+      "G1": "PASS: Visual Master / FIRST BUILD / REWORK contact sheet shows a clear rework win in masthead, names, Hero semantics, year badge and editorial rhythm.",
       "G2": "PASS: Shogo, Shiori, 2026 and 2026.10.24 source values remain controlled.",
-      "G3": "SPEC PASS / EXECUTION REWORK: hierarchy rules exist but unrelated Hero proxy prevents trustworthy visual-mass validation.",
-      "G4": "SPECIFIED; face-safe execution cannot be validated until representative people proxy is installed.",
-      "G5": "STRUCTURAL PASS: four photo slots passed cross-swap without spill/gap/frame rebuild. This is not visual-proxy acceptance.",
-      "G6": "REOPENED: prior A5 thumbnail/grayscale proof was based on visually non-representative Hero and cannot establish design completion.",
-      "G7": "PASS for first-build asset integrity/alpha evidence; revised assets must rerun relevant alpha QA.",
-      "G8": "PENDING final visual acceptance and final-photo/print handoff.",
-      "G9": "PASS: live frame reset; no hidden rejected/obsolete graveyard detected in first build."
+      "G3": "PASS: representative couple proxy restores title/Hero visual mass and three feature modules remain intentionally non-identical.",
+      "G4": "PASS for representative proxy; final real-photo crop must be rechecked.",
+      "G5": "PASS: four photo slots passed cross-swap/restore with geometry and clipping unchanged.",
+      "G6": "PASS for A5 readability, safe hierarchy and grayscale; final print-raster check remains pending with real photos.",
+      "G7": "PASS: revised display assets have real alpha; baked-checkerboard candidates were rejected.",
+      "G8": "PENDING final real-photo installation and print-raster/export handoff; visual Reference Delta has passed.",
+      "G9": "PASS: temporary REWORK was removed after promotion; hidden layers are only explicit native source-of-truth fallbacks, not a rejected-asset graveyard."
     },
     "executionSubGates": {
       "E0_CURRENT_FIGMA_SCREENSHOT_CAPTURED": "PASS",
-      "E1_REPRESENTATIVE_VISUAL_PROXY": "FAIL",
-      "E2_IDENTITY_ANCHORS": "FAIL",
-      "E3_FIRST_IMPRESSION_REFERENCE_DELTA": "FAIL",
-      "E4_ANTI_UI_COMPONENTIZATION": "FAIL_REWORK_FEATURE_STACK",
+      "E1_REPRESENTATIVE_VISUAL_PROXY": "PASS_VISUAL_MASTER_CALIBRATION_PROXY",
+      "E2_IDENTITY_ANCHORS": "PASS",
+      "E3_FIRST_IMPRESSION_REFERENCE_DELTA": "PASS_REWORK_PROMOTED",
+      "E4_ANTI_UI_COMPONENTIZATION": "PASS",
       "E5_EDITABILITY_AND_FACT_SOURCE": "PASS_WITH_DISPLAY_ART_FALLBACK_ALLOWED",
-      "E6_A5_PRINT": "PENDING_AFTER_VISUAL_REWORK",
+      "E6_A5_PRINT": "PASS_READABILITY_FINAL_RASTER_PENDING",
       "E7_HUMAN_FEEDBACK_WRITEBACK": "PASS"
     },
     "technicalQaCannotOverrideVisualQa": true

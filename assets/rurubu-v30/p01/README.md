@@ -1,10 +1,10 @@
 # V30 P01 production assets
 
-Status: `P01_FIGMA_STRUCTURE_READY / VISUAL_REWORK_REQUIRED / FINAL_PHOTO_QA_PENDING`
+Status: `P01_REFERENCE_DELTA_PASS / REWORK_PROMOTED / FINAL_PHOTO_QA_PENDING`
 
 P01 is the V30 pilot page. The live Figma frame was reset before reconstruction; V20-derived debris, hidden graveyards, obsolete placeholders and rejected candidates are not retained in the current frame.
 
-**Important:** the first rebuild proved the layer/mask/asset pipeline, but direct review of the actual Figma screenshot against `P01.png` showed material visual-fidelity failures. Therefore this page is **not** `FIGMA_DESIGN_COMPLETE` yet.
+**Current result:** the first rebuild remains historical baseline evidence. A targeted REWORK passed Visual Master / FIRST BUILD / REWORK comparison and was promoted into the existing CURRENT frame `3535:7`. The temporary REWORK frame was removed. `FIGMA_DESIGN_COMPLETE` remains false only because real-photo and final print-raster QA are still pending.
 
 Required post-build acceptance guide:
 `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
@@ -37,9 +37,22 @@ Required visual-polish extensions:
 
 These are **structural passes only**. They do not prove Visual Master fidelity.
 
-## Adopted / current production assets
+## First-build production assets — historical baseline
 
-These assets exist in the first rebuild, but `ADOPTED` does not automatically mean `VISUALLY_ACCEPTED` after human feedback.
+These assets document the first rebuild. Current Figma node IDs changed during the approved promotion; the table below is historical evidence rather than the live node map.
+
+## Promoted REWORK additions
+
+| Asset | Role | Status |
+| --- | --- | --- |
+| `V30_P01_MASTHEAD_RURUBU_REWORK_FINAL_RGBA.png` | るるぶ identity-anchor display art | ADOPTED / TRUE ALPHA VERIFIED |
+| `V30_P01_NAMES_LOCKUP_REWORK_FINAL_RGBA.png` | exact `Shogo & Shiori` expressive display art | ADOPTED / TRUE ALPHA VERIFIED |
+| `V30_P01_HERO_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png` | temporary people-led Hero calibration proxy | ADOPTED FOR VISUAL QA / REPLACE BEFORE FINAL PRINT |
+| `V30_P01_FEATURE_1_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png` | temporary Feature 1 proxy | ADOPTED FOR VISUAL QA / REPLACE BEFORE FINAL PRINT |
+| `V30_P01_FEATURE_2_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png` | temporary Feature 2 proxy | ADOPTED FOR VISUAL QA / REPLACE BEFORE FINAL PRINT |
+| `V30_P01_FEATURE_3_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png` | temporary Feature 3 proxy | ADOPTED FOR VISUAL QA / REPLACE BEFORE FINAL PRINT |
+
+Rejected generated candidates that only looked transparent because checkerboard pixels were baked into RGB were not committed. Actual alpha-channel inspection is required before adoption.
 
 | Asset | Role | First-build Figma node | Acceptance |
 | --- | --- | --- | --- |
@@ -76,7 +89,7 @@ Keep the exact approved string separately as native/source-of-truth data and QA 
 
 Long body/caption/Q&A text stays native/editable.
 
-## Post-build visual feedback — REQUIRED CALIBRATION
+## First-build visual feedback — historical calibration record
 
 Direct screenshot review against the user-provided Visual Master found these failures:
 
@@ -193,6 +206,8 @@ P01 Hero requires a two-person people-led VISUAL_PROXY before visual acceptance.
 - Source folder: [01_SOURCE_KEYED/P01](https://drive.google.com/drive/folders/1AIbUPb18DFdT035NW_3tSsCgp22Ct1-o)
 - Production folder: [02_PRODUCTION_RGBA/P01](https://drive.google.com/drive/folders/1-zfSYIrxrPnwWQuAXO8-toHZEuz-zrNr)
 - QA folder: [90_QA_EXPORT/P01](https://drive.google.com/drive/folders/1YQpvXrh8qHyv_LXLXoPYPC90dzQw3bAk)
+- FIRST BUILD baseline: [P01_FIRST_BUILD_BASELINE](https://drive.google.com/drive/folders/1ggtQ4j0TCqBKm8O3hwVqkC0wbPDhZAKW)
+- Promoted REWORK evidence: [P01_REWORK_CURRENT_QA_20260902](https://drive.google.com/drive/folders/1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d)
 - Rejected folder: [99_REJECTED_DO_NOT_USE/P01](https://drive.google.com/drive/folders/1DXJ3gIlZalOiCeytBRnm425s3W9KO-bb)
 
 Older QA exports that call the first build `FIGMA_COMPLETE` are historical evidence of the first-build pipeline, **not current visual acceptance evidence**.
@@ -201,12 +216,14 @@ Older QA exports that call the first build `FIGMA_COMPLETE` are historical evide
 
 - `VISUAL_MASTER_LOCKED = YES`
 - `PART_MAP_APPROVED = YES`
-- `ASSETS_GENERATED = YES` for the first build
+- `ASSETS_GENERATED = YES` for the promoted targeted rework
 - `FIGMA_STRUCTURE_READY = YES`
 - `PHOTO_SWAP_PASS = YES`
-- `REPRESENTATIVE_VISUAL_PROXY_READY = NO` for Hero
-- `IDENTITY_ANCHOR_PASS = NO`
-- `REFERENCE_DELTA_PASS = NO / REWORK REQUIRED`
+- `REPRESENTATIVE_VISUAL_PROXY_READY = YES` — Visual Master calibration proxy
+- `IDENTITY_ANCHOR_PASS = YES`
+- `REFERENCE_DELTA_PASS = YES / REWORK PROMOTED`
+- `A5_READABILITY = PASS`
+- `A5_PRINT_QA_PASS = NO` — real-photo raster/export check pending
 - `HUMAN_FEEDBACK_REVIEWED = YES` — systemic lessons are written back to root/page/polish authority
 - `FIGMA_DESIGN_COMPLETE = NO`
 - `FINAL_PHOTO_QA_PENDING = YES`
@@ -214,18 +231,9 @@ Older QA exports that call the first build `FIGMA_COMPLETE` are historical evide
 
 ## Next P01 work
 
-Do not restart the whole page blindly.
-
-Use targeted revision:
-1. fix `るるぶ` identity anchor;
-2. fix `Shogo & Shiori` visible display lockup while preserving exact spelling source;
-3. install representative two-person Hero visual proxy;
-4. fix `2026` badge silhouette/ecology;
-5. loosen/restore Feature 1/2/3 editorial rhythm and measured irregularity;
-6. strengthen Date ticket and bottom story vessel;
-7. add restrained local tactile print character where appropriate;
-8. capture a fresh Figma screenshot;
-9. run direct Reference Delta again;
-10. only then reconsider `FIGMA_DESIGN_COMPLETE`.
+1. replace the Visual Master calibration crops with user-supplied real photos;
+2. recheck face-safe crops and support-photo semantics;
+3. verify effective raster resolution and final A5 print export;
+4. then set `FINAL_PHOTO_QA_PASS` / `A5_PRINT_QA_PASS` and reconsider `FIGMA_DESIGN_COMPLETE`.
 
 `STRUCTURE READY ≠ VISUAL COMPLETE.`

@@ -238,6 +238,10 @@ Hard reject:
 
 If texture becomes one of the first things noticed at A5, it is too strong.
 
+## Floating-asset alpha verification
+
+A generator preview that visually resembles a checkerboard is not evidence of real transparency. Before adopting any floating PNG/RGBA asset, inspect the actual alpha channel; baked checkerboard pixels are a reject. Record alpha mode and dimensions in asset evidence, and review the placed asset on both light and dark fields when edge contamination is plausible.
+
 ## Reference Delta Gate — mandatory evidence
 
 A direct current screenshot is required. Do not validate from layer names or manifest claims.

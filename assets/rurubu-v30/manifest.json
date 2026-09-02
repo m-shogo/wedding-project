@@ -293,6 +293,7 @@
       "fields": ["canvas dimensions", "visual bounds inside canvas", "transparent padding on each side", "anchor point", "intended crop behavior"],
       "rule": "Transparent padding must not silently change perceived size or placement. Crop/trim or account for it explicitly before Figma placement."
     },
+    "alphaVerificationRule": "A checkerboard-looking generator preview is not proof of transparency. Inspect the actual alpha channel and reject baked checkerboard pixels before a floating asset is adopted.",
     "assetMetadataRequired": ["assetId", "path", "renderMode", "status", "source/provenance", "dimensions", "visual bounds", "alpha mode", "sha256 when available", "page", "layerGroup", "zIndex"],
     "statuses": ["REFERENCE_ONLY", "CANDIDATE", "ADOPTED", "SUPERSEDED", "REJECTED"]
   },
@@ -369,7 +370,7 @@
     ]
   },
   "pages": [
-    {"page": "P01", "role": "COVER", "visualMaster": "assets/rurubu-v30/p01/P01.png", "manifest": "assets/rurubu-v30/p01/manifest.json", "visualReview": "LOCKED", "figmaState": "FIGMA_STRUCTURE_READY_VISUAL_REWORK_REQUIRED"},
+    {"page": "P01", "role": "COVER", "visualMaster": "assets/rurubu-v30/p01/P01.png", "manifest": "assets/rurubu-v30/p01/manifest.json", "visualReview": "LOCKED", "figmaState": "REFERENCE_DELTA_PASS_FINAL_PHOTO_QA_PENDING"},
     {"page": "P02", "role": "PROFILE + Q1/Q2", "visualMaster": "assets/rurubu-v30/p02/P02.png", "manifest": "assets/rurubu-v30/p02/manifest.json", "visualReview": "LOCKED"},
     {"page": "P03", "role": "OUR STORY + Q3/Q4", "visualMaster": "assets/rurubu-v30/p03/P03.png", "manifest": "assets/rurubu-v30/p03/manifest.json", "visualReview": "LOCKED"},
     {"page": "P04", "role": "ALL TRAVEL MEMORIES / OUR JOURNEY", "visualMaster": "assets/rurubu-v30/p04/P04.png", "manifest": "assets/rurubu-v30/p04/manifest.json", "visualReview": "AWAITING_CHAT_REVIEW"},
