@@ -9,74 +9,25 @@
     "status": "USER_LOCKED_2026_09_02",
     "manifestAndReviewOwner": "ChatGPT",
     "figmaAndProductionImageGenerationOwner": "Codex",
-    "chatgptResponsibilities": [
-      "analyze user feedback",
-      "inspect actual Visual Masters and current screenshots",
-      "improve root/shared/page manifests and acceptance rules",
-      "detect contradictions and stale rules",
-      "prepare Codex execution instructions",
-      "review Codex result against Visual Master and current authority"
-    ],
-    "codexResponsibilities": [
-      "production ImageGen",
-      "alpha/cutout preparation",
-      "Figma creation/editing/cleanup",
-      "clean proxy installation",
-      "Figma screenshot/export QA",
-      "Drive/Git production evidence"
-    ],
+    "chatgptResponsibilities": ["analyze user feedback", "inspect actual Visual Masters and current screenshots", "improve root/shared/page manifests and acceptance rules", "detect contradictions and stale rules", "prepare Codex execution instructions", "review Codex result against Visual Master and current authority"],
+    "codexResponsibilities": ["production ImageGen", "alpha/cutout preparation", "Figma creation/editing/cleanup", "clean proxy installation", "Figma screenshot/export QA", "Drive/Git production evidence"],
     "hardRule": "ChatGPT must not jump ahead into direct Figma modification or production ImageGen while manifest/feedback work is open unless the user explicitly reassigns that work."
   },
   "bundledFixedDisplayModulePolicy": {
     "principle": "When a short fixed display element is visually authored as one editorial object, generate/prepare the complete visible module as one asset instead of decomposing it into generic Figma text + generic shapes.",
-    "oneAssetMayInclude": [
-      "short fixed text",
-      "numbers",
-      "background/vessel",
-      "badge shape",
-      "icons",
-      "doodles/routes",
-      "flowers/hearts/sparkles",
-      "printed outlines/shadows",
-      "local fixed accents"
-    ],
+    "oneAssetMayInclude": ["short fixed text", "numbers", "background/vessel", "badge shape", "icons", "doodles/routes", "flowers/hearts/sparkles", "printed outlines/shadows", "local fixed accents"],
     "visibleTextMustRemainEditable": false,
     "sourceOfTruthRule": "Approved exact strings/numbers must remain in page authority or asset metadata and visible generated spelling/numbers must be QA-checked.",
-    "keepSeparate": [
-      "replaceable real photos",
-      "long body copy",
-      "unapproved/TBD/personal copy",
-      "frequently changing text",
-      "independently movable decorations when separate overlap is required"
-    ],
-    "hardRejects": [
-      "generic native UI primitives replacing an authored fixed module only for editability",
-      "flattening replaceable photos into fixed display art",
-      "baking unapproved long/personal copy into generated art",
-      "bundling unrelated decorations only to reduce layer count"
-    ]
+    "keepSeparate": ["replaceable real photos", "long body copy", "unapproved/TBD/personal copy", "frequently changing text", "independently movable decorations when separate overlap is required"],
+    "hardRejects": ["generic native UI primitives replacing an authored fixed module only for editability", "flattening replaceable photos into fixed display art", "baking unapproved long/personal copy into generated art", "bundling unrelated decorations only to reduce layer count"]
   },
   "photoProxyContaminationPolicy": {
     "status": "HARD_OVERRIDE",
     "principle": "A photo proxy must read as standalone photo content only.",
     "visualMasterCropAsPhotoProxy": "PROHIBITED",
-    "allowedProxySources": [
-      "user-provided real photo suitable for the slot",
-      "clean semantically representative standalone photo",
-      "clean generated standalone photo proxy with no page-layout decoration"
-    ],
-    "hardRejects": [
-      "crop from P01.png/P02.png/etc used as active photo fill",
-      "page screenshot used as photo fill",
-      "proxy containing page border/title/badge/ticket/stamp/Q shell/flower/route/frame/background decoration",
-      "proxy whose baked decoration duplicates a separate page asset"
-    ],
-    "qa": [
-      "inspect proxy alone",
-      "verify role/count/orientation/focal mass",
-      "verify no page-layout decoration is baked in",
-      "verify photo replacement does not remove page decoration"
-    ]
+    "allowedProxySources": ["user-provided real photo suitable for the slot", "clean semantically representative standalone photo", "clean generated standalone photo proxy with no page-layout decoration"],
+    "hardRejects": ["crop from P01.png/P02.png/etc used as active photo fill", "page screenshot used as photo fill", "proxy containing page border/title/badge/ticket/stamp/Q shell/flower/route/frame/background decoration", "proxy whose baked decoration duplicates a separate page asset"],
+    "qa": ["inspect proxy alone", "verify role/count/orientation/focal mass", "verify no page-layout decoration is baked in", "verify photo replacement does not remove page decoration"]
   },
   "alphaIntegrityPolicy": {
     "status": "HARD / REQUIRED_FOR_ALL_RGBA_DISPLAY_MODULES",
@@ -86,90 +37,34 @@
       "insideOpacity": "Paper/vessel/badge/ribbon/card areas intended to be printed opaque must remain visually and numerically opaque. Do not accidentally erase or weaken white/cream interiors during key-background removal."
     },
     "defaultOpacityExpectation": {
-      "opaquePaperVessel": "Interior alpha should normally be >= 0.95, preferably 1.00, except deliberately anti-aliased edges, intentional holes, or an explicitly approved translucent material.",
+      "opaquePaperVessel": "Interior alpha should normally be >= 0.95, preferably 1.00, except deliberately anti-aliased edges, intentional holes, or explicitly approved translucent material.",
       "antiAliasedEdge": "Partial alpha is allowed only in a narrow edge transition where required for clean antialiasing.",
       "intentionalTransparency": "Any large translucent interior region must be explicitly justified by the Visual Master/page authority; never assume transparency because the PNG has alpha."
     },
-    "mandatoryQa": [
-      "inspect alpha channel, not only RGB preview",
-      "view asset over white, mid-gray, dark and high-contrast temporary backgrounds",
-      "inspect the module by itself and inside the current page",
-      "confirm intended paper/vessel interiors do not reveal page background or Hero pixels",
-      "sample representative interior alpha values or generate an opacity-mask diagnostic when practical",
-      "check text/icon readability after compositing",
-      "compare against Visual Master material character at A5 size"
-    ],
-    "hardRejects": [
-      "checkerboard preview treated as proof of correct alpha",
-      "outer transparency pass while intended paper/vessel interior is semi-transparent",
-      "white/cream paper deleted by key-color cutout",
-      "large unexplained alpha holes inside tickets/cards/labels",
-      "Figma opacity used to hide incorrect source alpha",
-      "placing a white rectangle behind a broken module merely to fake the intended vessel when it changes silhouette or overlap"
-    ],
+    "mandatoryQa": ["inspect alpha channel, not only RGB preview", "view asset over white, mid-gray, dark and high-contrast temporary backgrounds", "inspect the module by itself and inside the current page", "confirm intended paper/vessel interiors do not reveal page background or Hero pixels", "sample representative interior alpha values or generate an opacity-mask diagnostic when practical", "check text/icon readability after compositing", "compare against Visual Master material character at A5 size"],
+    "hardRejects": ["checkerboard preview treated as proof of correct alpha", "outer transparency pass while intended paper/vessel interior is semi-transparent", "white/cream paper deleted by key-color cutout", "large unexplained alpha holes inside tickets/cards/labels", "Figma opacity used to hide incorrect source alpha", "placing a white rectangle behind a broken module merely to fake the intended vessel when it changes silhouette or overlap"],
     "repairRule": "If interior opacity is wrong, fix/regenerate the source/cutout alpha for the affected module. Do not normalize the whole page or add generic Figma rescue shapes."
   },
   "editorialIrregularityPolicy": {
     "principle": "Preserve authored local irregularity; do not normalize the page into UI components and do not manufacture random messiness.",
-    "check": [
-      "module width/height differences",
-      "photo-slot size differences",
-      "local x/y offsets",
-      "icon positions",
-      "overlap depth",
-      "edge activation",
-      "padding/negative-space differences"
-    ],
-    "hardRejects": [
-      "equal-card normalization",
-      "mechanical mirroring",
-      "formulaic/random scrapbook rotation",
-      "component convenience overriding page silhouette"
-    ]
+    "check": ["module width/height differences", "photo-slot size differences", "local x/y offsets", "icon positions", "overlap depth", "edge activation", "padding/negative-space differences"],
+    "hardRejects": ["equal-card normalization", "mechanical mirroring", "formulaic/random scrapbook rotation", "component convenience overriding page silhouette"]
   },
   "edgeSafetyPolicy": {
     "status": "HARD_FOR_A5",
     "principle": "Energetic edge activation is allowed, but important badges, labels, text and intended object silhouettes must not look accidentally clipped by trim/border.",
-    "qa": [
-      "inspect left/right/top/bottom edge at full page and A5 size",
-      "distinguish intentional bleed/crop from accidental collision",
-      "keep critical text, number badges and module identity safely legible",
-      "compare edge relationship directly to Visual Master"
-    ],
-    "hardRejects": [
-      "number badge visibly cut by border with no reference basis",
-      "important heading touching trim/border so tightly that it reads as accidental",
-      "same edge offset reused mechanically across unrelated modules"
-    ]
+    "qa": ["inspect left/right/top/bottom edge at full page and A5 size", "distinguish intentional bleed/crop from accidental collision", "keep critical text, number badges and module identity safely legible", "compare edge relationship directly to Visual Master"],
+    "hardRejects": ["number badge visibly cut by border with no reference basis", "important heading touching trim/border so tightly that it reads as accidental", "same edge offset reused mechanically across unrelated modules"]
   },
   "tactilePrintFinishPolicy": {
     "principle": "Use restrained tactile print character where the Visual Master supports it; never solve flat design with indiscriminate global grain.",
-    "preferredTargets": [
-      "paper vessels",
-      "tickets/postcards",
-      "ribbons/tapes",
-      "stamps/postmarks",
-      "expressive display-title art",
-      "irregular printed frames/backings"
-    ],
-    "hardRejects": [
-      "heavy fake vintage grain",
-      "global dirty-paper overlay",
-      "texture on faces",
-      "texture reducing A5 readability",
-      "noise hiding weak generation"
-    ]
+    "preferredTargets": ["paper vessels", "tickets/postcards", "ribbons/tapes", "stamps/postmarks", "expressive display-title art", "irregular printed frames/backings"],
+    "hardRejects": ["heavy fake vintage grain", "global dirty-paper overlay", "texture on faces", "texture reducing A5 readability", "noise hiding weak generation"]
   },
   "visualCarryOverPolicy": {
     "status": "MANDATORY_AFTER_ANY_TARGETED_REWORK_OR_PROMOTION",
     "principle": "A clean Figma layer tree can still contain visually stale production assets.",
-    "statuses": [
-      "UNREVIEWED_CARRYOVER",
-      "KEEP_REQUALIFIED",
-      "REWORK_REQUIRED",
-      "REPLACE_REQUIRED",
-      "SUPERSEDED"
-    ],
+    "statuses": ["UNREVIEWED_CARRYOVER", "KEEP_REQUALIFIED", "REWORK_REQUIRED", "REPLACE_REQUIRED", "SUPERSEDED"],
     "grandfatheringForbidden": true,
     "adjacencyRequalificationRule": "After a high-saliency anchor/Hero/module improves, reopen nearby support assets because the raised quality bar can expose stale neighboring design.",
     "maintainedDefinition": "MAINTAINED requires explicit current-build requalification. Unchanged, ADOPTED, PRODUCTION_RGBA or prior PASS are not enough.",
