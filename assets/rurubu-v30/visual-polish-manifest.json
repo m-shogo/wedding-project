@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "status": "CURRENT_REQUIRED_POLISH_EXTENSION",
+  "scope": "P01-P08 systemic visual-polish rules",
+  "inherits": "assets/rurubu-v30/manifest.json",
+  "reason": "Added after P01 first-build feedback exposed visually generic native text, over-regularized editorial modules and insufficient material/print character despite structurally valid Figma output.",
+  "fixedShortDisplayTextPolicy": {
+    "rule": "Short fixed display text may be image-generated or prepared display art when its visual treatment is part of the page identity. This permission is not limited to personal names.",
+    "eligibleExamples": [
+      "るるぶ",
+      "WEDDING",
+      "OUR STORY",
+      "OUR JOURNEY",
+      "Q1",
+      "Q2",
+      "Q3",
+      "Q4",
+      "Q5",
+      "Q6",
+      "fixed short feature headings",
+      "fixed short badges and labels",
+      "short page-specific display titles"
+    ],
+    "sourceOfTruthRule": "When the visible display is generated/prepared art, retain the approved exact string separately as native/source-of-truth data and QA the visible rendering against it.",
+    "preferNativeWhen": [
+      "body copy",
+      "long-form Q&A answers",
+      "captions",
+      "frequently changing text",
+      "guest names/relationships",
+      "precision metadata where styling is not identity-critical"
+    ],
+    "hardRejects": [
+      "choosing generic native type solely because it is easier to edit",
+      "baking long or frequently changing copy into raster art",
+      "accepting misspelled generated display text",
+      "treating generated visible text as the authoritative factual source"
+    ]
+  },
+  "editorialIrregularityPolicy": {
+    "principle": "Preserve authored local irregularity from the Visual Master; do not manufacture random messiness and do not normalize the page into UI components.",
+    "checkDimensions": [
+      "module width and height differences",
+      "photo-slot size differences",
+      "local x/y offsets",
+      "rotation only where visually evidenced",
+      "icon position differences",
+      "overlap depth",
+      "edge activation",
+      "padding/negative-space differences"
+    ],
+    "rules": [
+      "Do not force equal heights, equal photo sizes, equal padding or equal icon alignment merely for component reuse.",
+      "When the Visual Master contains measured differences, preserve them or tune toward them during Reference Delta.",
+      "Do not assign arbitrary rotation formulas or random offsets. Any tilt/offset must serve the Visual Master or improve direct visual comparison.",
+      "Related modules may share publication DNA without sharing identical geometry."
+    ],
+    "hardRejects": [
+      "equal-card normalization",
+      "mechanical mirroring",
+      "randomized scrapbook rotation with no reference basis",
+      "component convenience overriding page silhouette"
+    ]
+  },
+  "tactilePrintFinishPolicy": {
+    "principle": "Use restrained tactile/print character to avoid flat digital/AI-sticker appearance, but never apply indiscriminate global grain.",
+    "preferredTargets": [
+      "paper vessels",
+      "tickets/postcards",
+      "ribbons/tapes",
+      "stamps/postmarks",
+      "expressive display-title art",
+      "irregular printed frames/backings"
+    ],
+    "allowedCharacteristics": [
+      "subtle paper fiber or matte print feel",
+      "very slight ink/edge irregularity",
+      "restrained printed shadow/depth",
+      "small local imperfections that support the visual master"
+    ],
+    "avoidOn": [
+      "faces",
+      "real photographs unless part of an approved photo treatment",
+      "precision native body text",
+      "the entire page as a uniform noise overlay unless the Visual Master explicitly requires it"
+    ],
+    "hardRejects": [
+      "heavy fake vintage grain",
+      "global dirty-paper overlay",
+      "texture that reduces A5 readability",
+      "texture added merely to make output look less digital",
+      "visible compression/noise mistaken for tactile print quality"
+    ],
+    "qa": "Texture/material treatment must survive A5 readability and Reference Delta; if it becomes the first thing noticed, it is too strong."
+  },
+  "acceptanceRule": "These policies are evaluated during docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md. Structural QA cannot waive them when they materially affect the Visual Master."
+}
