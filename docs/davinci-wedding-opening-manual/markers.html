@@ -7,6 +7,34 @@
   <meta name="description" content="StaRtの曲の区切りにDaVinci Resolveのマーカーを置き、結婚式オープニングムービーの演出位置を見えるようにする。" />
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./studio.css" />
+  <style>
+    .marker-hero::after{content:"♪";font-size:110px;transform:none;bottom:16px}
+    .marker-key{display:inline-grid;place-items:center;min-width:48px;height:48px;padding:0 14px;border-radius:12px;background:#fff;color:#123b63;font-size:23px;font-weight:950;box-shadow:0 7px 16px rgba(0,0,0,.12)}
+    .marker-list{display:grid;gap:9px}
+    .marker-item{display:grid;grid-template-columns:26px 110px minmax(0,1fr);gap:14px;align-items:center;padding:16px 17px;border:1px solid var(--studio-line);border-left:5px solid #b8ccd8;border-radius:14px;background:#fff;cursor:pointer;transition:.18s ease}
+    .marker-item:hover{transform:translateX(3px);border-color:#a9c5d4;box-shadow:0 9px 22px rgba(31,57,74,.07)}
+    .marker-item.hot{border-left-color:var(--studio-coral)}
+    .marker-item.travel{border-left-color:var(--studio-cyan)}
+    .marker-item.finale{border-left-color:var(--studio-yellow);background:#fffdf5}
+    .marker-item.countdown{border-left-color:#253f69;background:#f7f9ff}
+    .marker-item.is-done{opacity:.58;background:#f2f8f5;border-color:#b8d8c9}
+    .marker-item.is-done strong{text-decoration:line-through;text-decoration-thickness:1px}
+    .marker-item input{width:20px;height:20px;accent-color:#1f7a5a}
+    .marker-item time{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:900;color:#3f6379;font-size:13px}
+    .marker-item strong,.marker-item span{display:block}
+    .marker-item strong{font-size:16px;line-height:1.35}
+    .marker-item span{margin-top:3px;color:var(--studio-muted);font-size:12px;line-height:1.55}
+    .marker-note{margin-top:18px}
+    .beat-strip{display:grid;grid-template-columns:16fr 22fr 20fr 10fr 20fr 20fr 20fr;overflow:hidden;margin:20px 0 2px;border-radius:12px;background:#e8edf0;box-shadow:inset 0 0 0 1px #d5dfe4}
+    .beat-strip span{display:grid;place-items:center;min-height:58px;padding:8px 5px;border-right:1px solid rgba(255,255,255,.7);font-size:10px;font-weight:900;text-align:center;color:#31566e}
+    .beat-strip .b-intro{background:#def2fb}.beat-strip .b-hot{background:#ffe3df}.beat-strip .b-travel{background:#e5f7fa}.beat-strip .b-final{background:#fff2ad}
+    .next-scene-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .next-scene-grid a{display:grid;gap:4px;padding:16px;border:1px solid var(--studio-line);border-radius:14px;background:#fff;color:var(--studio-ink);text-decoration:none;transition:.17s ease}
+    .next-scene-grid a:hover{transform:translateY(-2px);border-color:#b5ceda;box-shadow:0 10px 20px rgba(31,57,74,.07)}
+    .next-scene-grid a>span{font-size:20px;font-weight:950}.next-scene-grid a>strong{font-size:14px}.next-scene-grid a>small{color:var(--studio-muted);line-height:1.45}
+    .back-link{margin:20px 0 0}.back-link a{color:#1b668f;font-weight:850;text-decoration:none}
+    @media(max-width:760px){.marker-item{grid-template-columns:25px 1fr}.marker-item time{grid-column:2}.marker-item div{grid-column:2}.beat-strip{grid-template-columns:1fr}.beat-strip span{min-height:38px}.next-scene-grid{grid-template-columns:1fr 1fr}}
+  </style>
 </head>
 <body class="studio-body marker-page">
   <header class="studio-hero marker-hero">
@@ -17,8 +45,8 @@
         <p class="hero-lead">写真も文字も、まだ置かなくていい。<br><strong>「ここからサビ」「ここで旅行」「ここから5→1」</strong>が見えるだけで、一気に作りやすくなる。</p>
       </div>
       <div class="today-card">
-        <p class="today-kicker">KEY</p>
-        <strong>M</strong>
+        <p class="today-kicker">TODAY'S KEY</p>
+        <strong><span class="marker-key">M</span></strong>
         <p>再生ヘッドがある場所にマーカーを置くキー。今日はほぼこれだけ。</p>
         <a class="primary-button" href="#first-marker">最初の1個を置く →</a>
       </div>
@@ -46,22 +74,22 @@
       <div class="single-task">
         <div class="task-main">
           <p class="task-label">やること</p>
-          <h3>イントロの終わりに「1番START」の目印</h3>
+          <h3>イントロの終わりに「1番 START」の目印</h3>
           <ol class="big-steps">
             <li><span>1</span><div><strong>StaRtを再生する</strong><small>タイムラインの▶︎、またはSpace。</small></div></li>
-            <li><span>2</span><div><strong>0:16付近で止める</strong><small>ピッタリじゃなくてOK。あとで直せる。</small></div></li>
+            <li><span>2</span><div><strong>0:16付近で止める</strong><small>ピッタリじゃなくてOK。あとで動かせる。</small></div></li>
             <li><span>3</span><div><strong>キーボードの M を1回押す</strong><small>タイムラインに色付きの目印が付けば成功。</small></div></li>
             <li><span>4</span><div><strong>同じ場所でMをもう一度押す</strong><small>名前を入れる画面が開いたら「1番 START」と入力。</small></div></li>
           </ol>
           <label class="check action-check">
-            <input type="checkbox" data-progress="first-marker" />
+            <input type="checkbox" data-progress="marker-016" />
             <span>できた。最初のマーカーを置けた</span>
           </label>
         </div>
         <aside class="task-side">
           <p class="side-title">POINT</p>
           <strong>秒数は仮で大丈夫。</strong>
-          <p>曲を聴いて「ここだ」と思った位置に少し動かしてOK。今は編集の地図を作る段階。</p>
+          <p>曲を聴いて「ここだ」と思った位置に少し動かしてOK。いま作っているのは編集の地図。</p>
           <div class="mini-flow"><span>再生</span><b>→</b><span>止める</span><b>→</b><span>M</span><b>→</b><span>名前</span></div>
         </aside>
       </div>
@@ -76,6 +104,10 @@
         </div>
       </div>
 
+      <div class="beat-strip" aria-label="StaRtのおおまかな曲構成">
+        <span class="b-intro">INTRO<br>0:00</span><span>1番<br>0:16</span><span class="b-hot">サビ<br>0:38</span><span class="b-travel">間奏<br>0:58</span><span>2番<br>1:08</span><span class="b-hot">サビ<br>1:28</span><span class="b-final">FINALE<br>1:48–2:08</span>
+      </div>
+
       <div class="marker-list">
         <label class="marker-item"><input type="checkbox" data-progress="marker-016"><time>0:16</time><div><strong>1番 START</strong><span>イントロ終了。ここから新郎新婦・写真を入れる候補。</span></div></label>
         <label class="marker-item hot"><input type="checkbox" data-progress="marker-038"><time>0:38</time><div><strong>1番 サビ</strong><span>写真ラッシュや短い歌詞を効かせる候補。</span></div></label>
@@ -83,7 +115,7 @@
         <label class="marker-item"><input type="checkbox" data-progress="marker-108"><time>1:08</time><div><strong>2番 START</strong><span>2人の旅や短いメッセージ候補。</span></div></label>
         <label class="marker-item hot"><input type="checkbox" data-progress="marker-128"><time>1:28</time><div><strong>2番 サビ</strong><span>一番楽しい写真・動画を見せる候補。</span></div></label>
         <label class="marker-item finale"><input type="checkbox" data-progress="marker-148"><time>1:48</time><div><strong>ラスト間奏</strong><span>入場に向けて上げ始める。</span></div></label>
-        <label class="marker-item countdown"><input type="checkbox" data-progress="marker-200"><time>2:00前後</time><div><strong>COUNTDOWN候補</strong><span>5・4・3・2・1を始める位置。曲を聴いてあとで決める。</span></div></label>
+        <label class="marker-item countdown"><input type="checkbox" data-progress="marker-200"><time>2:00前後</time><div><strong>COUNTDOWN候補</strong><span>5・4・3・2・1を始める位置。ここだけ曲を聴いてあとで詰める。</span></div></label>
       </div>
 
       <div class="note marker-note"><strong>迷ったら：</strong> 秒数を打ち込んで正確に置くより、まず曲を聴きながら「ここ」と思う位置でM。細かい調整は演出を置く時で大丈夫。</div>
@@ -93,8 +125,8 @@
       <div class="section-heading">
         <div>
           <p class="chapter-no">AFTER THIS</p>
-          <h2>目印が並んだら、やっと演出へ。</h2>
-          <p>次からは「どこを作りたい？」で選ぶ。順番に勉強する必要はない。</p>
+          <h2>目印が並んだら、演出へ。</h2>
+          <p>ここからは好きな場所から作る。「冒頭を作りたい」「サビを作りたい」で選べばいい。</p>
         </div>
       </div>
       <div class="next-scene-grid">
