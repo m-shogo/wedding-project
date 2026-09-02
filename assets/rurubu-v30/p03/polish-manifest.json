@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P03",
+  "status": "CURRENT_REQUIRED_P03_EXECUTION_OVERRIDE",
+  "inherits": ["assets/rurubu-v30/manifest.json", "assets/rurubu-v30/visual-polish-manifest.json", "assets/rurubu-v30/p03/manifest.json"],
+  "purpose": "Prevent P01's generic-native-module and Visual-Master-crop proxy failures from repeating when P03 production begins.",
+  "bundledDisplayModules": [
+    {
+      "id": "P03_OUR_STORY_TITLE_DISPLAY",
+      "exactVisibleText": ["OUR", "STORY"],
+      "rule": "May be generated/prepared as one expressive title system with layered outlines/depth and fixed attached micro-decoration where the Visual Master treats them as one title object. Visible text need not remain editable."
+    },
+    {
+      "id": "P03_STORY_RIBBON_DISPLAY",
+      "approvedFixedStructure": ["ふたりのこれまで"],
+      "rule": "Ribbon + fixed short heading + attached fixed accents may be one generated/prepared module. Do not bake the longer intro/story sentence until approved."
+    },
+    {
+      "id": "P03_TIMELINE_STEP_1_DISPLAY",
+      "approvedFixedStructure": ["1", "出会い"],
+      "bundleTogether": ["number/badge", "fixed step heading", "fixed local icon/accent that belongs to the step shell"],
+      "mustRemainSeparate": ["timeline body copy", "replaceable support photo"]
+    },
+    {
+      "id": "P03_TIMELINE_STEP_2_DISPLAY",
+      "approvedFixedStructure": ["2", "デート"],
+      "bundleTogether": ["number/badge", "fixed step heading", "fixed local icon/accent that belongs to the step shell"],
+      "mustRemainSeparate": ["timeline body copy", "replaceable support photo"]
+    },
+    {
+      "id": "P03_TIMELINE_STEP_3_DISPLAY",
+      "approvedFixedStructure": ["3", "旅"],
+      "bundleTogether": ["number/badge", "fixed step heading", "fixed local icon/accent that belongs to the step shell"],
+      "mustRemainSeparate": ["timeline body copy", "replaceable support photo"]
+    },
+    {
+      "id": "P03_TIMELINE_STEP_4_DISPLAY",
+      "approvedFixedStructure": ["4", "プロポーズ"],
+      "bundleTogether": ["number/badge", "fixed step heading", "fixed local icon/accent that belongs to the step shell"],
+      "mustRemainSeparate": ["timeline body copy", "replaceable support photo"]
+    },
+    {
+      "id": "P03_TIMELINE_STEP_5_DISPLAY",
+      "approvedFixedStructure": ["5", "今日"],
+      "bundleTogether": ["number/badge", "fixed step heading", "fixed local icon/accent that belongs to the step shell"],
+      "mustRemainSeparate": ["timeline body copy"],
+      "hardRule": "Step 5 intentionally has no real-photo inset."
+    },
+    {
+      "id": "P03_Q3_DISPLAY_SHELL",
+      "fixedVisiblePart": ["Q3"],
+      "bundleTogether": ["Q3 badge/number", "pink-coded paper-shell visual", "fixed shell decoration"],
+      "mustRemainSeparate": ["Q3 question/answer until approved"]
+    },
+    {
+      "id": "P03_Q4_DISPLAY_SHELL",
+      "fixedVisiblePart": ["Q4"],
+      "bundleTogether": ["Q4 badge/number", "blue-coded paper-shell visual", "fixed shell decoration"],
+      "mustRemainSeparate": ["Q4 question/answer until approved"]
+    },
+    {
+      "id": "P03_WEDDING_DAY_CARD",
+      "exactVisibleFacts": ["Wedding Day", "2026.10.24"],
+      "rule": "When the Visual Master confirms the date card is one visual object, label + exact date + card/background/fixed decoration may be one generated/prepared asset. Exact date remains canonical in manifest metadata."
+    },
+    {
+      "id": "P03_PAGE_BADGE",
+      "exactVisibleText": ["PAGE", "03"],
+      "rule": "PAGE + 03 + badge/background/fixed attached accent may be one complete generated/prepared asset."
+    }
+  ],
+  "nativeOrVariableCopy": ["intro story sentence", "timeline step body copy", "Q3 question/answer", "Q4 question/answer", "any ungrounded autobiographical statement", "long-form copy"],
+  "photoProxyRoles": {
+    "P03_PHOTO_HERO": "clean standalone two-person couple photo proxy with similar portrait/upper-body visual mass; no page tape/title/flowers/border baked in",
+    "P03_PHOTO_ENCOUNTER": "clean standalone people/couple memory photo proxy; no page decorations",
+    "P03_PHOTO_DATE": "clean standalone date/couple photo proxy; no page decorations",
+    "P03_PHOTO_TRAVEL": "clean standalone travel/place or couple-travel photo proxy matching intended slot semantics; no page decorations",
+    "P03_PHOTO_PROPOSAL": "clean standalone proposal/sunset-role photo proxy; no page decorations"
+  },
+  "photoProxyContaminationHardReject": ["crop from P03.png", "page screenshot crop", "proxy containing pink tape, OUR STORY lettering, timeline route, Q3/Q4 paper, border, church cluster or PAGE 03 badge"],
+  "independentlyMovableExceptions": ["Hero pink tape stays separate from the Hero photo", "continuous dotted timeline route remains separate when it spans multiple step modules", "bottom church/tropical cluster remains separate from Wedding Day card if Visual Master overlap requires independent movement"],
+  "executionQa": ["verify all five photo slots use clean standalone proxy content", "verify step 1-5 are not cloned identical cards", "verify Q3/Q4 remain non-identical", "verify step 5 has no photo", "verify bundled display text spelling/numbers against manifest", "re-run Visual Master comparison after clean proxies are installed"]
+}
