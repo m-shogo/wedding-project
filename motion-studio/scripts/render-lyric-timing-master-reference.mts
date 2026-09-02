@@ -90,6 +90,9 @@ const rows = master.phrases
           <td>${escapeHtml(c.text)}</td>
           <td>${fmtSec(t)}</td>
           <td class="judge-cell">
+            <div class="judge-row slider-row">
+              <input type="range" class="delta-slider" data-role="slider" min="-3000" max="3000" step="10" value="0" />
+            </div>
             <div class="judge-row nudge-row">
               <button type="button" class="btn btn-nudge btn-nudge-big" data-delta="-300">⏪⏪</button>
               <button type="button" class="btn btn-nudge" data-delta="-50">⏪</button>
@@ -157,6 +160,8 @@ writeFileSync(
   #saveHint { font-size: 12px; color: #888; width: 100%; }
 
   .judge-cell { min-width: 220px; }
+  .slider-row { padding: 2px 0; }
+  .delta-slider { width: 100%; accent-color: #F4C95D; }
   .judge-row { margin-bottom: 3px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
   .btn { border: 1px solid #444; background: #232323; color: #eee; border-radius: 5px; padding: 3px 8px; font-size: 12px; cursor: pointer; }
   .btn:hover { background: #333; }
@@ -352,6 +357,8 @@ ${rows}
     var currentSec = designedSec + entry.deltaMs / 1000;
     currentEl.textContent = designedSec.toFixed(3) + 's → ' + currentSec.toFixed(3) + 's' + (entry.deltaMs === 0 ? '(ズレなし)' : ' (' + (entry.deltaMs > 0 ? '+' : '') + entry.deltaMs + 'ms)');
     if (noteInput && document.activeElement !== noteInput) noteInput.value = entry.note || '';
+    var slider = tr.querySelector('[data-role=slider]');
+    if (slider && document.activeElement !== slider) slider.value = entry.deltaMs;
 
     if (entry.status === 'adjust' && entry.deltaMs !== 0) {
       statusEl.textContent = '合ってない → ' + Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く') + '補正';
@@ -418,6 +425,21 @@ ${rows}
       renderRow(tr);
       saveState();
     });
+    var slider = tr.querySelector('[data-role=slider]');
+    if (slider) {
+      slider.addEventListener('input', function () {
+        var entry = getEntry(cueId);
+        entry.deltaMs = parseInt(slider.value, 10);
+        if (entry.status !== 'reject') entry.status = 'adjust';
+        renderRow(tr);
+        saveState();
+      });
+      slider.addEventListener('change', function () {
+        var entry = getEntry(cueId);
+        var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
+        if (checkBtn) playAtShiftedPosition(designedSec + entry.deltaMs / 1000, checkBtn);
+      });
+    }
     var checkBtn = tr.querySelector('.btn-check');
     checkBtn.addEventListener('click', function () {
       var entry = getEntry(cueId);

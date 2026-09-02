@@ -212,6 +212,9 @@ const rows = entries
       <button type="button" class="btn btn-check" data-action="check">▶ ここで聴く</button>
     </td>
     <td class="judge-cell">
+      <div class="judge-row slider-row">
+        <input type="range" class="delta-slider" data-role="slider" min="-3000" max="3000" step="10" value="0" />
+      </div>
       <div class="judge-row nudge-row">
         <button type="button" class="btn btn-nudge btn-nudge-big" data-delta="-300">⏪⏪</button>
         <button type="button" class="btn btn-nudge" data-delta="-50">⏪</button>
@@ -271,6 +274,8 @@ writeFileSync(
   #saveHint { font-size: 12px; color: #888; width: 100%; }
 
   .judge-cell { min-width: 260px; }
+  .slider-row { padding: 2px 0; }
+  .delta-slider { width: 100%; accent-color: #F4C95D; }
   .judge-row { margin-bottom: 4px; }
   .btn { border: 1px solid #444; background: #232323; color: #eee; border-radius: 5px; padding: 4px 9px; font-size: 12px; cursor: pointer; }
   .btn:hover { background: #333; }
@@ -561,6 +566,8 @@ ${rows}
     if (goldenInput) goldenInput.checked = !!entry.golden;
     var noteInput = tr.querySelector('[data-role=note]');
     if (noteInput && document.activeElement !== noteInput) noteInput.value = entry.note || '';
+    var slider = tr.querySelector('[data-role=slider]');
+    if (slider && document.activeElement !== slider) slider.value = entry.deltaMs;
 
     // status: 'ok'(合ってる) / 'adjust'(合ってない。ズレ量ありなしを問わず)/ 'reject'(わからない) / null(未確認)。
     // 「合ってない」を押しただけでdeltaMsが0のままの行は、実際の補正量が
@@ -638,6 +645,23 @@ ${rows}
       renderRow(tr);
       saveState();
     });
+    var slider = tr.querySelector('[data-role=slider]');
+    if (slider) {
+      // ドラッグ中(input)は数値表示だけ更新し、音は鳴らさない(ドラッグのたびに
+      // 音が連打されるのを防ぐ)。指を離した瞬間(change)にその位置で確認再生する。
+      slider.addEventListener('input', function () {
+        var entry = getEntry(cueId);
+        entry.deltaMs = parseInt(slider.value, 10);
+        if (entry.status !== 'reject') entry.status = 'adjust';
+        renderRow(tr);
+        saveState();
+      });
+      slider.addEventListener('change', function () {
+        var entry = getEntry(cueId);
+        var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
+        if (checkBtn) playAtShiftedPosition(designedSec + entry.deltaMs / 1000, checkBtn);
+      });
+    }
     var checkBtn = tr.querySelector('.btn-check');
     if (checkBtn) {
       checkBtn.addEventListener('click', function () {
