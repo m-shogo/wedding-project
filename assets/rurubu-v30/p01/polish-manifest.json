@@ -3,140 +3,62 @@
   "project": "Rurubu WEDDING V30",
   "page": "P01",
   "status": "CURRENT_P01_MICRO_VISUAL_POLISH_DEBT_OPEN",
-  "inherits": [
-    "assets/rurubu-v30/manifest.json",
-    "assets/rurubu-v30/visual-polish-manifest.json",
-    "assets/rurubu-v30/p01/manifest.json"
-  ],
+  "inherits": ["assets/rurubu-v30/manifest.json", "assets/rurubu-v30/visual-polish-manifest.json", "assets/rurubu-v30/p01/manifest.json"],
   "purpose": "Current P01 execution authority after final REWORK plus owner review of the actual current screenshot. Major structural/proxy/carry-over work is complete, but minor visual debt is reopened for Feature-shell interior opacity/edge safety and top-left ring-cluster fidelity before P02 production.",
-  "directVisualMasterRereview": {
-    "date": "2026-09-02",
-    "source": "assets/rurubu-v30/p01/P01.png",
-    "status": "COMPLETE",
-    "threeSecondRead": [
-      "るるぶ + WEDDING",
-      "two-person Hero",
-      "Shogo & Shiori ribbon",
-      "2026 year cluster",
-      "Date + Feature 1/2/3",
-      "Bottom Story",
-      "OUR JOURNEY + PAGE 01"
-    ]
-  },
-  "currentFigma": {
-    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
-    "currentNode": "3535:7",
-    "realP02Node": "3535:9",
-    "deletedTempNode": "3708:2",
-    "hiddenOldLayerCountReported": 0,
-    "duplicateSameJobLayerCountReported": 0
-  },
-  "priorFinalRework": {
-    "commit": "c64b3c66d3a0579f704222eea980b193005d7dbd",
-    "acceptedAsBaseline": true,
-    "keep": [
-      "clean standalone Hero/Feature proxies",
-      "bundled Date/Feature/Bottom Story/Names/2026/Journey/Page modules",
-      "accepted WEDDING",
-      "tropical/destination clusters",
-      "airmail border",
-      "bottom floral"
-    ],
-    "importantRule": "Do not roll back to FIRST BUILD and do not do another whole-page REWORK."
-  },
+  "currentFigma": {"fileKey": "bfM0d4c9dCeBv5pCkJ3TNM", "currentNode": "3535:7", "realP02Node": "3535:9", "deletedTempNode": "3708:2"},
+  "priorFinalRework": {"commit": "c64b3c66d3a0579f704222eea980b193005d7dbd", "acceptedAsBaseline": true, "importantRule": "Do not roll back to FIRST BUILD and do not do another whole-page REWORK."},
   "fixedDisplayModules": [
-    {"id": "P01_MASTHEAD_RURUBU", "exactVisibleText": ["るるぶ"]},
-    {"id": "P01_WEDDING_TITLE", "exactVisibleText": ["WEDDING"]},
-    {"id": "P01_NAMES_RIBBON_MODULE", "exactVisibleText": ["Shogo & Shiori"]},
-    {"id": "P01_YEAR_2026_MODULE", "exactVisibleText": ["2026"]},
-    {"id": "P01_DATE_TICKET_MODULE", "exactVisibleText": ["WEDDING DATE", "2026.10.24", "SAT"]},
-    {"id": "P01_FEATURE_1_DISPLAY_MODULE", "exactVisibleText": ["1", "ふたりのプロフィール"], "replaceablePhotoSeparate": true},
-    {"id": "P01_FEATURE_2_DISPLAY_MODULE", "exactVisibleText": ["2", "旅の思い出"], "replaceablePhotoSeparate": true},
-    {"id": "P01_FEATURE_3_DISPLAY_MODULE", "exactVisibleText": ["3", "家族と友達"], "replaceablePhotoSeparate": true},
-    {"id": "P01_BOTTOM_STORY_MODULE", "exactVisibleText": ["ふたりの“楽しい!”を詰めこんだ", "わたしたちの旅ストーリー"]},
-    {"id": "P01_JOURNEY_STAMP_MODULE", "exactVisibleText": ["OUR JOURNEY", "TAKE A TRIP"]},
-    {"id": "P01_PAGE_BADGE_MODULE", "exactVisibleText": ["PAGE", "01"]}
+    {"id":"P01_MASTHEAD_RURUBU","exactVisibleText":["るるぶ"]},
+    {"id":"P01_WEDDING_TITLE","exactVisibleText":["WEDDING"]},
+    {"id":"P01_NAMES_RIBBON_MODULE","exactVisibleText":["Shogo & Shiori"]},
+    {"id":"P01_YEAR_2026_MODULE","exactVisibleText":["2026"]},
+    {"id":"P01_DATE_TICKET_MODULE","exactVisibleText":["WEDDING DATE","2026.10.24","SAT"]},
+    {"id":"P01_FEATURE_1_DISPLAY_MODULE","exactVisibleText":["1","ふたりのプロフィール"],"replaceablePhotoSeparate":true},
+    {"id":"P01_FEATURE_2_DISPLAY_MODULE","exactVisibleText":["2","旅の思い出"],"replaceablePhotoSeparate":true},
+    {"id":"P01_FEATURE_3_DISPLAY_MODULE","exactVisibleText":["3","家族と友達"],"replaceablePhotoSeparate":true},
+    {"id":"P01_BOTTOM_STORY_MODULE","exactVisibleText":["ふたりの“楽しい!”を詰めこんだ","わたしたちの旅ストーリー"]},
+    {"id":"P01_JOURNEY_STAMP_MODULE","exactVisibleText":["OUR JOURNEY","TAKE A TRIP"]},
+    {"id":"P01_PAGE_BADGE_MODULE","exactVisibleText":["PAGE","01"]}
   ],
-  "photoProxyPolicy": {
-    "status": "CLEAN_STANDALONE_ONLY",
-    "hardRule": "P01.png/page screenshots must never be used as active photo fills.",
-    "roles": {
-      "Hero": "clean standalone two-person couple/wedding photo",
-      "Feature1": "clean standalone couple/profile photo",
-      "Feature2": "clean standalone travel/place photo",
-      "Feature3": "clean standalone group/friends photo"
-    }
-  },
+  "photoProxyPolicy": {"status":"CLEAN_STANDALONE_ONLY","hardRule":"P01.png/page screenshots must never be used as active photo fills."},
   "alphaAndMaterialExpectation": {
-    "Feature1": "White/pink paper-vessel interior should read as opaque printed paper; background/Hero must not visibly show through except narrow antialiased edge pixels.",
-    "Feature2": "White/blue paper-vessel interior should read as opaque printed paper; background/Hero must not visibly show through except narrow antialiased edge pixels.",
-    "Feature3": "White/green paper-vessel interior should read as opaque printed paper; background/Hero must not visibly show through except narrow antialiased edge pixels.",
-    "Date": "Ticket body is opaque printed paper, not translucent glass.",
-    "BottomStory": "White cloud/paper vessel is opaque enough to separate copy from Hero/background.",
-    "hardRule": "Actual alpha existence alone is insufficient. Inspect interior alpha and composited appearance."
+    "Feature1":"White/pink paper-vessel interior should read as opaque printed paper; background/Hero must not visibly show through except narrow antialiased edge pixels.",
+    "Feature2":"White/blue paper-vessel interior should read as opaque printed paper; background/Hero must not visibly show through except narrow antialiased edge pixels.",
+    "Feature3":"White/green paper-vessel interior should read as opaque printed paper; background/Hero must not visibly show through except narrow antialiased edge pixels.",
+    "Date":"Ticket body is opaque printed paper, not translucent glass.",
+    "BottomStory":"White cloud/paper vessel is opaque enough to separate copy from Hero/background.",
+    "hardRule":"Actual alpha existence alone is insufficient. Inspect interior alpha and composited appearance."
   },
   "ownerReviewReopenedDebt20260902": {
-    "status": "OPEN / BLOCKS_P02_UNTIL_RESOLVED_OR_EXPLICITLY_DEFERRED",
-    "findings": [
-      {
-        "id": "P01_FEATURE_INTERIOR_OPACITY",
-        "severity": "MATERIAL_MINOR",
-        "observation": "Current screenshot makes Feature 1-3 white label/vessel areas look too transparent/washed compared with the Visual Master.",
-        "possibleCause": "Interior alpha may have been weakened during key-background cutout, even though the asset has a valid alpha channel.",
-        "requiredCheck": [
-          "inspect each Feature RGBA alpha channel",
-          "sample representative white/paper interior pixels",
-          "verify intended interior alpha >= 0.95, preferably 1.00",
-          "preview over dark/high-contrast backgrounds",
-          "confirm Hero/background does not show through intended paper"
-        ],
-        "repair": "Fix/regenerate source/cutout alpha for only the affected Feature modules if opacity is wrong. Do not add generic rescue rectangles or reduce whole-module opacity."
-      },
-      {
-        "id": "P01_FEATURE_LEFT_EDGE_SAFETY",
-        "severity": "MINOR",
-        "observation": "Feature number badges/labels sit too close to the left airmail border and read slightly cramped/clipped relative to Visual Master.",
-        "requiredFix": "Adjust only Feature 1-3 local x/scale/visual bounds as needed so badges and headings read intentionally inside the border while preserving unequal rhythm."
-      },
-      {
-        "id": "P01_RING_CLUSTER_FIDELITY",
-        "severity": "MINOR",
-        "observation": "Current top-left ring cluster is visually weaker than Visual Master; gold rings/diamond/sparkle wedding cue lacks saliency.",
-        "requiredFix": "Targeted requalify/regenerate/reposition the ring cluster only if needed. Preserve current masthead and overall title geometry."
-      }
+    "status":"OPEN / BLOCKS_P02_UNTIL_RESOLVED_OR_EXPLICITLY_DEFERRED",
+    "findings":[
+      {"id":"P01_FEATURE_INTERIOR_OPACITY","severity":"MATERIAL_MINOR","observation":"Current screenshot makes Feature 1-3 white label/vessel areas look too transparent/washed compared with the Visual Master.","requiredCheck":["inspect each Feature RGBA alpha channel","sample representative white/paper interior pixels","verify intended interior alpha >= 0.95, preferably 1.00","preview over dark/high-contrast backgrounds","confirm Hero/background does not show through intended paper"],"repair":"Fix/regenerate source/cutout alpha for only the affected Feature modules if opacity is wrong. Do not add generic rescue rectangles."},
+      {"id":"P01_FEATURE_LEFT_EDGE_SAFETY","severity":"MINOR","observation":"Feature number badges/labels sit too close to the left airmail border and read slightly cramped/clipped relative to Visual Master.","requiredFix":"Adjust only Feature 1-3 local x/scale/visual bounds as needed while preserving unequal rhythm."},
+      {"id":"P01_RING_CLUSTER_FIDELITY","severity":"MINOR","observation":"Current top-left ring cluster is visually weaker than Visual Master; gold rings/diamond/sparkle wedding cue lacks saliency.","requiredFix":"Targeted requalify/regenerate/reposition the ring cluster only if needed. Preserve masthead and title geometry."}
     ]
   },
   "acceptanceState": {
-    "FIGMA_STRUCTURE_READY": "PASS",
-    "CLEAN_PROXY_PASS": "PASS",
-    "BUNDLED_DISPLAY_MODULE_PASS": "PASS_WITH_ALPHA_RECHECK_REQUIRED_FOR_FEATURE_1_3",
-    "IDENTITY_ANCHOR_PASS": "PASS_EXCEPT_RING_SUPPORT_FIDELITY_RECHECK",
-    "VISUAL_CARRYOVER_PASS": "PASS",
-    "REFERENCE_DELTA_PASS": "REOPENED_FOR_MICRO_VISUAL_POLISH",
-    "PHOTO_SWAP_PASS": "PASS",
-    "A5_GRAYSCALE_PASS": "PASS_WITH_LEFT_EDGE_RECHECK",
-    "FIGMA_DESIGN_COMPLETE": false,
-    "FINAL_PHOTO_QA_PENDING": true,
-    "PRINT_READY": false
+    "FIGMA_STRUCTURE_READY":"PASS",
+    "CLEAN_PROXY_PASS":"PASS",
+    "BUNDLED_DISPLAY_MODULE_PASS":"PASS_WITH_ALPHA_RECHECK_REQUIRED_FOR_FEATURE_1_3",
+    "IDENTITY_ANCHOR_PASS":"PASS_EXCEPT_RING_SUPPORT_FIDELITY_RECHECK",
+    "VISUAL_CARRYOVER_PASS":"PASS",
+    "REFERENCE_DELTA_PASS":"REOPENED_FOR_MICRO_VISUAL_POLISH",
+    "PHOTO_SWAP_PASS":"PASS",
+    "A5_GRAYSCALE_PASS":"PASS_WITH_LEFT_EDGE_RECHECK",
+    "FIGMA_DESIGN_COMPLETE":false,
+    "FINAL_PHOTO_QA_PENDING":true,
+    "PRINT_READY":false
   },
   "nextCodexMicroPolish": [
     "do not create a new P01 frame; update CURRENT 3535:7 only",
     "inspect Feature 1/2/3 source alpha for intended paper-vessel interior opacity before changing geometry",
-    "if interior is unintentionally translucent, repair/regenerate only affected module RGBA and replace old LIVE module; remove superseded layer",
-    "tune Feature 1/2/3 left-edge spacing without normalizing their unequal sizes",
+    "repair/regenerate only affected module RGBA if opacity is wrong and delete superseded LIVE layer",
+    "tune Feature 1/2/3 left-edge spacing without normalizing unequal sizes",
     "requalify top-left ring/diamond/sparkle cluster against P01.png and strengthen only if needed",
     "capture fresh full-page and A5 screenshots",
     "run alpha-interior QA, edge-safety QA and fresh Reference Delta",
-    "update this status to complete only after user-visible issues are resolved",
     "do not touch real P02 3535:9"
   ],
-  "doNotDo": [
-    "do not start P02 while this micro debt is open unless the user explicitly defers it",
-    "do not rebuild the entire P01 page",
-    "do not use P01.png crops as photo proxies",
-    "do not keep superseded hidden layers",
-    "do not fake paper opacity with generic white rectangles that alter the authored module silhouette",
-    "do not make Feature 1/2/3 equal UI cards",
-    "do not modify P02-P08"
-  ]
+  "doNotDo": ["do not start P02 while this micro debt is open unless explicitly deferred","do not rebuild the entire P01 page","do not use P01.png crops as photo proxies","do not keep superseded hidden layers","do not fake paper opacity with generic rescue rectangles","do not make Feature 1/2/3 equal UI cards","do not modify P02-P08"]
 }
