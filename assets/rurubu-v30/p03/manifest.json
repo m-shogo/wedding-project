@@ -1,28 +1,445 @@
 {
   "schemaVersion": 3,
+  "reviewRevision": 1,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "role": "OUR STORY + Q3/Q4",
-  "status": "AWAITING_VISUAL_REVIEW",
-  "productionState": "VISUAL_MASTER_PENDING",
+  "status": "VISUAL_MASTER_LOCKED",
+  "productionState": "VISUAL_MASTER_LOCKED",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualLockAuditPolicy": "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
   "visualMaster": {
     "path": "assets/rurubu-v30/p03/P03.png",
-    "authority": "PRIMARY_VISUAL_AUTHORITY_PENDING_CHAT_REVIEW",
-    "rule": "Do not infer page-specific geometry or styling from prose. Review the actual user-provided page image and complete both visual-review passes before locking."
+    "authority": "PRIMARY_VISUAL_AUTHORITY",
+    "analysisSource": "user-provided P03.png reviewed visually in ChatGPT on 2026-09-02",
+    "reviewedDimensionsPx": {
+      "width": 1055,
+      "height": 1491
+    },
+    "reviewMode": "direct visual review + second-pass reverse omission/misclassification audit; no OCR-derived fact promotion",
+    "rule": "Reconstruct P03 from this image first. The visual master controls composition, hierarchy, photo count, asymmetry, framing, overlap and editorial character. Personal/story/Q&A text visible in the image is reference copy only until grounded."
   },
-  "canonicalFacts": {"names": {"Shogo": "LOCKED", "Shiori": "LOCKED"}, "weddingDate": "2026.10.24"},
-  "constraintProfile": {"visualMasterWins": true, "defaultPositionLevel": "TARGET", "defaultSizeLevel": "TARGET", "decorativeMicroPlacementLevel": "FLEXIBLE", "locked": ["page role", "canonical facts", "three-second hierarchy after review", "mustNotCover", "photo masks", "hard rejects"]},
-  "requiredAfterVisualReview": ["threeSecondReadOrder", "saliency weights 0-100", "quiet zones", "relational constraints", "pageSpec confirmation", "visualAuthority", "backgroundSystem", "frameSystem", "objects with normalized + Figma geometry", "constraintLevel and tolerance per major object", "layerOrder/zIndex", "overlap and mustNotCover rules", "photo masks, face-safe zones and replaceability", "renderMode per object", "factClass per text object", "assetDecompositionPlan only after part-generation gate", "asset padding/visual-bounds contract", "hardRejects", "ordered QA gates", "reference-delta comparison targets", "second-pass omission/misclassification audit"],
-  "reviewProcess": {
-    "passA24PointReview": "REQUIRED",
-    "passBReverseOmissionAudit": "REQUIRED",
-    "passBChecks": ["top/middle/bottom scan", "left/center/right scan", "micro accents", "wrong object identity", "photo/frame dependency", "intentional asymmetry", "left/right roles", "repeated-module non-identity", "quiet-space intent", "factClass safety"],
-    "lockCondition": "Do not set VISUAL_MASTER_LOCKED until both passes are complete and all findings are corrected in this manifest."
+  "reviewCompleteness": {
+    "passA24PointReview": "COMPLETE",
+    "passBReverseOmissionAudit": "COMPLETE",
+    "passBScansCompleted": [
+      "top/middle/bottom",
+      "left/center/right",
+      "micro accents",
+      "wrong object identity",
+      "photo/frame dependency",
+      "intentional asymmetry",
+      "timeline repeated-module non-identity",
+      "Q3/Q4 non-identity",
+      "quiet-space intent",
+      "factClass safety"
+    ],
+    "secondPassFindings": [
+      "hero photo pink tape is a separate editorial object",
+      "timeline yellow dotted route is a single continuous navigation motif, not a factual route",
+      "steps 1-5 are not five cloned cards; colors/icons/photo relationships differ",
+      "steps 1-4 have supporting photo relationships while step 5 intentionally has no real-photo inset",
+      "Q3 is pink-coded and Q4 blue-coded; they are related paper vessels but not identical mirrored components",
+      "standalone camera, ring, palms, flowers, sparkles and hearts are low/medium-saliency supporting objects, not optional generic filler",
+      "bottom Wedding Day date card and bottom church/tropical cluster are distinct objects",
+      "hero bouquet/flowers inside the real photo are photo content and must not be recreated as independent page decoration"
+    ],
+    "lockConditionMet": true,
+    "futureRule": "Any later P03 rebuild must preserve these distinctions and pass the same reverse omission audit before visual acceptance."
   },
-  "pageSpecificPending": {"relationalConstraints": "AWAITING_VISUAL_REVIEW", "quietZones": "AWAITING_VISUAL_REVIEW", "saliency": "AWAITING_VISUAL_REVIEW", "faceSafeZones": "AWAITING_VISUAL_REVIEW", "geometryTolerances": "INHERIT_ROOT_UNTIL_REVIEW", "secondPassOmissionAudit": "REQUIRED_BEFORE_LOCK"},
-  "photoPolicy": {"inheritRoot": true, "rule": "Every real-photo slot must be a separate clipped/masked replaceable image; dummy sources must not spill outside frames; face/eye safety overrides TARGET geometry when necessary."},
-  "partGenerationGate": "BLOCKED_UNTIL_VISUAL_REVIEW_AND_SECOND_PASS_AUDIT",
-  "qa": {"gate0": "Pending direct visual review of the actual page master plus second-pass reverse omission audit.", "technicalQaCannotPassBeforeVisualQa": true}
+  "canonicalFacts": {
+    "names": {
+      "Shogo": "LOCKED",
+      "Shiori": "LOCKED"
+    },
+    "weddingDate": "2026.10.24",
+    "rule": "Names/date remain root authority. Visible autobiographical story/Q&A copy is not promoted to FACT solely from this visual master."
+  },
+  "visualMasterTextSafety": {
+    "lockedFactsFromRoot": [
+      "Shogo",
+      "Shiori",
+      "2026.10.24"
+    ],
+    "editorialStructureAllowed": [
+      "OUR STORY",
+      "ふたりのこれまで",
+      "Q3",
+      "Q4",
+      "PAGE 03",
+      "Wedding Day"
+    ],
+    "referenceOnlyUntilGrounded": [
+      "intro story sentence",
+      "timeline step body copy for 出会い / デート / 旅 / プロポーズ / 今日",
+      "Q3 question and answer",
+      "Q4 question and answer"
+    ],
+    "rule": "Keep personal claims native/editable and TBD/REFERENCE_ONLY until grounded by approved copy. Do not bake them into generated paper art."
+  },
+  "threeSecondReadOrder": [
+    "OUR STORY title system",
+    "large top-right couple hero photo",
+    "ふたりのこれまで ribbon + intro story cue",
+    "left 1→5 story timeline",
+    "Q3 then Q4 paper Q&A modules",
+    "supporting story photos and icons",
+    "Wedding Day card / bottom destination cluster / PAGE 03"
+  ],
+  "pageSpec": {
+    "trimMm": {
+      "width": 148,
+      "height": 210
+    },
+    "bleedMm": 3,
+    "safeTextMarginMm": 6,
+    "figmaTrimPx": {
+      "width": 559,
+      "height": 794
+    },
+    "visualMasterPx": {
+      "width": 1055,
+      "height": 1491
+    },
+    "geometryRule": "Normalized geometry is durable authority. Figma pixel values are approximate. Preserve relational rhythm, photo hierarchy, asymmetry and Reference Delta before exact coordinates."
+  },
+  "visualAuthority": {
+    "firstImpression": "A playful Japanese travel-magazine story page: giant blue/pink OUR STORY title on the upper-left, one dominant resort couple photo on the upper-right, a hand-drawn 1-to-5 relationship timeline descending the left half, and two torn-notebook Q&A cards stacked on the right.",
+    "signatureMove": "The page turns a chronological relationship story into an editorial travel route without using a rigid timeline UI: heart-number badges, handwritten headings, irregular photo prints, dotted route marks, tropical icons and paper Q&A notes overlap a warm textured field.",
+    "composition": "Upper ~42% is a deliberate title-vs-hero split. Middle/lower left is a vertical five-step story route with four support photos staggered toward the center. Middle/lower right is reserved for Q3 and Q4 paper notes. Bottom edge closes with a Wedding Day card, church/tropical destination cluster and PAGE 03 badge.",
+    "density": "high but directional; the left route is busy and sequential while the Q&A paper interiors remain comparatively calm",
+    "asymmetryRule": "Do not balance the page into equal columns. The hero is top-right, title top-left, timeline left-heavy, Q&A right-heavy, and support photos stagger rather than align to one grid.",
+    "colorBehavior": {
+      "dominant": [
+        "travel blue",
+        "hot pink",
+        "warm ivory paper",
+        "white",
+        "sun yellow"
+      ],
+      "support": [
+        "lime/leaf green",
+        "hibiscus red/pink",
+        "orange route line",
+        "black/charcoal handwriting"
+      ],
+      "semanticCoding": {
+        "timeline1": "pink",
+        "timeline2": "blue",
+        "timeline3": "yellow/orange",
+        "timeline4": "green",
+        "timeline5": "pink",
+        "Q3": "pink",
+        "Q4": "blue"
+      },
+      "reject": [
+        "generic beige wedding editorial",
+        "equal pastel cards",
+        "SaaS timeline",
+        "muted monochrome",
+        "perfect mirrored symmetry"
+      ]
+    }
+  },
+  "backgroundSystem": {
+    "backgroundId": "P03_BG_WARM_PAPER_AIRMAIL",
+    "role": "Warm tactile magazine field that supports dense story objects without feeling like a digital UI.",
+    "renderMode": "generated-art or prepared raster",
+    "fullBleed": true,
+    "description": "Warm ivory paper texture with subtle grain and a thin multicolor diagonal airmail perimeter.",
+    "geometry": {
+      "referencePx": {"x":16,"y":16,"width":1023,"height":1458},
+      "normalized": {"x":0.0152,"y":0.0107,"width":0.9697,"height":0.9779},
+      "figmaTrimPxApprox": {"x":8.5,"y":8.5,"width":542.0,"height":776.4},
+      "anchor": "top-left",
+      "constraintLevel": {"position":"TARGET","size":"TARGET"},
+      "tolerance": "±2% page position/size; preserve trim relationship"
+    },
+    "zIndex": 0,
+    "layerGroup": "background-field",
+    "mustPreserve": ["warm tactile paper","subtle grain","clean reading fields","airmail perimeter"],
+    "hardRejects": ["plain white canvas","generic gradient","heavy scrapbook noise behind body copy"]
+  },
+  "frameSystem": {
+    "outerBorder": {
+      "id": "P03_BORDER_AIRMAIL",
+      "renderMode": "generated-art",
+      "description": "Repeating diagonal blue/pink/yellow/white airmail-style perimeter with white inner separation.",
+      "geometry": {
+        "referencePx": {"x":16,"y":16,"width":1023,"height":1458},
+        "normalized": {"x":0.0152,"y":0.0107,"width":0.9697,"height":0.9779},
+        "figmaTrimPxApprox": {"x":8.5,"y":8.5,"width":542.0,"height":776.4},
+        "anchor": "top-left",
+        "constraintLevel": {"position":"TARGET","size":"TARGET"},
+        "tolerance": "±2% page position/size"
+      },
+      "zIndex": 105,
+      "layerGroup": "trim-border-and-print-overlay",
+      "mustNotCover": ["critical copy","faces","PAGE 03 numerals"],
+      "rule": "Do not replace with a generic solid stroke."
+    },
+    "heroPhotoFrame": {
+      "id": "P03_HERO_PHOTO_PRINT",
+      "photoSlotId": "P03_PHOTO_HERO",
+      "renderMode": "generated-art or figma-shape-ok",
+      "visualTreatment": "large white printed-photo edge, slightly rotated clockwise, with independent pink tape at the top-right; no heavy rounded-card treatment",
+      "geometry": {
+        "referencePx": {"x":512,"y":50,"width":500,"height":610},
+        "normalized": {"x":0.4853,"y":0.0335,"width":0.4739,"height":0.4091},
+        "figmaTrimPxApprox": {"x":271.4,"y":26.6,"width":264.9,"height":325.0},
+        "anchor": "top-left",
+        "constraintLevel": {"position":"TARGET","size":"TARGET"},
+        "tolerance": "±3% position / ±4% size"
+      },
+      "rotationDegreesTarget": 2.0,
+      "zIndex": 43,
+      "rule": "Photo, white print/frame edge and tape remain separate. Swapping the real photo must not rebuild the frame/tape."
+    },
+    "supportPhotoFrames": [
+      {"id":"P03_SUPPORT_FRAME_1","photoSlotId":"P03_PHOTO_ENCOUNTER","geometry":{"referencePx":{"x":308,"y":516,"width":245,"height":165},"normalized":{"x":0.2919,"y":0.3461,"width":0.2322,"height":0.1107},"figmaTrimPxApprox":{"x":163.3,"y":274.8,"width":129.8,"height":87.9},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"rotationDegreesTarget":-4.0,"zIndex":44,"visualTreatment":"small white printed-photo frame with slight counterclockwise tilt"},
+      {"id":"P03_SUPPORT_FRAME_2","photoSlotId":"P03_PHOTO_DATE","geometry":{"referencePx":{"x":378,"y":704,"width":242,"height":163},"normalized":{"x":0.3583,"y":0.4722,"width":0.2294,"height":0.1093},"figmaTrimPxApprox":{"x":200.4,"y":375.0,"width":128.2,"height":86.8},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"rotationDegreesTarget":-2.0,"zIndex":44,"visualTreatment":"small white printed-photo frame, different tilt from photo 1"},
+      {"id":"P03_SUPPORT_FRAME_3","photoSlotId":"P03_PHOTO_TRAVEL","geometry":{"referencePx":{"x":335,"y":873,"width":245,"height":158},"normalized":{"x":0.3175,"y":0.5855,"width":0.2322,"height":0.106},"figmaTrimPxApprox":{"x":177.5,"y":465.1,"width":129.8,"height":84.2},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"rotationDegreesTarget":3.0,"zIndex":44,"visualTreatment":"landscape white printed-photo frame"},
+      {"id":"P03_SUPPORT_FRAME_4","photoSlotId":"P03_PHOTO_PROPOSAL","geometry":{"referencePx":{"x":405,"y":1044,"width":190,"height":170},"normalized":{"x":0.3839,"y":0.7002,"width":0.1801,"height":0.114},"figmaTrimPxApprox":{"x":214.7,"y":556.0,"width":100.7,"height":90.5},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"rotationDegreesTarget":4.0,"zIndex":44,"visualTreatment":"proposal photo print; smaller and lower than the travel photo"}
+    ],
+    "qaVessels": [
+      {"id":"P03_Q3_PAPER","renderMode":"generated-art + native-text","geometry":{"referencePx":{"x":625,"y":700,"width":365,"height":330},"normalized":{"x":0.5924,"y":0.4695,"width":0.346,"height":0.2213},"figmaTrimPxApprox":{"x":331.2,"y":372.7,"width":193.4,"height":175.8},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"visualTreatment":"warm pale-yellow torn notebook paper with irregular deckled edge, punched holes along top, subtle paper shadow and pink Q3 speech-bubble styling","zIndex":52,"accent":"pink"},
+      {"id":"P03_Q4_PAPER","renderMode":"generated-art + native-text","geometry":{"referencePx":{"x":610,"y":1010,"width":385,"height":350},"normalized":{"x":0.5782,"y":0.6774,"width":0.3649,"height":0.2347},"figmaTrimPxApprox":{"x":323.3,"y":538.1,"width":203.9,"height":186.4},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"visualTreatment":"cream torn notebook paper with top punched holes, irregular deckled edge, subtle shadow and blue Q4 speech-bubble styling","zIndex":52,"accent":"blue"}
+    ],
+    "rule": "Hero frame, four support photo prints and Q3/Q4 paper vessels are different editorial families. Never normalize them into one rounded-card component."
+  },
+  "photoSlots": [
+    {"id":"P03_PHOTO_HERO","role":"primary couple hero / top-right identity anchor","renderMode":"replaceable-photo","geometry":{"referencePx":{"x":520,"y":56,"width":480,"height":595},"normalized":{"x":0.4929,"y":0.0376,"width":0.455,"height":0.3991},"figmaTrimPxApprox":{"x":275.6,"y":29.8,"width":254.3,"height":316.9},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"rotationDegreesTarget":2.0,"zIndex":31,"replaceable":true,"maskRequired":true,"clipsContent":true,"nonDestructiveCrop":true,"defaultFit":"FILL_CROP","frameSeparate":true,"faceSafe":{"slotRelative":{"x":0.2,"y":0.07,"width":0.67,"height":0.43},"priority":["both eyes","both faces","heads/hair","smiles","upper bouquet when feasible"]},"mustNotCover":["both faces/eyes","hero expressions","title legibility"],"cropRule":"Faces and expressions outrank exact TARGET crop. Bouquet and beach context are secondary."},
+    {"id":"P03_PHOTO_ENCOUNTER","role":"story step 1 supporting couple photo","renderMode":"replaceable-photo","geometry":{"referencePx":{"x":316,"y":524,"width":228,"height":148},"normalized":{"x":0.2995,"y":0.3514,"width":0.2161,"height":0.0993},"figmaTrimPxApprox":{"x":167.5,"y":279.0,"width":120.8,"height":78.8},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"rotationDegreesTarget":-4.0,"zIndex":33,"replaceable":true,"maskRequired":true,"clipsContent":true,"nonDestructiveCrop":true,"defaultFit":"FILL_CROP","frameSeparate":true,"faceSafe":{"slotRelative":{"x":0.1,"y":0.1,"width":0.8,"height":0.66},"priority":["both faces","eyes","shared interaction"]},"cropRule":"Keep both faces and interaction readable at A5."},
+    {"id":"P03_PHOTO_DATE","role":"story step 2 supporting couple photo","renderMode":"replaceable-photo","geometry":{"referencePx":{"x":386,"y":712,"width":225,"height":145},"normalized":{"x":0.3659,"y":0.4775,"width":0.2133,"height":0.0973},"figmaTrimPxApprox":{"x":204.6,"y":379.3,"width":119.2,"height":77.2},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"rotationDegreesTarget":-2.0,"zIndex":33,"replaceable":true,"maskRequired":true,"clipsContent":true,"nonDestructiveCrop":true,"defaultFit":"FILL_CROP","frameSeparate":true,"faceSafe":{"slotRelative":{"x":0.18,"y":0.1,"width":0.68,"height":0.62},"priority":["both faces","eyes","travel/resort context"]},"cropRule":"Both faces must remain immediately recognizable."},
+    {"id":"P03_PHOTO_TRAVEL","role":"story step 3 travel landscape support","renderMode":"replaceable-photo","geometry":{"referencePx":{"x":343,"y":881,"width":226,"height":140},"normalized":{"x":0.3251,"y":0.5909,"width":0.2142,"height":0.0939},"figmaTrimPxApprox":{"x":181.8,"y":469.3,"width":119.8,"height":74.6},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"rotationDegreesTarget":3.0,"zIndex":33,"replaceable":true,"maskRequired":true,"clipsContent":true,"nonDestructiveCrop":true,"defaultFit":"FILL_CROP","frameSeparate":true,"focalSafe":{"slotRelative":{"x":0.08,"y":0.1,"width":0.84,"height":0.72},"priority":["coastline/landmark","water/land balance","recognizable travel scene"]},"cropRule":"This slot is landscape-led; do not force a face-safe model onto it."},
+    {"id":"P03_PHOTO_PROPOSAL","role":"story step 4 proposal support","renderMode":"replaceable-photo","geometry":{"referencePx":{"x":413,"y":1052,"width":172,"height":152},"normalized":{"x":0.3915,"y":0.7056,"width":0.163,"height":0.1019},"figmaTrimPxApprox":{"x":218.9,"y":560.3,"width":91.1,"height":81.0},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"rotationDegreesTarget":4.0,"zIndex":33,"replaceable":true,"maskRequired":true,"clipsContent":true,"nonDestructiveCrop":true,"defaultFit":"FILL_CROP","frameSeparate":true,"focalSafe":{"slotRelative":{"x":0.12,"y":0.1,"width":0.76,"height":0.78},"priority":["both human figures","proposal gesture","hands/ring gesture if visible","sunset context"]},"cropRule":"Preserve the proposal gesture before scenery."}
+  ],
+  "objects": [
+    {"id":"P03_TITLE_OUR_STORY","role":"first-read page title system","renderMode":"generated-art","factClass":"EDITORIAL_COPY","referenceText":"OUR STORY","geometry":{"referencePx":{"x":63,"y":63,"width":505,"height":290},"normalized":{"x":0.0597,"y":0.0423,"width":0.4787,"height":0.1945},"figmaTrimPxApprox":{"x":33.4,"y":33.6,"width":267.6,"height":154.5},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"zIndex":66,"layerGroup":"display-art","saliency":100,"visualRule":"Stacked chunky title: OUR in saturated blue, STORY in hot pink, both with thick white/yellow/dark dimensional outlines. White heart cutout inside O. Treat as expressive cover-like art, not clean native type."},
+    {"id":"P03_SUBTITLE_RIBBON","role":"story section subtitle","renderMode":"generated-art + native-text","factClass":"EDITORIAL_COPY","referenceText":"ふたりのこれまで","geometry":{"referencePx":{"x":90,"y":305,"width":465,"height":130},"normalized":{"x":0.0853,"y":0.2046,"width":0.4408,"height":0.0872},"figmaTrimPxApprox":{"x":47.7,"y":162.4,"width":246.4,"height":69.2},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"zIndex":68,"layerGroup":"display-art","saliency":64,"visualRule":"White/pale ribbon with hot-pink outline and folded tail; subtitle remains editable if practical."},
+    {"id":"P03_INTRO_COPY","role":"handwritten story lead","renderMode":"native-text","factClass":"TBD","referenceTextVisibleInMaster":"出会ってから、今日までの ふたりのストーリー♡","truthStatus":"VISUAL_REFERENCE_ONLY_NOT_APPROVED","geometry":{"referencePx":{"x":90,"y":438,"width":385,"height":105},"normalized":{"x":0.0853,"y":0.2938,"width":0.3649,"height":0.0704},"figmaTrimPxApprox":{"x":47.7,"y":233.3,"width":203.9,"height":55.9},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"zIndex":84,"layerGroup":"native-copy-and-facts","saliency":48,"visualRule":"Blue handwritten/editorial script with pink underline/heart. Preserve casual hand-drawn energy, not a centered paragraph."},
+    {"id":"P03_TIMELINE_STORY_COPY","role":"five-step story labels and body copy","renderMode":"native-text","factClass":"TBD","truthStatus":"VISUAL_REFERENCE_ONLY_NOT_APPROVED","referenceSteps":[{"n":1,"title":"出会い","color":"pink","body":"友だちの紹介で知り合って、初めて話したときからずっと笑ってたね。"},{"n":2,"title":"デート","color":"blue","body":"たくさん一緒に過ごして、景色も時間も、全部が宝物に変わったよ。"},{"n":3,"title":"旅","color":"yellow/orange","body":"いろんな場所へ行って、思い出がふたりの絆をもっと深くしてくれたね。"},{"n":4,"title":"プロポーズ","color":"green","body":"大切な場所で、まっすぐな言葉と笑顔で「一緒に未来をつくろう」って。一生忘れないよ。"},{"n":5,"title":"今日","color":"pink","body":"この日を迎えられることに心からありがとう！これからもよろしくね♡"}],"geometry":{"referencePx":{"x":50,"y":555,"width":385,"height":790},"normalized":{"x":0.0474,"y":0.3722,"width":0.3649,"height":0.5298},"figmaTrimPxApprox":{"x":26.5,"y":295.6,"width":203.9,"height":420.8},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"relational timeline rhythm outranks one box"},"zIndex":85,"layerGroup":"native-copy-and-facts","saliency":60,"rule":"Titles/colors guide structure. Personal narrative remains unapproved reference copy. Keep all story text native/editable."},
+    {"id":"P03_Q3_COPY","role":"Q3 question and answer","renderMode":"native-text","factClass":"TBD","truthStatus":"VISUAL_REFERENCE_ONLY_NOT_APPROVED","referenceQuestionVisibleInMaster":"ふたりの関係をひとことで表すと？","referenceAnswerVisibleInMaster":"自然体でいられる、最高のパートナー！","geometry":{"referencePx":{"x":650,"y":720,"width":305,"height":270},"normalized":{"x":0.6161,"y":0.4829,"width":0.2891,"height":0.1811},"figmaTrimPxApprox":{"x":344.4,"y":383.6,"width":161.6,"height":143.8},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"zIndex":86,"layerGroup":"native-copy-and-facts","saliency":57,"visualRule":"Pink question hierarchy, black handwritten answer and pink underline accents. Keep answer field breathable."},
+    {"id":"P03_Q4_COPY","role":"Q4 question and answer","renderMode":"native-text","factClass":"TBD","truthStatus":"VISUAL_REFERENCE_ONLY_NOT_APPROVED","referenceQuestionVisibleInMaster":"相手の好きなところは？","referenceAnswerVisibleInMaster":"いつも私を笑顔にしてくれて、どんな時もそばで支えてくれるやさしさ。","geometry":{"referencePx":{"x":625,"y":1035,"width":330,"height":285},"normalized":{"x":0.5924,"y":0.6942,"width":0.3128,"height":0.1911},"figmaTrimPxApprox":{"x":331.2,"y":551.2,"width":174.8,"height":151.8},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"zIndex":86,"layerGroup":"native-copy-and-facts","saliency":57,"visualRule":"Blue question hierarchy, black handwritten answer, pink/blue underline and small heart accents. Do not copy Q3 styling mechanically."},
+    {"id":"P03_WEDDING_DAY_CARD","role":"bottom-left date reminder / editorial ephemera","renderMode":"generated-art + native-text","factClass":"FACT","nativeText":"2026.10.24","referenceEditorialText":"Wedding Day","geometry":{"referencePx":{"x":27,"y":1323,"width":185,"height":145},"normalized":{"x":0.0256,"y":0.8873,"width":0.1754,"height":0.0973},"figmaTrimPxApprox":{"x":14.3,"y":704.7,"width":98.0,"height":77.2},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"zIndex":90,"layerGroup":"native-copy-and-facts","saliency":27,"visualRule":"Small warm-paper note/card with dark clip at top-left and tactile border/shadow. Exact date remains native/editable."},
+    {"id":"P03_PAGE_BADGE","role":"page meta","renderMode":"generated-art + native-text","factClass":"EDITORIAL_COPY","nativeText":"PAGE 03","geometry":{"referencePx":{"x":858,"y":1334,"width":145,"height":145},"normalized":{"x":0.8133,"y":0.8947,"width":0.1374,"height":0.0973},"figmaTrimPxApprox":{"x":454.6,"y":710.5,"width":76.8,"height":77.2},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"},"tolerance":"±3% / ±4%"},"zIndex":98,"layerGroup":"page-meta-and-critical-badges","saliency":18,"visualRule":"White circular badge with blue dashed/hand-drawn perimeter and small pink heart. Subordinate to story/Q&A."}
+  ],
+  "timelineSystem": {
+    "route": {"id":"P03_TIMELINE_DOTTED_ROUTE","renderMode":"figma-shape-ok or generated-art","factClass":"DECORATIVE_FICTION","geometry":{"referencePx":{"x":32,"y":460,"width":135,"height":900},"normalized":{"x":0.0303,"y":0.3085,"width":0.128,"height":0.6036},"figmaTrimPxApprox":{"x":17.0,"y":245.0,"width":71.5,"height":479.3},"anchor":"top-left","constraintLevel":{"position":"FLEXIBLE","size":"FLEXIBLE"},"tolerance":"Preserve continuity, turns and relation to badges; exact dash geometry FLEXIBLE"},"zIndex":61,"saliency":23,"description":"Orange/yellow dotted hand-drawn route line that snakes down the left edge, visually connecting the five story beats without implying a geographic route.","mustNotCover":["story body copy","photo faces","number badges"]},
+    "steps": [
+      {"id":"P03_STEP_1","badge":"pink heart 1","title":"出会い","icon":"small plumeria","geometry":{"referencePx":{"x":52,"y":555,"width":260,"height":145},"normalized":{"x":0.0493,"y":0.3722,"width":0.2464,"height":0.0973},"figmaTrimPxApprox":{"x":27.6,"y":295.6,"width":137.7,"height":77.2}},"photoRelation":"P03_PHOTO_ENCOUNTER"},
+      {"id":"P03_STEP_2","badge":"blue heart 2","title":"デート","icon":"pink heart + separate palm-tree cue nearby","geometry":{"referencePx":{"x":118,"y":715,"width":250,"height":145},"normalized":{"x":0.1118,"y":0.4795,"width":0.237,"height":0.0973},"figmaTrimPxApprox":{"x":62.5,"y":380.9,"width":132.5,"height":77.2}},"photoRelation":"P03_PHOTO_DATE"},
+      {"id":"P03_STEP_3","badge":"yellow/orange heart 3","title":"旅","icon":"small hibiscus/plumeria; camera cue belongs to nearby photo field","geometry":{"referencePx":{"x":105,"y":878,"width":265,"height":155},"normalized":{"x":0.0995,"y":0.5889,"width":0.2512,"height":0.1039},"figmaTrimPxApprox":{"x":55.6,"y":467.7,"width":140.4,"height":82.6}},"photoRelation":"P03_PHOTO_TRAVEL"},
+      {"id":"P03_STEP_4","badge":"green heart 4","title":"プロポーズ","icon":"engagement-ring cue","geometry":{"referencePx":{"x":75,"y":1035,"width":315,"height":160},"normalized":{"x":0.0711,"y":0.6942,"width":0.2986,"height":0.1073},"figmaTrimPxApprox":{"x":39.7,"y":551.2,"width":166.9,"height":85.2}},"photoRelation":"P03_PHOTO_PROPOSAL"},
+      {"id":"P03_STEP_5","badge":"pink heart 5","title":"今日","icon":"small plumeria","geometry":{"referencePx":{"x":145,"y":1210,"width":295,"height":140},"normalized":{"x":0.1374,"y":0.8115,"width":0.2796,"height":0.0939},"figmaTrimPxApprox":{"x":76.8,"y":644.4,"width":156.3,"height":74.6}},"photoRelation":"NO_REAL_PHOTO_INSET"}
+    ],
+    "nonIdentityRule": "Five beats are one narrative family but not cloned cards. Preserve badge colors, icon differences, staggered alignment and photo/no-photo differences."
+  },
+  "decorativeObjects": [
+    {"id":"P03_TITLE_LEFT_TROPICAL_CLUSTER","renderMode":"generated-art","geometry":{"referencePx":{"x":34,"y":96,"width":145,"height":330},"normalized":{"x":0.0322,"y":0.0644,"width":0.1374,"height":0.2213},"figmaTrimPxApprox":{"x":18.0,"y":51.1,"width":76.8,"height":175.8},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"}},"zIndex":73,"layerGroup":"decorative-overlays","saliency":32,"description":"Large left-edge hibiscus/plumeria/green-leaf cluster weaving behind/around the OUR STORY title."},
+    {"id":"P03_TITLE_ROUTE_PLANE","renderMode":"generated-art","geometry":{"referencePx":{"x":413,"y":55,"width":145,"height":120},"normalized":{"x":0.3915,"y":0.0369,"width":0.1374,"height":0.0805},"figmaTrimPxApprox":{"x":218.9,"y":29.3,"width":76.8,"height":63.9},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"}},"zIndex":75,"layerGroup":"decorative-overlays","saliency":29,"description":"Blue airplane with pink dotted heart-route and a yellow sparkle between title and hero photo."},
+    {"id":"P03_HERO_PINK_TAPE","renderMode":"generated-art","geometry":{"referencePx":{"x":819,"y":43,"width":125,"height":60},"normalized":{"x":0.7763,"y":0.0288,"width":0.1185,"height":0.0402},"figmaTrimPxApprox":{"x":434.0,"y":22.9,"width":66.2,"height":32.0},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"}},"zIndex":78,"layerGroup":"decorative-overlays","saliency":17,"description":"Pink polka-dot washi tape crossing the top-right corner of the hero photo print. Separate from the photo/frame."},
+    {"id":"P03_HERO_LOWER_PLUMERIA","renderMode":"generated-art","geometry":{"referencePx":{"x":895,"y":590,"width":100,"height":100},"normalized":{"x":0.8483,"y":0.3957,"width":0.0948,"height":0.0671},"figmaTrimPxApprox":{"x":474.2,"y":314.2,"width":53.0,"height":53.3},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"}},"zIndex":76,"layerGroup":"decorative-overlays","saliency":22,"description":"Standalone white/yellow plumeria at the hero-photo lower-right transition near Q3."},
+    {"id":"P03_STEP2_PALM","renderMode":"generated-art","geometry":{"referencePx":{"x":48,"y":760,"width":85,"height":130},"normalized":{"x":0.0455,"y":0.5097,"width":0.0806,"height":0.0872},"figmaTrimPxApprox":{"x":25.4,"y":404.8,"width":45.0,"height":69.2},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"}},"zIndex":74,"layerGroup":"decorative-overlays","saliency":20,"description":"Small palm-tree sticker/illustration supporting the date/travel transition."},
+    {"id":"P03_STEP3_CAMERA","renderMode":"generated-art","geometry":{"referencePx":{"x":490,"y":965,"width":90,"height":80},"normalized":{"x":0.4645,"y":0.6472,"width":0.0853,"height":0.0537},"figmaTrimPxApprox":{"x":259.7,"y":514.2,"width":47.7,"height":42.6},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"}},"zIndex":76,"layerGroup":"decorative-overlays","saliency":22,"description":"Retro camera object beside the travel landscape print."},
+    {"id":"P03_STEP4_RING","renderMode":"generated-art","geometry":{"referencePx":{"x":335,"y":1030,"width":78,"height":68},"normalized":{"x":0.3175,"y":0.6908,"width":0.0739,"height":0.0456},"figmaTrimPxApprox":{"x":177.5,"y":548.6,"width":41.3,"height":36.2},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"}},"zIndex":76,"layerGroup":"decorative-overlays","saliency":24,"description":"Engagement-ring icon near the proposal beat."},
+    {"id":"P03_Q3_FLORAL_ACCENT","renderMode":"generated-art","geometry":{"referencePx":{"x":895,"y":920,"width":105,"height":100},"normalized":{"x":0.8483,"y":0.617,"width":0.0995,"height":0.0671},"figmaTrimPxApprox":{"x":474.2,"y":490.0,"width":55.6,"height":53.3},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"}},"zIndex":77,"layerGroup":"decorative-overlays","saliency":22,"description":"Pink hibiscus/green-leaf cluster on the lower-right edge of the Q3 paper."},
+    {"id":"P03_Q4_FLORAL_ACCENT","renderMode":"generated-art","geometry":{"referencePx":{"x":900,"y":1240,"width":105,"height":105},"normalized":{"x":0.8531,"y":0.8317,"width":0.0995,"height":0.0704},"figmaTrimPxApprox":{"x":476.9,"y":660.4,"width":55.6,"height":55.9},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"}},"zIndex":77,"layerGroup":"decorative-overlays","saliency":22,"description":"Larger pink hibiscus/green-leaf cluster on the lower-right edge of Q4."},
+    {"id":"P03_BOTTOM_DESTINATION_CLUSTER","renderMode":"generated-art","factClass":"DECORATIVE_FICTION","geometry":{"referencePx":{"x":320,"y":1215,"width":430,"height":260},"normalized":{"x":0.3033,"y":0.8149,"width":0.4076,"height":0.1744},"figmaTrimPxApprox":{"x":169.6,"y":647.0,"width":227.8,"height":138.5},"anchor":"top-left","constraintLevel":{"position":"TARGET","size":"TARGET"}},"zIndex":79,"layerGroup":"decorative-overlays","saliency":31,"description":"Blue/white seaside church, water stroke, palm trees, tropical flowers and a pink ribbon tail. Decorative destination/editorial closure; do not infer actual venue."},
+    {"id":"P03_MICRO_ACCENT_FIELD","renderMode":"generated-art or figma-shape-ok","geometry":{"referencePx":{"x":35,"y":40,"width":950,"height":1310},"normalized":{"x":0.0332,"y":0.0268,"width":0.9005,"height":0.8786},"figmaTrimPxApprox":{"x":18.5,"y":21.3,"width":503.4,"height":697.8},"anchor":"field","constraintLevel":{"position":"FLEXIBLE","size":"FLEXIBLE"},"tolerance":"Presence/character required; exact micro placement FLEXIBLE"},"zIndex":77,"layerGroup":"decorative-overlays","saliency":12,"description":"Small hearts, yellow sparkles, tiny flowers, hand-drawn underline strokes and punctuation accents distributed around title, steps and Q&A. Preserve authored irregularity without increasing density."}
+  ],
+  "roleLocks": {
+    "titleSide": {"side":"upper-left","constraintLevel":"LOCKED"},
+    "heroSide": {"side":"upper-right","constraintLevel":"LOCKED"},
+    "timelineSide": {"side":"left/lower-left","constraintLevel":"LOCKED"},
+    "qaSide": {"side":"right/lower-right","constraintLevel":"LOCKED"},
+    "q3": {"position":"above Q4","accent":"pink","constraintLevel":"LOCKED"},
+    "q4": {"position":"below Q3","accent":"blue","constraintLevel":"LOCKED"},
+    "timelinePhotoCount": {"realSupportPhotos":4,"step5HasPhoto":false,"constraintLevel":"LOCKED"},
+    "totalRealPhotoSlots": {"count":5,"constraintLevel":"LOCKED"},
+    "rule": "Do not mirror or rebalance these roles into a clean two-column grid."
+  },
+  "relationalConstraints": [
+    {"type":"dominates","subject":"P03_TITLE_OUR_STORY","object":["timeline details","Q3/Q4","decorations"],"level":"LOCKED"},
+    {"type":"dominates","subject":"P03_PHOTO_HERO","object":["support photos","timeline icons","Q3/Q4 decorations"],"level":"LOCKED"},
+    {"type":"leftOf","subject":"P03_TITLE_OUR_STORY","object":"P03_PHOTO_HERO","level":"LOCKED"},
+    {"type":"leftOf","subject":"timelineSystem","object":"Q3/Q4 paper stack","level":"LOCKED"},
+    {"type":"above","subject":"P03_Q3_PAPER","object":"P03_Q4_PAPER","level":"LOCKED"},
+    {"type":"near","subject":"P03_SUBTITLE_RIBBON","object":"P03_TITLE_OUR_STORY lower edge","level":"TARGET"},
+    {"type":"overlaps","subject":"P03_HERO_PINK_TAPE","object":"P03_HERO_PHOTO_PRINT top-right edge","level":"TARGET"},
+    {"type":"staggeredWith","subject":["P03_PHOTO_ENCOUNTER","P03_PHOTO_DATE","P03_PHOTO_TRAVEL","P03_PHOTO_PROPOSAL"],"object":"timeline copy","level":"TARGET","rule":"Do not align all support photos to one vertical grid."},
+    {"type":"mustNotAdd","subject":"P03_STEP_5","object":"new mirrored/repeated real-photo inset","level":"LOCKED"},
+    {"type":"mustNotCover","subject":"all decorative art","object":["hero faces/eyes","support-photo face/gesture focal points","timeline body copy","Q3/Q4 answers"],"level":"LOCKED"}
+  ],
+  "quietZones": [
+    {"id":"P03_QZ_HERO_FACES","host":"P03_PHOTO_HERO","type":"face-safe quiet zone","slotRelative":{"x":0.2,"y":0.07,"width":0.67,"height":0.43},"rule":"No tape, title, flower or Q&A object over either face/eyes."},
+    {"id":"P03_QZ_TIMELINE_COPY","host":"timelineSystem","type":"critical-copy quiet zone","hostRelative":{"x":0.28,"y":0.05,"width":0.64,"height":0.9},"rule":"Route dots/icons may orbit the text but must not invade body-copy reading lanes."},
+    {"id":"P03_QZ_Q3_ANSWER","host":"P03_Q3_PAPER","type":"intentional breathing space","hostRelative":{"x":0.1,"y":0.34,"width":0.8,"height":0.48},"rule":"Keep Q3 answer field calm; no added stickers."},
+    {"id":"P03_QZ_Q4_ANSWER","host":"P03_Q4_PAPER","type":"intentional breathing space","hostRelative":{"x":0.08,"y":0.28,"width":0.82,"height":0.58},"rule":"Preserve long-answer readability and handwritten line spacing."},
+    {"id":"P03_QZ_PAGE_BADGE","host":"P03_PAGE_BADGE","type":"page-meta quiet zone","rule":"Do not let bottom destination flowers/ribbon cover PAGE 03 numerals."}
+  ],
+  "saliency": {
+    "P03_TITLE_OUR_STORY": 100,
+    "P03_PHOTO_HERO": 94,
+    "P03_SUBTITLE_RIBBON": 64,
+    "timelineSystem": 62,
+    "P03_Q3_COPY": 57,
+    "P03_Q4_COPY": 57,
+    "supportPhotos": "44-50",
+    "P03_INTRO_COPY": 48,
+    "P03_BOTTOM_DESTINATION_CLUSTER": 31,
+    "title/tropical/plane ornaments": "20-32",
+    "P03_WEDDING_DAY_CARD": 27,
+    "P03_PAGE_BADGE": 18,
+    "micro accents": "8-14",
+    "rule": "Title and hero must remain dominant; Q&A/timeline are second-tier reading systems; micro decorations cannot become focal."
+  },
+  "layerOrder": {
+    "0": "warm paper background",
+    "10": "subtle texture",
+    "20-29": "photo/Q&A backing and masks",
+    "30-39": "replaceable photos",
+    "40-49": "photo frame fronts",
+    "50-59": "Q3/Q4 paper vessels",
+    "60-69": "title/ribbon/timeline route/badges",
+    "70-79": "tape, flowers, plane, palm, camera, ring, sparkles, bottom destination cluster",
+    "80-89": "native story/Q&A copy",
+    "90-99": "Wedding Day / PAGE 03 meta objects",
+    "100-109": "airmail perimeter",
+    "rule": "Preserve photo/frame separation and front/back overlaps; exact z integers may be tuned against the visual master."
+  },
+  "assetDecompositionPlan": {
+    "status": "PROPOSED_AFTER_VISUAL_REVIEW_NOT_YET_PART_MAP_APPROVED",
+    "onePartOneImage": true,
+    "proposedGeneratedEditorialObjects": [
+      "OUR STORY display-title system",
+      "ふたりのこれまで ribbon vessel without personal story copy",
+      "hero white print/frame if generated rather than native",
+      "hero pink tape",
+      "support photo frames 1-4 as independent parts/variants",
+      "Q3 torn-paper vessel without question/answer copy",
+      "Q4 torn-paper vessel without question/answer copy",
+      "title-left tropical cluster",
+      "title airplane + heart route cluster",
+      "step2 palm",
+      "step3 camera",
+      "step4 ring",
+      "hero-lower plumeria",
+      "Q3 floral accent",
+      "Q4 floral accent",
+      "bottom Wedding Day card vessel without baked date",
+      "bottom church/tropical destination cluster",
+      "PAGE 03 badge vessel if not native"
+    ],
+    "nativePrecisionObjects": [
+      "all personal/story/Q&A copy",
+      "exact wedding date",
+      "timeline route if simple native stroke reproduces master",
+      "heart-number numerals and step titles where native text gives better accuracy",
+      "simple sparkles/hearts/underline strokes where visually faithful",
+      "photo masks/clipping frames",
+      "safe/trim guides"
+    ],
+    "rule": "Do not generate five identical timeline cards. Generated units follow semantic jobs, not convenience batching."
+  },
+  "assetPaddingContract": {
+    "requiredForFloatingAssets": true,
+    "requiredFields": ["canvas dimensions","visual bounds","transparent padding top/right/bottom/left","anchor","intended crop behavior"],
+    "priorityAssets": ["title","ribbon","tape","photo frames","Q3/Q4 paper","flowers","plane","camera","ring","bottom destination cluster","page badge"],
+    "rule": "Figma placement follows visible bounds, not transparent canvas padding."
+  },
+  "hardRejects": [
+    "generic relationship timeline UI",
+    "five identical timeline cards",
+    "equal two-column grid with timeline and Q&A balanced symmetrically",
+    "moving OUR STORY away from upper-left or hero away from upper-right",
+    "small clean native-text replacement for the expressive OUR STORY title",
+    "turning hero photo into a generic rounded card",
+    "flattening hero photo + frame + pink tape",
+    "flattening support photos with their frames",
+    "adding a fifth real-photo inset to step 5 merely to make all steps identical",
+    "removing the continuous dotted story-route motif",
+    "making Q3 and Q4 identical mirrored cards",
+    "swapping Q3 pink and Q4 blue roles",
+    "baking autobiographical story/Q&A text into generated art",
+    "treating visible story/Q&A reference copy as confirmed FACT",
+    "covering hero/support faces or proposal gesture with decoration",
+    "recreating the bouquet inside the hero photo as a separate decorative asset",
+    "treating the bottom church cluster as factual venue information",
+    "removing small icons/flowers/tape/sparkles until the page becomes AI-clean",
+    "plain white or generic gradient background",
+    "technical QA pass before visual Reference Delta pass"
+  ],
+  "referenceDelta": {
+    "method": "side-by-side or overlay against assets/rurubu-v30/p03/P03.png",
+    "priorityOrder": [
+      "3-second identity: OUR STORY upper-left + dominant couple hero upper-right",
+      "title/hero scale ratio",
+      "subtitle ribbon relationship",
+      "left-hand five-step story flow",
+      "continuous dotted route and staggered support photos",
+      "exact photo count: one hero + four support photos, no step-5 photo",
+      "Q3 above Q4 with pink-vs-blue identity",
+      "Q paper scale/tear/punched-hole character",
+      "bottom Wedding Day card / destination cluster / PAGE 03 closure",
+      "micro tape/flowers/plane/camera/ring/hearts/sparkles"
+    ],
+    "failConditions": [
+      "page reads as a generic wedding timeline template",
+      "title or hero loses dominance",
+      "support photos become uniform aligned thumbnails",
+      "timeline becomes a repeated card stack",
+      "Q3/Q4 become mirrored identical modules",
+      "step 5 gains a photo that is absent from the master",
+      "hero tape or important small editorial cues disappear",
+      "Q&A interiors become cramped",
+      "bottom closure loses its layered editorial rhythm"
+    ]
+  },
+  "a5Qa": {
+    "threeSecondTest": "At actual A5 size, OUR STORY and the hero couple must read first. The 1→5 flow should be discoverable immediately after, then Q3/Q4.",
+    "readabilityTargets": [
+      "timeline step titles remain distinct at A5",
+      "timeline body copy is not shrunk merely to fit decorative density",
+      "Q3/Q4 questions read before answers",
+      "Q4 long answer retains comfortable line spacing",
+      "support photos remain recognizable and not postage-stamp small",
+      "proposal gesture remains legible",
+      "PAGE 03 stays subordinate"
+    ],
+    "printSafety": [
+      "airmail border may activate trim edge but critical text remains safe",
+      "hero faces remain away from risky trim/decoration collision",
+      "bottom destination cluster may touch visual edge but cannot cover date/page number",
+      "Wedding Day card remains readable at actual size"
+    ],
+    "grayscaleCheck": "Hierarchy must survive reduced saturation; timeline cannot rely on color alone to distinguish sequence."
+  },
+  "partGenerationGate": {
+    "status": "READY_FOR_PART_MAP_APPROVAL",
+    "visualMasterReviewed": true,
+    "passA24PointReviewComplete": true,
+    "secondPassOmissionAuditComplete": true,
+    "threeSecondHierarchyLocked": true,
+    "backgroundFramePhotoRolesMapped": true,
+    "referenceDeltaDirectionLocked": true,
+    "partMapApproved": false,
+    "rule": "Visual lock is complete. Isolated generation remains blocked until PART_MAP_APPROVED."
+  },
+  "qa": {
+    "orderedGates": ["G0_VISUAL_IDENTITY_3_SECOND","G1_REFERENCE_DELTA","G2_CANONICAL_FACTS","G3_RELATIONAL_HIERARCHY_AND_SALIENCY","G4_QUIET_ZONES_AND_OCCLUSION","G5_PHOTO_MASK_FACE_SAFE_AND_REPLACEABILITY","G6_A5_READABILITY_AND_SAFE_AREA","G7_ALPHA_PADDING_AND_ASSET_INTEGRITY","G8_EXPORT_AND_PRINT","G9_HIDDEN_STALE_PLACEHOLDER_SCAN"],
+    "currentGateEvidence": {
+      "G0": "Visual master reviewed twice; title/hero/timeline/Q&A hierarchy recorded.",
+      "G1": "Reference Delta priorities and fail conditions recorded; Figma production comparison pending.",
+      "G2": "Root date/name facts retained; personal story/Q&A copy explicitly not promoted to FACT.",
+      "G3": "Role locks, asymmetry, photo-count and saliency rules recorded.",
+      "G4": "Hero/timeline/Q&A/page-badge quiet zones recorded.",
+      "G5": "Five replaceable real-photo slots specified with face/focal-safe behavior; actual Figma swap test pending.",
+      "G6": "A5 readability/print-safety targets specified; actual-size proof pending.",
+      "G7": "Independent asset/padding contract specified; production assets pending.",
+      "G8": "Pending Figma production/export.",
+      "G9": "Pending final production scan."
+    },
+    "technicalQaCannotOverrideVisualQa": true
+  }
 }
