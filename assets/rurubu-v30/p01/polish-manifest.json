@@ -1,105 +1,114 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "project": "Rurubu WEDDING V30",
   "page": "P01",
-  "status": "CURRENT_P01_PROMOTED_WITH_CARRYOVER_DEBT",
+  "status": "CURRENT_P01_PROMOTED_WITH_CARRYOVER_AND_PROXY_DEBT",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
     "assets/rurubu-v30/p01/manifest.json"
   ],
-  "purpose": "Keep P01 as the best current working version while explicitly reopening inherited FIRST BUILD assets for visual requalification. Promotion is retained; final visual acceptance is not.",
+  "purpose": "Keep P01 as the best current working version while explicitly correcting inherited FIRST BUILD visual language and the contaminated Visual-Master-crop proxy method before any further completion claim.",
   "currentInterpretation": {
     "promotion": "VALID_BEST_CURRENT",
-    "finalReferenceDelta": "PROVISIONAL_CARRYOVER_AUDIT_OPEN",
+    "finalReferenceDelta": "PROVISIONAL_CARRYOVER_AND_PROXY_AUDIT_OPEN",
     "figmaDesignComplete": false,
     "finalPhotoQaPending": true,
-    "systemicFeedbackDebt": "OPEN_VISUAL_CARRYOVER",
-    "rule": "The promoted REWORK is clearly better than FIRST BUILD and remains CURRENT, but a better CURRENT can still contain stale inherited design language."
+    "systemicFeedbackDebt": ["OPEN_VISUAL_CARRYOVER", "OPEN_PROXY_CONTAMINATION", "OPEN_DISPLAY_MODULE_REBUILD"],
+    "rule": "Do not roll back the improved masthead/names/Hero hierarchy, but do not treat the current composition as final while old module art and Visual-Master-crop photo proxies remain."
   },
-  "fixedShortDisplayOverrides": {
-    "rule": "P01 fixed short display text may use image-generated/prepared display art when needed for fidelity; native/source-of-truth values remain separately controlled.",
-    "targets": {
-      "るるぶ": {
-        "mode": "generated/prepared display art preferred",
-        "reason": "first native rebuild was too generic",
-        "mustPreserve": ["three-block identity", "chunky glyph character", "white/dark dimensional edges", "playful irregularity"]
+  "bundledDisplayModules": {
+    "rule": "The following P01 fixed visible modules should be authored as complete generated/prepared editorial objects. Their internal visible text does NOT need to remain editable in Figma.",
+    "targets": [
+      {
+        "id": "P01_YEAR_DISPLAY_MODULE",
+        "exactVisibleText": ["2026"],
+        "bundleTogether": ["2026", "yellow cloud/burst backing", "outline/depth", "nearby heart", "airplane/dotted-route accents when they visually move as one year cluster"],
+        "separateIfNeeded": ["route/airplane only when Visual Master proves independent movement/overlap is necessary"]
       },
-      "WEDDING": {
-        "mode": "generated display art",
-        "mustPreserve": ["very large hot-pink mass", "thick layered outline/depth", "cover-dominant scale"]
+      {
+        "id": "P01_DATE_TICKET_MODULE",
+        "exactVisibleText": ["WEDDING DATE", "2026.10.24", "SAT."],
+        "bundleTogether": ["ticket/postal paper", "all three short text lines", "postal/cancellation lines", "small fixed floral/icon accents", "printed outline/shadow"],
+        "replaceablePhotoInside": false
       },
-      "Shogo & Shiori": {
-        "mode": "display-art-with-native-source allowed",
-        "sourceOfTruth": "Shogo & Shiori",
-        "mustPreserve": ["hot-pink script/hand-lettered character", "energetic movement", "heart punctuation if present in approved treatment", "fit within yellow/blue ribbon"]
+      {
+        "id": "P01_FEATURE_1_DISPLAY_MODULE",
+        "exactVisibleText": ["1", "ふたりのプロフィール"],
+        "bundleTogether": ["number badge", "number", "fixed heading", "camera icon", "vessel/background", "fixed decorative accents"],
+        "mustRemainSeparate": ["Feature 1 replaceable photo", "Feature 1 photo mask/frame when required for swapping"]
       },
-      "2026": {
-        "mode": "prepared badge backing + native source or display-art-with-native-source",
-        "sourceOfTruth": "2026",
-        "mustPreserve": ["yellow cloud/burst silhouette", "playful outlined character", "heart/airplane-route ecology"]
+      {
+        "id": "P01_FEATURE_2_DISPLAY_MODULE",
+        "exactVisibleText": ["2", "旅の思い出"],
+        "bundleTogether": ["number badge", "number", "fixed heading", "airplane/route iconography", "vessel/background", "fixed decorative accents"],
+        "mustRemainSeparate": ["Feature 2 replaceable photo", "Feature 2 photo mask/frame when required for swapping"]
       },
-      "OUR JOURNEY": {
-        "mode": "generated/prepared stamp art allowed",
-        "mustPreserve": ["postmark/stamp character", "subordinate role"]
+      {
+        "id": "P01_FEATURE_3_DISPLAY_MODULE",
+        "exactVisibleText": ["3", "家族と友達"],
+        "factSafety": "REFERENCE DISPLAY WORDING ONLY until final editorial wording is confirmed; do not silently reinterpret page role from this phrase.",
+        "bundleTogether": ["number badge", "number", "fixed approved heading", "flower/leaf iconography", "vessel/background", "fixed decorative accents"],
+        "mustRemainSeparate": ["Feature 3 replaceable photo", "Feature 3 photo mask/frame when required for swapping"]
       },
-      "PAGE 01": {
-        "mode": "native or display-art-with-native-source",
-        "sourceOfTruth": "PAGE 01",
-        "mustPreserve": ["subordinate page-meta role", "badge character"]
+      {
+        "id": "P01_BOTTOM_STORY_MODULE",
+        "exactVisibleText": ["ふたりの“楽しい!”を詰めこんだ", "わたしたちの旅ストーリー"],
+        "bundleTogether": ["irregular white story vessel", "fixed two-line story hook", "heart", "sparkles", "local fixed outline/shadow accents"],
+        "mustRemainSeparate": ["large bottom floral cluster when it overlaps independently"]
+      },
+      {
+        "id": "P01_JOURNEY_STAMP_MODULE",
+        "exactVisibleText": ["OUR JOURNEY", "TAKE A TRIP"],
+        "bundleTogether": ["stamp circle", "fixed lettering", "postmark/cancellation lines", "small fixed iconography"]
+      },
+      {
+        "id": "P01_PAGE_BADGE_MODULE",
+        "exactVisibleText": ["PAGE", "01"],
+        "bundleTogether": ["page badge backing", "PAGE", "01", "small fixed heart/accent if attached to badge"]
       }
-    }
+    ],
+    "identityAnchorsAlsoMayBeCompleteDisplayArt": [
+      {"id": "P01_MASTHEAD_RURUBU", "exactVisibleText": "るるぶ"},
+      {"id": "P01_WEDDING_TITLE", "exactVisibleText": "WEDDING"},
+      {"id": "P01_NAMES_LOCKUP", "exactVisibleText": "Shogo & Shiori"}
+    ],
+    "figmaRule": "For these fixed modules, do not rebuild the visible result as separate editable number/text/icon primitives merely for editability. Figma should place/scale the accepted module as one visible asset while preserving separate real-photo slots where listed.",
+    "sourceOfTruthRule": "Exact strings above are recorded here/parent manifest/asset metadata. A hidden duplicate native text layer in Figma is optional and should not exist solely to satisfy a blanket editability rule."
+  },
+  "photoProxyOverride": {
+    "status": "CURRENT_VISUAL_MASTER_CROP_METHOD_DEPRECATED",
+    "hardRule": "Do not use crops from assets/rurubu-v30/p01/P01.png as Hero or Feature photo fills in the next P01 build/QA.",
+    "reason": "Those crops contain page background/decorative content and make it difficult to distinguish actual photo content from the page's separate generated assets. They can also duplicate flowers/background/other page elements inside the photo slot.",
+    "affectedCurrentTemporaryProxies": [
+      "V30_P01_HERO_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png",
+      "V30_P01_FEATURE_1_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png",
+      "V30_P01_FEATURE_2_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png",
+      "V30_P01_FEATURE_3_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png"
+    ],
+    "historicalStatus": "KEEP_ONLY_AS_QA_HISTORY_NOT_FUTURE_PROXY",
+    "replacementOrder": [
+      "user-provided real photo if available",
+      "clean standalone two-person wedding/couple proxy for Hero",
+      "clean standalone couple/profile proxy for Feature 1",
+      "clean standalone travel/place photo for Feature 2",
+      "clean standalone group/friends photo for Feature 3"
+    ],
+    "cleanProxyRequirements": ["no page title", "no page border", "no feature number", "no ticket", "no stamp", "no decorative flower/route/badge copied from the P01 layout", "reads as standalone photo content"],
+    "referenceDeltaRule": "Re-run visual comparison after clean proxies are installed; do not rely on the prior crop-based PASS to close P01."
   },
   "featureStackIrregularityTargets": {
     "sharedRule": "Feature 1/2/3 are a related editorial family but not one equal-card component. Preserve Visual Master differences instead of normalizing them.",
-    "visualMasterEvidence": {
-      "feature1ReferencePx": {"width": 310, "height": 180},
-      "feature2ReferencePx": {"width": 330, "height": 190},
-      "feature3ReferencePx": {"width": 320, "height": 180},
-      "photoSlotsAreNotExactlyEqual": true
-    },
-    "preserveDifferencesIn": [
-      "module width/height",
-      "photo-slot width/height",
-      "local vertical spacing",
-      "icon placement",
-      "accent placement",
-      "local overlap",
-      "heading treatment"
-    ],
+    "visualMasterEvidence": {"feature1ReferencePx": {"width": 310, "height": 180}, "feature2ReferencePx": {"width": 330, "height": 190}, "feature3ReferencePx": {"width": 320, "height": 180}, "photoSlotsAreNotExactlyEqual": true},
+    "preserveDifferencesIn": ["module width/height", "photo-slot width/height", "local vertical spacing", "icon placement", "accent placement", "local overlap", "heading treatment"],
     "rotationRule": "Do not invent random scrapbook angles. Use rotation/offset only where the Visual Master supports it or direct overlay proves it improves fidelity.",
-    "hardRejects": [
-      "equal heights for Feature 1/2/3",
-      "equal thumbnail dimensions merely for reuse",
-      "identical padding",
-      "identical icon coordinates",
-      "identical rounded-card component",
-      "formulaic rotation applied to all three"
-    ]
+    "hardRejects": ["equal heights for Feature 1/2/3", "equal thumbnail dimensions merely for reuse", "identical padding", "identical icon coordinates", "identical rounded-card component", "formulaic rotation applied to all three"]
   },
   "tactileFinishTargets": {
     "principle": "P01 should feel like authored printed travel-magazine ephemera rather than flat digital cards, but texture must remain subtle.",
-    "priorityParts": [
-      "るるぶ/WEDDING display art where reference supports dimensional print character",
-      "names ribbon",
-      "date ticket",
-      "Feature 1/2/3 paper/photo-frame vessels",
-      "OUR JOURNEY stamp/postmark",
-      "bottom story vessel"
-    ],
-    "allowed": [
-      "subtle paper/matte feel",
-      "slight printed edge irregularity",
-      "restrained local shadow/depth",
-      "small material differences between ticket/ribbon/stamp/paper objects"
-    ],
-    "forbidden": [
-      "uniform full-page grain",
-      "heavy vintage dirt",
-      "texture on faces",
-      "texture that weakens exact factual text",
-      "noise used to disguise low-quality generation"
-    ],
+    "priorityParts": ["るるぶ/WEDDING display art where reference supports dimensional print character", "names ribbon", "date ticket", "Feature 1/2/3 modules", "OUR JOURNEY stamp/postmark", "bottom story vessel"],
+    "allowed": ["subtle paper/matte feel", "slight printed edge irregularity", "restrained local shadow/depth", "small material differences between ticket/ribbon/stamp/paper objects"],
+    "forbidden": ["uniform full-page grain", "heavy vintage dirt", "texture on faces", "texture that weakens exact factual text", "noise used to disguise low-quality generation"],
     "referenceDeltaRule": "Material treatment is supporting evidence only. It must never outweigh title, couple Hero, names/date or Feature readability."
   },
   "carryOverAudit": {
@@ -107,106 +116,37 @@
     "importantFinding": "This is not a hidden-layer/graveyard bug. It is visible inherited production-art debt. The prior stale-layer scan passed correctly but answered the wrong question.",
     "currentLiveEvidence": {
       "figmaFrame": "3535:7",
-      "visibleInheritedNodesConfirmed": [
-        "P01_NAMES_RIBBON / PRODUCTION_RGBA",
-        "P01_DATE_TICKET / PRODUCTION_RGBA",
-        "P01_FEATURE_1_VESSEL / PRODUCTION_RGBA",
-        "P01_FEATURE_2_VESSEL / PRODUCTION_RGBA",
-        "P01_FEATURE_3_VESSEL / PRODUCTION_RGBA",
-        "P01_JOURNEY_STAMP / PRODUCTION_RGBA",
-        "P01_BOTTOM_STORY_VESSEL / PRODUCTION_RGBA",
-        "P01_PAGE_BADGE / PRODUCTION_RGBA",
-        "P01_BOTTOM_FLORAL_CLUSTER / PRODUCTION_RGBA",
-        "P01_AIRMAIL_BORDER / PRODUCTION_RGBA"
-      ],
+      "visibleInheritedNodesConfirmed": ["P01_NAMES_RIBBON / PRODUCTION_RGBA", "P01_DATE_TICKET / PRODUCTION_RGBA", "P01_FEATURE_1_VESSEL / PRODUCTION_RGBA", "P01_FEATURE_2_VESSEL / PRODUCTION_RGBA", "P01_FEATURE_3_VESSEL / PRODUCTION_RGBA", "P01_JOURNEY_STAMP / PRODUCTION_RGBA", "P01_BOTTOM_STORY_VESSEL / PRODUCTION_RGBA", "P01_PAGE_BADGE / PRODUCTION_RGBA", "P01_BOTTOM_FLORAL_CLUSTER / PRODUCTION_RGBA", "P01_AIRMAIL_BORDER / PRODUCTION_RGBA"],
       "hiddenOldGraveyardDetected": false,
       "meaning": "The problem is carry-over acceptance, not deletion hygiene."
     },
     "provisionalDecisions": [
-      {
-        "asset": "P01_WEDDING_TITLE / PRODUCTION_RGBA",
-        "decision": "KEEP_REQUALIFIED",
-        "reason": "Promoted comparison explicitly reported WEDDING PASS / MAINTAINED and current screenshot remains visually coherent with the improved masthead/Hero."
-      },
-      {
-        "asset": "P01_RIGHT_DESTINATION_CLUSTER / PRODUCTION_RGBA",
-        "decision": "KEEP_REQUALIFIED",
-        "reason": "Destination cluster was reported PASS / MAINTAINED and still reads as chapel + sea + palms + flowers in current screenshot."
-      },
-      {
-        "asset": "P01_LEFT_TROPICAL_CLUSTER / PRODUCTION_RGBA",
-        "decision": "KEEP_REQUALIFIED",
-        "reason": "Still supports the title/hero composition and does not currently read as obvious prior-build UI language."
-      },
-      {
-        "asset": "P01_AIRMAIL_BORDER / PRODUCTION_RGBA",
-        "decision": "KEEP_REQUALIFIED",
-        "reason": "Border remains consistent with the Visual Master and current page identity."
-      },
-      {
-        "asset": "P01_BOTTOM_FLORAL_CLUSTER / PRODUCTION_RGBA",
-        "decision": "KEEP_REQUALIFIED",
-        "reason": "Bottom floral closure remains visually compatible; recheck again if bottom story vessel is rebuilt."
-      },
-      {
-        "asset": "P01_NAMES_RIBBON / PRODUCTION_RGBA",
-        "decision": "UNREVIEWED_CARRYOVER",
-        "reason": "Visible names lettering improved substantially, but the older ribbon backing itself was carried forward and needs explicit coherence review against the new lockup."
-      },
-      {
-        "asset": "P01_DATE_TICKET / PRODUCTION_RGBA",
-        "decision": "REWORK_REQUIRED",
-        "reason": "Direct isolated/live review shows the same FIRST BUILD ticket backing is still used; earlier feedback already identified it as weak/compressed and postal-object physicality remains behind the stronger reworked anchors."
-      },
-      {
-        "asset": "P01_FEATURE_1_VESSEL / PRODUCTION_RGBA",
-        "decision": "REWORK_REQUIRED",
-        "reason": "Same FIRST BUILD white/pink vessel remains visible and still reads more like a compact UI module than the Visual Master teaser treatment."
-      },
-      {
-        "asset": "P01_FEATURE_2_VESSEL / PRODUCTION_RGBA",
-        "decision": "REWORK_REQUIRED",
-        "reason": "Same FIRST BUILD blue vessel remains visible; asymmetry improved at page level but inherited vessel language is still visibly old."
-      },
-      {
-        "asset": "P01_FEATURE_3_VESSEL / PRODUCTION_RGBA",
-        "decision": "REWORK_REQUIRED",
-        "reason": "Same FIRST BUILD green vessel remains visible and should be re-authored rather than merely repositioned."
-      },
-      {
-        "asset": "P01_BOTTOM_STORY_VESSEL / PRODUCTION_RGBA",
-        "decision": "REWORK_REQUIRED",
-        "reason": "Same FIRST BUILD story backing remains; earlier feedback identified insufficient occupied area/physicality and current stronger Hero/title makes that weakness more apparent."
-      },
-      {
-        "asset": "P01_JOURNEY_STAMP / PRODUCTION_RGBA",
-        "decision": "UNREVIEWED_CARRYOVER",
-        "reason": "Not obviously broken, but old material/outline language must be requalified beside any revised bottom story treatment."
-      },
-      {
-        "asset": "P01_PAGE_BADGE / PRODUCTION_RGBA",
-        "decision": "UNREVIEWED_CARRYOVER",
-        "reason": "Subordinate and possibly acceptable, but previous-pass maintenance is not enough evidence under the new carry-over rule."
-      }
+      {"asset": "P01_WEDDING_TITLE / PRODUCTION_RGBA", "decision": "KEEP_REQUALIFIED", "reason": "Current title remains visually coherent with the improved masthead/Hero."},
+      {"asset": "P01_RIGHT_DESTINATION_CLUSTER / PRODUCTION_RGBA", "decision": "KEEP_REQUALIFIED", "reason": "Still reads as chapel + sea + palms + flowers and remains coherent."},
+      {"asset": "P01_LEFT_TROPICAL_CLUSTER / PRODUCTION_RGBA", "decision": "KEEP_REQUALIFIED", "reason": "Still supports title/Hero and does not read as old UI language."},
+      {"asset": "P01_AIRMAIL_BORDER / PRODUCTION_RGBA", "decision": "KEEP_REQUALIFIED", "reason": "Still consistent with Visual Master and current page identity."},
+      {"asset": "P01_BOTTOM_FLORAL_CLUSTER / PRODUCTION_RGBA", "decision": "KEEP_REQUALIFIED_RECHECK_AFTER_STORY_REWORK", "reason": "Compatible now but must be rechecked after the new Bottom Story module."},
+      {"asset": "P01_NAMES_RIBBON / PRODUCTION_RGBA", "decision": "UNREVIEWED_CARRYOVER", "reason": "Visible lettering improved but old ribbon backing must be requalified against the new lockup."},
+      {"asset": "P01_DATE_TICKET / PRODUCTION_RGBA", "decision": "REPLACE_WITH_BUNDLED_DISPLAY_MODULE", "reason": "Old backing + separate native text model is superseded by the new complete Date Ticket module policy."},
+      {"asset": "P01_FEATURE_1_VESSEL / PRODUCTION_RGBA", "decision": "REPLACE_WITH_BUNDLED_DISPLAY_MODULE", "reason": "Old vessel remains UI-like; new module should combine number/heading/icon/vessel while keeping photo separate."},
+      {"asset": "P01_FEATURE_2_VESSEL / PRODUCTION_RGBA", "decision": "REPLACE_WITH_BUNDLED_DISPLAY_MODULE", "reason": "Old vessel remains visually stale; use complete module while keeping photo separate."},
+      {"asset": "P01_FEATURE_3_VESSEL / PRODUCTION_RGBA", "decision": "REPLACE_WITH_BUNDLED_DISPLAY_MODULE", "reason": "Old vessel remains visually stale; use complete module while keeping photo separate."},
+      {"asset": "P01_BOTTOM_STORY_VESSEL / PRODUCTION_RGBA", "decision": "REPLACE_WITH_BUNDLED_DISPLAY_MODULE", "reason": "Old backing + native story copy is superseded by a complete fixed story module."},
+      {"asset": "P01_JOURNEY_STAMP / PRODUCTION_RGBA", "decision": "REWORK_AS_BUNDLED_DISPLAY_MODULE", "reason": "Treat stamp + fixed words + cancellation as one authored object."},
+      {"asset": "P01_PAGE_BADGE / PRODUCTION_RGBA", "decision": "REWORK_AS_BUNDLED_DISPLAY_MODULE", "reason": "Treat PAGE + 01 + badge as one authored fixed object."}
     ],
-    "adjacencyRules": [
-      "If Feature vessels are rebuilt, recheck Feature number badges/headings/photo-frame fronts as one local system.",
-      "If Date ticket is rebuilt, recheck nearby Feature 1 spacing and Hero-left collision.",
-      "If Bottom story is rebuilt, recheck bottom floral cluster, OUR JOURNEY stamp and PAGE 01 together.",
-      "If names ribbon backing changes, preserve the accepted Shogo & Shiori display-art spelling/source-of-truth and title/Hero overlap."
-    ],
-    "completionRule": "P01 carry-over debt closes only when every material inherited visible asset is KEEP_REQUALIFIED, REWORKED, REPLACED, SUPERSEDED, or explicitly deferred by the user with a reason.",
-    "blockP02ProductionUntilResolved": true
+    "adjacencyRules": ["If Feature modules are rebuilt, recheck photo-frame fronts and local spacing as one system.", "If Date ticket is rebuilt, recheck Feature 1 spacing and Hero-left collision.", "If Bottom story is rebuilt, recheck bottom floral cluster, OUR JOURNEY and PAGE 01 together.", "If names ribbon backing changes, preserve the accepted Shogo & Shiori display-art spelling and title/Hero overlap."],
+    "completionRule": "P01 debt closes only when all material inherited visible assets are requalified/reworked/replaced/superseded and all four contaminated Visual-Master-crop photo proxies are removed from active visual QA."
   },
-  "nextBuildPriority": [
-    "Feature 1/2/3 inherited vessel rework",
-    "Date ticket inherited backing rework",
-    "Bottom story inherited vessel rework",
-    "Names ribbon backing explicit requalification",
-    "OUR JOURNEY stamp + PAGE 01 local requalification",
-    "fresh current Figma screenshot",
-    "Visual Master / current coherence comparison",
-    "carry-over audit closure",
-    "then continue final-photo QA later"
-  ]
+  "nextCodexBuildPriority": [
+    "remove/deprecate P01.png-crop photo proxies from active slots and replace with clean standalone proxies",
+    "generate complete Feature 1/2/3 display modules while keeping each real-photo slot separate",
+    "generate complete Date Ticket module",
+    "generate complete Bottom Story module",
+    "generate/requalify OUR JOURNEY and PAGE 01 complete modules",
+    "requalify names ribbon backing",
+    "recheck Bottom Floral after Story changes",
+    "capture fresh CURRENT screenshot and rerun clean-proxy + carry-over + Reference Delta QA"
+  ],
+  "doNotDo": ["do not edit P02-P08 while closing P01 debt", "do not use Visual Master crops as photo proxies", "do not recreate fixed modules as generic editable Figma text/shapes", "do not flatten replaceable photos into display modules", "do not regenerate the whole page when targeted module replacement is sufficient"]
 }
