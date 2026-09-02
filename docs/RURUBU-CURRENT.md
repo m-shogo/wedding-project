@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `CURRENT_POINTER / V30_ONLY / P01_DESIGN_LOCKED / GIT_BINARY_SYNC_COMPLETE / 2026-09-02`
+Status: `CURRENT_POINTER / V30_ONLY / P01_TARGETED_POST_LOCK_PATCH_OPEN / 2026-09-02`
 
 The only current Rurubu WEDDING production version is **V30**.
 
@@ -84,63 +84,103 @@ V20 = frozen history/reference only. Do not create V31 unless explicitly request
 - fixed short authored display modules may be bundled with their vessel/icon/decor; editable native text is not inherently better;
 - page-master crops/screenshots are prohibited as active photo fills;
 - `TRUE ALPHA ≠ CORRECT ALPHA`: verify outside transparency and inside opacity separately;
+- if one same-family white-paper module fails inside-opacity QA, run one quick sibling sweep before closing page alpha integrity;
 - opaque paper/ticket/label/vessel interiors normally remain alpha `>= 0.95`, preferably `1.00`;
+- newest owner-approved copy must propagate to dependent teaser/index/cover modules; stale generated copy has no grandfathered PASS;
+- page borders/frames are background-adjacent by default: above background, below Hero/photos/display modules/stickers unless Visual Master explicitly requires foreground overlap;
 - use fast-fail regeneration: one quick discriminator, then regenerate/re-cut cheap asset-side defects instead of prolonged diagnosis;
 - important labels/badges/text must not read as accidentally clipped by border/trim;
 - keep Figma LIVE current-only; history belongs in Git/Drive evidence.
 
-## P01 — DESIGN LOCKED
+## P01 — TARGETED POST-LOCK PATCH OPEN
 
 P01 CURRENT remains `3535:7`.
 
-Fresh post-fix CURRENT review confirms:
-- Feature 1–3 intended white paper/vessel interiors no longer visually bleed Hero/background;
-- reported paper-core alpha samples are `255`; outer transparency retained; Figma node/image opacity `1.0`;
-- Feature 1–3 left-edge spacing is safer while unequal editorial rhythm remains;
-- top-left wedding-ring cue now reads as gold rings + diamond + yellow sparkle without overtaking masthead/title;
-- hidden obsolete layers reported `0`;
-- duplicate same-job production layers reported `0`;
-- P02 `3535:9` remained untouched.
+Preserve the already accepted improvements:
+- clean standalone Hero + Feature proxies;
+- Feature 1–3 opaque-paper fix;
+- Feature 1–3 left-edge safety fix;
+- top-left gold ring / diamond / yellow sparkle improvement;
+- stale/duplicate LIVE cleanup;
+- first micro-polish production binaries already synchronized to Git.
 
-P01 design gates are PASS:
-- `FIGMA_STRUCTURE_READY`
-- `CLEAN_PROXY_PASS`
-- `BUNDLED_DISPLAY_MODULE_PASS`
-- `MICRO_POLISH_DEBT = CLOSED`
-- `INTERNAL_OPACITY_PASS = YES`
-- `ALPHA_INTEGRITY_PASS`
-- `EDGE_SAFETY_PASS`
-- `RING_CLUSTER_PASS = YES`
-- `IDENTITY_ANCHOR_PASS`
-- `VISUAL_CARRYOVER_PASS`
-- `REFERENCE_DELTA_PASS_AFTER_MICRO_POLISH`
-- `PHOTO_SWAP_PASS`
-- `A5_GRAYSCALE_PASS`
-- `HUMAN_FEEDBACK_REVIEWED`
-- `FIGMA_DESIGN_COMPLETE = YES`
+Latest owner review reopened **three targeted issues**:
 
-Still pending later:
+### 1. Date + PAGE 01 internal opacity
+
+Targets:
+- `P01_WEDDING_DATE_2026_10_24_SAT / FINAL_REWORK_COMPLETE_MODULE`
+- `P01_PAGE_01 / FINAL_REWORK_COMPLETE_MODULE`
+
+Both appear internally translucent. Use one quick source-alpha/composite discriminator; if asset-side, regenerate/re-cut immediately. Do not hide the defect with rescue rectangles.
+
+Because this is another same-family white-paper failure, perform one quick sibling sweep across:
+- Date
+- Feature 1
+- Feature 2
+- Feature 3
+- Bottom Story
+- PAGE 01
+
+before closing `ALPHA_INTEGRITY_PASS`.
+
+### 2. Feature 3 teaser copy
+
+The old visible wording `家族と友達` is superseded.
+
+Current approved exact P01 cover-teaser wording:
+
+**`友達との思い出`**
+
+`友達` alone is also not the approved final heading because it is too bare for the editorial teaser role.
+
+This friends-only wording aligns with the locked P05 Friends Memories role without importing family semantics back into P01.
+
+### 3. Airmail border depth / z-order
+
+Target:
+- `P01_AIRMAIL_BORDER / PRODUCTION_RGBA`
+
+Required depth:
+
+`background → airmail border → Hero/photos → authored display modules → major stickers/badges`
+
+The border should frame the page, not sit as a strong foreground overlay over editorial content.
+
+## Current P01 gates
+
+- `FIGMA_STRUCTURE_READY = PASS`
+- `CLEAN_PROXY_PASS = PASS`
+- `FEATURE_ALPHA_FIX_PASS = PASS`
+- `FEATURE_LEFT_EDGE_PASS = PASS`
+- `RING_CLUSTER_PASS = PASS`
+- `ALPHA_INTEGRITY_PASS = REOPENED_FOR_DATE_AND_PAGE01_PLUS_SIBLING_SWEEP`
+- `COPY_SYNC_PASS = REOPENED_FOR_FEATURE_3`
+- `BORDER_Z_ORDER_PASS = REOPENED_FOR_AIRMAIL_BORDER`
+- `REFERENCE_DELTA_PASS = REOPENED_FOR_TARGETED_PATCH`
+- `FIGMA_DESIGN_COMPLETE = NO`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-## Repository sync — COMPLETE
+P02 production is blocked until these targeted issues are resolved or explicitly deferred by the owner.
 
-The four micro-polish production PNGs are committed on the PR branch:
+## Next P01 action — CODEX ONLY
 
-- `assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_1_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
-- `assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_2_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
-- `assets/rurubu-v30/p01/final-rework/V30_P01_FEATURE_3_MODULE_MICRO_POLISH_OPAQUE_PAPER_RGBA.png`
-- `assets/rurubu-v30/p01/final-rework/V30_P01_TOP_LEFT_RING_DIAMOND_SPARKLE_MICRO_POLISH_RGBA.png`
+1. update CURRENT `3535:7` only;
+2. preserve Feature 1–3 opacity/edge fixes and ring improvement;
+3. check Date and PAGE 01 inside opacity once and regenerate/re-cut immediately if asset-side;
+4. run one white-paper sibling sweep before closing alpha integrity;
+5. replace Feature 3 visible heading with exact `3 / 友達との思い出`;
+6. move the airmail border to background-adjacent depth;
+7. delete superseded LIVE modules/layers after replacement;
+8. capture one fresh full-page + A5 final evidence set;
+9. run `ALPHA_INTEGRITY → COPY_SYNC → BORDER_Z_ORDER → REFERENCE_DELTA` once after fixes;
+10. commit/push any newly generated production binaries and verify remote paths;
+11. do not touch P02 `3535:9`.
 
-Feature module x positions are `21 / 23 / 22`; ring node `3681:137` is `27,40,92×76`. Fresh screenshot SHA-256 is `f83e608d943fb15131042edb43d59a503b171ca427902428e140789b134989a3`; QA Drive folder is `1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d`.
+## P02/P03
 
-**P02 production may proceed.**
-
-## After binary sync
-
-P02 may proceed under its direct Visual Master/page-polish authority. Preserve the authored header ecology, SHOGO-left/blue and SHIORI-right/pink asymmetry, Q1/Q2 non-identity, Q1-only inset photo, clean standalone proxies, internal-opacity QA and fast-fail regeneration.
-
-When final P01 owner photos arrive, replace only Hero + Feature 1/2/3 photo fills and run final-photo crop/face-safe/effective-resolution/A5/print QA.
+P02/P03 have direct Visual Master/page-polish authorities already. P02 must wait until the P01 targeted patch above closes.
 
 ## P04–P08
 
