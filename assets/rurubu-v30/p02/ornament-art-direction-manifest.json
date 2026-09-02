@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P02",
+  "status": "ORNAMENT_ART_DIRECTION_REDESIGN_OPEN",
+  "inherits": [
+    "assets/rurubu-v30/ornament-art-direction-manifest.json",
+    "assets/rurubu-v30/visual-polish-manifest.json",
+    "docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md",
+    "assets/rurubu-v30/p02/polish-manifest.json"
+  ],
+  "reason": "The latest replacement ornament candidates improved standalone drawing quality but split into visibly different illustration genres. The page therefore needs higher-level Rurubu editorial-DNA and V30 art-direction gating before another replacement run.",
+  "pageVisualLanguage": {
+    "role": "PROFILE + Q1/Q2",
+    "priority": "people/profile information first, ornaments second",
+    "threeSecondLead": ["プロフィール title", "SHOGO/SHIORI portraits", "paired profile sheets", "Q1/Q2"],
+    "ornamentJob": "support travel/wedding energy, guide eye movement and activate corners/gaps without becoming independent hero illustrations",
+    "targetWeight": "light-to-medium editorial accents; lower visual dominance than faces/title/profile information",
+    "hardRejects": [
+      "large standalone illustration plate competing with portraits",
+      "ornament detail density substantially higher than the surrounding magazine page",
+      "different stock-pack or illustration-genre feeling across the five target ornaments",
+      "cover-level ornament density imported from P01 without P02 page-role need"
+    ]
+  },
+  "currentCandidateAssessment": {
+    "status": "STYLE_DRIFT_REVIEW_REQUIRED / NOT_FAMILY_LOCKED",
+    "ownerFeedback": "individual designs are good, but their design taste/style does not feel continuous with the publication",
+    "observedDrift": [
+      "one airplane reads as softer craft/storybook-style travel illustration",
+      "another airplane reads as a stronger retro aviation-poster illustration",
+      "one tropical cluster reads as a detailed botanical illustration plate",
+      "another tropical cluster reads as a lighter magazine/sticker illustration",
+      "the problem is not that every object must use identical brushwork; the problem is that the mixed media does not currently read as one Rurubu-style editorial art direction"
+    ],
+    "decision": "Do not promote the current generated set as V30 family anchors merely because the individual art quality is high."
+  },
+  "familyAssignments": {
+    "P02_TOP_AIRPLANE_ROUTE": {
+      "families": ["TRAVEL_VEHICLE", "TRAVEL_ROUTE_DOODLE"],
+      "localJob": "small upper travel cue and directional rhythm around the title zone",
+      "rule": "lighter editorial utility; must not read as a standalone aviation poster"
+    },
+    "P02_Q2_PLANE_AND_ROUTE": {
+      "families": ["TRAVEL_VEHICLE", "TRAVEL_ROUTE_DOODLE"],
+      "localJob": "support Q2 travel-theme narrative without becoming a second hero",
+      "rule": "may differ in vehicle/pose from top airplane, but must share compatible editorial weight, print treatment and route grammar"
+    },
+    "P02_Q2_SUITCASE": {
+      "families": ["TRAVEL_EPHEMERA"],
+      "localJob": "small narrative prop integrated with Q2",
+      "rule": "must not read as an isolated generic suitcase icon"
+    },
+    "P02_TOP_LEFT_TROPICAL_CLUSTER": {
+      "families": ["TROPICAL_BOTANICAL"],
+      "localJob": "corner/edge activation and wedding-travel warmth",
+      "rule": "compact editorial cluster; do not become a fine-art botanical plate"
+    },
+    "P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER": {
+      "families": ["TROPICAL_BOTANICAL", "TRAVEL_EPHEMERA"],
+      "localJob": "balance top-right travel/tropical energy while remaining subordinate to title and portrait",
+      "rule": "must be compositionally distinct from top-left while clearly belonging to the same publication art direction"
+    }
+  },
+  "coherenceContract": {
+    "sameDoesNotMeanIdentical": true,
+    "mustShare": [
+      "Rurubu editorial usefulness",
+      "V30 tactile/print feeling",
+      "compatible line-weight range",
+      "compatible saturation/temperature",
+      "compatible realism/detail range",
+      "compatible cutout/sticker weight",
+      "shared route/doodle grammar where routes appear",
+      "subordinate relationship to photography/native editorial content"
+    ],
+    "mayDiffer": [
+      "exact illustration medium",
+      "vehicle type and pose",
+      "flower species",
+      "cluster silhouette",
+      "micro-accent combination"
+    ],
+    "hardRejects": [
+      "botanical fine-art plate beside lightweight sticker art with no editorial unifier",
+      "retro-poster airplane beside storybook airplane when both are meant to read as one page's travel vocabulary",
+      "reusing one exact prominent ornament twice",
+      "making all five assets artificially identical just to solve consistency"
+    ]
+  },
+  "productionPlan": {
+    "strategy": "CALIBRATE_THEN_CONTEXTUAL_VARIANTS",
+    "steps": [
+      "Before another five-asset final batch, establish/confirm one compact TRAVEL_VEHICLE treatment anchor and one compact TROPICAL_BOTANICAL treatment anchor against the P02 Visual Master and V30 global authority.",
+      "Do not treat these anchors as mandatory final page assets; they calibrate visual weight, line/detail range, print texture and mixed-media compatibility.",
+      "Once both anchors pass, produce the five final P02 ornament variants in small related batches while viewing the P02 page context.",
+      "Run true-alpha preflight before Figma placement.",
+      "Judge the final page, not isolated PNG beauty, before closing family coherence."
+    ],
+    "doNotDo": [
+      "generate a large library of final P02/global icons before page context is known",
+      "approve each final PNG independently without comparing the set in the page",
+      "force P02 to copy P01 cover ornament density or exact motifs"
+    ]
+  },
+  "closeGates": {
+    "RURUBU_EDITORIAL_DNA_PASS": "REOPENED",
+    "V30_ART_DIRECTION_PASS": "REOPENED",
+    "PAGE_ROLE_FIT_PASS": "REOPENED_FOR_FIVE_ORNAMENTS",
+    "ORNAMENT_FAMILY_COHERENCE_PASS": "REOPENED",
+    "ORNAMENT_OBJECT_QUALITY_PASS": "CURRENT_CANDIDATES_STRONG_BUT_NOT_SUFFICIENT",
+    "REUSE_INTENT_PASS": "REOPENED",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "REQUIRED_FOR_FINAL_REPLACEMENTS",
+    "FIGMA_DESIGN_COMPLETE": false
+  }
+}
