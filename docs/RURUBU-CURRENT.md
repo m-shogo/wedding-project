@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `CURRENT_POINTER / V30_ONLY / 2026-09-02`
+Status: `CURRENT_POINTER / V30_ONLY / P01_DESIGN_LOCKED / 2026-09-02`
 
 The only current Rurubu WEDDING production version is **V30**.
 
@@ -90,138 +90,83 @@ Execution authorities:
 - P02 `assets/rurubu-v30/p02/polish-manifest.json`
 - P03 `assets/rurubu-v30/p03/polish-manifest.json`
 
-### P01 fixed-module model
-
-Complete fixed display modules include:
-- `るるぶ`
-- `WEDDING`
-- `Shogo & Shiori` + ribbon
-- `2026`
-- Date ticket
-- Feature 1/2/3 shells
-- Bottom Story
-- `OUR JOURNEY / TAKE A TRIP`
-- `PAGE / 01`
-
-Replaceable photo slots remain separate:
-- Hero
-- Feature 1
-- Feature 2
-- Feature 3
-
-Current Date display copy:
-- `WEDDING DATE`
-- `2026.10.24`
-- `SAT`
-
-### P02 rereview model
-
-- `ふたりのプロフィール` top area is one authored header ecology
-- SHOGO/SHIORI bubbles are fixed display modules after exact copy approval
-- profile-sheet shells may be prepared art while personal values remain separate until copy-lock
-- Q1/Q2 are related but non-identical
-- Q1 alone has an inset couple photo
-- left=SHOGO/blue, right=SHIORI/pink
-- clean standalone proxies only
-
-### P03 rereview model
-
-- `OUR STORY + ふたりのこれまで` form one header system
-- intro sentence stays separate until copy-lock
-- Step 1–5 are individually authored modules
-- one continuous route spans multiple steps and remains independent
-- Step 1–4 have photo relationships; Step 5 intentionally has no photo
-- Q3/Q4 are related but non-identical
-- Hero + four support photos use clean standalone proxies
-- Hero pink tape remains independent
-- Wedding Day card and PAGE 03 may be complete fixed modules
-
 ## Systemic production rules
 
 ### Fixed bundled display modules
 
-Short fixed text/numbers may be generated/prepared together with their vessel/background/icon/attached accents when they move as one authored object.
-
-Visible fixed display text does not need to remain editable in Figma.
+Short fixed text/numbers may be generated/prepared together with their vessel/background/icon/attached accents when they move as one authored object. Visible fixed display text does not need to remain editable in Figma.
 
 Long/TBD/personal/frequently changing copy and replaceable photos remain separate.
 
 ### Clean photo proxies
 
-Visual Master is comparison authority, not photo source.
-
-Never use page-master crops or page screenshots as active photo fills.
+Visual Master is comparison authority, not photo source. Never use page-master crops or page screenshots as active photo fills.
 
 ### Alpha Integrity — HARD
 
 `TRUE ALPHA ≠ CORRECT ALPHA`.
 
-For RGBA modules, verify both:
-1. intended outside transparency;
-2. intended inside opacity.
+For RGBA modules, verify both intended outside transparency and intended inside opacity. Opaque paper/ticket/label/vessel interiors should normally remain alpha `>= 0.95`, preferably `1.00`, except narrow antialiased edges or explicitly approved translucency.
 
-Opaque paper/ticket/label/vessel interiors should normally remain alpha `>= 0.95`, preferably `1.00`, except antialiased edges or explicitly approved translucency.
+### Fast-fail regeneration — HARD
 
-Preview over light/dark/high-contrast backgrounds and inspect alpha itself.
+Use one quick discriminator. If a cheap defect is likely asset-side and regeneration/re-cut is faster than continued diagnosis, regenerate/re-cut immediately. Only inspect Figma opacity/blend/mask when source art passes. After replacement, run one integrated final QA pass rather than repeated midpoint checks/reports.
 
 ### Edge Safety — HARD
 
-Busy edge activation is allowed, but important labels/badges/text must not look accidentally clipped by border/trim.
+Busy edge activation is allowed, but important labels/badges/text must not look accidentally clipped by border/trim. Review at full page and A5 size.
 
-Review at full page and A5 size.
+## P01 CURRENT STATUS — DESIGN LOCKED
 
-## P01 CURRENT STATUS — MICRO POLISH REOPENED
+P01 CURRENT remains `3535:7`.
 
-P01 `3535:7` remains the best CURRENT. Do not roll back to FIRST BUILD and do not create another P01.
+The large REWORK plus targeted micro-polish are now accepted.
 
-The `c64b3c66...` final REWORK remains the accepted baseline for:
-- clean proxies
-- bundled modules
-- stale-layer cleanup
-- photo swap structure
+Fresh post-fix CURRENT review confirms:
+- Feature 1–3 intended white paper/vessel interiors no longer visually bleed Hero/background;
+- reported paper-core alpha samples are `255`, outer transparency remains available, and Figma node/image opacity is `1.0`;
+- Feature 1–3 left-edge spacing is safer while unequal editorial rhythm remains;
+- top-left wedding-ring cue now reads as gold rings + diamond + yellow sparkle without overtaking the masthead/title;
+- hidden obsolete layers remain reported `0`;
+- duplicate same-job production layers remain reported `0`;
+- real P02 `3535:9` remained untouched.
 
-However owner review of the actual CURRENT screenshot reopened **three targeted visual checks**:
+Current P01 gates:
 
-1. Feature 1–3 paper/vessel interiors appear too transparent/washed relative to Visual Master.
-2. Feature 1–3 number badges/labels sit too close to the left airmail border.
-3. Top-left ring/diamond/sparkle cluster is visually weaker than Visual Master.
+- `BEST_CURRENT = YES`
+- `FIGMA_STRUCTURE_READY = PASS`
+- `CLEAN_PROXY_PASS = PASS`
+- `BUNDLED_DISPLAY_MODULE_PASS = PASS`
+- `ALPHA_INTEGRITY_PASS = PASS`
+- `EDGE_SAFETY_PASS = PASS`
+- `IDENTITY_ANCHOR_PASS = PASS`
+- `VISUAL_CARRYOVER_PASS = PASS`
+- `REFERENCE_DELTA_PASS = PASS_AFTER_MICRO_POLISH`
+- `PHOTO_SWAP_PASS = PASS`
+- `A5_GRAYSCALE_PASS = PASS`
+- `FIGMA_DESIGN_COMPLETE = YES`
+- `FINAL_PHOTO_QA_PENDING = YES`
+- `PRINT_READY = NO`
 
-Current state:
+**P01 design is locked. P02 production may begin.**
 
-`BEST_CURRENT = YES`
+Do not reopen P01 design merely because final owner photography is not yet supplied. When final P01 photos arrive, replace only Hero + Feature 1/2/3 photo fills and run final-photo crop/face-safe/resolution/print QA.
 
-`FIGMA_STRUCTURE_READY = PASS`
+## P02 current starting rule
 
-`CLEAN_PROXY_PASS = PASS`
+P02 production may now proceed, but only after rereading the actual P02 Visual Master and its current page-polish authority. Preserve:
+- one authored `ふたりのプロフィール` header ecology;
+- SHOGO left/blue and SHIORI right/pink;
+- profile sheet shells separate from personal values until copy-lock;
+- Q1/Q2 non-identical relationship;
+- Q1-only inset couple photo;
+- clean standalone photo proxies;
+- internal-opacity QA on opaque paper/vessel modules;
+- fast-fail regeneration when cheap asset-side defects are obvious.
 
-`VISUAL_CARRYOVER_PASS = PASS`
+## P03 current starting rule
 
-`ALPHA_INTEGRITY_PASS = REOPENED_FOR_FEATURE_1_3`
-
-`EDGE_SAFETY_PASS = REOPENED_FOR_FEATURE_1_3`
-
-`REFERENCE_DELTA_PASS = REOPENED_FOR_MICRO_POLISH`
-
-`FIGMA_DESIGN_COMPLETE = NO`
-
-`FINAL_PHOTO_QA_PENDING = YES`
-
-P02 production is blocked until these micro issues are resolved or explicitly deferred by the owner.
-
-## Next P01 action — CODEX ONLY
-
-Targeted micro-polish only:
-
-1. inspect Feature 1/2/3 RGBA alpha channel and intended paper interior opacity;
-2. repair/regenerate only modules with incorrect interior alpha;
-3. do not fake opacity with generic white rescue rectangles;
-4. tune Feature 1–3 left-edge spacing without equalizing them;
-5. requalify top-left ring/diamond/sparkle cluster and strengthen only if needed;
-6. preserve CURRENT `3535:7`;
-7. do not touch P02 `3535:9`;
-8. remove superseded LIVE layers if any module is replaced;
-9. capture fresh full-page + A5 screenshots;
-10. rerun alpha integrity, edge safety and Reference Delta.
+P03 remains prepared from direct Visual Master rereview but should begin only after P02 acceptance. Preserve its authored header, individually authored Step 1–5 rhythm, independent continuous route, Q3/Q4 non-identity and clean replaceable photo structure.
 
 ## P04–P08
 
@@ -243,7 +188,7 @@ Do not invent exact module lists from prose alone.
 
 Add rules only for real/repeatable failures or truth/print/editability risk.
 
-Once the current feedback is modeled and contradictions are removed:
+Once current feedback is represented and contradictions are removed:
 
 `STOP WRITING RULES → HAND OFF TO CODEX → MAKE THE BOOK BETTER.`
 
