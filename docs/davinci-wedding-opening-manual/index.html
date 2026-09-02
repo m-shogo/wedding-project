@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DaVinci Wedding Opening Manual</title>
+  <meta name="description" content="DaVinci Resolve初心者が、結婚式オープニングムービーを会話しながら1操作ずつ完成させるための専用マニュアル。" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">WEDDING MOVIE / BEGINNER MANUAL</p>
+      <h1>DaVinci 結婚式オープニング<br class="sp-only" />制作マニュアル</h1>
+      <p class="lead">Mrs. GREEN APPLE「StaRt」を使った約2分のオープニングムービーを、<strong>1操作ずつ</strong>進めるための専用ガイド。</p>
+    </div>
+    <div class="progress-card" aria-live="polite">
+      <span>この章の進み具合</span>
+      <strong id="progressText">0 / 4</strong>
+      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="toc" aria-label="目次">
+      <div class="toc-inner">
+        <p class="toc-title">目次</p>
+        <a class="active" href="#chapter-01">01 起動〜音楽を取り込む</a>
+        <span class="coming">02 音楽をタイムラインへ</span>
+        <span class="coming">03 写真を入れる</span>
+        <span class="coming">04 写真を動かす</span>
+        <span class="coming">05 歌詞を入れる</span>
+        <span class="coming">06 歌詞以外の文字</span>
+        <span class="coming">07 2分に仕上げる</span>
+        <span class="coming">08 書き出す</span>
+      </div>
+    </aside>
+
+    <article class="content" id="chapter-01">
+      <section class="chapter-head">
+        <p class="chapter-no">CHAPTER 01</p>
+        <h2>起動したところから、音楽を取り込むまで</h2>
+        <p>ここではまだ動画を作り込みません。<strong>「プロジェクトを作る → Edit画面を開く → StaRtをDaVinciに入れる」</strong>だけです。</p>
+      </section>
+
+      <section class="rule-box">
+        <h3>このマニュアルのルール</h3>
+        <ul>
+          <li>一度にたくさん覚えない。</li>
+          <li>初めて出てくる言葉は、その場で意味を書く。</li>
+          <li>「どこを押すか」が分かる操作図を付ける。</li>
+          <li>会話で進んだところまで、このHTMLに追記していく。</li>
+        </ul>
+      </section>
+
+      <section class="step" data-step="1">
+        <div class="step-badge">STEP 1</div>
+        <h3>新しいプロジェクトを作る</h3>
+        <p>DaVinci Resolveを起動した直後の画面で、下のほうにある <strong>New Project</strong> を押します。</p>
+        <figure>
+          <img src="./assets/step-01-new-project.svg" alt="DaVinci Resolveの起動画面でNew Projectを押す位置を示した簡略図" />
+          <figcaption>操作図：起動画面の「New Project」を押す</figcaption>
+        </figure>
+        <div class="action-box">
+          <p><strong>入力する名前</strong></p>
+          <code>Wedding Opening</code>
+          <p>名前を入れたら <strong>Create</strong> を押します。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-progress="step-1" /> できた</label>
+      </section>
+
+      <section class="step" data-step="2">
+        <div class="step-badge">STEP 2</div>
+        <h3>画面下の「Edit」を押す</h3>
+        <p>プロジェクトが開くと、画面の一番下にページ切り替えがあります。今回はまず <strong>Edit</strong> だけ使います。</p>
+        <figure>
+          <img src="./assets/step-02-edit-page.svg" alt="DaVinci Resolve画面下部のEditボタンを示した簡略図" />
+          <figcaption>操作図：下部メニューの「Edit」</figcaption>
+        </figure>
+        <div class="note">
+          <strong>今は触らなくてOK：</strong> Fusion / Color / Fairlight / Deliver
+        </div>
+        <label class="check"><input type="checkbox" data-progress="step-2" /> できた</label>
+      </section>
+
+      <section class="step" data-step="3">
+        <div class="step-badge">STEP 3</div>
+        <h3>「Media Pool」がどこかだけ確認する</h3>
+        <p>Edit画面の<strong>左上</strong>に、写真・音楽・動画を置いておく場所があります。これを <strong>Media Pool（メディアプール）</strong> と呼びます。</p>
+        <figure>
+          <img src="./assets/step-03-media-pool.svg" alt="Edit画面左上のMedia Poolの位置を示した簡略図" />
+          <figcaption>操作図：左上が素材置き場「Media Pool」</figcaption>
+        </figure>
+        <div class="plain-language">
+          <span>難しい言葉を日本語にすると</span>
+          <strong>Media Pool ＝ 素材置き場</strong>
+        </div>
+        <p>この段階では、他の場所の名前は覚えなくて大丈夫です。</p>
+        <label class="check"><input type="checkbox" data-progress="step-3" /> 場所が分かった</label>
+      </section>
+
+      <section class="step" data-step="4">
+        <div class="step-badge">STEP 4</div>
+        <h3>StaRtの音楽ファイルを入れる</h3>
+        <ol class="micro-steps">
+          <li>Macの<strong>Finder</strong>を開く。</li>
+          <li>手元にある「StaRt」の音楽ファイルを探す。</li>
+          <li>そのファイルをマウスでつかむ。</li>
+          <li>DaVinci左上の<strong>Media Pool</strong>の空いているところへドラッグ。</li>
+          <li>Media Poolに曲名が表示されたら成功。</li>
+        </ol>
+        <div class="success-box">
+          <strong>この章のゴール</strong>
+          <p>左上のMedia Poolに「StaRt」の音楽ファイルが見えている。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-progress="step-4" /> 音楽が入った</label>
+      </section>
+
+      <section class="stop-card">
+        <span>STOP HERE</span>
+        <h3>ここで一度止める</h3>
+        <p>まだ音楽を下に置かない。写真も入れない。歌詞も作らない。</p>
+        <p>次は、<strong>Media Poolに入ったStaRtを「タイムライン」に置いて、再生するところ</strong>から進めます。</p>
+      </section>
+
+      <section class="glossary">
+        <h3>今回出てきた言葉</h3>
+        <dl>
+          <div><dt>Project</dt><dd>今回作る動画の作業ファイル一式。</dd></div>
+          <div><dt>Edit</dt><dd>写真・動画・音楽・文字を並べて編集するメイン画面。</dd></div>
+          <div><dt>Media Pool</dt><dd>使う素材を置いておく場所。今は「素材置き場」でOK。</dd></div>
+        </dl>
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    <p>Wedding Opening Manual — 会話しながら育てる初心者向けDaVinci Resolveガイド</p>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
