@@ -2,18 +2,13 @@
 
 Status: `CURRENT_V30_REQUIRED_READ / POST-BUILD_VISUAL_QA / 2026-09-02`
 
-Purpose: prevent a technically clean, editable Figma rebuild from being called complete when it is visually weaker, contaminated by reference-image crops, or mixed with stale production language.
-
-P01 exposed four distinct failures:
-
-1. technically valid/native Figma construction can still look generic;
-2. a targeted REWORK can improve major anchors while carrying stale FIRST BUILD visual language;
-3. a crop from the page Visual Master can contaminate a photo proxy with already-designed background/decorations and make page-part boundaries impossible to judge cleanly;
-4. implementation can begin too early, before the newest feedback is written back into authority.
+Purpose: prevent a technically clean/editable rebuild from being called complete when it is visually weaker, contaminated, unintentionally translucent, clipped, or mixed with stale production language.
 
 Hard summaries:
 
 `CLEAN LAYER TREE ≠ VISUALLY FRESH PAGE`
+
+`TRUE ALPHA ≠ CORRECT ALPHA`
 
 `VISUAL MASTER CROP ≠ CLEAN PHOTO PROXY`
 
@@ -25,406 +20,292 @@ Hard summaries:
 
 Current user-locked workflow:
 
-- ChatGPT: feedback analysis, manifest/doc authority updates, contradiction cleanup, Codex handoff prompt, post-build review.
-- Codex: production ImageGen, alpha/cutout preparation, Figma writes/cleanup, proxy installation, Figma/Drive/Git production evidence when instructed.
+- ChatGPT: feedback analysis, Visual Master/current-screenshot review, manifest/doc authority updates, contradiction cleanup, Codex handoff prompt, post-build review.
+- Codex: production ImageGen, alpha/cutout preparation, Figma writes/cleanup, proxy installation, screenshots/exports, Drive/Git production evidence.
 
-ChatGPT must not jump into direct production Figma/ImageGen while manifest/feedback debt is still open unless the user explicitly reassigns the work.
-
-Before Codex production starts, the relevant systemic and page-specific feedback must already be represented in authority.
+ChatGPT must not jump into production Figma/ImageGen while manifest/feedback debt is open unless the user explicitly reassigns the work.
 
 ## Mandatory read set before any V30 production write
 
-Read in this order:
-
 1. `docs/RURUBU-CURRENT.md`
-2. actual page Visual Master image
+2. actual page Visual Master
 3. `assets/rurubu-v30/manifest.json`
 4. `assets/rurubu-v30/visual-polish-manifest.json`
-5. page manifest, e.g. `assets/rurubu-v30/p01/manifest.json`
+5. page manifest
 6. page polish manifest when present
 7. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
 8. this document
-9. page README if production already exists
+9. page README when production exists
 
-Do not rely on an older chat report or older PASS statement when newer authority reopens a gate.
-
-## Four things must never be conflated
-
-### 1. Visual Master Lock
-Answers: **Do we understand the intended page?**
-
-Evidence:
-- hierarchy/object identity mapped;
-- geometry/relationships mapped;
-- PASS A + PASS B omission audit passed;
-- fixed display modules vs variable copy classified;
-- clean photo-proxy roles classified.
-
-### 2. Figma Structure Readiness
-Answers: **Is the file technically replaceable/rebuildable?**
-
-Evidence:
-- masks/clipping work;
-- real-photo slots remain independently replaceable;
-- current assets/layers exist;
-- stale hidden graveyard is absent.
-
-### 3. Figma Visual Acceptance
-Answers: **Does the actual page preserve the Visual Master-level design language?**
-
-Evidence:
-- clean photo proxies;
-- correct bundled fixed display modules;
-- identity anchors pass;
-- inherited visible assets pass carry-over audit;
-- current screenshot passes Reference Delta.
-
-### 4. Final Photo / Print Acceptance
-Answers: **Are final real photos and print assets ready at physical A5?**
-
-This remains separate from design acceptance.
+Newest explicit owner feedback reopens acceptance even if an older PASS exists.
 
 ## Completion vocabulary — HARD
-
-Use explicit states:
 
 1. `FIGMA_STRUCTURE_READY`
 2. `CLEAN_PROXY_PASS`
 3. `BUNDLED_DISPLAY_MODULE_PASS`
-4. `REPRESENTATIVE_VISUAL_PROXY_READY`
-5. `IDENTITY_ANCHOR_PASS`
-6. `VISUAL_CARRYOVER_PASS`
-7. `REFERENCE_DELTA_PASS`
-8. `PHOTO_SWAP_PASS`
-9. `A5_PRINT_QA_PASS`
-10. `HUMAN_FEEDBACK_REVIEWED`
-11. `FIGMA_DESIGN_COMPLETE`
-12. `FINAL_PHOTO_QA_PENDING` / `FINAL_PHOTO_QA_PASS`
-13. `COMPLETE`
+4. `ALPHA_INTEGRITY_PASS`
+5. `EDGE_SAFETY_PASS`
+6. `REPRESENTATIVE_VISUAL_PROXY_READY`
+7. `IDENTITY_ANCHOR_PASS`
+8. `VISUAL_CARRYOVER_PASS`
+9. `REFERENCE_DELTA_PASS`
+10. `PHOTO_SWAP_PASS`
+11. `A5_PRINT_QA_PASS`
+12. `HUMAN_FEEDBACK_REVIEWED`
+13. `FIGMA_DESIGN_COMPLETE`
+14. `FINAL_PHOTO_QA_PENDING` / `FINAL_PHOTO_QA_PASS`
+15. `COMPLETE`
 
-Do not use vague `FIGMA_COMPLETE` as shorthand for structure-only or locally improved work.
+Do not use vague `FIGMA_COMPLETE` for structure-only or locally improved work.
 
 ## Clean photo-proxy policy — HARD
 
-There are two proxy jobs.
+Visual Master is comparison authority, not photo-slot source material.
 
-### STRUCTURAL_PROXY
-Only for:
-- clipping;
-- swapping;
-- fill/crop behavior;
-- frame independence.
+Never use:
+- `P01.png` / `P02.png` / other page-master crops as active photo fills;
+- page screenshots as photo fills;
+- proxies containing page border/title/badge/ticket/stamp/Q shell/flower/route/frame/background decoration.
 
-It must still be a **clean standalone photo**, but it does not need to match final subject semantics.
+Allowed:
+1. suitable user real photo;
+2. clean standalone representative photo;
+3. clean generated standalone photo proxy with no page-layout decoration.
 
-It cannot pass Reference Delta.
-
-### VISUAL_PROXY
-For:
-- hierarchy;
-- visual mass;
-- crop;
-- face/focal relationships;
-- title/photo collision;
-- Reference Delta.
-
-It must match hierarchy-relevant properties:
-- people/group/place/object role;
-- subject count;
-- orientation;
-- subject scale;
-- focal position;
-- face/gesture density when people-led;
-- major bright/dark mass where it affects hierarchy.
-
-Allowed source order:
-1. suitable user-provided real photo;
-2. approved clean standalone representative photo;
-3. clean generated standalone photo proxy that contains **no page-layout decoration**.
-
-### Visual Master crop prohibition
-
-Do **not** crop `P01.png` / `P02.png` / other page Visual Master images and place those crops inside real-photo slots.
-
-Reason:
-- page background/decorations may already be baked into the crop;
-- flowers/titles/borders/frames/routes may duplicate separate page assets;
-- it becomes unclear what is photo content and what is page decoration;
-- Reference Delta can falsely improve because part of the target layout is hidden inside the proxy.
-
-Hard reject proxy content:
-- page border;
-- page title or number;
-- ticket/stamp/Q module;
-- decorative flowers/stickers/routes copied from the page;
-- already-designed frame/backing;
-- screenshot of the page itself.
-
-Proxy QA:
-- inspect proxy alone;
-- confirm it reads as photo content only;
-- replacing the proxy must not remove any intended page decoration;
-- no decorative element should appear both baked into the proxy and as a separate page layer.
+VISUAL_PROXY must match role/count/orientation/focal mass. STRUCTURAL_PROXY may be semantically looser but still must be standalone photo content.
 
 ## Bundled fixed display-module policy — HARD
 
-When a short fixed visible element behaves as **one authored editorial object**, generate/prepare the complete visible object as one asset.
+When short fixed text/numbers visually behave as one authored editorial object with their vessel/background/icon/accents, generate/prepare the complete visible module as one production asset.
 
-One module may include:
-- short fixed text;
-- numbers;
-- background/vessel;
-- badge shape;
-- icon;
-- route/doodle;
-- flower/heart/sparkle;
-- printed outlines/shadows;
-- local fixed accents.
-
-Examples:
-- year badge;
-- date ticket;
-- Feature number + heading + icon + vessel;
-- Q-number shell;
-- story-hook vessel;
-- stamp/postmark;
-- PAGE number badge;
-- masthead/title/name lockup when approved and fixed.
-
-### Visible text editability
-
-For approved fixed short display modules, **visible text does not need to remain editable in Figma**.
-
-The exact approved string/number must instead be preserved in:
-- canonical/page manifest; or
-- production asset metadata.
-
-A hidden duplicate native Figma text layer is optional, not required.
-
-Keep separate/native:
-- long body copy;
-- Q&A answers/questions until copy-locked;
-- personal/TBD facts;
-- guest data;
-- captions likely to change;
-- any frequently changing text.
-
-### Module boundary rule
-
-Bundle only elements that move/scale together as one visual object.
+Visible fixed text does not need to remain editable in Figma.
 
 Keep separate:
 - replaceable real photos;
-- independently movable overlapping decorations;
-- long/variable text;
-- a route/thread spanning several independent modules when the Visual Master requires independent layering.
+- long body copy;
+- unapproved/TBD/personal copy;
+- frequently changing text;
+- independently movable decoration when separate overlap is required.
+
+## Alpha Integrity Gate — HARD
+
+**An RGBA file can have a valid alpha channel and still be visually wrong.**
+
+Alpha QA has two independent jobs:
+
+### A. Outside transparency
+
+The area outside a cutout module should be transparent where intended.
+
+Reject:
+- baked checkerboard;
+- key-color halo;
+- opaque rectangle;
+- fringe;
+- accidental external debris.
+
+### B. Intended interior opacity
+
+Paper, ticket, label, vessel, badge, ribbon or card surfaces that are intended to read as opaque printed material must remain opaque.
+
+Default expectation:
+- large interior paper/vessel areas: alpha normally `>= 0.95`, preferably `1.00`;
+- partial alpha is normally limited to antialiased edge transitions;
+- large translucent interiors require explicit Visual Master/page-authority evidence.
+
+Mandatory QA:
+- inspect the alpha channel itself;
+- preview over white, mid-gray, black/dark and high-contrast backgrounds;
+- inspect asset in isolation and on the current page;
+- sample representative interior alpha values or produce an opacity-mask diagnostic when practical;
+- confirm Hero/background pixels do not show through an intended opaque paper vessel;
+- verify text/icon readability after compositing;
+- compare material character at A5 size.
 
 Hard reject:
-- generic ellipse + Inter text replacing an authored badge only for editability;
-- turning an expressive fixed module into a collection of UI primitives;
-- flattening a real-photo slot into the fixed display module;
-- baking unapproved personal copy into generated art.
+- `alpha channel exists` used as the only pass condition;
+- outer transparency passes while an intended white/cream paper interior becomes semi-transparent;
+- key-background removal erases intended white/cream material;
+- large unexplained internal alpha holes;
+- reducing Figma layer opacity to hide bad source alpha;
+- adding generic white rescue rectangles behind a broken module when that changes authored silhouette/overlap.
+
+Repair the source/cutout alpha or regenerate only the affected module.
+
+## Edge Safety Gate — HARD
+
+Busy Rurubu composition may activate edges, but important labels/badges/text must not look accidentally clipped.
+
+Check at full page and A5 size:
+- left/right/top/bottom module clearance;
+- whether crop/bleed is intentional or accidental;
+- number-badge and heading legibility;
+- border collision;
+- relationship to Visual Master.
+
+Hard reject:
+- important number badge cut by the airmail border without reference basis;
+- headings touching trim/border so tightly they read as accidental;
+- formulaic reuse of the same edge offset across different modules.
 
 ## Identity Anchor Gate
 
-High-identity objects are not ordinary primitives.
-
-Examples:
-- `るるぶ`;
-- `WEDDING`;
-- `Shogo & Shiori` P01 lockup;
-- `OUR STORY`;
-- distinctive year/title/badge systems.
-
-Compare:
+Compare high-identity objects by:
 - silhouette;
 - letterform character;
 - outline/stroke weight;
 - depth/shadow;
-- highlights/gloss where present;
+- highlight/gloss where present;
 - color proportions;
 - relative scale;
 - relation to neighboring art;
 - authored irregularity.
 
-Text correctness alone is not a visual pass.
+Text correctness alone is not a pass.
 
-## Anti-UI / anti-componentization Gate
+## Anti-UI / editorial irregularity
 
-Related editorial modules do not automatically become identical components.
-
-Before reuse ask:
-- same semantic job?
-- predictable variation?
-- does reuse preserve the Visual Master's local asymmetry and silhouette?
+Related modules do not automatically become identical components.
 
 Check unwanted equalization of:
 - module width/height;
-- photo-slot size;
+- photo size;
 - padding;
 - icon coordinates;
-- local x/y offsets;
-- overlap depth;
-- tilt where the Visual Master actually supports it.
+- local x/y;
+- overlap;
+- tilt.
 
-Do not add random rotation simply to look handmade.
+Do not add random scrapbook rotation simply to look handmade.
 
-## Tactile print finish Gate
-
-Avoid flat digital/UI appearance, but do not solve it with global grain.
-
-Suitable targets:
-- paper vessels;
-- tickets/postcards;
-- ribbons/tapes;
-- stamps/postmarks;
-- expressive title/display modules;
-- irregular print frames/backings.
+## Tactile print finish
 
 Allowed when subtle:
 - paper/matte feel;
-- slight printed-edge irregularity;
-- restrained local depth/shadow;
-- small material differences between print objects.
+- printed-edge irregularity;
+- restrained local shadow/depth.
 
 Reject:
-- dirty full-page grain;
+- global dirty grain;
 - heavy fake vintage texture;
-- texture across faces;
-- texture that weakens A5 text;
-- noise hiding poor generation.
-
-## Floating-asset alpha verification
-
-Checkerboard-looking preview is **not** proof of transparency.
-
-Before adoption:
-- actual alpha channel exists;
-- outer canvas is transparent;
-- no baked checkerboard;
-- no key-color halo;
-- no accidental holes;
-- review over light and dark temporary backgrounds where useful.
+- texture on faces;
+- texture reducing A5 readability;
+- noise hiding weak generation.
 
 ## Visual Carry-over Audit — HARD
 
-This is separate from stale-layer cleanup.
+A clean Figma tree can still contain stale visual language.
 
-A clean current Figma tree can still visibly contain old design language if earlier production assets were intentionally reused.
+Every inherited visible asset after REWORK must be:
+- `UNREVIEWED_CARRYOVER`
+- `KEEP_REQUALIFIED`
+- `REWORK_REQUIRED`
+- `REPLACE_REQUIRED`
+- `SUPERSEDED`
 
-Run when:
-- a REWORK reuses older assets;
-- identity anchor/Hero quality materially increases;
-- some modules are regenerated while neighbors are retained;
-- owner feedback raises the page quality bar;
-- the user says old parts still look visible.
+`ADOPTED`, `PRODUCTION_RGBA`, unchanged, or previous PASS is never permanent approval.
 
-For each inherited visible asset record:
-- provenance/build;
-- current node;
-- current-context appearance;
-- Visual Master comparison;
-- coherence with newly improved neighbors;
-- decision: `KEEP_REQUALIFIED`, `REWORK_REQUIRED`, `REPLACE_REQUIRED`, `SUPERSEDED`.
+After a major anchor/module improves, reopen nearby support assets.
 
-Until checked: `UNREVIEWED_CARRYOVER`.
-
-`ADOPTED`, `PRODUCTION_RGBA`, previous PASS, or unchanged status never grant permanent visual approval.
-
-### Adjacency requalification
-
-After a major anchor improves, reopen nearby support assets.
-
-Examples:
-- new masthead → recheck year/name/top decorations;
-- new Hero → recheck Feature rhythm/Date/lower balance;
-- new Bottom Story → recheck bottom flowers/stamp/page badge.
-
-### Mixed-generation coherence question
-
-> Does this look like one authored magazine page, or like new high-quality anchors placed over old UI-like pieces?
-
-If different production eras are visible, carry-over fails.
-
-A better candidate may stay CURRENT while debt is open, but use:
-
-`PROMOTED_CURRENT_WITH_CARRYOVER_DEBT`
-
-and do not claim final `REFERENCE_DELTA_PASS` / `FIGMA_DESIGN_COMPLETE`.
+Question:
+> Does this look like one authored magazine page, or like new high-quality anchors placed over an older draft?
 
 ## Reference Delta Gate
 
-Use the **current Figma screenshot**, not layer names or manifest claims.
+Use the **current screenshot**, not layer names or previous reports.
 
-Compare at matching aspect ratio in this order:
-
-1. 3-second first impression
+Compare in this order:
+1. 3-second impression
 2. clean proxy integrity
 3. fixed display-module fidelity
-4. identity anchors
-5. high-saliency photo subject/visual mass
-6. title/photo ratio
-7. occupied vs calm areas
-8. asymmetric silhouette
-9. overlap relationships
-10. feature/module rhythm
-11. background/frame/material character
-12. new-vs-inherited coherence
-13. micro accents
+4. alpha/material integrity
+5. edge safety
+6. identity anchors
+7. high-saliency photo mass
+8. title/photo ratio
+9. occupied vs calm areas
+10. asymmetric silhouette
+11. overlap
+12. module rhythm
+13. background/frame character
+14. carry-over coherence
+15. micro accents
 
-A material failure in proxy cleanliness, module fidelity, carry-over coherence, first impression, identity, Hero semantics or major scale blocks final `REFERENCE_DELTA_PASS`.
+A material failure in proxy cleanliness, intended opacity, edge safety, identity, Hero semantics or major scale reopens `REFERENCE_DELTA_PASS`.
 
 ## Human Feedback Writeback — HARD
 
-When feedback reveals a repeatable problem, do not fix only Figma.
+New owner feedback can reopen a previously closed debt.
 
-Page-specific → page manifest/page polish manifest.
+Page-specific feedback → page manifest/page polish/README.
 
-Systemic → root manifest + `visual-polish-manifest.json` + this guide.
+Systemic repeatable failure → Root/visual-polish/this guide.
 
-A new issue reopens `FEEDBACK_DEBT` even if an earlier debt was closed.
-
-Do not move to the next production page until the implementation-affecting debt has been modeled/resolved or the user explicitly defers it.
+Do not scale a newly found failure mode to later pages until it is modeled and the current affected page is rechecked or explicitly deferred.
 
 ## Targeted regeneration rule
 
-Fix the weak object/module, not the entire page, when possible.
+Fix the weak object/module, not the entire page, whenever possible.
 
-A generation brief must say:
-- what changes;
-- what remains unchanged;
-- exact fixed visible strings/numbers;
-- intended module boundary;
-- whether a replaceable photo must remain separate.
+Do not create another P01 page merely for a micro-fix. Keep CURRENT node and replace only affected module(s).
 
-## P01 current calibration
+## P01 current calibration — 2026-09-02 owner review
 
-The promoted P01 REWORK remains the better CURRENT at `3535:7`; do not roll back to FIRST BUILD.
+P01 CURRENT remains `3535:7` and the `c64b3c66...` final REWORK remains the accepted baseline.
 
-But current debt includes:
-- visible inherited Feature 1/2/3, Date and Bottom Story production language;
-- requalification of names ribbon / lower stamp/page area;
-- Visual-Master-crop Hero + Feature proxy method now deprecated and must be replaced with clean standalone proxy photos before closing visual acceptance.
+Major work already accepted:
+- clean standalone Hero/Feature proxies;
+- bundled Date / Feature 1–3 / Bottom Story / Names / 2026 / Journey / Page modules;
+- stale LIVE layers removed;
+- photo swap structure preserved.
 
-Therefore P01 is currently:
+New owner-visible micro debt reopens final acceptance:
 
-`BEST CURRENT PROMOTED`
-+
-`CARRY-OVER DEBT OPEN`
-+
-`CLEAN-PROXY DEBT OPEN`
-+
-`FINAL PHOTO QA PENDING`.
+1. **Feature 1–3 label/vessel opacity**
+   - current screenshot looks more translucent/washed than Visual Master;
+   - inspect actual source alpha, not only Figma layer opacity;
+   - intended white/cream paper must not reveal Hero/background.
+
+2. **Feature 1–3 left-edge safety**
+   - number badges/labels are too close to the left airmail border;
+   - tune local x/scale/visual bounds only, keeping their unequal rhythm.
+
+3. **Top-left ring cluster fidelity**
+   - current ring cue is weaker than Visual Master;
+   - requalify/regenerate/reposition only the ring/diamond/sparkle cluster if necessary.
+
+Therefore current status is:
+
+`BEST CURRENT = YES`
+
+`FIGMA_STRUCTURE_READY = PASS`
+
+`CLEAN_PROXY_PASS = PASS`
+
+`VISUAL_CARRYOVER_PASS = PASS`
+
+`ALPHA_INTEGRITY_PASS = REOPENED_FOR_FEATURE_1_3`
+
+`EDGE_SAFETY_PASS = REOPENED_FOR_FEATURE_1_3`
+
+`REFERENCE_DELTA_PASS = REOPENED_FOR_MICRO_POLISH`
+
+`FIGMA_DESIGN_COMPLETE = NO`
+
+`FINAL_PHOTO_QA_PENDING = YES`
+
+P02 production remains blocked until this micro debt is resolved or explicitly deferred by the owner.
 
 ## Print boundary
 
 Before `A5_PRINT_QA_PASS` verify:
-- A5 trim `148 × 210 mm`;
+- trim `148 × 210 mm`;
 - 3 mm bleed where required;
 - critical faces/text safe;
-- generated fixed display text legible at actual size;
-- effective final raster resolution around 300 ppi where practical;
-- current links/assets/export proof;
+- generated fixed display text readable at actual size;
+- final-photo effective raster resolution around 300 ppi where practical;
+- current export evidence;
 - grayscale/thumbnail review.
 
-Technical print readiness can only follow, never overrule, visual acceptance.
+Technical print readiness never overrides visual acceptance.
