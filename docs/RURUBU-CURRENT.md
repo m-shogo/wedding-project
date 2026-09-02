@@ -10,11 +10,12 @@ The only current Rurubu WEDDING production version is **V30**.
 2. actual page Visual Master — `assets/rurubu-v30/pXX/PXX.png`
 3. Root manifest — `assets/rurubu-v30/manifest.json`
 4. V30 visual-polish override — `assets/rurubu-v30/visual-polish-manifest.json`
-5. page manifest
-6. page polish manifest when present
-7. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
-8. `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
-9. page README when production exists
+5. `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md`
+6. page manifest
+7. page polish manifest when present
+8. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
+9. `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
+10. page README when production exists
 
 Newest explicit owner feedback can reopen an older PASS.
 
@@ -112,7 +113,22 @@ Travel/tropical/icon/route ornaments must be judged for:
 
 Do not use the same or near-identical prominent airplane/route/suitcase/tropical cluster in multiple positions unless repetition is clearly intentional.
 
-### 4. Clean proxy / alpha / border
+### 4. True-alpha generation before Figma
+
+For every generated ornament/display asset that needs transparent surroundings:
+
+- prefer a generation/export path with a real alpha channel;
+- a visible checkerboard is never transparency and must never be requested/accepted as such;
+- immediately inspect actual alpha after generation, before Figma placement;
+- no meaningful alpha / baked checkerboard / opaque outside field = `GENERATION_ALPHA_FAIL`;
+- only `TRUE_ALPHA_PREFLIGHT_PASS` assets may be placed in Figma;
+- if direct alpha is unavailable, use one flat safe matte for extraction, never checkerboard;
+- background extraction is a fallback, not the default pipeline;
+- if extraction damages white/light art, thin routes, edges or internal details, regenerate instead of patching repeatedly.
+
+Canonical detail: `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md`.
+
+### 5. Clean proxy / material alpha / border
 
 - page-master crops/screenshots are prohibited as active photo fills;
 - `TRUE ALPHA ≠ CORRECT ALPHA`;
@@ -121,7 +137,7 @@ Do not use the same or near-identical prominent airplane/route/suitcase/tropical
 - border/frame is background-adjacent by default;
 - cheap asset-side failure -> one quick discriminator -> regenerate/re-cut -> one integrated final QA.
 
-### 5. Fast close
+### 6. Fast close
 
 For a bounded correction, do not restart a full-page certification cycle. Fix the reopened scope, run one integrated final QA, sync once, then STOP.
 
@@ -176,6 +192,7 @@ Current P02 gates:
 - `COPY_SAFETY_PASS = PASS_PRESERVED`
 - `ASSET_ROLE_CLASSIFICATION_PASS = PASS_AFTER_OWNER_CORRECTION`
 - `SHARED_COMPONENT_PASS = PASS_WITH_PAGE_BADGE_RULE_CORRECTED`
+- `TRUE_ALPHA_GENERATION_POLICY = REQUIRED_FOR_REPLACEMENT_ORNAMENTS`
 - `ORNAMENT_ORIGINALITY_PASS = REOPENED`
 - `VISUAL_CARRYOVER_PASS = REOPENED_FOR_FIVE_ORNAMENTS`
 - `REFERENCE_DELTA_PASS = REOPENED_FOR_TARGETED_ORNAMENT_PATCH`
