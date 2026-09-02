@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "project": "Rurubu WEDDING V30",
   "page": "P01",
   "status": "CURRENT_P01_MICRO_VISUAL_POLISH_DEBT_OPEN",
@@ -29,10 +29,18 @@
     "BottomStory":"White cloud/paper vessel is opaque enough to separate copy from Hero/background.",
     "hardRule":"Actual alpha existence alone is insufficient. Inspect interior alpha and composited appearance."
   },
+  "fastFailRegeneration": {
+    "status":"REQUIRED_FOR_CURRENT_MICRO_POLISH_AND_FUTURE_P01_REPLACEMENTS",
+    "decisionRule":"Use one quick discriminator only. If a defect is likely asset-side and regeneration/cutout is cheaper than continued diagnosis, regenerate/re-cut immediately.",
+    "pageSpecificFastFailTargets":["P01_FEATURE_1_DISPLAY_MODULE","P01_FEATURE_2_DISPLAY_MODULE","P01_FEATURE_3_DISPLAY_MODULE","P01_DATE_TICKET_MODULE","P01_BOTTOM_STORY_MODULE","P01_RING_CLUSTER when generated/prepared as raster art"],
+    "workflow":["check one representative alpha/composite or source-vs-Figma discriminator","if source/RGBA/cutout fails, regenerate/re-cut immediately","only inspect Figma opacity/blend/mask when source passes","replace affected module only and delete superseded LIVE node","run one integrated final page/A5 QA pass"],
+    "reporting":"Do not produce repeated midpoint reports/checks for the same cheap defect. Give one concise final cause/replacement/QA report unless there is a blocker or repeated regeneration failure.",
+    "hardRejects":["spending multiple diagnosis cycles on obvious Feature-vessel translucency","adding rescue rectangles instead of fixing/regenerating source art","rebuilding whole P01 because one small generated module failed","repeating screenshots merely to restate the same known defect"]
+  },
   "ownerReviewReopenedDebt20260902": {
     "status":"OPEN / BLOCKS_P02_UNTIL_RESOLVED_OR_EXPLICITLY_DEFERRED",
     "findings":[
-      {"id":"P01_FEATURE_INTERIOR_OPACITY","severity":"MATERIAL_MINOR","observation":"Current screenshot makes Feature 1-3 white label/vessel areas look too transparent/washed compared with the Visual Master.","requiredCheck":["inspect each Feature RGBA alpha channel","sample representative white/paper interior pixels","verify intended interior alpha >= 0.95, preferably 1.00","preview over dark/high-contrast backgrounds","confirm Hero/background does not show through intended paper"],"repair":"Fix/regenerate source/cutout alpha for only the affected Feature modules if opacity is wrong. Do not add generic rescue rectangles."},
+      {"id":"P01_FEATURE_INTERIOR_OPACITY","severity":"MATERIAL_MINOR","observation":"Current screenshot makes Feature 1-3 white label/vessel areas look too transparent/washed compared with the Visual Master.","requiredCheck":["run one quick alpha/composite discriminator for each affected Feature module","verify intended interior alpha >= 0.95, preferably 1.00","confirm Hero/background does not show through intended paper"],"repair":"If the quick check points asset-side, fix/regenerate source/cutout alpha immediately for only the affected Feature module. Do not continue prolonged diagnosis and do not add generic rescue rectangles."},
       {"id":"P01_FEATURE_LEFT_EDGE_SAFETY","severity":"MINOR","observation":"Feature number badges/labels sit too close to the left airmail border and read slightly cramped/clipped relative to Visual Master.","requiredFix":"Adjust only Feature 1-3 local x/scale/visual bounds as needed while preserving unequal rhythm."},
       {"id":"P01_RING_CLUSTER_FIDELITY","severity":"MINOR","observation":"Current top-left ring cluster is visually weaker than Visual Master; gold rings/diamond/sparkle wedding cue lacks saliency.","requiredFix":"Targeted requalify/regenerate/reposition the ring cluster only if needed. Preserve masthead and title geometry."}
     ]
@@ -52,13 +60,15 @@
   },
   "nextCodexMicroPolish": [
     "do not create a new P01 frame; update CURRENT 3535:7 only",
-    "inspect Feature 1/2/3 source alpha for intended paper-vessel interior opacity before changing geometry",
-    "repair/regenerate only affected module RGBA if opacity is wrong and delete superseded LIVE layer",
+    "for Feature 1/2/3 run only one quick source-alpha/composite discriminator before deciding repair path",
+    "if Feature source/RGBA/cutout is wrong, regenerate/re-cut immediately instead of prolonged diagnosis",
+    "inspect Figma opacity/blend/mask only when the corresponding source asset passes",
+    "repair/regenerate only affected module RGBA and delete superseded LIVE layer",
     "tune Feature 1/2/3 left-edge spacing without normalizing unequal sizes",
     "requalify top-left ring/diamond/sparkle cluster against P01.png and strengthen only if needed",
-    "capture fresh full-page and A5 screenshots",
-    "run alpha-interior QA, edge-safety QA and fresh Reference Delta",
+    "capture one fresh full-page/A5 final evidence set after corrections rather than repeated midpoint screenshots",
+    "run final alpha-interior QA, edge-safety QA and fresh Reference Delta once after replacement",
     "do not touch real P02 3535:9"
   ],
-  "doNotDo": ["do not start P02 while this micro debt is open unless explicitly deferred","do not rebuild the entire P01 page","do not use P01.png crops as photo proxies","do not keep superseded hidden layers","do not fake paper opacity with generic rescue rectangles","do not make Feature 1/2/3 equal UI cards","do not modify P02-P08"]
+  "doNotDo": ["do not start P02 while this micro debt is open unless explicitly deferred","do not rebuild the entire P01 page","do not use P01.png crops as photo proxies","do not keep superseded hidden layers","do not fake paper opacity with generic rescue rectangles","do not make Feature 1/2/3 equal UI cards","do not modify P02-P08","do not waste repeated diagnosis/context on a cheap asset-side defect when regeneration is faster"]
 }
