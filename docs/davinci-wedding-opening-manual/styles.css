@@ -9,6 +9,7 @@
   --green: #1f7a5a;
   --green-soft: #dff1e9;
   --navy: #243447;
+  --blue-soft: #eaf4ff;
   --shadow: 0 14px 34px rgba(31, 35, 40, 0.08);
 }
 
@@ -109,6 +110,8 @@ code {
   font-size: 13px;
   text-decoration: none;
 }
+.toc a { color: var(--ink); }
+.toc a:hover { background: #ebe7de; }
 .toc a.active { background: var(--ink); color: #fff; }
 .toc .coming { color: #95989e; }
 
@@ -117,7 +120,8 @@ code {
 .rule-box,
 .step,
 .stop-card,
-.glossary {
+.glossary,
+.idea-card {
   margin-bottom: 28px;
   padding: clamp(24px, 4vw, 42px);
   border: 1px solid var(--line);
@@ -125,18 +129,137 @@ code {
   background: var(--paper);
   box-shadow: var(--shadow);
 }
-.chapter-head h2 {
+.chapter-head h2,
+.idea-card h2 {
   margin: 4px 0 16px;
   font-size: clamp(28px, 4.5vw, 42px);
   line-height: 1.25;
 }
-.chapter-head p:last-child { margin-bottom: 0; }
+.chapter-head p:last-child,
+.idea-card p:last-child { margin-bottom: 0; }
 .rule-box { background: #fff7e6; }
 .rule-box h3,
 .step h3,
 .stop-card h3,
 .glossary h3 { margin-top: 0; }
 .rule-box ul { margin-bottom: 0; padding-left: 1.2em; }
+
+.fact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+.fact-grid > div {
+  display: grid;
+  gap: 2px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+.fact-grid span { color: var(--muted); font-size: 12px; font-weight: 700; }
+.idea-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 22px 0;
+}
+.idea-grid article {
+  display: grid;
+  gap: 4px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: #fff;
+}
+.idea-grid article strong { font-size: 18px; }
+.idea-grid article span { color: var(--muted); font-size: 13px; }
+.candidate-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+.candidate-list strong { width: 100%; }
+.candidate-list span {
+  padding: 6px 10px;
+  border: 1px solid #cdd9e6;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.method-list { display: grid; gap: 12px; margin: 24px 0; }
+.method-list article {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: #fff;
+}
+.method-list h3 { margin: 0 0 4px; font-size: 18px; }
+.method-list p { margin: 0; color: #454b52; }
+.method-no {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.prompt-card {
+  margin-top: 18px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+}
+.prompt-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.prompt-head > div { display: grid; gap: 1px; }
+.prompt-head span { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: 0.12em; }
+.prompt-head strong { font-size: 15px; }
+.copy-button {
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.copy-button:hover { opacity: 0.82; }
+.copy-button.is-copied { background: var(--green); }
+.prompt-card pre {
+  max-height: 270px;
+  margin: 0;
+  padding: 18px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #f7f8fa;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
 .step-badge {
   display: inline-flex;
   margin-bottom: 12px;
@@ -240,7 +363,10 @@ footer {
   .rule-box,
   .step,
   .stop-card,
-  .glossary { border-radius: 17px; }
+  .glossary,
+  .idea-card { border-radius: 17px; }
+  .fact-grid,
+  .idea-grid { grid-template-columns: 1fr; }
   .glossary dl div { grid-template-columns: 1fr; gap: 3px; }
   .sp-only { display: block; }
 }
