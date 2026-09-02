@@ -1,51 +1,142 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "Rurubu WEDDING V30",
   "page": "P02",
-  "status": "CURRENT_REQUIRED_P02_EXECUTION_OVERRIDE",
-  "inherits": ["assets/rurubu-v30/manifest.json", "assets/rurubu-v30/visual-polish-manifest.json", "assets/rurubu-v30/p02/manifest.json"],
-  "purpose": "Prevent P01's generic-native-module and Visual-Master-crop proxy failures from repeating when P02 production begins.",
-  "bundledDisplayModules": [
-    {
-      "id": "P02_PROFILE_TITLE_DISPLAY",
-      "approvedFixedStructure": ["ふたりの", "プロフィール"],
-      "rule": "May be generated/prepared as one expressive title system with its fixed title lettering, backing/outline and attached fixed decoration where the Visual Master shows them as one object. Visible text need not remain editable in Figma."
-    },
-    {
-      "id": "P02_SHOGO_NAME_LABEL",
-      "exactFact": "Shogo",
-      "rule": "Speech-bubble/name-label art may include the fixed visible name and its backing/decoration as one asset. Preserve exact spelling in manifest/asset metadata; hidden duplicate Figma text is optional."
-    },
-    {
-      "id": "P02_SHIORI_NAME_LABEL",
-      "exactFact": "Shiori",
-      "rule": "Speech-bubble/name-label art may include the fixed visible name and its backing/decoration as one asset. Preserve exact spelling in manifest/asset metadata; hidden duplicate Figma text is optional."
-    },
-    {
-      "id": "P02_Q1_DISPLAY_SHELL",
-      "fixedVisiblePart": ["Q1"],
-      "bundleTogether": ["Q1 badge/number", "paper-shell decorative edge", "fixed icon/doodle accents that belong to the shell"],
-      "mustRemainSeparate": ["Q1 question/answer until approved", "Q1 inset replaceable photo", "Q1 photo frame/mask when required for swapping"]
-    },
-    {
-      "id": "P02_Q2_DISPLAY_SHELL",
-      "fixedVisiblePart": ["Q2"],
-      "bundleTogether": ["Q2 badge/number", "paper-shell decorative edge", "fixed icon/doodle accents that belong to the shell"],
-      "mustRemainSeparate": ["Q2 question/answer until approved"]
-    },
-    {
-      "id": "P02_PAGE_BADGE",
-      "exactVisibleText": ["PAGE", "02"],
-      "rule": "PAGE + 02 + badge/background/fixed attached accent may be one complete generated/prepared asset."
-    }
+  "status": "VISUAL_MASTER_REREVIEWED_EXECUTION_OVERRIDE",
+  "inherits": [
+    "assets/rurubu-v30/manifest.json",
+    "assets/rurubu-v30/visual-polish-manifest.json",
+    "assets/rurubu-v30/p02/manifest.json"
   ],
-  "nativeOrVariableCopy": ["profile facts/answers", "Japanese readings if not explicitly approved", "Q1 question/answer", "Q2 question/answer", "any TBD personal fact", "long explanatory copy"],
-  "profileSheetRule": "The blue/pink profile-sheet paper, row separators and fixed pictogram system may be generated/prepared art, but personal profile values remain native/replaceable until explicitly copy-locked. Do not bake ungrounded personal facts into generated paper art.",
-  "photoProxyRoles": {
-    "P02_PHOTO_SHOGO": "clean standalone Shogo-role portrait proxy; one-person upper-body/portrait, no page decoration",
-    "P02_PHOTO_SHIORI": "clean standalone Shiori-role portrait proxy; one-person upper-body/portrait, no page decoration",
-    "P02_Q1_INSET_COUPLE_PHOTO": "clean standalone two-person couple photo proxy; no Q1 paper/background/decorations baked in"
+  "purpose": "P02 execution authority after direct rereview of P02.png. Prevent generic-native rebuilding, contaminated page-crop photo proxies, false left/right mirroring and over-baking of unapproved personal copy.",
+  "directVisualMasterRereview": {
+    "date": "2026-09-02",
+    "source": "assets/rurubu-v30/p02/P02.png",
+    "reviewedDimensionsPx": {"width": 1055, "height": 1491},
+    "status": "COMPLETE",
+    "confirmedThreeSecondRead": [
+      "ふたりのプロフィール header/title system",
+      "large SHOGO and SHIORI portrait pair",
+      "SHOGO / SHIORI speech-bubble labels",
+      "blue/pink profile sheets",
+      "Q1 / Q2 lower modules",
+      "PAGE 02 + secondary travel/tropical accents"
+    ],
+    "confirmedAsymmetry": "Left and right form a semantic pair, not a mirrored UI. Q1 includes an inset couple photo; Q2 intentionally does not."
   },
-  "photoProxyContaminationHardReject": ["crop from P02.png", "crop/screenshot containing title, paper vessel, border, flowers, icons, badge or page background", "proxy with decoration that duplicates a separate page asset"],
-  "executionQa": ["verify each proxy in isolation", "verify fixed display modules do not become generic editable UI", "verify Q1 has inset photo and Q2 does not", "verify SHOGO=blue-left and SHIORI=pink-right", "re-run Visual Master comparison after clean proxies are installed"]
+  "fixedDisplayModules": {
+    "globalRule": "A fixed module may bake short fixed text, backing, iconography and attached accents when they visually move as one object. Personal profile values, unapproved name readings, Q&A question/answer copy and real photos remain separate until copy-locked.",
+    "targets": [
+      {
+        "id": "P02_HEADER_TITLE_MODULE",
+        "fixedCoreText": ["ふたりの", "プロフィール"],
+        "referenceEditorialRibbonText": "私たちのこと、少しだけ紹介します♪",
+        "bundleTogether": ["ふたりの", "large hot-pink プロフィール lettering", "layered outline/depth", "blue subtitle ribbon/background", "attached heart", "airplane + dotted route", "camera", "title-adjacent tropical flowers/leaves/sparkles where they visually behave as one header ecology"],
+        "copySafety": "The subtitle ribbon sentence is EDITORIAL_COPY_REFERENCE until explicitly copy-locked. It may be baked only after approval; otherwise keep the ribbon art ready for separate/native text.",
+        "hardReject": "Do not rebuild this as plain native title text plus unrelated sticker primitives."
+      },
+      {
+        "id": "P02_SHOGO_NAME_LABEL",
+        "lockedLatinText": "SHOGO",
+        "referenceReading": "しょうご",
+        "bundleTogether": ["blue speech-bubble backing", "SHOGO", "approved reading only when confirmed", "attached outline/shadow"],
+        "copySafety": "Latin spelling is locked. Japanese reading remains REFERENCE_ONLY until explicitly approved."
+      },
+      {
+        "id": "P02_SHIORI_NAME_LABEL",
+        "lockedLatinText": "SHIORI",
+        "referenceReading": "しおり",
+        "bundleTogether": ["pink speech-bubble backing", "SHIORI", "approved reading only when confirmed", "attached outline/shadow"],
+        "copySafety": "Latin spelling is locked. Japanese reading remains REFERENCE_ONLY until explicitly approved."
+      },
+      {
+        "id": "P02_PROFILE_SHEET_SHOGO_SHELL",
+        "fixedStructuralLabelsFromVisualMaster": ["出身地", "好きなこと", "旅のスタイル", "今日のひとこと"],
+        "bundleTogether": ["cream paper sheet", "blue hand-drawn/printed border", "row separators", "blue pictogram system", "fixed row labels when approved", "local printed shadow/depth"],
+        "mustRemainSeparate": ["all personal profile values/answers until grounded and copy-locked"],
+        "antiUiRule": "Do not make a sterile equal-radius table/card. Preserve tactile paper and local irregularity."
+      },
+      {
+        "id": "P02_PROFILE_SHEET_SHIORI_SHELL",
+        "fixedStructuralLabelsFromVisualMaster": ["出身地", "好きなこと", "旅のスタイル", "今日のひとこと"],
+        "bundleTogether": ["cream paper sheet", "pink hand-drawn/printed border", "row separators", "pink pictogram system", "fixed row labels when approved", "local printed shadow/depth"],
+        "mustRemainSeparate": ["all personal profile values/answers until grounded and copy-locked"],
+        "antiUiRule": "Related to SHOGO sheet but not mechanically mirrored. Preserve local size/line/icon differences."
+      },
+      {
+        "id": "P02_Q1_DISPLAY_SHELL",
+        "fixedVisiblePart": ["Q1"],
+        "referenceQuestion": "ふたりの出会いは？",
+        "bundleTogether": ["Q1 badge/number", "white paper shell", "blue dotted/printed edge", "tape", "small star/heart/doodle accents", "Q1 question only after copy lock"],
+        "mustRemainSeparate": ["Q1 answer until approved", "Q1 inset replaceable couple photo", "Q1 photo mask/frame"],
+        "hardRule": "Q1 owns the inset photo; do not add an equivalent photo to Q2 merely for symmetry."
+      },
+      {
+        "id": "P02_Q2_DISPLAY_SHELL",
+        "fixedVisiblePart": ["Q2"],
+        "referenceQuestion": "ふたりの旅のテーマは？",
+        "bundleTogether": ["Q2 badge/number", "white paper shell", "pink dotted/printed edge", "airplane + route", "suitcase", "fixed decorative accents", "Q2 question only after copy lock"],
+        "mustRemainSeparate": ["Q2 answer until approved"],
+        "hardRule": "Q2 intentionally has no inset real-photo slot."
+      },
+      {
+        "id": "P02_PAGE_BADGE_MODULE",
+        "exactVisibleText": ["PAGE", "02"],
+        "bundleTogether": ["page badge backing", "PAGE", "02", "small attached heart/accent"]
+      }
+    ]
+  },
+  "nativeOrVariableCopy": [
+    "SHOGO profile personal values",
+    "SHIORI profile personal values",
+    "Japanese name readings until approved",
+    "header blue-ribbon sentence until approved",
+    "Q1 question until approved",
+    "Q1 answer",
+    "Q2 question until approved",
+    "Q2 answer",
+    "any TBD personal fact",
+    "long explanatory copy"
+  ],
+  "replaceablePhotos": {
+    "P02_PHOTO_SHOGO": "one-person SHOGO-role portrait/upper-body photo",
+    "P02_PHOTO_SHIORI": "one-person SHIORI-role portrait/upper-body photo",
+    "P02_Q1_INSET_COUPLE_PHOTO": "two-person couple photo inside Q1 only"
+  },
+  "photoProxyPolicy": {
+    "hardRule": "P02.png and page screenshots are comparison references only, never photo-fill sources.",
+    "roles": {
+      "P02_PHOTO_SHOGO": "clean standalone one-person male-role portrait with similar face/upper-body mass",
+      "P02_PHOTO_SHIORI": "clean standalone one-person female-role portrait with similar face/upper-body mass",
+      "P02_Q1_INSET_COUPLE_PHOTO": "clean standalone two-person couple photo"
+    },
+    "hardRejects": ["crop from P02.png", "proxy containing title, profile sheet, border, flower, icon, Q shell or page background", "proxy decoration duplicated by a separate page asset"],
+    "qa": ["inspect proxy in isolation", "verify role/count/orientation", "verify no page-layout decoration is baked in", "re-run Reference Delta after clean proxies are placed"]
+  },
+  "standaloneOrIndependentDecorations": [
+    "airmail border",
+    "portrait/profile seam plumeria cluster",
+    "lower Q1/Q2 seam hibiscus cluster",
+    "side hearts and micro accents when their independent overlap matters"
+  ],
+  "leftRightRoleLock": {
+    "left": "SHOGO / blue",
+    "right": "SHIORI / pink",
+    "hardRejects": ["swapping left/right identity", "making both profile sheets identical except hue", "mirroring every flower/icon/offset", "adding Q2 inset photo for symmetry"]
+  },
+  "tactileFinish": {
+    "priority": ["header/title", "name bubbles", "profile sheets", "Q1/Q2 paper shells", "printed-photo frames"],
+    "allowed": ["subtle paper/matte feel", "slight printed-edge irregularity", "restrained local shadow/depth"],
+    "forbidden": ["global dirty grain", "flat SaaS-card shadows", "texture reducing profile/Q&A readability"]
+  },
+  "executionQa": [
+    "verify all three photo slots use clean standalone proxy content",
+    "verify title/header reads as one authored editorial system rather than native title + stickers",
+    "verify profile personal values remain separately controllable until copy-locked",
+    "verify SHOGO=blue-left and SHIORI=pink-right",
+    "verify Q1 has inset photo and Q2 does not",
+    "verify Q1/Q2 are related but non-identical",
+    "verify PAGE 02 is a complete fixed badge module",
+    "run fresh Visual Master Reference Delta after production"
+  ]
 }
