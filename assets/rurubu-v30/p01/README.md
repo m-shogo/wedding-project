@@ -12,6 +12,10 @@ The large REWORK and first 2026-09-02 micro-polish remain the accepted baseline 
 - stale/duplicate LIVE cleanup;
 - first micro-polish production binary sync.
 
+## Authority precedence
+
+`assets/rurubu-v30/p01/polish-manifest.json` is the newer P01 execution/copy authority. Where the older P01 main manifest still contains stale execution wording, the newer polish manifest wins.
+
 ## Latest owner review — TARGETED PATCH OPEN
 
 ### 1. Date + PAGE 01 internal opacity
@@ -85,7 +89,7 @@ Do not burn context on repeated identical diagnosis.
 3. fix Date and PAGE 01 inside opacity if needed;
 4. run the one-time P01 white-paper sibling sweep;
 5. replace Feature 3 heading with exact `友達との思い出`;
-6. move the airmail border behind main content / just above background;
+6. move the airmail border behind content / just above background;
 7. remove superseded LIVE layers after replacement;
 8. capture one fresh full-page + A5 screenshot set;
 9. rerun `ALPHA_INTEGRITY → COPY_SYNC → BORDER_Z_ORDER → REFERENCE_DELTA` once;
