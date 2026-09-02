@@ -1,16 +1,10 @@
 # V30 P01 production assets
 
-Status: `P01_BEST_CURRENT / MICRO_VISUAL_POLISH_DEBT_OPEN / FINAL_PHOTO_QA_PENDING`
+Status: `P01_DESIGN_LOCKED / FINAL_PHOTO_QA_PENDING`
 
 P01 CURRENT remains Figma node `3535:7`. Do not roll back to FIRST BUILD and do not create another P01 frame.
 
-The `c64b3c66d3a0579f704222eea980b193005d7dbd` final REWORK remains the accepted baseline for clean standalone photo proxies, bundled fixed modules, stale LIVE-layer cleanup, photo-swap structure and major identity hierarchy.
-
-Owner review of the actual current screenshot reopened only three targeted visual checks before P02:
-
-1. Feature 1–3 paper/vessel interiors look too transparent/washed relative to Visual Master.
-2. Feature 1–3 number badges/labels sit too close to the left airmail border.
-3. Top-left ring/diamond/sparkle cluster is weaker than Visual Master.
+The large REWORK plus 2026-09-02 targeted micro-polish are accepted.
 
 Required authority:
 - `docs/RURUBU-CURRENT.md`
@@ -20,58 +14,97 @@ Required authority:
 - `assets/rurubu-v30/p01/polish-manifest.json`
 - `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
 
-## Alpha Integrity
+## Current accepted structure
 
-For Feature 1–3, the white/cream paper-vessel interiors should read as opaque print. A valid RGBA/alpha channel alone is not a pass.
+Fixed display modules include:
+- `るるぶ`
+- `WEDDING`
+- `Shogo & Shiori` + ribbon
+- `2026`
+- Date ticket using `WEDDING DATE / 2026.10.24 / SAT`
+- Feature 1 / 2 / 3 display shells
+- Bottom Story
+- `OUR JOURNEY / TAKE A TRIP`
+- `PAGE / 01`
 
-Codex must:
-- inspect source alpha;
-- sample representative interior pixels;
-- expect intended paper interiors to be alpha `>= 0.95`, preferably `1.00`, except antialiased edges;
-- preview over white, gray, dark and high-contrast backgrounds;
-- verify Hero/background does not show through the intended paper body.
+Replaceable photo slots remain separate:
+- Hero
+- Feature 1
+- Feature 2
+- Feature 3
 
-If wrong, repair/regenerate only the affected module/cutout, replace the old LIVE module and delete the superseded layer.
+P01.png/page screenshots remain comparison references only and must never be used as active photo fills.
 
-Do not fake opacity with generic white rectangles or whole-layer Figma opacity changes.
+## Micro-polish resolution — 2026-09-02
 
-## Left-edge safety
+### Feature 1–3 interior opacity
 
-Tune only Feature 1–3 local x/scale/visual bounds so number badges and headings do not look accidentally clipped by the airmail border. Preserve their unequal editorial rhythm.
+Resolved.
 
-## Ring cluster fidelity
+Codex identified the defect as source-PNG internal alpha rather than Figma opacity/blend. The affected Feature display assets were repaired/replaced without adding rescue rectangles.
 
-Requalify the top-left ring/diamond/sparkle cluster against P01.png and strengthen/regenerate/reposition only if needed. Preserve masthead/WEDDING geometry.
+Reported checks:
+- intended paper-core samples: alpha `255`;
+- outside transparency retained;
+- Figma node/image opacity: `1.0`;
+- fresh CURRENT screenshot no longer shows Hero/background through the intended white paper vessels.
+
+### Feature 1–3 left-edge safety
+
+Resolved.
+
+The three modules were tuned inward without normalizing their intentionally unequal local spacing/rhythm. Fresh CURRENT review no longer reads the number badges/headings as accidentally clipped by the airmail border.
+
+### Top-left ring cluster
+
+Resolved.
+
+The weak simplified cue was replaced/requalified as a support cluster reading as gold wedding rings + visible diamond + yellow sparkle. It remains subordinate to `るるぶ / WEDDING` hierarchy.
 
 ## Current gate state
 
 - `BEST_CURRENT = YES`
 - `FIGMA_STRUCTURE_READY = PASS`
 - `CLEAN_PROXY_PASS = PASS`
+- `BUNDLED_DISPLAY_MODULE_PASS = PASS`
+- `ALPHA_INTEGRITY_PASS = PASS`
+- `EDGE_SAFETY_PASS = PASS`
+- `IDENTITY_ANCHOR_PASS = PASS`
 - `VISUAL_CARRYOVER_PASS = PASS`
+- `REFERENCE_DELTA_PASS = PASS_AFTER_MICRO_POLISH`
 - `PHOTO_SWAP_PASS = PASS`
-- `ALPHA_INTEGRITY_PASS = REOPENED_FOR_FEATURE_1_3`
-- `EDGE_SAFETY_PASS = REOPENED_FOR_FEATURE_1_3`
-- `REFERENCE_DELTA_PASS = REOPENED_FOR_MICRO_POLISH`
-- `FIGMA_DESIGN_COMPLETE = NO`
+- `A5_GRAYSCALE_PASS = PASS`
+- `HUMAN_FEEDBACK_REVIEWED = PASS`
+- `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-P02 `3535:9` remains untouched and production is blocked until the three micro issues are resolved or explicitly deferred by the owner.
+Reported cleanup after the micro-polish:
+- hidden obsolete layer count: `0`
+- duplicate same-job production layer count: `0`
+- P02 `3535:9`: untouched
+- TEMP `3708:2`: already deleted
 
-The accidental TEMP `3708:2` is already deleted.
+## Fast-fail rule retained
 
-## Next P01 work — CODEX ONLY
+For future P01/V30 generated-asset defects:
 
-1. update CURRENT `3535:7` only;
-2. inspect Feature 1/2/3 intended interior alpha;
-3. repair only genuinely translucent modules;
-4. tune left-edge safety;
-5. requalify top-left ring cluster;
-6. remove superseded LIVE layers after replacement;
-7. confirm hidden-old-layer count remains 0;
-8. capture fresh full-page and A5 screenshots;
-9. rerun `ALPHA_INTEGRITY → EDGE_SAFETY → REFERENCE_DELTA`;
-10. only then restore `FIGMA_DESIGN_COMPLETE = YES`.
+`one quick discriminator → asset-side failureなら即 regenerate/re-cut → replace affected module only → one integrated final QA`.
+
+Do not waste repeated diagnosis/context on a cheap asset-side defect when regeneration is faster.
+
+## Next P01 work
+
+No further P01 design work is required now.
+
+When owner-approved final photographs are supplied, replace only the four photo fills while preserving accepted masks, display modules, overlap and CURRENT node `3535:7`.
+
+Then run final-photo:
+- crop / face-safe QA
+- effective resolution QA
+- A5 readability
+- print/export QA
 
 Historical baseline/rejected/superseded assets belong in Drive/Git history, not active Figma LIVE.
+
+**P02 production may begin.**
