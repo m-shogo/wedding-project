@@ -125,8 +125,8 @@ if (handoff.includes("MOTION:type-mask-reveal") || page.includes("MOTION:type-ma
 if (workspace.includes('label="Editable Source of Truth JSON"')) errors.push("JSON serialization must not be presented to the user as the Source of Truth");
 
 requireAll(page, [
-  'Native App Actual 9件を、検証根拠と一緒に公開する',
-  'Mask Reveal・Quiet Caption・Static Hero・Word Punch・Small Push・Slow Pull・Flash Soft・Char StaggerはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み',
+  'Native App Actual 10件を、検証根拠と一緒に公開する',
+  'Mask Reveal・Quiet Caption・Static Hero・Word Punch・Small Push・Slow Pull・Gentle Pan・Flash Soft・Char StaggerはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み',
   '人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本', 'MaskRevealEditableWorkspace',
   'CONCEPT PREVIEW / 実装確認前', 'JUST-IN-TIME LEARNING', 'この演出で学べること', 'getMotionLearningBundle(pattern.id)',
   'learning.fusionRecipes.map', 'getLatestPreviewEvidence(preview.id)', 'ACTUAL ${actualRenderLabel(previewEvidence.sourceType)} RENDER QA ✓ / IMPLEMENTATION EVIDENCE',
@@ -188,4 +188,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Visual Motion Library contracts OK (${actualMediaState.mode === "COMPLETE" ? "media verified" : "code-only; local media absent"}): 9 native-app Actuals (mask-reveal, quiet-caption, cut-hard-accent, photo-static-hero, type-word-punch, photo-small-push, photo-slow-pull, flash-one-frame-soft, type-char-stagger), 2 source-media Actual TESTED renders, independent pixel-oracle evidence, and separate Concept assets are registered; Human Master Scene values remain the source of truth.`);
+console.log(`Visual Motion Library contracts OK (${actualMediaState.mode === "COMPLETE" ? "media verified" : "code-only; local media absent"}): 10 native-app Actuals (mask-reveal, quiet-caption, cut-hard-accent, photo-static-hero, type-word-punch, photo-small-push, photo-slow-pull, photo-directional-pan, flash-one-frame-soft, type-char-stagger), 2 source-media Actual TESTED renders, independent pixel-oracle evidence, and separate Concept assets are registered; Human Master Scene values remain the source of truth.`);

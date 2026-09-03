@@ -619,6 +619,8 @@ function kitPresetToPattern(preset: StartMotionPreset): MotionPatternRecord {
                   ? ["preview-photo-small-push-davinci-actual", "preview-photo-small-push-concept"]
                   : preset.id === "photo-slow-pull"
                     ? ["preview-photo-slow-pull-davinci-actual", "preview-photo-slow-pull-concept"]
+                    : preset.id === "photo-directional-pan"
+                      ? ["preview-photo-directional-pan-davinci-actual", "preview-photo-directional-pan-concept"]
                     : preset.id === "flash-one-frame-soft"
                     ? ["preview-flash-one-frame-soft-davinci-actual", "preview-flash-one-frame-soft-concept"]
                     : preset.id === "type-char-stagger"
@@ -784,6 +786,23 @@ function kitPresetToImplementation(preset: StartMotionPreset): MotionImplementat
       studioRequired: false,
       verified: true,
       notes: "専用Resolve projectで1280x720 / 30fps timelineへFusion Saver(EXR)を直接render。Transform.Sizeを0(1.00)→119(1.05)でkeyframe。frame0/118のpixel差分(サンプリング平均abs diff 1.4→17.2、watermark帯の見かけ幅拡大)で寄りを確認済み。Deliverページのタイムラインrenderはこのproject構成でTransform keyframeを反映しない既知の不具合があったため、Fusion内蔵Saverでの直接renderに切り替えた。",
+    };
+  }
+  if (preset.id === "photo-directional-pan") {
+    return {
+      id: "impl-photo-directional-pan",
+      patternId: "photo-directional-pan",
+      kind: "DAVINCI_FUSION",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Fusion TransformのCenter(X)をGUI上でkeyframe(0.44→0.56、frame 0〜119)。Sizeは1.12固定でoverscanを確保し、pan中に透明な余白が出ないようにする。位置以外は固定。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve project (MotionZukan_GentlePan_Actual_20260902_Claude)で1280x720 / 30fps timelineへFusion Saver(EXR)を直接render。過去にComp Lua scriptでCenter(Point型入力)をcomp:BezierSpline()でkeyframeしようとして失敗した経緯があるため、今回はDaVinciのInspector上でCenter Xを直接右クリック→アニメートしてGUI keyframeを作成(frame0で0.44、frame119で0.56)。frame0/119のpixel差分(mean 48.41、max 255)で、水平方向の大きな移動を確認した(push/pull系の差分(mean 17前後)より大きいのはpanが画面全体を水平移動させるため妥当)。Deliverページのタイムラインrenderはこのproject構成でFusion keyframeを反映しない既知の不具合があったため、Fusion内蔵Saverでの直接renderに切り替えた。",
     };
   }
   if (preset.id === "photo-slow-pull") {
@@ -1088,6 +1107,22 @@ motionPreviews.push({
   resolveVersion: "21.0.4.5",
   verified: true,
   notes: "Transform.Sizeを1.06(frame0)→1.00(frame119)で線形pull(photo-small-pushの逆方向)。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化。GetInput readbackでSIZE_AT_0=1.06/SIZE_AT_119=1を確認、frame0/119のpixel差分(mean 17.46、max 244)で引きを確認済み。",
+});
+motionPreviews.push({
+  id: "preview-photo-directional-pan-davinci-actual",
+  patternId: "photo-directional-pan",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/photo-directional-pan/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/photo-directional-pan/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Transform (GUI keyframe) / Saver EXR render",
+  generatedAt: "2026-09-03T13:01:00+09:00",
+  implementationId: "impl-photo-directional-pan",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "Transform.Centerの X を0.44(frame0)→0.56(frame119)でDaVinci Inspector上のGUI keyframeとして直接設定(Point型入力はcomp:BezierSpline()での script keyframe化に失敗した実績があるため今回はGUI操作)。Sizeは1.12固定でoverscan確保、pan中も透明な余白が出ないことを目視確認。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化。frame0/119のpixel差分(mean 48.41、max 255)で水平方向の大きな移動を確認済み。",
 });
 motionPreviews.push({
   id: "preview-flash-one-frame-soft-davinci-actual",
