@@ -1,11 +1,11 @@
 {
-  "schemaVersion": 9,
+  "schemaVersion": 10,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "role": "OUR STORY + Q3/Q4",
-  "status": "DESIGN_LOCKED_AFTER_V30_STYLE_REALIGNMENT",
+  "status": "DESIGN_LOCKED_EDGE_ALPHA_CLEANUP_PENDING",
   "date": "2026-09-03",
-  "authorityPrecedence": "Newest explicit owner feedback and direct live-Figma comparison against locked P01/P02 CURRENT pages override earlier grouped-regeneration PASS declarations and older P03 main-manifest execution details.",
+  "authorityPrecedence": "Newest explicit owner feedback and direct live-Figma/source-asset review override earlier run-level PASS declarations and older P03 main-manifest execution details.",
   "visualMaster": {
     "path": "assets/rurubu-v30/p03/P03.png",
     "status": "LOCKED_PRIMARY_LOCAL_COMPOSITION_AUTHORITY",
@@ -15,7 +15,7 @@
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "frameId": "3535:11",
     "reviewedOn": "2026-09-03",
-    "rule": "Update CURRENT 3535:11 only. Do not create a duplicate P03 and do not modify P01/P02/P04-P08."
+    "rule": "CURRENT 3535:11 remains design-locked. Do not create a duplicate P03 and do not modify P01/P02/P04-P08. Edge-alpha cleanup may replace only the affected raster sources while preserving node job, geometry and approved visual design."
   },
   "crossPageStyleAnchors": {
     "status": "HARD / REQUIRED",
@@ -47,7 +47,7 @@
     "gate": "CROSS_PAGE_STYLE_FAMILY_PASS"
   },
   "ownerRejectedCurrentTargets": {
-    "status": "REWORK_REQUIRED",
+    "status": "HISTORICAL_REWORK_COMPLETED",
     "targets": [
       "P03_HEADER_ECOLOGY / GROUPED_REGENERATION / COPY_LOCKED",
       "P03_Q3_EDITORIAL_FAMILY / GROUPED_REGENERATION / Q3_ONLY",
@@ -64,7 +64,7 @@
       "P03_TIMELINE_STEP_5_LABEL / GENERATED_DISPLAY_ASSET",
       "P03_WEDDING_DAY_CARD / GENERATED_DISPLAY_ASSET / 2026.10.24"
     ],
-    "reason": "These implementations either drift from the active P01/P02 V30 family or preserve the flowchart/isolated-icon assembly problem. Previous PASS labels are superseded."
+    "reason": "These older implementations were superseded by the accepted V30-aligned grouped realignment. Do not restore them."
   },
   "newGroupedProductionModel": {
     "principle": "Use fewer, larger editorial ecologies. Do not solve P03 with isolated clipart/SVG parts and do not flatten the whole page.",
@@ -133,7 +133,31 @@
     "nativePendingPersonalCopy": true,
     "pageBadgeInstance": "3782:16 / master 3772:2 / value 03",
     "airmailBorder": true,
-    "overallP03InformationArchitecture": true
+    "overallP03InformationArchitecture": true,
+    "acceptedRgbDesignDuringEdgeAlphaCleanup": true
+  },
+  "edgeAlphaReview": {
+    "status": "REOPENED_SOURCE_ALPHA_ONLY",
+    "trigger": "Owner noticed remaining background-transparency weakness after design lock. Direct source inspection confirmed all five accepted grouped raster PNGs use binary alpha only.",
+    "inspectedAssets": [
+      "V30_P03_HEADER_ECOLOGY_V30_ALIGNED.png",
+      "V30_P03_Q3_EDITORIAL_FAMILY_V30_ALIGNED.png",
+      "V30_P03_Q4_EDITORIAL_FAMILY_V30_ALIGNED.png",
+      "V30_P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED_V2.png",
+      "V30_P03_BOTTOM_CLOSURE_V30_ALIGNED.png"
+    ],
+    "finding": "Each inspected source contains only alpha 0 and 255, with zero partial-alpha edge pixels. Outside transparency exists and intended paper interiors remain opaque, but curved/organic raster boundaries require a separate edge-quality pass because hard thresholding can create jaggies or matte-like fringe.",
+    "designImpact": "NONE. Cross-page style, composition, RGB artwork, copy architecture and photo roles remain locked.",
+    "requiredRepair": [
+      "preserve accepted RGB/design source exactly",
+      "perform edge-aware alpha refinement/re-cut at source resolution",
+      "restore controlled antialiasing on the true external cutout boundary where appropriate",
+      "preserve intentional white/yellow keylines as opaque artwork",
+      "remove matte contamination from edge RGB if present",
+      "do not blur the full artwork or soften interior typography/outlines",
+      "replace only the affected PNG sources/nodes after light/mid/dark compositing passes"
+    ],
+    "gate": "EDGE_ALPHA_QUALITY_PASS"
   },
   "acceptanceState": {
     "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS",
@@ -145,26 +169,26 @@
     "REFERENCE_DELTA_PASS": "PASS",
     "PHOTO_ROLE_PASS": "PASS",
     "COPY_SAFETY_PASS": "PASS_PENDING_FINAL_COPY",
-    "ALPHA_MATERIAL_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "ALPHA_INTERIOR_OPACITY_PASS": "PASS",
+    "EDGE_ALPHA_QUALITY_PASS": "REOPENED_BINARY_EDGE_REVIEW",
+    "ALPHA_MATERIAL_PASS": "PARTIAL_PASS_INTERIOR_OK_EDGE_REOPENED",
     "FINGERPRINT_COLLISION_PASS": "PASS",
     "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_ASSET_ALPHA_QA_PENDING": true,
     "FINAL_COPY_QA_PENDING": true,
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false
   },
   "executionOrder": [
-    "read latest remote authority first",
-    "compare P01 3535:7, P02 3535:9 and P03 3535:11 side-by-side before generating",
-    "generate one representative P03 V30-aligned calibration ecology/sample first; do not generate the entire replacement batch until that sample passes cross-page style review",
-    "rebuild Header ecology in V30-aligned graphic language",
-    "rebuild Q3/Q4 as one calibrated bright editorial-paper family",
-    "rebuild Timeline + fixed local accents + Wedding Day/date as one grouped Story ecology",
-    "rebuild Bottom closure in V30-aligned graphic language",
-    "remove superseded isolated camera/palm/plumeria/route/label/Wedding-Day nodes after replacements win visually",
-    "run one full-page P01/P02/P03 cross-page comparison plus P03 Visual Master/A5 review",
-    "run alpha/material and fingerprint checks only on new grouped blocks",
+    "do not redesign P03; retain the locked V30-aligned RGB artwork and layout",
+    "for the five accepted grouped PNGs, inspect/rebuild only the source alpha edge using the current TRUE-ALPHA policy",
+    "compare source on light, mid-gray and dark backgrounds and inspect outer contour at source resolution and A5 use size",
+    "preserve intentional white/yellow keylines and fully opaque paper interiors",
+    "replace only source assets whose edge-quality improves; delete superseded binary-edge LIVE source after replacement",
+    "run one final full-page visual check to verify no design regression",
     "sync Drive/Git/PR once and stop"
   ],
   "productionEvidence": "assets/rurubu-v30/p03/production/v30-style-realignment/manifest.json",
-  "completionCondition": "SATISFIED_2026-09-03: direct P01/P02/P03 comparison passes; Story Timeline is one authored ecology; P03 composition, five photo roles, native pending copy, shared PAGE03 and border remain intact."
+  "completionCondition": "DESIGN_SATISFIED / EDGE_ALPHA_PENDING: P03 remains FIGMA_DESIGN_COMPLETE=YES. Final asset-alpha closure requires EDGE_ALPHA_QUALITY_PASS on the accepted grouped raster assets without changing the approved V30 design."
 }
