@@ -2,7 +2,7 @@
   "schemaVersion": 4,
   "project": "Rurubu WEDDING V30",
   "page": "P02",
-  "status": "P02_ORNAMENT_QUALITY_REOPENED / STRUCTURE_AND_COPY_SAFE",
+  "status": "P02_DESIGN_LOCKED_AFTER_ORNAMENT_ART_DIRECTION_REBUILD",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
@@ -87,36 +87,36 @@
     "rule": "PAGE 02 must visually align with the P01 PAGE 01 common component system. Do not independently restyle/regenerate it as a P02-only image asset. Keep the common backing/typography/stroke behavior coherent and vary the page number/content only unless a future owner-approved exception is explicit."
   },
   "ornamentQualityDebtLatest": {
-    "status": "OPEN / TARGETED_ORNAMENT_REWORK_REQUIRED",
+    "status": "CLOSED / PASS_AFTER_CALIBRATED_FAMILY_REBUILD",
     "reason": "Owner review found generic/weak icon quality and obvious reuse/carry-over feel. Previous REQUALIFIED_CARRYOVER status was too permissive and is revoked for the affected ornaments.",
     "targets": [
       {
         "id": "P02_Q2_PLANE_AND_ROUTE",
-        "status": "REWORK_REQUIRED",
+        "status": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
         "problem": "generic/simple airplane-route icon and reuse feel",
         "requirement": "replace with a distinct Q2-specific editorial travel ornament; do not reuse the top airplane-route geometry"
       },
       {
         "id": "P02_TOP_AIRPLANE_ROUTE",
-        "status": "REWORK_REQUIRED",
+        "status": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
         "problem": "generic/simple airplane-route icon and reuse feel",
         "requirement": "top-header route must be a separate authored composition supporting the title ecology"
       },
       {
         "id": "P02_Q2_SUITCASE",
-        "status": "REWORK_REQUIRED",
+        "status": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
         "problem": "stock/clipart-like suitcase treatment",
         "requirement": "replace with a more editorial/travel-magazine treatment matching current page line/detail quality"
       },
       {
         "id": "P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER",
-        "status": "REWORK_REQUIRED",
+        "status": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
         "problem": "carry-over/reuse feel and insufficient current-page specificity",
         "requirement": "redesign as a P02 top-right role-specific cluster; do not pass by moving/resizing the old asset"
       },
       {
         "id": "P02_TOP_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER",
-        "status": "REWORK_REQUIRED",
+        "status": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
         "problem": "carry-over/reuse feel and insufficient current-page specificity",
         "requirement": "redesign as a P02 top-left role-specific cluster; coordinate with top-right but do not mirror or duplicate it"
       }
@@ -171,10 +171,17 @@
     "BORDER_Z_ORDER_PASS": "PASS_PRESERVED",
     "ASSET_ROLE_CLASSIFICATION_PASS": "PASS_AFTER_OWNER_CORRECTION",
     "SHARED_COMPONENT_PASS": "PASS_WITH_PAGE_BADGE_RULE_CORRECTED",
-    "ORNAMENT_ORIGINALITY_PASS": "REOPENED",
-    "VISUAL_CARRYOVER_PASS": "REOPENED_FOR_FIVE_ORNAMENTS",
-    "REFERENCE_DELTA_PASS": "REOPENED_FOR_TARGETED_ORNAMENT_PATCH",
-    "FIGMA_DESIGN_COMPLETE": false,
+    "RURUBU_EDITORIAL_DNA_PASS": "PASS",
+    "V30_ART_DIRECTION_PASS": "PASS",
+    "PAGE_ROLE_FIT_PASS": "PASS",
+    "ORNAMENT_FAMILY_COHERENCE_PASS": "PASS",
+    "ORNAMENT_OBJECT_QUALITY_PASS": "PASS",
+    "ORNAMENT_ORIGINALITY_PASS": "PASS",
+    "REUSE_INTENT_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "VISUAL_CARRYOVER_PASS": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+    "REFERENCE_DELTA_PASS": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+    "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false
   },

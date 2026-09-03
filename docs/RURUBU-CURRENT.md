@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `CURRENT_POINTER / V30_ONLY / P02_ORNAMENT_ART_DIRECTION_REDESIGN_OPEN / 2026-09-02`
+Status: `CURRENT_POINTER / V30_ONLY / P02_DESIGN_LOCKED / 2026-09-03`
 
 The only current Rurubu WEDDING production version is **V30**. V20 is frozen history/reference only. Do not create V31 unless explicitly requested.
 
@@ -170,7 +170,7 @@ P01 CURRENT: `3535:7`.
 
 Remaining work is final owner-photo replacement + final-photo/print QA only. Do not copy P01's cover density or exact ornament set into later pages merely for consistency.
 
-## P02 — STRUCTURE/COPY/PHOTO PASS; ORNAMENT ART DIRECTION REOPENED
+## P02 — DESIGN LOCKED AFTER ORNAMENT ART-DIRECTION REBUILD
 
 P02 CURRENT: `3535:9`.
 
@@ -191,31 +191,32 @@ Correct role classification:
 - travel/tropical/route/icon art = `PAGE_SPECIFIC_ORNAMENT`
 - replaceable pictures = `PHOTO`
 
-Current five ornament targets remain open:
+The five ornament targets were rebuilt after Phase A calibration:
 - `P02_Q2_PLANE_AND_ROUTE`
 - `P02_TOP_AIRPLANE_ROUTE`
 - `P02_Q2_SUITCASE`
 - `P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER`
 - `P02_TOP_LEFT_TROPICAL_CLUSTER`
 
-The latest generated candidates improved standalone art quality but exposed **illustration-genre drift**. They are not accepted merely because they are attractive individually.
+The accepted family treatment uses compatible navy hand-drawn contours, bright simplified gouache blocks, restrained print texture, warm-white sticker keylines and light-to-medium editorial weight. Vehicle/route and tropical pairs are related but compositionally distinct; Q2 suitcase is a locally integrated travel-ephemera prop.
 
 P02-specific authority: `assets/rurubu-v30/p02/ornament-art-direction-manifest.json`.
 
 Current P02 gates:
 - structure/copy/photo/material alpha/border = PASS preserved
-- `RURUBU_EDITORIAL_DNA_PASS = REOPENED`
-- `V30_ART_DIRECTION_PASS = REOPENED`
-- `PAGE_ROLE_FIT_PASS = REOPENED_FOR_FIVE_ORNAMENTS`
-- `ORNAMENT_FAMILY_COHERENCE_PASS = REOPENED`
-- `ORNAMENT_OBJECT_QUALITY_PASS = CURRENT_CANDIDATES_STRONG_BUT_NOT_SUFFICIENT`
-- `REUSE_INTENT_PASS = REOPENED`
-- `TRUE_ALPHA_PREFLIGHT_PASS = REQUIRED_FOR_FINAL_REPLACEMENTS`
-- `FIGMA_DESIGN_COMPLETE = NO`
+- `RURUBU_EDITORIAL_DNA_PASS = PASS`
+- `V30_ART_DIRECTION_PASS = PASS`
+- `PAGE_ROLE_FIT_PASS = PASS`
+- `ORNAMENT_FAMILY_COHERENCE_PASS = PASS`
+- `ORNAMENT_OBJECT_QUALITY_PASS = PASS`
+- `REUSE_INTENT_PASS = PASS`
+- `TRUE_ALPHA_PREFLIGHT_PASS = PASS`
+- `REFERENCE_DELTA_PASS = PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD`
+- `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-Do not start P03 production until the P02 ornament art-direction debt is closed or the owner explicitly defers it.
+P02 design is locked. Remaining work is final owner-photo replacement and final-photo/print QA.
 
 ## P03+
 

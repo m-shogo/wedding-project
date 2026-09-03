@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "project": "Rurubu WEDDING V30",
   "page": "P02",
-  "status": "FIRST_PRODUCTION_BASELINE_VALID_ORNAMENT_QUALITY_REOPENED",
+  "status": "FIGMA_DESIGN_COMPLETE_FINAL_PHOTO_QA_PENDING",
   "figma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "page": "V30_FINAL_PRODUCTION",
@@ -49,9 +49,9 @@
     "qaQuestions": "REFERENCE_ONLY native text, separately controllable",
     "qaAnswers": "TBD native text, separately controllable"
   },
-  "reopenedOrnamentDebt": {
+  "resolvedOrnamentDebt": {
     "reason": "Owner review found generic/stock icon feel and obvious carry-over/reuse quality that the first structural QA did not catch.",
-    "status": "REWORK_REQUIRED",
+    "status": "CLOSED_AFTER_CALIBRATED_FAMILY_REBUILD_2026_09_03",
     "targets": [
       "P02_Q2_PLANE_AND_ROUTE",
       "P02_TOP_AIRPLANE_ROUTE",
@@ -71,13 +71,20 @@
     "EDGE_SAFETY_PASS": "PASS_PRESERVED",
     "BORDER_Z_ORDER_PASS": "PASS_PRESERVED",
     "ASSET_ROLE_CLASSIFICATION_PASS": "PASS_AFTER_OWNER_CORRECTION",
-    "ORNAMENT_ORIGINALITY_PASS": "REOPENED",
-    "VISUAL_CARRYOVER_PASS": "REOPENED_FOR_FIVE_ORNAMENTS",
-    "REFERENCE_DELTA_PASS": "REOPENED_FOR_TARGETED_ORNAMENT_PATCH",
+    "RURUBU_EDITORIAL_DNA_PASS": "PASS",
+    "V30_ART_DIRECTION_PASS": "PASS",
+    "PAGE_ROLE_FIT_PASS": "PASS",
+    "ORNAMENT_FAMILY_COHERENCE_PASS": "PASS",
+    "ORNAMENT_OBJECT_QUALITY_PASS": "PASS",
+    "ORNAMENT_ORIGINALITY_PASS": "PASS",
+    "REUSE_INTENT_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "VISUAL_CARRYOVER_PASS": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+    "REFERENCE_DELTA_PASS": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
     "A5_GRAYSCALE_PASS": "PASS_BASELINE_PRESERVED",
     "HIDDEN_OBSOLETE_COUNT": 0,
     "DUPLICATE_SAME_JOB_LIVE_COUNT": 0,
-    "FIGMA_DESIGN_COMPLETE": false,
+    "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false
   },
@@ -96,6 +103,15 @@
     "visualMasterComparisonSha256": "b3cf7131dab506d1415860b2389117f66fe2cda0afcc2853c3b791edc3367871",
     "driveProductionFolderId": "10TnlGlA7OEUVzv3lKGRLMGyXZ21jnpaU",
     "driveQaFolderId": "1fvDQl2Rpe6H1JufWxtbnWc9zng8437MN",
-    "note": "These hashes document the first production baseline. They are not evidence that the reopened ornament-quality gate is closed."
+    "note": "These hashes document the first production baseline."
+  },
+  "ornamentArtDirectionPatch": {
+    "date": "2026-09-03",
+    "status": "COMPLETE",
+    "manifest": "assets/rurubu-v30/p02/production/ornaments/manifest.json",
+    "finalScreenshotSha256": "93317041c31e01e80b69b3bc3eb1ba876d8b488845bffa67ed8a3a8dc2b55e50",
+    "figmaChildCount": 76,
+    "acceptedStructurePreserved": true,
+    "p01AndP03ToP08Untouched": true
   }
 }

@@ -1,6 +1,6 @@
 # V30 P02 production assets
 
-Status: `STRUCTURE_COPY_PHOTO_PASS / ORNAMENT_QUALITY_REOPENED / FINAL_PHOTO_QA_PENDING / PRINT_READY_NO`
+Status: `FIGMA_DESIGN_COMPLETE / FINAL_PHOTO_QA_PENDING / PRINT_READY_NO`
 
 P02 CURRENT is the official Figma frame `3535:9`. No duplicate or TEMP P02 frame exists.
 
@@ -26,9 +26,9 @@ Do not infer render mode from whether text is fixed or stylized. P02 uses these 
 - `PHOTO`: SHOGO portrait, SHIORI portrait, Q1 couple inset.
 - `GENERATED_DISPLAY_ASSET`: only where an authored visual object genuinely benefits from being prepared as one display asset; fixed/stylized text alone is not a reason to rasterize it.
 
-## Reopened ornament debt — REWORK_REQUIRED
+## Ornament art-direction patch — COMPLETE
 
-The first production pass is structurally valid, but the following ornaments fail the current visual-quality bar because they read as generic/stock, repeated, or stale carry-over rather than locally authored magazine decoration:
+Phase A established one TRAVEL_VEHICLE/ROUTE anchor and one TROPICAL_BOTANICAL anchor before the five contextual final assets were produced:
 
 - `P02_Q2_PLANE_AND_ROUTE`
 - `P02_TOP_AIRPLANE_ROUTE`
@@ -36,9 +36,9 @@ The first production pass is structurally valid, but the following ornaments fai
 - `P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER`
 - `P02_TOP_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER`
 
-Moving, resizing, recoloring, or lightly reusing these same assets is not sufficient. Replace/rework the ornament art itself while preserving the accepted page structure.
+All five were replaced with newly authored art using one compatible V30 treatment: imperfect navy contours, bright simplified gouache color, restrained print texture, warm-white sticker keylines and light-to-medium editorial weight.
 
-`REQUALIFIED_CARRYOVER` only passes when current visual quality, local context fit, stock/clipart feel, and same-page reuse/duplication feel all pass.
+The two vehicle/route compositions and two tropical compositions are related but not duplicated or mirrored. Q2 suitcase is an integrated travel-ephemera vignette. Production assets and hashes are in `production/ornaments/manifest.json`.
 
 ## Clean standalone proxies
 
@@ -56,11 +56,16 @@ Final owner photos can replace only these fills.
 - `COPY_SAFETY_PASS = PASS_PRESERVED`
 - `BORDER_Z_ORDER_PASS = PASS_PRESERVED`
 - `ASSET_ROLE_CLASSIFICATION_PASS = PASS_AFTER_OWNER_CORRECTION`
-- `ORNAMENT_ORIGINALITY_PASS = REOPENED`
-- `VISUAL_CARRYOVER_PASS = REOPENED_FOR_FIVE_ORNAMENTS`
-- `REFERENCE_DELTA_PASS = REOPENED_FOR_TARGETED_ORNAMENT_PATCH`
-- `FIGMA_DESIGN_COMPLETE = NO`
+- `RURUBU_EDITORIAL_DNA_PASS = PASS`
+- `V30_ART_DIRECTION_PASS = PASS`
+- `PAGE_ROLE_FIT_PASS = PASS`
+- `ORNAMENT_FAMILY_COHERENCE_PASS = PASS`
+- `ORNAMENT_OBJECT_QUALITY_PASS = PASS`
+- `REUSE_INTENT_PASS = PASS`
+- `TRUE_ALPHA_PREFLIGHT_PASS = PASS`
+- `REFERENCE_DELTA_PASS = PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD`
+- `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-Production baseline evidence remains recorded in `production/manifest.json`; it is not a current full-design LOCK until the five ornament debts close.
+P02 is design-locked. Final-photo and print-readiness QA remain pending.

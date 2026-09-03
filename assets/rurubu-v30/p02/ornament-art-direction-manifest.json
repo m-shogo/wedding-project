@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "project": "Rurubu WEDDING V30",
   "page": "P02",
-  "status": "ORNAMENT_ART_DIRECTION_REDESIGN_OPEN",
+  "status": "ORNAMENT_ART_DIRECTION_LOCKED_AFTER_CALIBRATION_2026_09_03",
   "inherits": [
     "assets/rurubu-v30/ornament-art-direction-manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
@@ -24,7 +24,7 @@
     ]
   },
   "currentCandidateAssessment": {
-    "status": "STYLE_DRIFT_REVIEW_REQUIRED / NOT_FAMILY_LOCKED",
+    "status": "SUPERSEDED_BY_2026_09_03_CALIBRATED_FAMILY",
     "ownerFeedback": "individual designs are good, but their design taste/style does not feel continuous with the publication",
     "observedDrift": [
       "one airplane reads as softer craft/storybook-style travel illustration",
@@ -103,14 +103,34 @@
       "force P02 to copy P01 cover ornament density or exact motifs"
     ]
   },
+  "acceptedProduction": {
+    "date": "2026-09-03",
+    "strategy": "CALIBRATE_THEN_CONTEXTUAL_VARIANTS",
+    "calibrationTreatment": "Medium-thick imperfect navy contour, simplified bright gouache blocks, restrained risograph/print scuff, warm-white sticker keyline and light-to-medium editorial weight.",
+    "anchors": [
+      "assets/rurubu-v30/p02/production/ornaments/calibration/V30_P02_TRAVEL_VEHICLE_CALIBRATION_ANCHOR.png",
+      "assets/rurubu-v30/p02/production/ornaments/calibration/V30_P02_TROPICAL_BOTANICAL_CALIBRATION_ANCHOR.png"
+    ],
+    "finalAssets": [
+      "assets/rurubu-v30/p02/production/ornaments/final/V30_P02_TOP_AIRPLANE_ROUTE.png",
+      "assets/rurubu-v30/p02/production/ornaments/final/V30_P02_Q2_PLANE_AND_ROUTE.png",
+      "assets/rurubu-v30/p02/production/ornaments/final/V30_P02_Q2_SUITCASE.png",
+      "assets/rurubu-v30/p02/production/ornaments/final/V30_P02_TOP_LEFT_TROPICAL_CLUSTER.png",
+      "assets/rurubu-v30/p02/production/ornaments/final/V30_P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER.png"
+    ],
+    "trueAlphaMethod": "Direct alpha failed; one safe violet matte was extracted before Figma placement and verified over light/dark backgrounds.",
+    "figmaNodeIds": ["3753:128", "3753:135", "3753:138", "3753:111", "3753:112"],
+    "finalScreenshotSha256": "93317041c31e01e80b69b3bc3eb1ba876d8b488845bffa67ed8a3a8dc2b55e50"
+  },
   "closeGates": {
-    "RURUBU_EDITORIAL_DNA_PASS": "REOPENED",
-    "V30_ART_DIRECTION_PASS": "REOPENED",
-    "PAGE_ROLE_FIT_PASS": "REOPENED_FOR_FIVE_ORNAMENTS",
-    "ORNAMENT_FAMILY_COHERENCE_PASS": "REOPENED",
-    "ORNAMENT_OBJECT_QUALITY_PASS": "CURRENT_CANDIDATES_STRONG_BUT_NOT_SUFFICIENT",
-    "REUSE_INTENT_PASS": "REOPENED",
-    "TRUE_ALPHA_PREFLIGHT_PASS": "REQUIRED_FOR_FINAL_REPLACEMENTS",
-    "FIGMA_DESIGN_COMPLETE": false
+    "RURUBU_EDITORIAL_DNA_PASS": "PASS",
+    "V30_ART_DIRECTION_PASS": "PASS",
+    "PAGE_ROLE_FIT_PASS": "PASS",
+    "ORNAMENT_FAMILY_COHERENCE_PASS": "PASS",
+    "ORNAMENT_OBJECT_QUALITY_PASS": "PASS",
+    "REUSE_INTENT_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "REFERENCE_DELTA_PASS": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+    "FIGMA_DESIGN_COMPLETE": true
   }
 }
