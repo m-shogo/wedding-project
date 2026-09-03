@@ -21,6 +21,9 @@ V30 is the sole current production version. V20 is history/reference only. Do no
 For P02, latest owner override is:
 `assets/rurubu-v30/p02/post-figma-review-20260903-manifest.json`
 
+Supporting recovered history (not execution authority):
+`docs/rurubu-v30/HISTORICAL-LESSON-RECONCILIATION-20260903.md`
+
 Newest explicit owner feedback wins.
 
 Current precedence:
@@ -66,17 +69,28 @@ Page: `V30_FINAL_PRODUCTION`
 
 Plan globally, calibrate families early, produce final page-specific ornaments in context. Do not pre-generate a giant final icon library.
 
+For page-specific major ornaments, exact source reuse is now a separate gate:
+- compare source SHA-256 when available;
+- inspect live Figma `imageHash` when carry-over is possible;
+- exact source reuse across distinct page-specific roles fails unless explicitly declared shared/recurring.
+
+Gate: `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS`.
+
 ### Display roles
 
-Classify by editorial role, not by whether an element contains text:
+Classify by editorial role, mutability and saliency, not by whether an element contains text:
 
-- `GENERATED_DISPLAY_ASSET`: short locked high-saliency authored title/ribbon/name-label art
-- `NATIVE_TEXT`: long/variable/TBD/personal/frequently changing copy
+- `GENERATED_DISPLAY_ASSET`: short locked high-saliency authored title/ribbon/name-label art when current page authority explicitly chooses it
+- `NATIVE_TEXT`: long/variable/TBD/personal/frequently changing or not-copy-locked copy
 - `SHARED_PUBLICATION_COMPONENT`: recurring cross-page furniture such as PAGE badge
 - `PAGE_SPECIFIC_ORNAMENT`: local decorative/editorial art
 - `PHOTO`: replaceable photo/proxy
 
 Canonical: `assets/rurubu-v30/publication-display-system-manifest.json`.
+
+A role declaration is not enough. Before design lock, inspect live Figma and confirm the actual node/source matches the declared role.
+
+Gate: `LIVE_ROLE_IMPLEMENTATION_PASS`.
 
 ### Shared PAGE badge — HARD
 
@@ -88,6 +102,8 @@ Preferred implementation:
 Do not independently generate/redesign a PAGE badge per page.
 
 P01 PAGE 01 is a calibration reference; migrate P01/P02 to the shared master and use the same master for later pages.
+
+`SHARED_PUBLICATION_COMPONENT_PASS` requires actual master/source provenance, not naming or visual similarity alone.
 
 ## P01 — LOCKED EXCEPT SHARED PAGE BADGE MIGRATION
 
@@ -140,8 +156,10 @@ Replace with a P02-specific compact `TROPICAL_BOTANICAL` composition or remove i
 
 - five-target calibrated ornament rebuild = `PASS_PRESERVED_PENDING_INTEGRATED_REVIEW`
 - `DISPLAY_ROLE_CLASSIFICATION_PASS = REOPENED`
+- `LIVE_ROLE_IMPLEMENTATION_PASS = REOPENED`
 - `DISPLAY_ART_QUALITY_PASS = REOPENED`
 - `SHARED_PUBLICATION_COMPONENT_PASS = FAIL_CURRENT_PAGE_BADGE_DRIFT`
+- `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS = FAIL_EXACT_P01_FLORAL_REUSE`
 - `VISUAL_CARRYOVER_PASS = FAIL_EXACT_P01_FLORAL_REUSE`
 - `REFERENCE_DELTA_PASS = REOPENED`
 - `FIGMA_DESIGN_COMPLETE = NO`
@@ -155,3 +173,5 @@ Do not start P03 production until P02 closes or the owner explicitly defers it.
 ## P03+
 
 Inventory/planning may continue. Final page production waits for direct page review and current authority.
+
+For every future page lock, the new live-role, shared-component and exact-source fingerprint gates apply before `FIGMA_DESIGN_COMPLETE = YES`.
