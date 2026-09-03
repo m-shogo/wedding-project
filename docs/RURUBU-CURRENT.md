@@ -1,62 +1,54 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `CURRENT_POINTER / V30_ONLY / P02_DESIGN_LOCKED / 2026-09-03`
+Status: `V30_ONLY / P02_POST_FIGMA_REVIEW_REOPENED / 2026-09-03`
 
-The only current Rurubu WEDDING production version is **V30**. V20 is frozen history/reference only. Do not create V31 unless explicitly requested.
+V30 is the sole current production version. V20 is history/reference only. Do not create V31 unless explicitly requested.
 
-## REQUIRED READ SET — every production run
+## Required read set — before production writes
 
-1. this file
-2. actual page Visual Master — `assets/rurubu-v30/pXX/PXX.png`
-3. Root manifest — `assets/rurubu-v30/manifest.json`
-4. V30 visual-polish override — `assets/rurubu-v30/visual-polish-manifest.json`
-5. **Ornament art-direction authority — `assets/rurubu-v30/ornament-art-direction-manifest.json`**
-6. `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md`
-7. page manifest
-8. page polish manifest when present
-9. page-specific ornament manifest when present
-10. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
-11. `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
-12. page README when production exists
+1. `docs/RURUBU-CURRENT.md`
+2. actual target-page Visual Master
+3. `assets/rurubu-v30/manifest.json`
+4. `assets/rurubu-v30/visual-polish-manifest.json`
+5. `assets/rurubu-v30/ornament-art-direction-manifest.json`
+6. **`assets/rurubu-v30/publication-display-system-manifest.json`**
+7. `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md`
+8. target page manifest / polish manifest
+9. target page ornament/display override when present
+10. `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
+11. page README/production evidence when relevant
 
-For P02, also read `assets/rurubu-v30/p02/ornament-art-direction-manifest.json` before any new ornament generation or Figma replacement.
+For P02, latest owner override is:
+`assets/rurubu-v30/p02/post-figma-review-20260903-manifest.json`
 
 Newest explicit owner feedback wins.
 
-### Current override precedence
+Current precedence:
+`owner feedback → latest page-specific owner override → publication display system / page ornament authority → global ornament art direction → visual-polish → true-alpha policy → older generic/root/page-main language`
 
-`owner feedback → page-specific ornament/page-polish authority → global ornament-art-direction authority → visual-polish → TRUE-ALPHA policy → current Acceptance gate → older generic/root/page-main execution language`
-
-Older rules that broadly rasterize fixed/stylized text, treat checkerboard as a transparency workflow, approve good standalone art without publication-family review, or make P01 the literal template for later pages are **SUPERSEDED**.
-
-## Ownership — USER LOCKED
+## Workflow ownership
 
 ### ChatGPT
-- feedback / Visual Master / current screenshot review
-- Root/shared/page manifest improvement
-- contradiction/stale-rule cleanup
+- feedback / Visual Master / live Figma screenshot review
+- Root/shared/page authority correction
+- stale-rule/contradiction cleanup
 - Codex handoff
 - post-build review
 
 ### Codex
 - production ImageGen
-- alpha/cutout preparation
-- Figma writes/cleanup
-- clean proxy placement
+- true-alpha/cutout preparation
+- Figma writes/cleanup/components
 - screenshots/exports
 - Drive/Git production evidence
 
-## Git / Figma authority
+ChatGPT does not perform production Figma/ImageGen writes unless the owner explicitly reassigns them.
 
-Branch: `rurubu/v30-final-production-20260901`
+## Figma authority
 
-PR: `#878`
-
-Figma file: `bfM0d4c9dCeBv5pCkJ3TNM`
-
+File: `bfM0d4c9dCeBv5pCkJ3TNM`
 Page: `V30_FINAL_PRODUCTION`
 
-Frames:
 - P01 `3535:7`
 - P02 `3535:9`
 - P03 `3535:11`
@@ -66,162 +58,100 @@ Frames:
 - P07 `3535:19`
 - P08 `3535:21`
 
-TEMP `3708:2` is deleted. Do not create alternate/TEMP production pages unless explicitly approved.
+## System architecture
 
-## Locked project facts / page roles
+### Rurubu / ornament
 
-- A5 portrait / 8 pages
-- trim `148 × 210 mm`
-- bleed `3 mm`
-- wedding date `2026.10.24`
-- names `Shogo` / `Shiori`
-- P08 barcode `2026102400000`
+`RURUBU_EDITORIAL_DNA → V30_ART_DIRECTION → PAGE_VISUAL_LANGUAGE → ORNAMENT_FAMILY → ASSET_INSTANCE`
 
-Roles:
-- P01 Cover / `るるぶ WEDDING`
-- P02 Profile + Q1/Q2
-- P03 Our Story + Q3/Q4
-- P04 All Travel Memories / Our Journey
-- P05 Friends Memories only
-- P06 Real Life / Favorites / Best Shots + Q5/Q6
-- P07 Closing Message / Thank You
-- P08 Magazine Back Cover
+Plan globally, calibrate families early, produce final page-specific ornaments in context. Do not pre-generate a giant final icon library.
 
-## Systemic design architecture
+### Display roles
 
-### 1. Rurubu editorial DNA is the root
+Classify by editorial role, not by whether an element contains text:
 
-The hierarchy is:
+- `GENERATED_DISPLAY_ASSET`: short locked high-saliency authored title/ribbon/name-label art
+- `NATIVE_TEXT`: long/variable/TBD/personal/frequently changing copy
+- `SHARED_PUBLICATION_COMPONENT`: recurring cross-page furniture such as PAGE badge
+- `PAGE_SPECIFIC_ORNAMENT`: local decorative/editorial art
+- `PHOTO`: replaceable photo/proxy
 
-`RURUBU_EDITORIAL_DNA → RURUBU_WEDDING_V30_ART_DIRECTION → PAGE_VISUAL_LANGUAGE → ORNAMENT_FAMILY → ASSET_INSTANCE`
+Canonical: `assets/rurubu-v30/publication-display-system-manifest.json`.
 
-P01 is a **global style calibration reference**, not the root authority and not a page template for P02+.
+### Shared PAGE badge — HARD
 
-A high-quality standalone illustration can still fail if it does not function as Rurubu-style editorial material.
+PAGE 01 / 02 / 03... is one publication component system.
 
-### 2. Plan globally, produce contextually
+Preferred implementation:
+`one PAGE_BADGE_SHARED_MASTER → controlled page-number variable/property → instances across pages`
 
-Do **not** generate every final icon upfront.
+Do not independently generate/redesign a PAGE badge per page.
 
-Use:
+P01 PAGE 01 is a calibration reference; migrate P01/P02 to the shared master and use the same master for later pages.
 
-`global ornament-slot inventory → small family calibration anchors → shared components once → final page-specific variants in context → registry writeback`
+## P01 — LOCKED EXCEPT SHARED PAGE BADGE MIGRATION
 
-This is intentional:
-- pure page-by-page work causes style drift;
-- generating every final icon upfront creates wrong-context assets, sunk-work carry-over and asset-pack behavior.
+P01 `3535:7` remains accepted. New owner feedback reopens **only the PAGE badge** so it can migrate into the cross-page shared component system.
 
-When P09+ is added, inventory its ornament jobs, map them to existing families, and create a new family only when the page role genuinely requires one.
+Do not touch unrelated P01 design/photo/copy/ornament work.
 
-Canonical system: `assets/rurubu-v30/ornament-art-direction-manifest.json`.
+`FINAL_PHOTO_QA_PENDING = YES`
+`PRINT_READY = NO`
 
-### 3. Asset role before render mode
+## P02 — POST-FIGMA REVIEW REOPENED
 
-Classify material elements as:
-- `NATIVE_TEXT`
-- `SHARED_COMMON_COMPONENT`
-- `GENERATED_DISPLAY_ASSET`
-- `PAGE_SPECIFIC_ORNAMENT`
-- `PHOTO`
+Current screenshot after Codex commit `d730f6b60abd130c3b2e2764a2f40d3bf63df5cc` was reviewed directly in Figma.
 
-Stylized/fixed text is not automatically an image. Shared publication furniture is not a page-specific generated ornament.
+### Preserve
 
-### 4. Ornament review order
+- current accepted five rebuilt top/Q2 ornament assets, unless integrated QA later exposes a direct conflict
+- SHOGO left/blue, SHIORI right/pink
+- three clean photo slots/proxies
+- profile sheets
+- Q1/Q2 structure; Q1 one inset photo, Q2 none
+- profile/Q&A TBD/body copy native
+- border/background depth
+- P03-P08 untouched
 
-Before accepting generated ornament art, review in this order:
+### Reopened display targets
 
-1. `RURUBU_EDITORIAL_DNA_PASS`
-2. `V30_ART_DIRECTION_PASS`
-3. `PAGE_ROLE_FIT_PASS`
-4. `ORNAMENT_FAMILY_COHERENCE_PASS`
-5. `ORNAMENT_OBJECT_QUALITY_PASS`
-6. `REUSE_INTENT_PASS`
-7. `TRUE_ALPHA_PREFLIGHT_PASS`
+- `ふたりのプロフィール` → `GENERATED_DISPLAY_ASSET`
+- `私たちのこと、少しだけ紹介します♪` ribbon → `GENERATED_DISPLAY_ASSET`
+- `SHOGO` name label → `GENERATED_DISPLAY_ASSET` family
+- `SHIORI` name label → `GENERATED_DISPLAY_ASSET` family
 
-Do not approve a beautiful individual PNG if it already fails a higher-level editorial/art-direction gate.
+This latest owner feedback supersedes the older P02-specific rule that forced these four roles to remain native text.
 
-### 5. Controlled mixed media
+### Shared PAGE badge failure
 
-V30 does not require every ornament to use identical brushwork. Different ornament families may vary, but they must feel art-directed for one publication.
+Current P02 PAGE 02 is a native ellipse/text/heart construction while P01 PAGE 01 is a different completed-art treatment. This is **not** a valid shared-component pass.
 
-Reject both extremes:
-- unrelated botanical-art / retro-poster / sticker-pack genres mixed without an editorial unifier;
-- forcing every ornament into one identical style and losing Rurubu-like mixed-media energy.
+Create one shared PAGE badge master and migrate P01/P02 to it; later pages inherit it.
 
-### 6. True-alpha before Figma
+### Exact carry-over failure
 
-For generated floating art:
+`P02_BOTTOM_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER` uses the exact same image hash as `P01_LEFT_TROPICAL_CLUSTER`:
+`c4300f9b1f5bf8607ec72da41aa064c2bf52e155`
 
-`true-alpha generation/export → immediate alpha preflight → only PASS assets enter Figma`
+Status: `REPLACE_REQUIRED`.
+Replace with a P02-specific compact `TROPICAL_BOTANICAL` composition or remove if unnecessary. Do not reuse P01 image bytes.
 
-If direct alpha is unavailable:
+### Current gates
 
-`single safe flat matte → one extraction → alpha preflight`
-
-Visible checkerboard RGB is `GENERATION_ALPHA_FAIL`. Background extraction is fallback, not the default pipeline.
-
-## P01 — DESIGN LOCKED
-
-P01 CURRENT: `3535:7`.
-
-- `FIGMA_DESIGN_COMPLETE = YES`
+- five-target calibrated ornament rebuild = `PASS_PRESERVED_PENDING_INTEGRATED_REVIEW`
+- `DISPLAY_ROLE_CLASSIFICATION_PASS = REOPENED`
+- `DISPLAY_ART_QUALITY_PASS = REOPENED`
+- `SHARED_PUBLICATION_COMPONENT_PASS = FAIL_CURRENT_PAGE_BADGE_DRIFT`
+- `VISUAL_CARRYOVER_PASS = FAIL_EXACT_P01_FLORAL_REUSE`
+- `REFERENCE_DELTA_PASS = REOPENED`
+- `FIGMA_DESIGN_COMPLETE = NO`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-Remaining work is final owner-photo replacement + final-photo/print QA only. Do not copy P01's cover density or exact ornament set into later pages merely for consistency.
+The prior P02 ornament rebuild report is evidence, not a current design lock.
 
-## P02 — DESIGN LOCKED AFTER ORNAMENT ART-DIRECTION REBUILD
-
-P02 CURRENT: `3535:9`.
-
-Preserve:
-- SHOGO = left / blue
-- SHIORI = right / pink
-- Q1 has exactly one replaceable couple-photo inset
-- Q2 has no photo slot
-- three clean standalone photo proxies
-- profile/Q paper opacity
-- background-adjacent border
-- unapproved personal copy native/separate
-- P01 and P03–P08 untouched
-
-Correct role classification:
-- `ふたりの`, `プロフィール`, ribbon sentence, `SHOGO`, `SHIORI` = `NATIVE_TEXT`
-- `PAGE 02` = `SHARED_COMMON_COMPONENT`
-- travel/tropical/route/icon art = `PAGE_SPECIFIC_ORNAMENT`
-- replaceable pictures = `PHOTO`
-
-The five ornament targets were rebuilt after Phase A calibration:
-- `P02_Q2_PLANE_AND_ROUTE`
-- `P02_TOP_AIRPLANE_ROUTE`
-- `P02_Q2_SUITCASE`
-- `P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER`
-- `P02_TOP_LEFT_TROPICAL_CLUSTER`
-
-The accepted family treatment uses compatible navy hand-drawn contours, bright simplified gouache blocks, restrained print texture, warm-white sticker keylines and light-to-medium editorial weight. Vehicle/route and tropical pairs are related but compositionally distinct; Q2 suitcase is a locally integrated travel-ephemera prop.
-
-P02-specific authority: `assets/rurubu-v30/p02/ornament-art-direction-manifest.json`.
-
-Current P02 gates:
-- structure/copy/photo/material alpha/border = PASS preserved
-- `RURUBU_EDITORIAL_DNA_PASS = PASS`
-- `V30_ART_DIRECTION_PASS = PASS`
-- `PAGE_ROLE_FIT_PASS = PASS`
-- `ORNAMENT_FAMILY_COHERENCE_PASS = PASS`
-- `ORNAMENT_OBJECT_QUALITY_PASS = PASS`
-- `REUSE_INTENT_PASS = PASS`
-- `TRUE_ALPHA_PREFLIGHT_PASS = PASS`
-- `REFERENCE_DELTA_PASS = PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD`
-- `FIGMA_DESIGN_COMPLETE = YES`
-- `FINAL_PHOTO_QA_PENDING = YES`
-- `PRINT_READY = NO`
-
-P02 design is locked. Remaining work is final owner-photo replacement and final-photo/print QA.
+Do not start P03 production until P02 closes or the owner explicitly defers it.
 
 ## P03+
 
-P03 has direct Visual Master/page-polish authority but production has not started.
-
-P04–P08 still require direct image rereview before page-specific generation. Do not pre-generate their final ornament assets from prose alone; inventory/planning is allowed, final production waits for page context.
-
-**CURRENT = V30. V20 = FROZEN HISTORY.**
+Inventory/planning may continue. Final page production waits for direct page review and current authority.
