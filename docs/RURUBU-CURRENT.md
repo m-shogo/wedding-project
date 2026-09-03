@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `V30_ONLY / P01-P03_DESIGN_COMPLETE / 2026-09-03`
+Status: `V30_ONLY / P01-P02_LOCKED / P03_TIMELINE_ECOLOGY_REOPENED / 2026-09-03`
 
 V30 is the sole current production version. V20 is history/reference only. Do not create V31 unless explicitly requested.
 
@@ -113,39 +113,70 @@ Important completed systemic fixes:
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-## P03 — FIGMA DESIGN COMPLETE
+## P03 — REOPENED FOR TIMELINE ECOLOGY
 
 Frame: `3535:11`
 Role: `OUR STORY + Q3/Q4 / STORY_TIMELINE_EDITORIAL_PAGE`
 Visual Master: `assets/rurubu-v30/p03/P03.png`
 
-P03 production and the latest owner-review grouped regeneration were completed directly in the protected frame on 2026-09-03. No duplicate or TEMP P03 frame exists.
+The 2026-09-03 grouped regeneration materially improved three regions and those improvements are retained:
+- grouped Header ecology (`OUR STORY + ふたりのこれまで♡ + ribbon + airplane/heart-route + tropical accents`)
+- grouped Q3/Q4 editorial paper family
+- grouped Bottom closure ecology
+
+However a fresh direct live-Figma review after commit `8f255bbb5216d36069378618f10e2e5a3409664b` found that the preserved left 1→5 timeline still reads too much like a flowchart / explanatory diagram. The prior run-level `ANTI_FLOWCHART_PASS` is therefore overridden by the newer page-polish authority.
 
 Current page authority:
 `assets/rurubu-v30/p03/polish-manifest.json`
 
-Current execution handoff:
-`docs/rurubu-v30/CODEX-P03-PRODUCTION-20260903.md`
+### P03 remaining design debt — one grouped rebuild
 
-Key P03 decisions:
-- `OUR STORY`, `ふたりのこれまで♡`, ribbon, airplane, heart route and local header ornaments are one grouped Header ecology
-- 1→5 timeline labels form one coordinated but non-cloned display family
-- timeline body copy remains native/reference-only
-- Q3/Q4 are a related but non-identical grouped editorial paper family with integrated local ornament logic; question/answer copy remains native until approved
-- exactly five replaceable photo roles; step 5 intentionally has no support photo
-- one continuous story-route motif spans the timeline
-- PAGE03 must be instance of shared master `3772:2`, number `03`
-- bottom chapel/tropical/tide/ribbon art is one grouped closure ecology behind the preserved Wedding Day and shared PAGE 03 modules
-- P03 page-specific ornaments may reuse V30 family grammar but not exact P01/P02 page-specific image bytes by convenience
-- Wedding Day may use locked `2026.10.24`
+Rebuild the fixed timeline visual system as one authored block:
+
+`P03_TIMELINE_ECOLOGY_GROUPED`
+
+Include:
+- `1 出会い`
+- `2 デート`
+- `3 旅`
+- `4 プロポーズ`
+- `5 今日`
+- continuous story-route visual logic
+- step-number/heading family
+- only the fixed local micro-ornament logic needed to connect the sequence
+
+Keep separate:
+- all timeline body/personal copy
+- Hero
+- four support-photo fills
+- all five photo roles in total
+- Step5 no-photo behavior
+- accepted Header ecology
+- accepted Q3/Q4 family
+- Wedding Day
+- accepted Bottom closure
+- PAGE03 instance `3782:16` of shared master `3772:2`
+- shared airmail border
+
+Hard reject:
+- orange dotted connector remaining the dominant timeline grammar
+- five separate SVG-like heart labels beside an independent route
+- presentation-roadmap / school-poster / flowchart feel
+- equal card/step rhythm
+- individually pasted generic icons
+- whole-page flatten
+- baking body copy or photo fills into the new timeline asset
 
 Current state:
-- `FIGMA_DESIGN_COMPLETE = YES`
+- `ECOLOGY_FIT_PASS = REOPENED_FOR_TIMELINE_ONLY`
+- `ANTI_FLOWCHART_PASS = FAIL_CURRENT_LIVE_TIMELINE`
+- `REFERENCE_DELTA_PASS = REOPENED_FOR_TIMELINE`
+- `FIGMA_DESIGN_COMPLETE = NO`
 - `FINAL_COPY_QA_PENDING = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-Latest production evidence and final screenshots are recorded under `assets/rurubu-v30/p03/production/grouped-regeneration/`.
+P03 can relock only after a fresh full-page/A5 review confirms the left story sequence reads as magazine editorial storytelling rather than a flowchart and does not regress the accepted grouped Header/Q/Bottom work.
 
 ## P04-P08
 
