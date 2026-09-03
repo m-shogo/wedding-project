@@ -4,30 +4,32 @@ Status: `REOPENED_FOR_V30_STYLE_REALIGNMENT_AND_GROUPED_STORY_ECOLOGY / FINAL_CO
 
 P03 CURRENT is Figma frame `3535:11`.
 
-The first production and first grouped regeneration are historical execution evidence only. Latest owner feedback + direct P01/P02/P03 live comparison reopens P03 because the current page does not yet belong strongly enough to the same V30 publication family.
+Latest direct P01/P02/P03 live comparison reopens P03 because the current page does not yet belong strongly enough to the same V30 publication family.
 
 ## Current diagnosis
 
-The page currently mixes two incompatible non-V30 tendencies:
-
-- grouped Header / Q3 / Q4 / Bottom drifted into painterly, vintage, parchment and botanical illustration language;
-- preserved timeline pieces still read as Canva/SVG/flowchart parts.
-
 P01 `3535:7` and P02 `3535:9` are current **style anchors, not layout templates**.
 
-P03 must preserve its own composition and story-page role while realigning major generated art to the same bright, high-saturation, crisp printed/sticker-like V30 family.
+Current P03 mixes two non-V30 tendencies:
+
+- Header / Q3 / Q4 / Bottom drifted into painterly, vintage, parchment and botanical illustration language;
+- timeline pieces remain Canva/SVG/flowchart-like.
+
+`ANTI_CANVA` does not mean switching to watercolor/vintage. Correct direction is:
+
+`P01/P02 V30 GRAPHIC FAMILY + P03'S OWN COMPOSITION`.
 
 ## Rebuild scope
 
 Rework:
 - Header ecology;
 - Q3/Q4 editorial paper family;
-- complete Story Timeline ecology including fixed 1–5 headings, route logic, required local accents, Wedding Day and `2026.10.24` as the terminal story endpoint;
+- complete Story Timeline ecology including fixed 1–5 headings, route/movement logic, required local accents, Wedding Day and `2026.10.24` as terminal story endpoint;
 - Bottom closure;
 - isolated camera/palm/plumeria accents: integrate into grouped ecologies or remove.
 
 Keep separate/preserved:
-- Hero photo role and main geometry;
+- Hero role and primary geometry;
 - five total photo roles;
 - four support photo fills independently replaceable;
 - Step5 no-photo behavior;
