@@ -1,9 +1,9 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "date": "2026-09-03",
-  "status": "DESIGN_LOCKED_EDGE_ALPHA_REPLACEMENT_PREPARED_FIGMA_SWAP_PENDING",
+  "status": "DESIGN_LOCKED_TIMELINE_VIOLET_REMOVED_OTHER_EDGE_ALPHA_SWAPS_PENDING",
   "figma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "page": "V30_FINAL_PRODUCTION",
@@ -41,8 +41,9 @@
       "role": "STORY_TIMELINE_ECOLOGY_V2",
       "path": "final/V30_P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED_V2.png",
       "figmaNode": "3797:20",
-      "imageHash": "8c251e8e938cd2e401e175e4669d243cea9535fd",
-      "sha256": "2184e369da65bdb32b2982b9f81d091c13c686df85bdd36bcfe39c0bd4fc8ea2"
+      "imageHash": "2a39d3633049098680ecdcb7494e4049e8309fad",
+      "sha256": "f08bea13c26cfbae5210157226267168fea9e5b8cfde50650e7cb28c77bed744",
+      "alphaMode": "TRUE_ALPHA / OUTER_AND_ENCLOSED_VIOLET_REMOVED / VIOLET_FRINGE_REMOVED / BORDER_NONZERO_0"
     },
     {
       "role": "BOTTOM_CLOSURE",
@@ -111,8 +112,18 @@
         "targetFigmaNode": "3794:22"
       }
     ],
-    "EDGE_ALPHA_QUALITY_PASS": "PREPARED_SOURCE_ASSETS / FIGMA_SWAP_AND_LIVE_QA_PENDING",
-    "figmaSwapStatus": "PENDING_TOOL_UPLOAD_TRANSPORT",
+    "timelineVioletCorrection": {
+      "status": "APPLIED_TO_FIGMA_AND_LIVE_QA_PASS",
+      "targetFigmaNode": "3797:20",
+      "imageHash": "2a39d3633049098680ecdcb7494e4049e8309fad",
+      "sha256": "f08bea13c26cfbae5210157226267168fea9e5b8cfde50650e7cb28c77bed744",
+      "transparentPixels": 494405,
+      "opaquePixels": 432301,
+      "borderNonzeroPixels": 0,
+      "note": "Removed the edge-connected matte plus six enclosed violet background islands and adjacent violet fringe without changing the approved artwork or geometry. The previously prepared timeline EDGEAA candidate is not approved for swap unless regenerated from this violet-free source."
+    },
+    "EDGE_ALPHA_QUALITY_PASS": "TIMELINE_VIOLET_PASS / OTHER_EDGEAA_FIGMA_SWAPS_PENDING",
+    "figmaSwapStatus": "TIMELINE_APPLIED / OTHER_ACCEPTED_GROUPED_ASSETS_PENDING",
     "finalQaRequired": [
       "light background",
       "mid-gray background",
@@ -129,6 +140,7 @@
     "grayscaleReview": "qa/V30_P03_GRAYSCALE_REVIEW.png",
     "alphaLight": "qa/V30_P03_V30_ALIGNED_ALPHA_LIGHT_QA.jpg",
     "alphaDark": "qa/V30_P03_V30_ALIGNED_ALPHA_DARK_QA.jpg",
+    "timelineTrueAlpha": "qa/V30_P03_STORY_TIMELINE_TRUE_ALPHA_QA.png",
     "CROSS_PAGE_STYLE_FAMILY_PASS": true,
     "ECOLOGY_FIT_PASS": true,
     "ANTI_FLOWCHART_PASS": true,
@@ -138,8 +150,9 @@
     "REFERENCE_DELTA_PASS": true,
     "PHOTO_ROLE_PASS": true,
     "COPY_SAFETY_PASS": true,
-    "ALPHA_INTEGRITY_PASS": "PASS_FOR_TRUE_ALPHA_AND_INTERIOR_OPACITY_ONLY",
-    "EDGE_ALPHA_QUALITY_PASS": "PENDING_FIGMA_SWAP_AND_LIVE_QA",
+    "ALPHA_INTEGRITY_PASS": "TIMELINE_VIOLET_MATTE_PASS / OTHER_ASSETS_UNCHANGED",
+    "TIMELINE_VIOLET_MATTE_PASS": true,
+    "EDGE_ALPHA_QUALITY_PASS": "TIMELINE_VIOLET_PASS / OTHER_EDGEAA_FIGMA_SWAPS_PENDING",
     "FINGERPRINT_COLLISION_PASS": true,
     "hiddenObsoleteNodeCount": 0,
     "duplicateSameJobCount": 0

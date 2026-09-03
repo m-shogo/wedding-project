@@ -1,9 +1,9 @@
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "role": "OUR STORY + Q3/Q4",
-  "status": "DESIGN_LOCKED_EDGE_ALPHA_CLEANUP_PENDING",
+  "status": "DESIGN_LOCKED_TIMELINE_VIOLET_REMOVED_OTHER_EDGE_ALPHA_CLEANUP_PENDING",
   "date": "2026-09-03",
   "authorityPrecedence": "Newest explicit owner feedback and direct live-Figma/source-asset review override earlier run-level PASS declarations and older P03 main-manifest execution details.",
   "visualMaster": {
@@ -157,7 +157,15 @@
       "do not blur the full artwork or soften interior typography/outlines",
       "replace only the affected PNG sources/nodes after light/mid/dark compositing passes"
     ],
-    "gate": "EDGE_ALPHA_QUALITY_PASS"
+    "gate": "EDGE_ALPHA_QUALITY_PASS",
+    "timelineVioletCorrection": {
+      "status": "PASS_APPLIED_TO_FIGMA_3797_20",
+      "finding": "The old edge-connected extraction left six enclosed violet matte islands inside closed route contours. Those islands and adjacent violet fringe are now transparent.",
+      "newImageHash": "2a39d3633049098680ecdcb7494e4049e8309fad",
+      "rgbDesignChanged": false,
+      "geometryChanged": false,
+      "otherGroupedAssetsChanged": false
+    }
   },
   "acceptanceState": {
     "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS",
@@ -172,6 +180,7 @@
     "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
     "ALPHA_INTERIOR_OPACITY_PASS": "PASS",
     "EDGE_ALPHA_QUALITY_PASS": "REOPENED_BINARY_EDGE_REVIEW",
+    "TIMELINE_VIOLET_MATTE_PASS": "PASS",
     "ALPHA_MATERIAL_PASS": "PARTIAL_PASS_INTERIOR_OK_EDGE_REOPENED",
     "FINGERPRINT_COLLISION_PASS": "PASS",
     "FIGMA_DESIGN_COMPLETE": true,
