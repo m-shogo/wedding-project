@@ -319,6 +319,9 @@ writeFileSync(
   .util-btn:hover { background: #3a3a42; }
   .util-btn:disabled { opacity: 0.4; cursor: default; }
   #progressCount { font-size: 13px; color: #ccc; }
+  #goldenCount { font-size: 13px; color: #F4C95D; }
+  .slow-toggle { font-size: 12px; color: #ccc; cursor: pointer; user-select: none; }
+  .slow-toggle input { margin-right: 4px; }
   #saveHint { font-size: 12px; color: #888; width: 100%; }
   .unsaved-banner { font-size: 12px; color: #1a1508; background: #F4C95D; padding: 3px 10px; border-radius: 10px; display: none; }
   .unsaved-banner.show { display: inline-block; }
@@ -415,7 +418,9 @@ writeFileSync(
   <button type="button" class="save-btn" id="saveBtn">💾 保存する(ダウンロード)</button>
   <button type="button" class="util-btn" id="jumpNextBtn">⏭ 次の未確認へ</button>
   <button type="button" class="util-btn" id="undoBtn">↺ 元に戻す</button>
+  <label class="slow-toggle"><input type="checkbox" id="slowModeToggle" /> 🐢 スロー再生(0.5倍)</label>
   <span id="progressCount"></span>
+  <span id="goldenCount"></span>
   <span id="saveHint"></span>
   <span id="unsavedBanner" class="unsaved-banner"></span>
 </div>
@@ -526,6 +531,10 @@ ${rows}
     }
     return {audio: sharedAudioEl, ready: sharedAudioReady};
   }
+  function isSlowMode() {
+    var t = document.getElementById('slowModeToggle');
+    return !!(t && t.checked);
+  }
   function playAtShiftedPosition(absoluteTimeSec, btn) {
     var originalLabel = btn.textContent;
     btn.disabled = true;
@@ -536,11 +545,15 @@ ${rows}
         btn.disabled = false;
         btn.textContent = originalLabel;
         if (sharedAudioStopTimer) clearTimeout(sharedAudioStopTimer);
+        var rate = isSlowMode() ? 0.5 : 1;
+        ref.audio.playbackRate = rate;
         ref.audio.pause();
         ref.audio.currentTime = Math.max(0, absoluteTimeSec - PLAY_PREROLL_SEC);
         var playPromise = ref.audio.play();
         if (playPromise && playPromise.catch) playPromise.catch(function () {});
-        sharedAudioStopTimer = setTimeout(function () { ref.audio.pause(); }, (PLAY_PREROLL_SEC + PLAY_POSTROLL_SEC) * 1000);
+        // 0.5倍速だと同じ範囲を鳴らし終えるまでの実時間が2倍になるので、
+        // 停止タイマーもrateに合わせて延ばす(途中で切れて中途半端にならないように)。
+        sharedAudioStopTimer = setTimeout(function () { ref.audio.pause(); }, ((PLAY_PREROLL_SEC + PLAY_POSTROLL_SEC) / rate) * 1000);
       })
       .catch(function () {
         btn.disabled = false;
@@ -732,6 +745,14 @@ ${rows}
     var text = '判定済み: ' + done + ' / ' + rowsAll.length + '件(自動的に保存されています)';
     document.getElementById('progressCount').textContent = text;
     document.getElementById('progressCountFloating').textContent = text;
+    var goldenTotal = rowsAll.filter(function (tr) { return tr.getAttribute('data-golden') === 'true'; }).length;
+    var goldenDone = rowsAll.filter(function (tr) {
+      if (tr.getAttribute('data-golden') !== 'true') return false;
+      var s = getEntry(tr.getAttribute('data-cueid')).status;
+      return s === 'ok' || s === 'adjust';
+    }).length;
+    var goldenEl = document.getElementById('goldenCount');
+    if (goldenEl) goldenEl.textContent = '⭐ Golden Anchor: ' + goldenDone + ' / ' + goldenTotal;
     updateUnsavedBanner();
   }
 
