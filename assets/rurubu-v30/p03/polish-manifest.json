@@ -1,15 +1,15 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "role": "OUR STORY + Q3/Q4",
   "status": "REOPENED_FOR_V30_STYLE_REALIGNMENT_AND_GROUPED_STORY_ECOLOGY",
   "date": "2026-09-03",
-  "authorityPrecedence": "Newest explicit owner feedback and direct live-Figma comparison against locked P01/P02 CURRENT pages override earlier grouped-regeneration PASS declarations.",
+  "authorityPrecedence": "Newest explicit owner feedback and direct live-Figma comparison against locked P01/P02 CURRENT pages override earlier grouped-regeneration PASS declarations and older P03 main-manifest execution details.",
   "visualMaster": {
     "path": "assets/rurubu-v30/p03/P03.png",
     "status": "LOCKED_PRIMARY_LOCAL_COMPOSITION_AUTHORITY",
-    "rule": "Use P03 Visual Master for local composition, hierarchy, photo count and information relationships, but it does not license a different illustration genre from the active V30 publication family."
+    "rule": "Use P03 Visual Master for local composition, hierarchy, photo count and information relationships. It does not license a different dominant illustration genre from the active V30 publication family."
   },
   "liveFigma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
@@ -23,7 +23,7 @@
       {"page": "P01", "figmaNode": "3535:7", "role": "GLOBAL_V30_STYLE_ANCHOR_NOT_LAYOUT_TEMPLATE"},
       {"page": "P02", "figmaNode": "3535:9", "role": "GLOBAL_V30_STYLE_ANCHOR_NOT_LAYOUT_TEMPLATE"}
     ],
-    "principle": "P03 may have a different page role and composition, but major display art, papers, tropical/travel ornaments and story graphics must look selected by the same publication art director as P01/P02.",
+    "principle": "P03 keeps its own story-page composition, but major display art, editorial papers, travel/tropical ornament treatment and story navigation must look art-directed by the same V30 publication team as P01/P02.",
     "v30StyleDNA": [
       "bright high-saturation travel-magazine energy",
       "crisp printed/sticker-like silhouettes rather than painterly illustration plates",
@@ -32,17 +32,17 @@
       "clean cream/white paper surfaces with clear colored framing rather than aged parchment",
       "bold pink/blue/yellow/green/cyan palette relationships",
       "tropical/travel motifs rendered as lively editorial cutouts/stickers, not watercolor botanical studies",
-      "tactile print character is allowed but texture stays restrained and graphic",
-      "mixed media is allowed only inside a bounded realism/texture range that still reads as one V30 publication"
+      "tactile print character is restrained and graphic, not sepia/vintage",
+      "mixed media stays inside one bounded realism/texture range"
     ],
     "hardRejects": [
       "watercolor or painterly botanical illustration as a dominant high-saliency P03 language",
-      "aged parchment / sepia scrapbook treatment that is absent from P01/P02",
+      "aged parchment / sepia scrapbook treatment",
       "retro travel-poster illustration genre drift",
-      "fine-art tropical/church rendering that reads like an illustration plate",
+      "fine-art church/tropical rendering that reads like an illustration plate",
       "generic Canva/SVG icon language",
       "one page mixing painterly vintage blocks with flat SVG flowchart elements",
-      "passing a page merely because each object is individually attractive while the page family is inconsistent"
+      "passing attractive individual objects when the overall publication family is inconsistent"
     ],
     "gate": "CROSS_PAGE_STYLE_FAMILY_PASS"
   },
@@ -64,10 +64,10 @@
       "P03_TIMELINE_STEP_5_LABEL / GENERATED_DISPLAY_ASSET",
       "P03_WEDDING_DAY_CARD / GENERATED_DISPLAY_ASSET / 2026.10.24"
     ],
-    "reason": "These current implementations either drift from the active P01/P02 V30 visual family or preserve the flowchart/isolated-icon assembly problem. Do not preserve them merely because a previous grouped-regeneration run marked them PASS."
+    "reason": "These implementations either drift from the active P01/P02 V30 family or preserve the flowchart/isolated-icon assembly problem. Previous PASS labels are superseded."
   },
   "newGroupedProductionModel": {
-    "principle": "Use fewer, larger editorial ecologies. Do not solve P03 with isolated clipart/SVG parts, but also do not flatten the whole page.",
+    "principle": "Use fewer, larger editorial ecologies. Do not solve P03 with isolated clipart/SVG parts and do not flatten the whole page.",
     "blocks": [
       {
         "id": "P03_HEADER_ECOLOGY_V30_ALIGNED",
@@ -80,7 +80,7 @@
         "generationUnit": "ONE_FAMILY_CALIBRATION_THEN_TWO_NON_MIRRORED_BLOCKS",
         "include": ["Q3 paper vessel", "Q4 paper vessel", "Q badge language", "rules/lines", "only necessary integrated floral/travel accents"],
         "keepSeparate": ["Q3 question/answer copy until approved", "Q4 question/answer copy until approved"],
-        "styleRule": "Use clean bright publication paper comparable to P02 editorial cards, not aged parchment/scrapbook paper. Q3/Q4 stay non-identical but clearly same V30 family."
+        "styleRule": "Use clean bright V30 editorial paper comparable to P02, not aged parchment/scrapbook paper. Q3/Q4 stay non-identical but one family."
       },
       {
         "id": "P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED",
@@ -109,20 +109,20 @@
           "P03_PHOTO_PROPOSAL"
         ],
         "photoRule": "Step1-4 support photos remain independently replaceable; Step5 remains no-photo.",
-        "styleRule": "Read as one irregular magazine story composition. The route is editorial movement, not a connector diagram. Do not retain the orange dotted-line + separate SVG-like icon/heart-label grammar.",
+        "styleRule": "Read as one irregular magazine story composition. Route is editorial movement, not connector-diagram grammar.",
         "hardRejects": ["flowchart", "roadmap", "presentation timeline", "school poster", "five separate heart badges next to an independent dotted connector", "equal step rhythm", "isolated generic camera/palm icons", "separate generic Wedding Day card"]
       },
       {
         "id": "P03_BOTTOM_CLOSURE_V30_ALIGNED",
         "generationUnit": "ONE_GROUPED_SUPPORT_BLOCK",
         "include": ["chapel/travel closure", "tropical support", "lower-page edge activation"],
-        "styleRule": "Support the page in the same bold editorial cutout/sticker family as P01/P02. No watercolor church, realistic botanical plate, painterly tide or vintage travel-poster treatment.",
-        "keepSeparate": ["PAGE03 shared instance", "timeline/native body copy", "replaceable photos"]
+        "styleRule": "Same bold editorial cutout/sticker family as P01/P02. No watercolor church, realistic botanical plate, painterly tide or vintage travel-poster treatment.",
+        "keepSeparate": ["PAGE03 shared instance", "native body copy", "replaceable photos"]
       }
     ]
   },
   "microOrnamentRule": {
-    "principle": "P03_STEP3_CAMERA, P03_STEP2_PALM, P03_HERO_LOWER_PLUMERIA and similar accents do not survive as isolated assets by default. Integrate them into the nearest grouped ecology when genuinely needed, otherwise remove them.",
+    "principle": "P03_STEP3_CAMERA, P03_STEP2_PALM, P03_HERO_LOWER_PLUMERIA and similar accents do not survive as isolated assets by default. Integrate into the nearest grouped ecology when genuinely needed, otherwise remove them.",
     "hardReject": "Do not regenerate a new isolated icon simply because the old isolated icon was rejected."
   },
   "preserve": {
@@ -153,8 +153,9 @@
     "PRINT_READY": false
   },
   "executionOrder": [
-    "read latest remote authority and compare current P01 3535:7, P02 3535:9 and P03 3535:11 side-by-side before generating",
-    "calibrate one P03 grouped style sample against P01/P02 V30 family before producing all replacements",
+    "read latest remote authority first",
+    "compare P01 3535:7, P02 3535:9 and P03 3535:11 side-by-side before generating",
+    "generate one representative P03 V30-aligned calibration ecology/sample first; do not generate the entire replacement batch until that sample passes cross-page style review",
     "rebuild Header ecology in V30-aligned graphic language",
     "rebuild Q3/Q4 as one calibrated bright editorial-paper family",
     "rebuild Timeline + fixed local accents + Wedding Day/date as one grouped Story ecology",
@@ -164,5 +165,5 @@
     "run alpha/material and fingerprint checks only on new grouped blocks",
     "sync Drive/Git/PR once and stop"
   ],
-  "completionCondition": "P03 may return to FIGMA_DESIGN_COMPLETE=YES only when a direct P01/P02/P03 side-by-side review passes CROSS_PAGE_STYLE_FAMILY_PASS and the timeline reads as one authored story ecology rather than a flowchart, without flattening photos or pending body copy."
+  "completionCondition": "P03 may return to FIGMA_DESIGN_COMPLETE=YES only when direct P01/P02/P03 side-by-side review passes CROSS_PAGE_STYLE_FAMILY_PASS, the story/timeline reads as one authored magazine-story ecology rather than a diagram, P03 local composition remains intact, and photos/pending body copy remain separately editable/replaceable."
 }
