@@ -1,177 +1,228 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
-  "status": "VISUAL_MASTER_REREVIEWED_EXECUTION_OVERRIDE",
+  "role": "OUR STORY + Q3/Q4",
+  "status": "CURRENT_P03_PREPRODUCTION_AUTHORITY",
+  "date": "2026-09-03",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
-    "assets/rurubu-v30/p03/manifest.json"
+    "assets/rurubu-v30/ornament-art-direction-manifest.json",
+    "assets/rurubu-v30/publication-display-system-manifest.json",
+    "assets/rurubu-v30/p03/manifest.json",
+    "docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md",
+    "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md"
   ],
-  "purpose": "P03 execution authority after direct rereview of P03.png. Preserve the authored title-vs-Hero asymmetry, five-step story rhythm, clean photo slots and fixed display-module boundaries without turning the page into a timeline UI.",
-  "directVisualMasterRereview": {
-    "date": "2026-09-02",
-    "source": "assets/rurubu-v30/p03/P03.png",
-    "reviewedDimensionsPx": {"width": 1055, "height": 1491},
-    "status": "COMPLETE",
-    "confirmedThreeSecondRead": [
-      "OUR STORY + ふたりのこれまで header system",
-      "large top-right two-person Hero",
-      "left 1→5 story timeline",
-      "Q3 / Q4 right-side paper modules",
-      "four support photos staggered through timeline",
-      "Wedding Day / bottom church cluster / PAGE 03"
-    ],
-    "confirmedAsymmetry": "Title left / Hero right / timeline left-heavy / Q&A right-heavy. Do not rebalance into equal columns."
+  "purpose": "Translate the locked P03 Visual Master into a Rurubu-style story/timeline editorial page using the current V30 display-role, shared-component, ornament-family, fingerprint and true-alpha rules learned from P01/P02.",
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p03/P03.png",
+    "status": "LOCKED_PRIMARY_VISUAL_AUTHORITY",
+    "reviewedPx": {"width": 1055, "height": 1491},
+    "ownerResentReferenceOn": "2026-09-03",
+    "rule": "Composition, hierarchy, photo count, asymmetry, local density and editorial character come from the Visual Master. Personal/story/Q&A copy visible in the image is reference-only unless separately approved."
   },
-  "fixedDisplayModules": {
-    "globalRule": "Bundle fixed short display content with the backing/iconography that visually moves with it. Keep autobiographical body copy, unapproved Q&A copy, real photos and decorations spanning multiple modules separate.",
-    "targets": [
-      {
-        "id": "P03_HEADER_OUR_STORY_MODULE",
-        "fixedCoreText": ["OUR", "STORY", "ふたりのこれまで"],
-        "bundleTogether": ["large OUR STORY lettering", "layered blue/pink/white/yellow outline/depth", "heart within title", "white/pink ふたりのこれまで ribbon", "title-adjacent flower/leaf accents", "small heart", "airplane + dotted-heart route", "sparkle when visually attached to header"],
-        "hardReject": "Do not split the title into generic native words and unrelated sticker primitives."
-      },
-      {
-        "id": "P03_INTRO_HANDWRITTEN_DISPLAY",
-        "referenceEditorialText": "出会ってから、今日までの ふたりのストーリー♡",
-        "bundleTogetherAfterCopyLock": ["approved intro sentence", "blue handwritten treatment", "pink underline", "heart"],
-        "copySafety": "REFERENCE_ONLY until explicitly approved. Keep native/separate before copy lock."
-      },
-      {
-        "id": "P03_TIMELINE_STEP_1_DISPLAY",
-        "fixedCoreText": ["1", "出会い"],
-        "bundleTogether": ["pink heart-number badge", "1", "出会い", "small local flower/accent when attached"],
-        "mustRemainSeparate": ["step 1 body copy", "P03_PHOTO_ENCOUNTER", "continuous timeline route"]
-      },
-      {
-        "id": "P03_TIMELINE_STEP_2_DISPLAY",
-        "fixedCoreText": ["2", "デート"],
-        "bundleTogether": ["blue heart-number badge", "2", "デート", "small attached heart/accent"],
-        "mustRemainSeparate": ["step 2 body copy", "P03_PHOTO_DATE", "continuous timeline route"]
-      },
-      {
-        "id": "P03_TIMELINE_STEP_3_DISPLAY",
-        "fixedCoreText": ["3", "旅"],
-        "bundleTogether": ["yellow/orange heart-number badge", "3", "旅", "small local flower/accent"],
-        "mustRemainSeparate": ["step 3 body copy", "P03_PHOTO_TRAVEL", "continuous timeline route"]
-      },
-      {
-        "id": "P03_TIMELINE_STEP_4_DISPLAY",
-        "fixedCoreText": ["4", "プロポーズ"],
-        "bundleTogether": ["green heart-number badge", "4", "プロポーズ", "ring icon if it remains locally attached to this step"],
-        "mustRemainSeparate": ["step 4 body copy", "P03_PHOTO_PROPOSAL", "continuous timeline route"]
-      },
-      {
-        "id": "P03_TIMELINE_STEP_5_DISPLAY",
-        "fixedCoreText": ["5", "今日"],
-        "bundleTogether": ["pink heart-number badge", "5", "今日", "small local flower/accent"],
-        "mustRemainSeparate": ["step 5 body copy", "continuous timeline route"],
-        "hardRule": "Step 5 intentionally has no real-photo inset. Do not add one for symmetry."
-      },
-      {
-        "id": "P03_Q3_DISPLAY_SHELL",
-        "fixedVisiblePart": ["Q3"],
-        "referenceQuestion": "ふたりの関係をひとことで表すと？",
-        "bundleTogether": ["Q3 badge/number", "pale-yellow torn notebook paper", "punched top holes", "pink shell styling", "fixed heart/flower/sparkle decoration", "Q3 question only after copy lock"],
-        "mustRemainSeparate": ["Q3 answer until approved"]
-      },
-      {
-        "id": "P03_Q4_DISPLAY_SHELL",
-        "fixedVisiblePart": ["Q4"],
-        "referenceQuestion": "相手の好きなところは？",
-        "bundleTogether": ["Q4 badge/number", "cream torn notebook paper", "punched top holes", "blue shell styling", "fixed heart/flower decoration", "Q4 question only after copy lock"],
-        "mustRemainSeparate": ["Q4 answer until approved"]
-      },
-      {
-        "id": "P03_WEDDING_DAY_CARD_MODULE",
-        "exactVisibleFacts": ["Wedding Day", "2026.10.24"],
-        "bundleTogether": ["paper card", "Wedding Day", "canonical date", "paperclip", "small fixed heart/accent"],
-        "sourceOfTruthRule": "2026.10.24 remains canonical in manifest metadata even when baked into the visible card."
-      },
-      {
-        "id": "P03_PAGE_BADGE_MODULE",
-        "exactVisibleText": ["PAGE", "03"],
-        "bundleTogether": ["page badge backing", "PAGE", "03", "small attached heart/accent"]
-      }
+  "liveFigma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "frameId": "3535:11",
+    "reviewedOn": "2026-09-03",
+    "currentState": "BLANK_WARM_FIELD",
+    "rule": "Treat P03 as a clean production build into the existing protected frame. Do not repurpose P01/P02 or create a duplicate P03 frame."
+  },
+  "pageVisualLanguage": {
+    "id": "STORY_TIMELINE_EDITORIAL_PAGE",
+    "threeSecondReadOrder": [
+      "OUR STORY title system",
+      "large top-right couple Hero photo",
+      "ふたりのこれまで ribbon",
+      "left 1→5 story sequence",
+      "Q3 then Q4 reflection-paper modules",
+      "support photos and story accents",
+      "Wedding Day card / bottom church-tropical cluster / PAGE 03"
+    ],
+    "density": "medium-high to high but directional; more narrative/information-dense than P02, less cover-like than P01",
+    "asymmetry": "title-left / hero-right / timeline-left-heavy / Q&A-right-heavy; never normalize into equal columns",
+    "hardRejects": [
+      "SaaS/product-roadmap timeline UI",
+      "five cloned equal-height timeline cards",
+      "two mirrored Q cards with color swap only",
+      "P01 cover density copied wholesale",
+      "ornaments becoming standalone art pieces stronger than the story/photos"
     ]
   },
-  "nativeOrVariableCopy": [
-    "intro handwritten sentence until approved",
-    "timeline step 1 body copy",
-    "timeline step 2 body copy",
-    "timeline step 3 body copy",
-    "timeline step 4 body copy",
-    "timeline step 5 body copy",
-    "Q3 question until approved",
-    "Q3 answer",
-    "Q4 question until approved",
-    "Q4 answer",
-    "any ungrounded autobiographical statement",
-    "long-form copy"
+  "roleClassification": {
+    "GENERATED_DISPLAY_ASSET": [
+      {
+        "id": "P03_HEADER_TITLE",
+        "copy": "OUR STORY",
+        "rule": "One high-saliency authored title asset. Keep adjacent airplane/flowers separate unless visually inseparable after full-page QA."
+      },
+      {
+        "id": "P03_HEADER_RIBBON",
+        "copy": "ふたりのこれまで♡",
+        "rule": "Coordinated with the title but independently placeable; exact locked editorial copy."
+      },
+      {
+        "id": "P03_TIMELINE_STEP_LABEL_FAMILY",
+        "members": ["1 出会い", "2 デート", "3 旅", "4 プロポーズ", "5 今日"],
+        "rule": "One coordinated family with five distinct authored members. Preserve semantic colors and local accents; do not clone one component five times."
+      },
+      {
+        "id": "P03_Q3_PAPER_DISPLAY",
+        "fixedVisible": ["Q3"],
+        "rule": "Generated/composed paper vessel + Q3 badge only. Question/answer remain native until approved."
+      },
+      {
+        "id": "P03_Q4_PAPER_DISPLAY",
+        "fixedVisible": ["Q4"],
+        "rule": "Generated/composed paper vessel + Q4 badge only. Related to Q3 but deliberately non-identical; question/answer remain native until approved."
+      },
+      {
+        "id": "P03_WEDDING_DAY_CARD",
+        "fixedVisible": ["Wedding Day", "2026.10.24"],
+        "rule": "May be composed as one display object because the canonical date is locked and separately recorded."
+      }
+    ],
+    "NATIVE_TEXT": [
+      "intro sentence under the header until explicitly copy-locked",
+      "timeline step 1 body copy",
+      "timeline step 2 body copy",
+      "timeline step 3 body copy",
+      "timeline step 4 body copy",
+      "timeline step 5 body copy",
+      "Q3 question until explicitly approved",
+      "Q3 answer",
+      "Q4 question until explicitly approved",
+      "Q4 answer",
+      "any autobiographical/personal statement not grounded outside the Visual Master"
+    ],
+    "SHARED_PUBLICATION_COMPONENT": [
+      {
+        "id": "P03_PAGE_BADGE",
+        "implementation": "instance of PAGE_BADGE_SHARED_MASTER 3772:2 with Page Number=03",
+        "hardRule": "Do not generate or redraw a page-specific PAGE 03 badge."
+      },
+      {
+        "id": "P03_AIRMAIL_BORDER",
+        "implementation": "reuse the intentional V30 shared border system/source where compatible",
+        "rule": "This is intentional shared publication furniture and is exempt from page-specific exact-source reuse rejection."
+      }
+    ],
+    "PAGE_SPECIFIC_ORNAMENT": [
+      "P03_HERO_PINK_TAPE",
+      "P03_HEADER_TROPICAL_ACCENT",
+      "P03_HEADER_AIRPLANE_HEART_ROUTE",
+      "P03_CONTINUOUS_TIMELINE_ROUTE",
+      "P03_STEP_LOCAL_MICRO_ACCENTS",
+      "P03_RING_ACCENT",
+      "P03_CAMERA_ACCENT",
+      "P03_PALM_AND_FLOWER_ACCENTS",
+      "P03_BOTTOM_CHURCH_TROPICAL_CLUSTER"
+    ],
+    "PHOTO": [
+      "P03_PHOTO_HERO",
+      "P03_PHOTO_ENCOUNTER",
+      "P03_PHOTO_DATE",
+      "P03_PHOTO_TRAVEL",
+      "P03_PHOTO_PROPOSAL"
+    ]
+  },
+  "photoContract": {
+    "count": 5,
+    "rules": [
+      "All five use clean standalone proxies or approved real photos, never crops from the Visual Master/page screenshot.",
+      "Hero/photo frames and pink tape remain separate from photo fills.",
+      "Support photos intentionally vary tilt, scale and placement.",
+      "Step 5 intentionally has no photo inset."
+    ]
+  },
+  "ornamentAndDisplayProduction": {
+    "strategy": "PLAN_GLOBALLY_CALIBRATE_UPFRONT_PRODUCE_CONTEXTUALLY",
+    "reuse": [
+      "Reuse V30 family grammar and approved shared components, not exact P01/P02 page-specific image bytes.",
+      "Before P03 design lock, run PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS against P01/P02 major page-specific ornament hashes/sources where carry-over is possible."
+    ],
+    "batches": [
+      {
+        "id": "HEADER_DISPLAY_CALIBRATION",
+        "first": "Calibrate OUR STORY + ふたりのこれまで as one header ecology.",
+        "then": "Produce title and ribbon as separate authored assets; produce local airplane/tropical accents as page-specific ornaments."
+      },
+      {
+        "id": "TIMELINE_DISPLAY_CALIBRATION",
+        "first": "Calibrate one heart-number + heading treatment.",
+        "then": "Produce five visibly related but non-cloned step-label members with pink/blue/yellow/green/pink semantic coding."
+      },
+      {
+        "id": "Q_PAPER_CALIBRATION",
+        "first": "Calibrate the torn-notebook/punched-hole paper family.",
+        "then": "Produce a shorter pink Q3 vessel and a taller blue Q4 vessel; never mirrored clones."
+      },
+      {
+        "id": "BOTTOM_AND_MICRO_ORNAMENTS",
+        "rule": "Produce bottom church/tropical cluster and local camera/ring/palm/flower/route accents only after page hierarchy and negative space are known."
+      }
+    ],
+    "hardRejects": [
+      "pre-generating a giant icon pack before layout context",
+      "reusing P01/P02 tropical/airplane/camera assets byte-for-byte for page-specific roles",
+      "baking personal story/Q&A copy into generated art",
+      "checkerboard transparency",
+      "bundling the continuous timeline route into each timeline step asset"
+    ]
+  },
+  "sharedAndIndependentStructure": {
+    "pageBadge": "Use existing shared master 3772:2 with page-number property 03.",
+    "continuousRoute": "One independently movable story navigation motif spanning steps; not five repeated route fragments.",
+    "heroTape": "Independent from Hero photo and frame.",
+    "q3q4": "Related display-paper family but independent/non-identical objects.",
+    "bottomCluster": "Independent from Wedding Day card and PAGE badge."
+  },
+  "copySafety": {
+    "locked": ["OUR STORY", "ふたりのこれまで♡", "1 出会い", "2 デート", "3 旅", "4 プロポーズ", "5 今日", "Q3", "Q4", "Wedding Day", "2026.10.24", "PAGE 03"],
+    "referenceOnly": [
+      "出会ってから、今日までのふたりのストーリー♡",
+      "timeline body sentences",
+      "Q3 question/answer",
+      "Q4 question/answer"
+    ],
+    "rule": "Reference-only copy may be represented as native placeholder/reference text for layout but must not be baked into generated art or promoted to autobiographical fact."
+  },
+  "trueAlpha": {
+    "rule": "Floating generated display/ornament assets must pass current true-alpha policy before Figma placement.",
+    "fallback": "If direct true alpha fails, generate against one safe flat matte, extract once, then alpha preflight. Checkerboard is prohibited."
+  },
+  "executionPhases": [
+    "P0: read current authority, inspect blank P03 and shared components, freeze scope",
+    "P1: build warm paper/background + shared airmail border + PAGE_BADGE_SHARED_MASTER instance 03",
+    "P2: create five replaceable photo slots/frames and clean standalone proxies",
+    "P3: calibrate/produce header display family and local header ornaments",
+    "P4: calibrate/produce five timeline step-label displays + one continuous route + four support-photo relationships",
+    "P5: calibrate/produce non-identical Q3/Q4 paper displays while keeping question/answer native",
+    "P6: produce Wedding Day card, bottom church/tropical cluster and only needed micro ornaments",
+    "P7: one full-page screenshot QA, targeted local fixes only, live-role/shared-component/fingerprint/alpha/reference-delta checks, Drive/Git/PR sync, STOP"
   ],
-  "replaceablePhotos": {
-    "P03_PHOTO_HERO": "top-right two-person couple Hero",
-    "P03_PHOTO_ENCOUNTER": "two-person encounter/memory photo",
-    "P03_PHOTO_DATE": "two-person date/couple photo",
-    "P03_PHOTO_TRAVEL": "travel/place or couple-travel photo",
-    "P03_PHOTO_PROPOSAL": "proposal/sunset-role photo"
-  },
-  "photoProxyPolicy": {
-    "hardRule": "P03.png and page screenshots are comparison references only and are prohibited as active photo fills.",
-    "roles": {
-      "P03_PHOTO_HERO": "clean standalone two-person couple photo with similar large face/upper-body mass; no page decoration",
-      "P03_PHOTO_ENCOUNTER": "clean standalone two-person/couple memory photo",
-      "P03_PHOTO_DATE": "clean standalone two-person date/couple photo",
-      "P03_PHOTO_TRAVEL": "clean standalone travel/place or couple-travel photo matching the slot role",
-      "P03_PHOTO_PROPOSAL": "clean standalone proposal/sunset-role photo"
-    },
-    "hardRejects": ["crop from P03.png", "page screenshot crop", "proxy containing pink tape, OUR STORY lettering, timeline route, Q3/Q4 paper, border, church cluster, flower sticker or PAGE 03 badge"],
-    "qa": ["inspect all five proxies in isolation", "verify semantic role/count/orientation/focal mass", "verify no page decoration is baked in", "re-run Reference Delta after clean proxies are placed"]
-  },
-  "independentlyMovableAssets": [
-    {
-      "id": "P03_HERO_PINK_TAPE",
-      "rule": "Separate from Hero photo and Hero frame so the real photo remains swappable."
-    },
-    {
-      "id": "P03_CONTINUOUS_TIMELINE_ROUTE",
-      "rule": "One continuous dotted/yellow-orange story navigation motif spanning multiple steps. It is not factual travel routing and must not be baked separately into every step module."
-    },
-    {
-      "id": "P03_BOTTOM_CHURCH_TROPICAL_CLUSTER",
-      "rule": "Church + sea + palms + flowers remain one decorative bottom cluster, independent from Wedding Day card and PAGE 03 when overlap requires separate movement."
-    },
-    {
-      "id": "P03_AIRMAIL_BORDER",
-      "rule": "Independent shared publication frame."
-    }
+  "designLockGates": [
+    "RURUBU_EDITORIAL_DNA_PASS",
+    "V30_ART_DIRECTION_PASS",
+    "PAGE_ROLE_FIT_PASS",
+    "DISPLAY_ROLE_CLASSIFICATION_PASS",
+    "LIVE_ROLE_IMPLEMENTATION_PASS",
+    "SHARED_PUBLICATION_COMPONENT_PASS",
+    "ORNAMENT_FAMILY_COHERENCE_PASS",
+    "ORNAMENT_OBJECT_QUALITY_PASS",
+    "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS",
+    "REUSE_INTENT_PASS",
+    "CLEAN_PHOTO_PROXY_PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS",
+    "COPY_SAFETY_PASS",
+    "REFERENCE_DELTA_PASS"
   ],
-  "timelineAntiUiRule": {
-    "principle": "Steps 1-5 form one narrative route but are five individually authored events, not five cloned cards.",
-    "preserveDifferencesIn": ["heart badge color", "heading color", "local icon/accent", "body-copy length", "photo relationship", "spacing", "photo tilt/size", "step 5 no-photo condition"],
-    "hardRejects": ["equal-height step cards", "same padding/component five times", "mirrored or formulaic icon placement", "one photo slot added to every step", "repeated identical rotation"]
-  },
-  "q3q4Rule": {
-    "relationship": "related notebook-paper family but intentionally non-identical",
-    "Q3": "pink-coded, pale-yellow paper, shorter upper card",
-    "Q4": "blue-coded, cream paper, lower/taller card",
-    "hardRejects": ["one mirrored component color-swapped", "same geometry and decoration", "forcing identical answer capacity"]
-  },
-  "tactileFinish": {
-    "priority": ["OUR STORY header", "printed-photo frames", "timeline badges", "Q3/Q4 torn paper", "Wedding Day card"],
-    "allowed": ["subtle paper/matte feel", "slight printed-edge irregularity", "restrained local shadow/depth"],
-    "forbidden": ["global heavy grain", "flat SaaS cards", "texture reducing timeline/Q&A readability"]
-  },
-  "executionQa": [
-    "verify all five active photo slots use clean standalone proxies",
-    "verify Header module preserves OUR STORY + ribbon identity",
-    "verify continuous timeline route is one spanning motif rather than repeated inside step assets",
-    "verify steps 1-5 remain individually authored and step 5 has no photo",
-    "verify Q3/Q4 remain non-identical",
-    "verify Wedding Day uses exact 2026.10.24",
-    "verify PAGE 03 is a complete fixed badge module",
-    "run fresh Visual Master Reference Delta after production"
-  ]
+  "completionState": {
+    "current": "READY_FOR_CODEX_PRODUCTION",
+    "FIGMA_DESIGN_COMPLETE": false,
+    "FINAL_COPY_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  }
 }
