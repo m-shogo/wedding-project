@@ -6,7 +6,7 @@ P03 CURRENT is Figma frame `3535:11`. Accepted production evidence is recorded i
 
 The 2026-09-03 bounded realignment replaced the rejected painterly Header/Q/Bottom and SVG/flowchart timeline with five V30-aligned grouped ecologies. P03 now passes cross-page family, ecology, anti-flowchart, anti-Canva/SVG, anti-clipart, alpha, fingerprint and reference-delta gates. Five photo roles, native pending copy, the shared PAGE03 instance and the airmail border remain separate and editable.
 
-Latest direct P01/P02/P03 live comparison reopens P03 because the current page does not yet belong strongly enough to the same V30 publication family.
+The latest direct P01/P02/P03 live comparison confirms that the completed realignment now belongs to the same V30 publication family.
 
 ## Resolved diagnosis
 
