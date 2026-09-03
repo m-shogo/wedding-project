@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P02",
+  "status": "POST_FIGMA_REVIEW_REOPENED_DISPLAY_AND_CARRYOVER",
+  "date": "2026-09-03",
+  "inherits": [
+    "assets/rurubu-v30/publication-display-system-manifest.json",
+    "assets/rurubu-v30/ornament-art-direction-manifest.json",
+    "assets/rurubu-v30/p02/ornament-art-direction-manifest.json",
+    "assets/rurubu-v30/p02/polish-manifest.json"
+  ],
+  "evidence": {
+    "figmaFrame": "3535:9",
+    "liveReview": "Direct Figma screenshot and node inspection after Codex commit d730f6b60abd130c3b2e2764a2f40d3bf63df5cc",
+    "p01ReferenceFrame": "3535:7"
+  },
+  "ownerLatestFeedback": {
+    "summary": "The five newly generated ornaments improved, but P02 still has under-authored high-saliency display text, a non-shared PAGE badge implementation, and one exact P01 floral carry-over at bottom-left.",
+    "latestFeedbackOverridesOlderNativeClassification": true
+  },
+  "liveFindings": [
+    {
+      "target": "P02_HEADER_TITLE / ふたりのプロフィール",
+      "current": "native text layers",
+      "decision": "REWORK_REQUIRED_AS_GENERATED_DISPLAY_ASSET",
+      "reason": "high-saliency locked page identity; current native treatment is visibly flatter/more generic than V30 display-art quality"
+    },
+    {
+      "target": "P02_HEADER_RIBBON / 私たちのこと、少しだけ紹介します♪",
+      "current": "native ribbon text over native/simple shell",
+      "decision": "REWORK_REQUIRED_AS_GENERATED_DISPLAY_ASSET",
+      "reason": "short owner-approved editorial display sentence should read as one authored ribbon module rather than generic Figma text"
+    },
+    {
+      "target": "P02_SHOGO_NAME_LABEL",
+      "current": "native speech-bubble frame + native SHOGO text",
+      "decision": "REWORK_REQUIRED_AS_GENERATED_DISPLAY_ASSET",
+      "reason": "locked high-saliency name label; generate as one authored label family member"
+    },
+    {
+      "target": "P02_SHIORI_NAME_LABEL",
+      "current": "native speech-bubble frame + native SHIORI text",
+      "decision": "REWORK_REQUIRED_AS_GENERATED_DISPLAY_ASSET",
+      "reason": "locked high-saliency name label; pair with SHOGO as one coordinated display family"
+    },
+    {
+      "target": "P02_PAGE_02_BADGE",
+      "current": "P02 ellipse + native PAGE + native 02 + native heart",
+      "decision": "REWORK_REQUIRED_AS_SHARED_PUBLICATION_COMPONENT_INSTANCE",
+      "reason": "P01 PAGE 01 is a different completed art treatment; current P02 implementation is not one shared master family"
+    },
+    {
+      "target": "P02_BOTTOM_LEFT_TROPICAL_CLUSTER",
+      "current": "REQUALIFIED_CARRYOVER",
+      "decision": "REPLACE_REQUIRED",
+      "reason": "Exact same Figma imageHash as P01_LEFT_TROPICAL_CLUSTER; this is literal asset reuse, not merely similar style",
+      "evidenceImageHash": "c4300f9b1f5bf8607ec72da41aa064c2bf52e155"
+    }
+  ],
+  "preserve": [
+    "current accepted five newly rebuilt top/Q2 ornament replacements unless new full-page comparison shows a direct conflict",
+    "SHOGO left / blue and SHIORI right / pink relationship",
+    "three photo slots and clean standalone proxies",
+    "profile sheets",
+    "Q1/Q2 structure and Q1-only inset photo rule",
+    "TBD/profile/Q&A body copy as NATIVE_TEXT",
+    "background-adjacent border",
+    "P03-P08 untouched"
+  ],
+  "displayAssetPlan": {
+    "P02_HEADER_TITLE": {
+      "role": "GENERATED_DISPLAY_ASSET",
+      "exactCopy": "ふたりのプロフィール",
+      "production": "one complete authored title asset; do not split into generic independent text layers merely for editability"
+    },
+    "P02_HEADER_RIBBON": {
+      "role": "GENERATED_DISPLAY_ASSET",
+      "exactCopy": "私たちのこと、少しだけ紹介します♪",
+      "production": "one complete authored ribbon/display asset with exact copy"
+    },
+    "P02_NAME_LABEL_PAIR": {
+      "role": "GENERATED_DISPLAY_ASSET_FAMILY",
+      "members": ["SHOGO", "SHIORI"],
+      "production": "calibrate/generate as one coordinated pair; install as separate assets for local positioning; blue/pink distinction remains"
+    }
+  },
+  "sharedPageBadgePlan": {
+    "role": "SHARED_PUBLICATION_COMPONENT",
+    "scope": "P01 onward",
+    "decision": "BUILD_ONCE_AND_INSTANCE",
+    "recommendedImplementation": "Create one PAGE_BADGE_SHARED_MASTER with a single authored decorative shell and controlled page-number text/property; apply to P01 and P02 now and all later pages as instances. P01 is reopened only for this shared badge migration, not for unrelated design changes.",
+    "hardReject": "Do not generate PAGE 01, PAGE 02, PAGE 03... as unrelated final images."
+  },
+  "bottomLeftOrnamentPlan": {
+    "role": "PAGE_SPECIFIC_ORNAMENT",
+    "decision": "replace exact P01 carry-over with a new P02-specific compact floral/tropical accent or remove it if the page reads better without it",
+    "family": "TROPICAL_BOTANICAL",
+    "rule": "same V30/Rurubu art direction, different local composition; do not reuse P01 image bytes/hash"
+  },
+  "currentGates": {
+    "FIVE_TARGET_ORNAMENT_REBUILD": "PASS_PRESERVED_PENDING_INTEGRATED_REVIEW",
+    "DISPLAY_ROLE_CLASSIFICATION_PASS": "REOPENED_AFTER_OWNER_FEEDBACK",
+    "DISPLAY_ART_QUALITY_PASS": "REOPENED_FOR_TITLE_RIBBON_NAMES",
+    "SHARED_PUBLICATION_COMPONENT_PASS": "FAIL_CURRENT_PAGE_BADGE_DRIFT",
+    "VISUAL_CARRYOVER_PASS": "FAIL_EXACT_P01_FLORAL_REUSE",
+    "REFERENCE_DELTA_PASS": "REOPENED",
+    "FIGMA_DESIGN_COMPLETE": false,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  },
+  "nextExecutionScope": "P02 title+ribbon+name labels, shared PAGE badge master/migration, and bottom-left floral replacement only. Do not regenerate the already accepted five ornament targets unless integrated QA specifically shows one is no longer compatible after these changes."
+}
