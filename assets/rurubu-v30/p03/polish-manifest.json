@@ -1,140 +1,168 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "role": "OUR STORY + Q3/Q4",
-  "status": "POST_GROUPED_REGEN_REOPENED_FOR_TIMELINE_ECOLOGY",
+  "status": "REOPENED_FOR_V30_STYLE_REALIGNMENT_AND_GROUPED_STORY_ECOLOGY",
   "date": "2026-09-03",
-  "inherits": [
-    "assets/rurubu-v30/manifest.json",
-    "assets/rurubu-v30/visual-polish-manifest.json",
-    "assets/rurubu-v30/ornament-art-direction-manifest.json",
-    "assets/rurubu-v30/publication-display-system-manifest.json",
-    "assets/rurubu-v30/p03/manifest.json",
-    "docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md",
-    "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md"
-  ],
-  "authorityPrecedence": "Newest explicit owner feedback and direct live-Figma review override older run-level PASS declarations. The prior grouped-regeneration evidence remains useful historical execution evidence but does not force ANTI_FLOWCHART_PASS when the live page still reads as a diagram.",
+  "authorityPrecedence": "Newest explicit owner feedback and direct live-Figma comparison against locked P01/P02 CURRENT pages override earlier grouped-regeneration PASS declarations.",
   "visualMaster": {
     "path": "assets/rurubu-v30/p03/P03.png",
-    "status": "LOCKED_PRIMARY_VISUAL_AUTHORITY",
-    "rule": "Composition, hierarchy, photo count, asymmetry, local density and editorial character come from the Visual Master. Personal/story/Q&A copy visible in the image is reference-only unless separately approved."
+    "status": "LOCKED_PRIMARY_LOCAL_COMPOSITION_AUTHORITY",
+    "rule": "Use P03 Visual Master for local composition, hierarchy, photo count and information relationships, but it does not license a different illustration genre from the active V30 publication family."
   },
   "liveFigma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "frameId": "3535:11",
     "reviewedOn": "2026-09-03",
-    "reviewBasis": "fresh direct screenshot review after commit 8f255bbb5216d36069378618f10e2e5a3409664b",
-    "rule": "Update CURRENT 3535:11 only. Do not create a duplicate P03 frame and do not modify P01/P02/P04-P08."
+    "rule": "Update CURRENT 3535:11 only. Do not create a duplicate P03 and do not modify P01/P02/P04-P08."
   },
-  "acceptedGroupedRegeneration": {
-    "status": "KEEP_REQUALIFIED_DO_NOT_REGRESS",
-    "evidence": "assets/rurubu-v30/p03/production/grouped-regeneration/manifest.json",
-    "acceptedBlocks": [
+  "crossPageStyleAnchors": {
+    "status": "HARD / REQUIRED",
+    "anchorPages": [
+      {"page": "P01", "figmaNode": "3535:7", "role": "GLOBAL_V30_STYLE_ANCHOR_NOT_LAYOUT_TEMPLATE"},
+      {"page": "P02", "figmaNode": "3535:9", "role": "GLOBAL_V30_STYLE_ANCHOR_NOT_LAYOUT_TEMPLATE"}
+    ],
+    "principle": "P03 may have a different page role and composition, but major display art, papers, tropical/travel ornaments and story graphics must look selected by the same publication art director as P01/P02.",
+    "v30StyleDNA": [
+      "bright high-saturation travel-magazine energy",
+      "crisp printed/sticker-like silhouettes rather than painterly illustration plates",
+      "strong dark outlines or equivalent high-contrast edge definition on high-saliency display art",
+      "white/yellow/bright keylines and controlled dimensional shadows where useful",
+      "clean cream/white paper surfaces with clear colored framing rather than aged parchment",
+      "bold pink/blue/yellow/green/cyan palette relationships",
+      "tropical/travel motifs rendered as lively editorial cutouts/stickers, not watercolor botanical studies",
+      "tactile print character is allowed but texture stays restrained and graphic",
+      "mixed media is allowed only inside a bounded realism/texture range that still reads as one V30 publication"
+    ],
+    "hardRejects": [
+      "watercolor or painterly botanical illustration as a dominant high-saliency P03 language",
+      "aged parchment / sepia scrapbook treatment that is absent from P01/P02",
+      "retro travel-poster illustration genre drift",
+      "fine-art tropical/church rendering that reads like an illustration plate",
+      "generic Canva/SVG icon language",
+      "one page mixing painterly vintage blocks with flat SVG flowchart elements",
+      "passing a page merely because each object is individually attractive while the page family is inconsistent"
+    ],
+    "gate": "CROSS_PAGE_STYLE_FAMILY_PASS"
+  },
+  "ownerRejectedCurrentTargets": {
+    "status": "REWORK_REQUIRED",
+    "targets": [
       "P03_HEADER_ECOLOGY / GROUPED_REGENERATION / COPY_LOCKED",
       "P03_Q3_EDITORIAL_FAMILY / GROUPED_REGENERATION / Q3_ONLY",
       "P03_Q4_EDITORIAL_FAMILY / GROUPED_REGENERATION / Q4_ONLY",
-      "P03_BOTTOM_CLOSURE_ECOLOGY / GROUPED_REGENERATION / P03_SPECIFIC"
+      "P03_BOTTOM_CLOSURE_ECOLOGY / GROUPED_REGENERATION / P03_SPECIFIC",
+      "P03_STEP3_CAMERA / P03_SPECIFIC",
+      "P03_HERO_LOWER_PLUMERIA / P03_SPECIFIC",
+      "P03_CONTINUOUS_TIMELINE_ROUTE / ONE_ROUTE",
+      "P03_STEP2_PALM / P03_SPECIFIC",
+      "P03_TIMELINE_STEP_1_LABEL / GENERATED_DISPLAY_ASSET",
+      "P03_TIMELINE_STEP_2_LABEL / GENERATED_DISPLAY_ASSET",
+      "P03_TIMELINE_STEP_3_LABEL / GENERATED_DISPLAY_ASSET",
+      "P03_TIMELINE_STEP_4_LABEL / GENERATED_DISPLAY_ASSET",
+      "P03_TIMELINE_STEP_5_LABEL / GENERATED_DISPLAY_ASSET",
+      "P03_WEDDING_DAY_CARD / GENERATED_DISPLAY_ASSET / 2026.10.24"
     ],
-    "review": {
-      "headerEcology": "PASS: substantially better integrated, no longer a loose ribbon/route/clipart assembly.",
-      "q3q4EditorialFamily": "PASS: tactile editorial paper treatment is materially better than the prior generic card/SVG feel.",
-      "bottomClosure": "PASS: chapel/tropical closure now reads as a page-ending ecology rather than a standalone tourist clipart cluster."
-    }
+    "reason": "These current implementations either drift from the active P01/P02 V30 visual family or preserve the flowchart/isolated-icon assembly problem. Do not preserve them merely because a previous grouped-regeneration run marked them PASS."
   },
-  "postGroupedLiveReview": {
-    "status": "REOPENED_ONE_MAJOR_VISUAL_DEBT",
-    "finding": {
-      "id": "P03_TIMELINE_ECOLOGY_FLOWCHART_DEBT",
-      "severity": "MAJOR_VISUAL_POLISH",
-      "observation": "The left 1→5 sequence still reads too much like a flowchart/explanatory diagram: orange dotted path, small heart-number labels, isolated small icons and separately placed accents remain visibly assembled rather than authored as one magazine-story ecology.",
-      "reasonPriorPassWasWrong": "The grouped regeneration targeted Header, Q3/Q4 and Bottom while explicitly preserving the existing five-step timeline skeleton. Therefore the run-level ANTI_FLOWCHART_PASS did not actually test a redesigned timeline ecology and was too generous.",
-      "requiredDirection": "Rebuild the full fixed timeline display system as one larger authored editorial ecology rather than continuing step-label/route/icon micro-patching."
-    }
-  },
-  "timelineEcologyRebuild": {
-    "id": "P03_TIMELINE_ECOLOGY_GROUPED",
-    "generationUnit": "ONE_GROUPED_EDITORIAL_BLOCK",
-    "mustIncludeFixedDisplay": [
-      "1 出会い",
-      "2 デート",
-      "3 旅",
-      "4 プロポーズ",
-      "5 今日",
-      "continuous story-route logic",
-      "step-number/heading visual family",
-      "local fixed micro-ornament logic needed to connect the sequence"
-    ],
-    "mustRemainSeparate": [
-      "timeline step 1 body copy",
-      "timeline step 2 body copy",
-      "timeline step 3 body copy",
-      "timeline step 4 body copy",
-      "timeline step 5 body copy",
-      "P03_PHOTO_ENCOUNTER",
-      "P03_PHOTO_DATE",
-      "P03_PHOTO_TRAVEL",
-      "P03_PHOTO_PROPOSAL",
-      "P03_PHOTO_HERO"
-    ],
-    "photoRule": "Keep all photo fills independently replaceable. Step 1-4 retain support-photo relationships; Step 5 retains no support photo.",
-    "copyRule": "Only the fixed headings 1-5 may be baked into the grouped timeline ecology. Personal episode/body copy remains native/reference-only until approved.",
-    "visualIntent": [
-      "read as one magazine story-navigation composition, not a diagram",
-      "preserve an irregular authored vertical rhythm rather than equal step spacing",
-      "use route/shape/ornament only as editorial movement, not connector arrows",
-      "integrate number, heading and route visually so no tiny sticker/icon feels pasted afterward",
-      "remain subordinate to Header/Hero while stronger and more authored than the current dotted-line flowchart"
-    ],
-    "hardRejects": [
-      "orange dotted connector line with isolated step icons retained as the dominant visual grammar",
-      "five independent SVG-like step labels placed beside a separate route",
-      "flowchart, roadmap, presentation timeline or school-poster feel",
-      "equal vertical card rhythm",
-      "generic hearts/icons added individually after layout",
-      "whole-page flatten",
-      "baking personal body copy or replaceable photos into the timeline asset"
+  "newGroupedProductionModel": {
+    "principle": "Use fewer, larger editorial ecologies. Do not solve P03 with isolated clipart/SVG parts, but also do not flatten the whole page.",
+    "blocks": [
+      {
+        "id": "P03_HEADER_ECOLOGY_V30_ALIGNED",
+        "generationUnit": "ONE_GROUPED_DISPLAY_BLOCK",
+        "include": ["OUR STORY", "ふたりのこれまで♡", "ribbon logic", "airplane/heart-route logic", "necessary tropical accents"],
+        "styleRule": "Match P01/P02 V30 graphic/sticker/print energy. No watercolor, vintage parchment, painterly botanical or retro-poster treatment."
+      },
+      {
+        "id": "P03_Q3_Q4_EDITORIAL_FAMILY_V30_ALIGNED",
+        "generationUnit": "ONE_FAMILY_CALIBRATION_THEN_TWO_NON_MIRRORED_BLOCKS",
+        "include": ["Q3 paper vessel", "Q4 paper vessel", "Q badge language", "rules/lines", "only necessary integrated floral/travel accents"],
+        "keepSeparate": ["Q3 question/answer copy until approved", "Q4 question/answer copy until approved"],
+        "styleRule": "Use clean bright publication paper comparable to P02 editorial cards, not aged parchment/scrapbook paper. Q3/Q4 stay non-identical but clearly same V30 family."
+      },
+      {
+        "id": "P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED",
+        "generationUnit": "ONE_GROUPED_EDITORIAL_BLOCK",
+        "include": [
+          "1 出会い",
+          "2 デート",
+          "3 旅",
+          "4 プロポーズ",
+          "5 今日",
+          "continuous story movement/route logic",
+          "step-number and heading family",
+          "camera/palm and only necessary fixed local accents",
+          "Wedding Day",
+          "2026.10.24 as the terminal story endpoint"
+        ],
+        "keepSeparate": [
+          "timeline step 1 body copy",
+          "timeline step 2 body copy",
+          "timeline step 3 body copy",
+          "timeline step 4 body copy",
+          "timeline step 5 body copy",
+          "P03_PHOTO_ENCOUNTER",
+          "P03_PHOTO_DATE",
+          "P03_PHOTO_TRAVEL",
+          "P03_PHOTO_PROPOSAL"
+        ],
+        "photoRule": "Step1-4 support photos remain independently replaceable; Step5 remains no-photo.",
+        "styleRule": "Read as one irregular magazine story composition. The route is editorial movement, not a connector diagram. Do not retain the orange dotted-line + separate SVG-like icon/heart-label grammar.",
+        "hardRejects": ["flowchart", "roadmap", "presentation timeline", "school poster", "five separate heart badges next to an independent dotted connector", "equal step rhythm", "isolated generic camera/palm icons", "separate generic Wedding Day card"]
+      },
+      {
+        "id": "P03_BOTTOM_CLOSURE_V30_ALIGNED",
+        "generationUnit": "ONE_GROUPED_SUPPORT_BLOCK",
+        "include": ["chapel/travel closure", "tropical support", "lower-page edge activation"],
+        "styleRule": "Support the page in the same bold editorial cutout/sticker family as P01/P02. No watercolor church, realistic botanical plate, painterly tide or vintage travel-poster treatment.",
+        "keepSeparate": ["PAGE03 shared instance", "timeline/native body copy", "replaceable photos"]
+      }
     ]
   },
+  "microOrnamentRule": {
+    "principle": "P03_STEP3_CAMERA, P03_STEP2_PALM, P03_HERO_LOWER_PLUMERIA and similar accents do not survive as isolated assets by default. Integrate them into the nearest grouped ecology when genuinely needed, otherwise remove them.",
+    "hardReject": "Do not regenerate a new isolated icon simply because the old isolated icon was rejected."
+  },
   "preserve": {
-    "headerEcology": true,
-    "hero": true,
+    "heroPhotoRole": true,
+    "heroPrimaryGeometry": true,
     "fivePhotoRoles": true,
     "step5NoPhoto": true,
-    "q3q4EditorialFamily": true,
-    "weddingDay": true,
-    "bottomClosure": true,
+    "nativePendingPersonalCopy": true,
     "pageBadgeInstance": "3782:16 / master 3772:2 / value 03",
     "airmailBorder": true,
-    "nativePendingCopy": true
+    "overallP03InformationArchitecture": true
   },
   "acceptanceState": {
-    "ECOLOGY_FIT_PASS": "REOPENED_FOR_TIMELINE_ONLY",
-    "ANTI_FLOWCHART_PASS": "FAIL_CURRENT_LIVE_TIMELINE",
-    "ANTI_CANVA_SVG_PASS": "PASS_FOR_HEADER_Q3Q4_BOTTOM / RECHECK_TIMELINE_AFTER_REBUILD",
-    "ANTI_CLIPART_PASS": "PASS_FOR_HEADER_Q3Q4_BOTTOM / RECHECK_TIMELINE_AFTER_REBUILD",
-    "ORNAMENT_FAMILY_PASS": "REOPENED_FOR_TIMELINE_INTEGRATION",
-    "REFERENCE_DELTA_PASS": "REOPENED_FOR_TIMELINE",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "FAIL_CURRENT_P03",
+    "ECOLOGY_FIT_PASS": "REOPENED",
+    "ANTI_FLOWCHART_PASS": "FAIL_CURRENT_TIMELINE",
+    "ANTI_CANVA_SVG_PASS": "REOPENED",
+    "ANTI_CLIPART_PASS": "REOPENED",
+    "ORNAMENT_FAMILY_PASS": "REOPENED",
+    "REFERENCE_DELTA_PASS": "REOPENED_AFTER_STYLE_REALIGNMENT",
     "PHOTO_ROLE_PASS": "PASS",
     "COPY_SAFETY_PASS": "PASS_PENDING_FINAL_COPY",
-    "ALPHA_MATERIAL_PASS": "PASS_FOR_ACCEPTED_GROUPED_BLOCKS / RECHECK_NEW_TIMELINE_ASSET",
-    "FINGERPRINT_COLLISION_PASS": "PASS_CURRENT / RECHECK_NEW_TIMELINE_ASSET",
+    "ALPHA_MATERIAL_PASS": "RECHECK_NEW_GROUPED_BLOCKS",
+    "FINGERPRINT_COLLISION_PASS": "RECHECK_NEW_GROUPED_BLOCKS",
     "FIGMA_DESIGN_COMPLETE": false,
     "FINAL_COPY_QA_PENDING": true,
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false
   },
-  "nextCodexTargetedRebuild": [
-    "read latest remote authority first; do not trust the older grouped-regeneration ANTI_FLOWCHART_PASS",
-    "update CURRENT 3535:11 only",
-    "preserve Header ecology, Q3/Q4 family, Bottom closure, Hero, photos, Wedding Day, PAGE03 and border",
-    "replace the current fixed 1-5 labels + continuous route + local fixed micro-accents with one P03_TIMELINE_ECOLOGY_GROUPED authored block",
-    "keep all five timeline body-copy areas native and separate",
-    "keep four support-photo fills independent and keep Step 5 without a photo",
-    "delete superseded timeline route/step-label/micro-accent LIVE nodes after the grouped timeline wins visually",
-    "run one full-page and A5 final review, especially ANTI_FLOWCHART and magazine-editorial integration",
-    "commit/push any new production binary and sync Drive/Git/PR evidence",
-    "do not touch P01/P02/P04-P08"
+  "executionOrder": [
+    "read latest remote authority and compare current P01 3535:7, P02 3535:9 and P03 3535:11 side-by-side before generating",
+    "calibrate one P03 grouped style sample against P01/P02 V30 family before producing all replacements",
+    "rebuild Header ecology in V30-aligned graphic language",
+    "rebuild Q3/Q4 as one calibrated bright editorial-paper family",
+    "rebuild Timeline + fixed local accents + Wedding Day/date as one grouped Story ecology",
+    "rebuild Bottom closure in V30-aligned graphic language",
+    "remove superseded isolated camera/palm/plumeria/route/label/Wedding-Day nodes after replacements win visually",
+    "run one full-page P01/P02/P03 cross-page comparison plus P03 Visual Master/A5 review",
+    "run alpha/material and fingerprint checks only on new grouped blocks",
+    "sync Drive/Git/PR once and stop"
   ],
-  "completionCondition": "P03 may return to FIGMA_DESIGN_COMPLETE=YES only when the live left story sequence no longer reads as a flowchart/roadmap and the grouped timeline ecology passes full-page/A5 visual review without regressing accepted Header/Q/Bottom work."
+  "completionCondition": "P03 may return to FIGMA_DESIGN_COMPLETE=YES only when a direct P01/P02/P03 side-by-side review passes CROSS_PAGE_STYLE_FAMILY_PASS and the timeline reads as one authored story ecology rather than a flowchart, without flattening photos or pending body copy."
 }
