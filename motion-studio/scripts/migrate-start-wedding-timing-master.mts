@@ -518,6 +518,12 @@ const phrases: TimingPhrase[] = lyrics.phrases.map((p) => {
     // phraseOffsetMs(Dashboardで設定される、このphrase全体への局所補正)は
     // 再migrationで0へリセットしない(cueOffsetMsと同じ理由)。
     phraseOffsetMs: existingPhraseById.get(p.phraseId)?.phraseOffsetMs ?? 0,
+    // endOffsetMs/endVerifiedByListening(人間が実際に聴いて確認した、この
+    // phraseの表示終了位置の補正)も、phraseOffsetMsと同じ理由で再migrationで
+    // リセットしない。一度trueにしたendVerifiedByListeningを、新しいlegacy
+    // canonicalEndMs計算で黙って上書き・解除しない。
+    endOffsetMs: existingPhraseById.get(p.phraseId)?.endOffsetMs ?? 0,
+    endVerifiedByListening: existingPhraseById.get(p.phraseId)?.endVerifiedByListening ?? false,
     confidence: (pm?.confidence as TimingPhrase['confidence']) ?? p.confidence ?? 'medium',
     cues,
     humanReviewRequired: !(phraseOverride?.verifiedByListening ?? false),

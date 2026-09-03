@@ -17,7 +17,7 @@ import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import type {TimingMaster} from '../src/data/startWeddingEdit/timingMaster.ts';
-import {resolveEffectiveCueTimeMs} from '../src/data/startWeddingEdit/timingMaster.ts';
+import {resolveEffectiveCueTimeMs, resolveEffectivePhraseEndMs} from '../src/data/startWeddingEdit/timingMaster.ts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const localDir = join(studioRoot, 'local');
@@ -150,7 +150,10 @@ const enrichedPhrases = master.phrases.map((p) => {
     // onset cue側だけに入るため、未補正のp.startMsを使うと確認マスターと
     // 映像表示が食い違う。onsetが無いlegacy phraseだけp.startMsへfallback。
     startSec: phraseOnsetCue ? toEditSecForCue(phraseOnsetCue, p) : toEditSec(p.startMs + p.phraseOffsetMs),
-    endSec: toEditSec(p.endMs),
+    // resolveEffectivePhraseEndMs()はglobalContentOffsetMs適用済みの絶対msを
+    // 返すため、ここでtoEditSec()(内部でglobalContentOffsetMsを再度足す)は
+    // 使わずsourceStartMsを引くだけにする(toEditSecForCueと同じ二重適用防止)。
+    endSec: (resolveEffectivePhraseEndMs(p, master.audio) - sourceStartMs) / 1000,
     emphasisWord: null as string | null,
     threeHitFrameSecs: hitCues.length > 0 ? hitCues.map((c) => toEditSecForCue(c, p)) : null,
     // P0-4(2026-08-27、Render Truth再監査): threeHitFrameSecsは基底LyricPhrase

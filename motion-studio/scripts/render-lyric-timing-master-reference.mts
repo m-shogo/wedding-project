@@ -21,7 +21,7 @@ import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import type {TimingMaster} from '../src/data/startWeddingEdit/timingMaster.ts';
-import {resolveEffectiveCueTimeMs} from '../src/data/startWeddingEdit/timingMaster.ts';
+import {resolveEffectiveCueTimeMs, resolveEffectivePhraseEndMs} from '../src/data/startWeddingEdit/timingMaster.ts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const localDir = join(studioRoot, 'local');
@@ -110,17 +110,45 @@ const rows = master.phrases
             <textarea class="note-input" data-role="note" rows="1" placeholder="メモ(任意)"></textarea>
             <div class="judge-status" data-role="status">未確認</div>
           </td>
+          <td></td>
         </tr>`;
       })
       .join('\n');
-    return `<tr class="phrase-row">
+    const onsetCue = p.cues.find((c) => c.kind === 'phrase-onset');
+    const effectiveStartMs = onsetCue
+      ? resolveEffectiveCueTimeMs(onsetCue, p, master.audio)
+      : p.startMs + master.audio.globalContentOffsetMs + p.phraseOffsetMs;
+    const effectiveEndMs = resolveEffectivePhraseEndMs(p, master.audio);
+    return `<tr class="phrase-row" data-phraseid="${escapeAttr(p.phraseId)}" data-endsec="${(effectiveEndMs / 1000).toFixed(3)}">
       <td colspan="2"><b>${escapeHtml(p.phraseId)}</b><br/><span class="section">${escapeHtml(p.sectionId)}</span></td>
       <td class="phrase-text"><b>${escapeHtml(p.text)}</b></td>
-      <td>${fmtSec(p.startMs)} 〜 ${fmtSec(p.endMs)}</td>
+      <td>${fmtSec(effectiveStartMs)} 〜 ${fmtSec(effectiveEndMs)}<br/><span class="hint">(始まり=cue確認込み/終わり=補正込み)</span></td>
       <td class="anim">
         演出: ${p.selectedAnimation ? escapeHtml(p.selectedAnimation) : '(未割当)'}<br/>
         <audio controls preload="none" src="lyric-phrase-clips/${escapeAttr(clip.clipFile)}"></audio>
         <span class="hint">(直前${PHRASE_PAD_BEFORE_SEC}秒を含み、次フレーズ開始前で終了)</span>
+      </td>
+      <td class="judge-cell end-judge-cell">
+        <div class="end-label">歌詞の「終わり」を確認</div>
+        <div class="judge-row slider-row">
+          <input type="range" class="delta-slider" data-role="end-slider" min="-3000" max="3000" step="10" value="0" />
+        </div>
+        <div class="judge-row nudge-row">
+          <button type="button" class="btn btn-nudge btn-nudge-big" data-end-delta="-300">⏪⏪</button>
+          <button type="button" class="btn btn-nudge" data-end-delta="-50">⏪</button>
+          <span class="nudge-current" data-role="end-current">ズレなし</span>
+          <button type="button" class="btn btn-nudge" data-end-delta="50">⏩</button>
+          <button type="button" class="btn btn-nudge btn-nudge-big" data-end-delta="300">⏩⏩</button>
+          <button type="button" class="btn btn-check" data-role="end-check">▶再生</button>
+        </div>
+        <div class="judge-row">
+          <button type="button" class="btn btn-ok" data-role="end-ok">👍</button>
+          <button type="button" class="btn btn-wrong" data-role="end-wrong">❌</button>
+          <button type="button" class="btn btn-reject" data-role="end-reject">🤔</button>
+          <button type="button" class="btn btn-reset" data-role="end-reset">↺</button>
+        </div>
+        <textarea class="note-input" data-role="end-note" rows="1" placeholder="メモ(任意)"></textarea>
+        <div class="judge-status" data-role="end-status">未確認</div>
       </td>
     </tr>
     ${cueRows}`;
@@ -160,6 +188,8 @@ writeFileSync(
   #saveHint { font-size: 12px; color: #888; width: 100%; }
 
   .judge-cell { min-width: 220px; }
+  .end-judge-cell { min-width: 220px; background: #1a1a20; border-left: 2px solid #3a3a4a; }
+  .end-label { font-size: 11px; color: #9CA8FF; margin-bottom: 4px; }
   .slider-row { padding: 2px 0; }
   .delta-slider { width: 100%; accent-color: #F4C95D; }
   .judge-row { margin-bottom: 3px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
@@ -227,7 +257,7 @@ writeFileSync(
 </div>
 
 <table>
-<thead><tr><th>phraseId</th><th></th><th>歌詞/内容</th><th>秒数</th><th>判定</th></tr></thead>
+<thead><tr><th>phraseId</th><th></th><th>歌詞/内容</th><th>秒数</th><th>演出/cue判定</th><th>フレーズの「終わり」判定</th></tr></thead>
 <tbody id="cueRows">
 ${rows}
 </tbody>
@@ -254,6 +284,30 @@ ${rows}
     }
   }
   var state = loadState();
+
+  // フレーズの「終わり」判定は、cueの判定(state)とは別軸のデータなので、
+  // 別のlocalStorageキー・別のstateオブジェクトで持つ(cueIdとphraseIdの
+  // 名前空間が混ざらないようにするため)。
+  var END_STORAGE_KEY = STORAGE_KEY + '_phraseEnds';
+  function loadEndState() {
+    try {
+      var raw = localStorage.getItem(END_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+  var endState = loadEndState(); // phraseId -> {status, deltaMs, note}
+  function getEndEntry(phraseId) {
+    if (!endState[phraseId]) endState[phraseId] = {status: null, deltaMs: 0, note: ''};
+    if (endState[phraseId].note == null) endState[phraseId].note = '';
+    return endState[phraseId];
+  }
+  function saveEndState() {
+    try { localStorage.setItem(END_STORAGE_KEY, JSON.stringify(endState)); } catch (e) {}
+    updateProgress();
+    updateSummary();
+  }
 
   // 補正込みの実際の時刻から、フル音源をそのまま再生する(クリック音方式は
   // 「歌がその分ズレて聞こえない」という指摘を受けて廃止)。
@@ -330,6 +384,22 @@ ${rows}
         lines.push('[OK・メモあり] ' + cueId + ' 「' + text + '」 (' + sec + '秒付近)' + (note ? ' / メモ: ' + note : ''));
       }
     });
+    phraseRowsAll.forEach(function (tr) {
+      var phraseId = tr.getAttribute('data-phraseid');
+      var entry = endState[phraseId];
+      if (!entry || !entry.status) return;
+      var sec = tr.getAttribute('data-endsec');
+      var note = (entry.note || '').trim();
+      if (entry.status === 'reject') {
+        lines.push('[終わり・わからない] ' + phraseId + ' (' + sec + '秒付近)' + (note ? ' / メモ: ' + note : ''));
+      } else if (entry.status === 'adjust' && entry.deltaMs !== 0) {
+        lines.push('[終わり・要調整] ' + phraseId + ' (' + sec + '秒付近) — ' + Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く') + (note ? ' / メモ: ' + note : ''));
+      } else if (entry.status === 'adjust') {
+        lines.push('[終わり・合ってない・補正量未入力] ' + phraseId + ' (' + sec + '秒付近)' + (note ? ' / メモ: ' + note : ''));
+      } else if (note) {
+        lines.push('[終わり・OK・メモあり] ' + phraseId + ' (' + sec + '秒付近)' + (note ? ' / メモ: ' + note : ''));
+      }
+    });
     var header = 'StaRt Wedding Edit — 聴取確認まとめ(要調整・わからない・メモありのみ ' + lines.length + '件)\\n' + '作成: ' + new Date().toLocaleString('ja-JP') + '\\n\\n';
     if (lines.length === 0) return header + '(まだ「要調整」「わからない」「メモあり」の行はありません。)';
     return header + lines.join('\\n');
@@ -378,9 +448,48 @@ ${rows}
     }
   }
 
+  function renderEndRow(tr) {
+    var phraseId = tr.getAttribute('data-phraseid');
+    var entry = getEndEntry(phraseId);
+    var okBtn = tr.querySelector('[data-role=end-ok]');
+    var wrongBtn = tr.querySelector('[data-role=end-wrong]');
+    var rejectBtn = tr.querySelector('[data-role=end-reject]');
+    var currentEl = tr.querySelector('[data-role=end-current]');
+    var statusEl = tr.querySelector('[data-role=end-status]');
+    var noteInput = tr.querySelector('[data-role=end-note]');
+    var slider = tr.querySelector('[data-role=end-slider]');
+
+    okBtn.classList.toggle('active', entry.status === 'ok');
+    wrongBtn.classList.toggle('active', entry.status === 'adjust');
+    rejectBtn.classList.toggle('active', entry.status === 'reject');
+    var designedSec = parseFloat(tr.getAttribute('data-endsec'));
+    var currentSec = designedSec + entry.deltaMs / 1000;
+    currentEl.textContent = designedSec.toFixed(3) + 's → ' + currentSec.toFixed(3) + 's' + (entry.deltaMs === 0 ? '(ズレなし)' : ' (' + (entry.deltaMs > 0 ? '+' : '') + entry.deltaMs + 'ms)');
+    if (noteInput && document.activeElement !== noteInput) noteInput.value = entry.note || '';
+    if (slider && document.activeElement !== slider) slider.value = entry.deltaMs;
+
+    if (entry.status === 'adjust' && entry.deltaMs !== 0) {
+      statusEl.textContent = '合ってない → ' + Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く') + '補正';
+      statusEl.className = 'judge-status is-adjust';
+    } else if (entry.status === 'adjust') {
+      statusEl.textContent = '合ってない(⏪/⏩で合わせて)';
+      statusEl.className = 'judge-status is-adjust';
+    } else if (entry.status === 'ok') {
+      statusEl.textContent = '合ってる';
+      statusEl.className = 'judge-status is-ok';
+    } else if (entry.status === 'reject') {
+      statusEl.textContent = 'わからない';
+      statusEl.className = 'judge-status is-reject';
+    } else {
+      statusEl.textContent = '未確認';
+      statusEl.className = 'judge-status';
+    }
+  }
+
   function updateProgress() {
     var done = Object.keys(state).filter(function (k) { return state[k].status === 'ok' || state[k].status === 'adjust' || state[k].status === 'reject'; }).length;
-    var text = '判定済み: ' + done + '件(自動的に保存されています)';
+    var endDone = Object.keys(endState).filter(function (k) { return endState[k].status === 'ok' || endState[k].status === 'adjust' || endState[k].status === 'reject'; }).length;
+    var text = '判定済み: ' + done + '件 / 終わり判定: ' + endDone + '件(自動的に保存されています)';
     document.getElementById('progressCount').textContent = text;
     document.getElementById('progressCountFloating').textContent = text;
   }
@@ -455,6 +564,77 @@ ${rows}
     });
     renderRow(tr);
   });
+
+  var phraseRowsAll = Array.prototype.slice.call(document.querySelectorAll('#cueRows tr.phrase-row'));
+  phraseRowsAll.forEach(function (tr) {
+    var phraseId = tr.getAttribute('data-phraseid');
+
+    tr.querySelector('[data-role=end-ok]').addEventListener('click', function () {
+      var entry = getEndEntry(phraseId);
+      entry.status = entry.status === 'ok' ? null : 'ok';
+      if (entry.status === 'ok') entry.deltaMs = 0;
+      renderEndRow(tr);
+      saveEndState();
+    });
+    tr.querySelector('[data-role=end-wrong]').addEventListener('click', function () {
+      var entry = getEndEntry(phraseId);
+      entry.status = entry.status === 'adjust' ? null : 'adjust';
+      renderEndRow(tr);
+      saveEndState();
+    });
+    tr.querySelector('[data-role=end-reject]').addEventListener('click', function () {
+      var entry = getEndEntry(phraseId);
+      entry.status = entry.status === 'reject' ? null : 'reject';
+      renderEndRow(tr);
+      saveEndState();
+    });
+    var endCheckBtn = tr.querySelector('[data-role=end-check]');
+    Array.prototype.slice.call(tr.querySelectorAll('.btn-nudge')).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var entry = getEndEntry(phraseId);
+        entry.deltaMs += parseInt(btn.getAttribute('data-end-delta'), 10);
+        if (entry.status !== 'reject') entry.status = 'adjust';
+        renderEndRow(tr);
+        saveEndState();
+        var designedSec = parseFloat(tr.getAttribute('data-endsec'));
+        if (endCheckBtn) playAtShiftedPosition(designedSec + entry.deltaMs / 1000, endCheckBtn);
+      });
+    });
+    tr.querySelector('[data-role=end-reset]').addEventListener('click', function () {
+      var entry = getEndEntry(phraseId);
+      entry.deltaMs = 0;
+      renderEndRow(tr);
+      saveEndState();
+    });
+    var endSlider = tr.querySelector('[data-role=end-slider]');
+    if (endSlider) {
+      endSlider.addEventListener('input', function () {
+        var entry = getEndEntry(phraseId);
+        entry.deltaMs = parseInt(endSlider.value, 10);
+        if (entry.status !== 'reject') entry.status = 'adjust';
+        renderEndRow(tr);
+        saveEndState();
+      });
+      endSlider.addEventListener('change', function () {
+        var entry = getEndEntry(phraseId);
+        var designedSec = parseFloat(tr.getAttribute('data-endsec'));
+        if (endCheckBtn) playAtShiftedPosition(designedSec + entry.deltaMs / 1000, endCheckBtn);
+      });
+    }
+    endCheckBtn.addEventListener('click', function () {
+      var entry = getEndEntry(phraseId);
+      var designedSec = parseFloat(tr.getAttribute('data-endsec'));
+      playAtShiftedPosition(designedSec + entry.deltaMs / 1000, endCheckBtn);
+    });
+    var endNoteInput = tr.querySelector('[data-role=end-note]');
+    endNoteInput.addEventListener('input', function () {
+      var entry = getEndEntry(phraseId);
+      entry.note = endNoteInput.value;
+      saveEndState();
+    });
+    renderEndRow(tr);
+  });
+
   updateProgress();
   updateSummary();
 
@@ -536,11 +716,33 @@ ${rows}
         decisions.push(rd);
       }
     });
-    if (decisions.length === 0) {
+    var phraseEndDecisions = [];
+    Object.keys(endState).forEach(function (phraseId) {
+      var e = endState[phraseId];
+      var note = (e.note || '').trim();
+      if (e.status === 'ok') {
+        var d = {phraseId: phraseId, status: 'ok'};
+        if (note) d.note = note;
+        phraseEndDecisions.push(d);
+      } else if (e.status === 'adjust' && e.deltaMs !== 0) {
+        var ad = {phraseId: phraseId, status: 'adjust', deltaMs: e.deltaMs};
+        if (note) ad.note = note;
+        phraseEndDecisions.push(ad);
+      } else if (e.status === 'adjust') {
+        var wd = {phraseId: phraseId, status: 'reject'};
+        wd.note = (note ? note + ' ' : '') + '(合ってないと判定されたが補正量が未入力)';
+        phraseEndDecisions.push(wd);
+      } else if (e.status === 'reject') {
+        var rd = {phraseId: phraseId, status: 'reject'};
+        if (note) rd.note = note;
+        phraseEndDecisions.push(rd);
+      }
+    });
+    if (decisions.length === 0 && phraseEndDecisions.length === 0) {
       setHint('saveHint', 'saveHintFloating', '⚠️ まだ判定した行が0件です。', true);
       return;
     }
-    var payload = {verifiedBy: verifiedBy, decisions: decisions};
+    var payload = {verifiedBy: verifiedBy, decisions: decisions, phraseEndDecisions: phraseEndDecisions};
     var blob = new Blob([JSON.stringify(payload, null, 2) + '\\n'], {type: 'application/json'});
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
@@ -550,7 +752,7 @@ ${rows}
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-    setHint('saveHint', 'saveHintFloating', '✅ ' + decisions.length + '件を書き出しました。listening-decisions.local.jsonとして保存後、pnpm apply:listening-verification → pnpm sync:timing-master。', false);
+    setHint('saveHint', 'saveHintFloating', '✅ cue' + decisions.length + '件・終わり' + phraseEndDecisions.length + '件を書き出しました。listening-decisions.local.jsonとして保存後、pnpm apply:listening-verification → pnpm sync:timing-master。', false);
   });
 })();
 </script>

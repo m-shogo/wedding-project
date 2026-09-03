@@ -15,7 +15,7 @@ import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import type {TimingMaster} from '../src/data/startWeddingEdit/timingMaster.ts';
-import {resolveEffectiveCueTimeMs} from '../src/data/startWeddingEdit/timingMaster.ts';
+import {resolveEffectiveCueTimeMs, resolveEffectivePhraseEndMs} from '../src/data/startWeddingEdit/timingMaster.ts';
 
 const studioRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const masterPath = join(studioRoot, 'local/start-wedding-timing-master.local.json');
@@ -41,7 +41,7 @@ const rawPhrases = master.phrases.map((phrase, index) => {
   const effectiveStartSourceMs = onset
     ? resolveEffectiveCueTimeMs(onset, phrase, master.audio)
     : phrase.startMs + globalContentOffsetMs + phrase.phraseOffsetMs;
-  const effectiveEndSourceMs = phrase.endMs + globalContentOffsetMs;
+  const effectiveEndSourceMs = resolveEffectivePhraseEndMs(phrase, master.audio);
   const cues = phrase.cues.map((cue) => {
     const effectiveSourceMs = resolveEffectiveCueTimeMs(cue, phrase, master.audio);
     const totalAdjustmentMs = globalContentOffsetMs + phrase.phraseOffsetMs + cue.cueOffsetMs;
@@ -85,6 +85,8 @@ const rawPhrases = master.phrases.map((phrase, index) => {
     sectionId: phrase.sectionId,
     sourceRangeMs: {start: roundMs(effectiveStartSourceMs), end: roundMs(effectiveEndSourceMs)},
     editRangeMs: {start: roundMs(toEditMs(effectiveStartSourceMs)), end: roundMs(toEditMs(effectiveEndSourceMs))},
+    endAdjustmentMs: roundMs(phrase.endOffsetMs),
+    endVerifiedByListening: phrase.endVerifiedByListening,
     timingStatus: onset?.verifiedByListening ? 'HUMAN_VERIFIED_ONSET' : 'HUMAN_REVIEW_REQUIRED',
     confidence: phrase.confidence,
     motion: {

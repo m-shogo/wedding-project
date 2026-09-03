@@ -61,8 +61,16 @@ try {
   targetCue.timingSource = 'manual';
   targetCue.verifiedByListening = true;
   targetCue.reviewComment = '[TEST-ONLY] manual preservation regression test';
+
+  // phrase.endOffsetMs/endVerifiedByListeningも同じ理由(cueOffsetMsと同じ
+  // preserve方針)で保持されるべきなので、同じtestの中で一緒に検証する。
+  const testEndOffsetMs = 6789;
+  targetPhrase.endOffsetMs = testEndOffsetMs;
+  targetPhrase.endVerifiedByListening = true;
+
   writeFileSync(masterPath, JSON.stringify(master, null, 2) + '\n');
   console.log(`[test] ${targetCue.cueId}を manual/verified/timeMs=${testTimeMs} へ一時的に書き換えました。`);
+  console.log(`[test] ${targetPhrase.phraseId}.endOffsetMs=${testEndOffsetMs}/endVerifiedByListening=true へ一時的に書き換えました。`);
 
   // migrate --apply を実行(backupは_backups/へ別途作られるが、このtestの
   // 検証には影響しない)。
@@ -82,6 +90,8 @@ try {
     ['timeMs', afterCue.timeMs === testTimeMs, `期待=${testTimeMs} 実際=${afterCue.timeMs}`],
     ['timingSource', afterCue.timingSource === 'manual', `期待=manual 実際=${afterCue.timingSource}`],
     ['verifiedByListening', afterCue.verifiedByListening === true, `期待=true 実際=${afterCue.verifiedByListening}`],
+    ['phrase.endOffsetMs', afterPhrase?.endOffsetMs === testEndOffsetMs, `期待=${testEndOffsetMs} 実際=${afterPhrase?.endOffsetMs}`],
+    ['phrase.endVerifiedByListening', afterPhrase?.endVerifiedByListening === true, `期待=true 実際=${afterPhrase?.endVerifiedByListening}`],
   ] as const;
 
   let allOk = true;

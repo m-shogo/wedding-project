@@ -48,6 +48,16 @@ type Decision = {
   goldenAnchor?: boolean;
 };
 
+/** phraseの「終わり」(いつまで画面に出すか)を人間が聴いて確認した結果。
+ * cueのDecisionとは別軸(cueは「音がいつ来るか」、これは「歌詞の表示終了」)
+ * なので、対象をcueIdではなくphraseIdで指定する独立した配列にする。 */
+type PhraseEndDecision = {
+  phraseId: string;
+  status: 'ok' | 'adjust' | 'reject';
+  deltaMs?: number;
+  note?: string;
+};
+
 if (!existsSync(masterPath)) {
   console.error('❌ masterが無い。');
   process.exit(1);
@@ -58,7 +68,12 @@ if (!existsSync(decisionsPath)) {
 }
 
 const master = JSON.parse(readFileSync(masterPath, 'utf8')) as TimingMaster;
-const input = JSON.parse(readFileSync(decisionsPath, 'utf8')) as {verifiedBy: string; decisions: Decision[]};
+const input = JSON.parse(readFileSync(decisionsPath, 'utf8')) as {
+  verifiedBy: string;
+  decisions: Decision[];
+  /** 任意(省略可)。省略時はphraseのendは一切変更しない(既存ファイルとの後方互換)。 */
+  phraseEndDecisions?: PhraseEndDecision[];
+};
 
 if (!input.verifiedBy || typeof input.verifiedBy !== 'string') {
   console.error('❌ verifiedByが無い。誰が確認したか(人間の名前/ハンドル)を必須にする。');
@@ -143,7 +158,36 @@ for (const d of input.decisions) {
   }
 }
 
-if (applied.length === 0) {
+// phraseの「終わり」の判定を反映する。cueとは別のstate(phrase.endOffsetMs/
+// endVerifiedByListening)へ書き込む、独立した処理。
+const appliedPhraseEnds: string[] = [];
+const skippedPhraseEnds: string[] = [];
+const phraseById = new Map(master.phrases.map((p) => [p.phraseId, p]));
+for (const d of input.phraseEndDecisions ?? []) {
+  const phrase = phraseById.get(d.phraseId);
+  if (!phrase) {
+    console.error(`⚠️  phraseId未検出のためskip: ${d.phraseId}`);
+    skippedPhraseEnds.push(`${d.phraseId}(未検出)`);
+    continue;
+  }
+  if (d.status === 'ok') {
+    phrase.endVerifiedByListening = true;
+    appliedPhraseEnds.push(`${d.phraseId}(end)`);
+  } else if (d.status === 'adjust') {
+    if (typeof d.deltaMs !== 'number') {
+      console.error(`⚠️  ${d.phraseId}(end): status=adjustだがdeltaMsが無い。skip。`);
+      skippedPhraseEnds.push(`${d.phraseId}(end, deltaMs欠落)`);
+      continue;
+    }
+    phrase.endOffsetMs = phrase.endOffsetMs + d.deltaMs;
+    phrase.endVerifiedByListening = true;
+    appliedPhraseEnds.push(`${d.phraseId}(end, ${d.deltaMs > 0 ? '+' : ''}${d.deltaMs}ms)`);
+  } else if (d.status === 'reject') {
+    skippedPhraseEnds.push(`${d.phraseId}(end, reject: verified化しない)`);
+  }
+}
+
+if (applied.length === 0 && appliedPhraseEnds.length === 0) {
   console.log('反映対象が0件だった(全件skipまたは入力なし)。masterは変更しない。');
   process.exit(0);
 }
@@ -192,6 +236,8 @@ writeFileSync(masterPath, JSON.stringify(updated, null, 2) + '\n');
 console.log(`[apply-listening-verification] verifiedBy=${input.verifiedBy}`);
 console.log(`[apply-listening-verification] 適用: ${applied.length}件 → ${applied.join(', ')}`);
 if (skipped.length > 0) console.log(`[apply-listening-verification] skip: ${skipped.length}件 → ${skipped.join(', ')}`);
+if (appliedPhraseEnds.length > 0) console.log(`[apply-listening-verification] end適用: ${appliedPhraseEnds.length}件 → ${appliedPhraseEnds.join(', ')}`);
+if (skippedPhraseEnds.length > 0) console.log(`[apply-listening-verification] endのskip: ${skippedPhraseEnds.length}件 → ${skippedPhraseEnds.join(', ')}`);
 console.log(`[apply-listening-verification] verifiedVocalCues=${verifiedVocalCues}/${totalVocalCues} verifiedPhrases=${verifiedPhrases}/${totalPhrases}`);
 console.log(`[apply-listening-verification] revision ${master.revision} → ${nextRevision}`);
 console.log('[apply-listening-verification] 反映後は pnpm sync:timing-master を実行してgenerated.tsへ反映してください。');

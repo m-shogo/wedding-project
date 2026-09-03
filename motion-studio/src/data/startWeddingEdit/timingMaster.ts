@@ -106,6 +106,17 @@ export type TimingPhrase = {
    * 二重適用しないよう、必ずresolveEffectiveCueTimeMs()経由で合成する。
    * 既定0。 */
   phraseOffsetMs: number;
+  /** phraseの終わり(endMs)だけを補正するoffset(ms)。cueOffsetMsと同じ思想:
+   * 「この歌詞の表示終了が早い/遅い」という局所修正に使う。cueは「音がいつ
+   * 来るか」、これは「この歌詞をいつまで画面に出すか」という別軸の値。
+   * globalContentOffsetMs/phraseOffsetMsと二重適用しないよう、必ず
+   * resolveEffectivePhraseEndMs()経由で合成する(このfieldへ直接他のoffsetを
+   * 足し込まない)。既定0。 */
+  endOffsetMs: number;
+  /** phraseの終わり(endMs)を人間が実際に聴いて確認したかどうか。cueの
+   * verifiedByListeningとは独立(cue全部がverifiedでもendはまだ未確認、
+   * ということがあり得る)。既定false。 */
+  endVerifiedByListening: boolean;
   cues: VocalCue[];
   /** phrase全体をverified扱いにできるのは、下のverification.totalPhrases集計で
    * 必須cueがすべてverifiedByListening=trueになった場合だけ。この値はUIの
@@ -323,6 +334,18 @@ export const resolveEffectiveCueTimeMs = (
   phrase: Pick<TimingPhrase, 'phraseOffsetMs'>,
   audio: Pick<TimingMaster['audio'], 'globalContentOffsetMs'>,
 ): number => cue.timeMs + audio.globalContentOffsetMs + phrase.phraseOffsetMs + cue.cueOffsetMs;
+
+/** phraseの終わり(endMs)の実効値を返す唯一の合成関数(resolveEffectiveCueTimeMs
+ * と同じ二重適用防止の思想)。戻り値はglobalContentOffsetMs適用後の絶対msなので、
+ * 呼び出し側でこれ以上globalContentOffsetMsを足してはいけない(sync script側は
+ * sourceStartMsを引くだけにする、toEditSecForCueと同じ扱い)。
+ *   effectiveEndMs = phrase.endMs + audio.globalContentOffsetMs + phrase.endOffsetMs
+ * phraseOffsetMsは含めない(phraseOffsetMsは中のcue群専用のoffsetであり、
+ * endMs自体はendOffsetMsという独立した値で補正する)。 */
+export const resolveEffectivePhraseEndMs = (
+  phrase: Pick<TimingPhrase, 'endMs' | 'endOffsetMs'>,
+  audio: Pick<TimingMaster['audio'], 'globalContentOffsetMs'>,
+): number => phrase.endMs + audio.globalContentOffsetMs + phrase.endOffsetMs;
 
 /** 優先順位: manual > verified-vocal > audio-analysis > beat-snap > estimated。
  * 複数のtimingSource候補から実際に使う1つを選ぶ共通ルール。 */
