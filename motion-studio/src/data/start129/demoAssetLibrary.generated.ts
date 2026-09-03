@@ -88,7 +88,8 @@ export const start129DemoAssetLibrary: Record<string, string[]> = {
   ],
   "MOVEMENT_LEFT_TO_RIGHT": [
     "demo/start-129/MOVEMENT_LEFT_TO_RIGHT/pexels-19188177.mp4",
-    "demo/start-129/MOVEMENT_LEFT_TO_RIGHT/pexels-3999419.mp4"
+    "demo/start-129/MOVEMENT_LEFT_TO_RIGHT/pexels-3999419.mp4",
+    "demo/start-129/MOVEMENT_LEFT_TO_RIGHT/pexels-6556837.mp4"
   ],
   "MOVEMENT_RIGHT_TO_LEFT": [
     "demo/start-129/MOVEMENT_RIGHT_TO_LEFT/pexels-3002456.mp4",

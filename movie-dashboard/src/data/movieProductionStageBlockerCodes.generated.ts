@@ -12,7 +12,8 @@ export const movieProductionStageBlockerCodes = {
     "opening": {
       "stages": {
         "media": [
-          "PHOTO_MISSING",
+          "PHOTO_INTAKE_RECEIPT_STALE",
+          "PHOTO_INTAKE:RECEIPT_MISSING",
           "BGM_NOT_READY",
           "BGM_INTAKE_RECEIPT_STALE",
           "BGM_INTAKE:BGM_RECEIPT_MISSING"

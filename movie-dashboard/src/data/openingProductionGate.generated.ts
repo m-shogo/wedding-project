@@ -11,11 +11,11 @@ export const openingProductionGate = {
     "audio": "motion-studio/src/data/assets.ts"
   },
   "expectedPhotoCount": 11,
-  "resolvedPhotoCount": 0,
-  "photoMissingCount": 11,
+  "resolvedPhotoCount": 11,
+  "photoMissingCount": 0,
   "photos": {
     "ready": false,
-    "fileReady": false,
+    "fileReady": true,
     "intakeReceiptCurrent": false,
     "intakeReceiptPath": "out/intake/opening-media-intake.json",
     "intakeReceiptVerifiedCount": 0,
@@ -28,7 +28,7 @@ export const openingProductionGate = {
       "metadataValid": true,
       "assetHintCount": 0,
       "coverCount": 7,
-      "coverPresentCount": 0,
+      "coverPresentCount": 7,
       "humanCropQaState": "NOT_RUN",
       "humanCropQaReviewedCount": 0,
       "humanCropQaRequiredCount": 0,
@@ -44,120 +44,274 @@ export const openingProductionGate = {
   "photoSlots": [
     {
       "key": "okinawa-01",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/okinawa-01.jpg",
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "okinawa-02",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/okinawa-02.jpg",
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "okinawa-03",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/okinawa-03.jpg",
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "seoul-01",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/seoul-01.jpg",
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "seoul-02",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/seoul-02.jpg",
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "seoul-03",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/seoul-03.jpg",
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "hawaii-01",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/hawaii-01.jpg",
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "hawaii-02",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/hawaii-02.jpg",
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "hawaii-03",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/hawaii-03.jpg",
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "hero-01",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/hero-01.jpg",
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "hero-02",
-      "resolved": false,
-      "path": null,
+      "resolved": true,
+      "path": "photos/opening/hero-02.jpg",
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     }
   ],
   "bgm": {
     "assetId": "opening-bgm-main",
     "status": "missing",
     "playable": false,
-    "fileExists": false,
+    "fileExists": true,
     "intakeReceiptCurrent": false,
     "intakeReceiptPath": "out/intake/opening-bgm-intake.json",
     "intakeReceiptBlockerCodes": [
@@ -166,10 +320,34 @@ export const openingProductionGate = {
     "ready": false
   },
   "ambience": [
-    {"assetId": "opening-okinawa-sea", "status": "missing", "playable": false, "fileExists": false, "ready": false},
-    {"assetId": "opening-seoul-street", "status": "missing", "playable": false, "fileExists": false, "ready": false},
-    {"assetId": "opening-hawaii-ocean", "status": "missing", "playable": false, "fileExists": false, "ready": false},
-    {"assetId": "opening-arrival-roomtone", "status": "missing", "playable": false, "fileExists": false, "ready": false}
+    {
+      "assetId": "opening-okinawa-sea",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    },
+    {
+      "assetId": "opening-seoul-street",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    },
+    {
+      "assetId": "opening-hawaii-ocean",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    },
+    {
+      "assetId": "opening-arrival-roomtone",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    }
   ],
   "finalBlocked": true,
   "nextAction": "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\"",

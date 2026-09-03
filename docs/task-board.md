@@ -240,7 +240,8 @@ Extended/Shortとは別枠の研究branch。曲頭〜2番サビ後の間奏ま�
 ## Blocked / Human input
 
 - Opening用の実写真11枚
-- BGM候補と上映/SNSの利用条件
 - 会場の最終納品仕様
+
+**StaRt音源は解消済み(2026-09-03)**：`motion-studio/local/audio/StaRt.m4a`(権利確認済みローカル音源)が存在し、`feature/start-129-three-showcases`branchのmergeで実歌詞30 phrase・beat/word-accent解析データもこのbranchへ入った。うち11/30 phraseは人間の聴取確認(`listening-decisions.local.json`、`verifiedBy: "m-shogo"`)まで完了。残り19/30と終了位置(`verifiedByListening=false`)は`/lyric-timing`(Lyric Timing Studio)で引き続き人間が耳で確認する必要がある。BGM候補と上映/SNS利用条件はこのStaRt音源の話とは別枠(会場BGM・入場曲等)として残っている場合は改めて確認。
 
 それ以外のコード・QA・差し替え基盤は人間確認待ちにせず進める。
