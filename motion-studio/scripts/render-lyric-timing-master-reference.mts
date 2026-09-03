@@ -52,6 +52,38 @@ execFileSync('ffmpeg', ['-y', '-i', audioPath, '-ac', '2', '-b:a', '160k', fullS
 const PHRASE_PAD_BEFORE_SEC = 1.0;
 const PHRASE_PAD_AFTER_SEC = 1.0;
 
+// 簡易波形画像(render-cue-listening-clips.mtsと同じ方式)。中心=対象時刻の
+// 対称窓で切り出すので、画像中央に固定の縦線を1本引くだけで示せる。
+const waveformDir = join(localDir, 'analysis/start-wedding/waveforms');
+mkdirSync(waveformDir, {recursive: true});
+const WAVEFORM_WINDOW_SEC = 1.5;
+const WAVEFORM_W = 480;
+const WAVEFORM_H = 56;
+const generateWaveform = (id: string, centerSec: number): string => {
+  const fileName = `${id.replace(/[^A-Za-z0-9_-]/g, '_')}.png`;
+  const outFile = join(waveformDir, fileName);
+  const start = Math.max(0, centerSec - WAVEFORM_WINDOW_SEC);
+  execFileSync(
+    'ffmpeg',
+    [
+      '-y',
+      '-ss',
+      String(start),
+      '-t',
+      String(WAVEFORM_WINDOW_SEC * 2),
+      '-i',
+      audioPath,
+      '-filter_complex',
+      `showwavespic=s=${WAVEFORM_W}x${WAVEFORM_H}:colors=0xF4C95D,drawbox=x=${Math.round(WAVEFORM_W / 2)}:y=0:w=2:h=${WAVEFORM_H}:color=0xFF5A5A:t=fill`,
+      '-frames:v',
+      '1',
+      outFile,
+    ],
+    {stdio: 'pipe'},
+  );
+  return fileName;
+};
+
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const escapeAttr = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 const fmtSec = (ms: number) => (ms / 1000).toFixed(3) + 's';
@@ -84,10 +116,11 @@ const rows = master.phrases
       .map((c) => {
         const t = resolveEffectiveCueTimeMs(c, p, master.audio);
         const offsetInClipSec = t / 1000 - clip.clipStartSec;
+        const waveformFile = generateWaveform(c.cueId, t / 1000);
         return `<tr class="cue-row" data-cueid="${escapeAttr(c.cueId)}" data-designoffset="${offsetInClipSec}" data-clipsrc="lyric-phrase-clips/${escapeAttr(clip.clipFile)}" data-text="${escapeAttr(c.text)}" data-designedsec="${(t / 1000).toFixed(3)}">
           <td class="indent">${escapeHtml(c.cueId)}</td>
           <td>${escapeHtml(c.kind)}</td>
-          <td>${escapeHtml(c.text)}</td>
+          <td>${escapeHtml(c.text)}<br/><img class="waveform-img" src="waveforms/${waveformFile}" alt="波形" /></td>
           <td>${fmtSec(t)}</td>
           <td class="judge-cell">
             <div class="judge-row slider-row">
@@ -109,6 +142,7 @@ const rows = master.phrases
             </div>
             <textarea class="note-input" data-role="note" rows="1" placeholder="メモ(任意)"></textarea>
             <div class="judge-status" data-role="status">未確認</div>
+            <div class="bulk-apply-hint" data-role="bulk-hint"></div>
           </td>
           <td></td>
         </tr>`;
@@ -119,6 +153,7 @@ const rows = master.phrases
       ? resolveEffectiveCueTimeMs(onsetCue, p, master.audio)
       : p.startMs + master.audio.globalContentOffsetMs + p.phraseOffsetMs;
     const effectiveEndMs = resolveEffectivePhraseEndMs(p, master.audio);
+    const endWaveformFile = generateWaveform(`${p.phraseId}-END`, effectiveEndMs / 1000);
     return `<tr class="phrase-row" data-phraseid="${escapeAttr(p.phraseId)}" data-endsec="${(effectiveEndMs / 1000).toFixed(3)}">
       <td colspan="2"><b>${escapeHtml(p.phraseId)}</b><br/><span class="section">${escapeHtml(p.sectionId)}</span></td>
       <td class="phrase-text"><b>${escapeHtml(p.text)}</b></td>
@@ -130,6 +165,7 @@ const rows = master.phrases
       </td>
       <td class="judge-cell end-judge-cell">
         <div class="end-label">歌詞の「終わり」を確認</div>
+        <img class="waveform-img" src="waveforms/${endWaveformFile}" alt="波形" />
         <div class="judge-row slider-row">
           <input type="range" class="delta-slider" data-role="end-slider" min="-3000" max="3000" step="10" value="0" />
         </div>
@@ -175,6 +211,16 @@ writeFileSync(
   .anim audio { height: 28px; vertical-align: middle; }
   .anim .hint { display: block; color: #888; font-size: 11px; }
   .indent { padding-left: 24px; }
+  .waveform-img { width: 200px; height: 28px; display: block; border-radius: 3px; background: #1a1a1a; margin-top: 3px; }
+  .util-btn { background: #2a2a30; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 7px 12px; font-size: 12px; cursor: pointer; }
+  .util-btn:hover { background: #3a3a42; }
+  .util-btn:disabled { opacity: 0.4; cursor: default; }
+  .unsaved-banner { font-size: 12px; color: #1a1508; background: #F4C95D; padding: 3px 10px; border-radius: 10px; display: none; }
+  .unsaved-banner.show { display: inline-block; }
+  tr.jump-highlight { outline: 2px solid #F4C95D; outline-offset: -2px; }
+  tr.hover-target td:first-child { box-shadow: inset 3px 0 0 #F4C95D; }
+  .bulk-apply-hint { background: #2a2418; border: 1px solid #7a5a1f; border-radius: 5px; padding: 5px 8px; font-size: 11px; color: #F4C95D; margin-top: 4px; cursor: pointer; display: none; }
+  .bulk-apply-hint.show { display: block; }
   h1 { font-size: 18px; }
   p.note { color: #f2a53f; font-size: 13px; }
 
@@ -243,8 +289,11 @@ writeFileSync(
 <div class="toolbar">
   <label style="font-size:13px;">名前: <input type="text" id="verifiedByInput" placeholder="例: しょうご" /></label>
   <button type="button" class="save-btn" id="saveBtn">💾 保存する(ダウンロード)</button>
+  <button type="button" class="util-btn" id="jumpNextBtn">⏭ 次の未確認へ</button>
+  <button type="button" class="util-btn" id="undoBtn">↺ 元に戻す</button>
   <span id="progressCount"></span>
   <span id="saveHint"></span>
+  <span id="unsavedBanner" class="unsaved-banner"></span>
 </div>
 
 <div class="summary-box">
@@ -363,6 +412,83 @@ ${rows}
     if (!state[cueId]) state[cueId] = {status: null, deltaMs: 0, golden: false, note: ''};
     if (state[cueId].note == null) state[cueId].note = '';
     return state[cueId];
+  }
+
+  // 誤操作の取り消し(cue/フレーズ終わり両方に対応した共通スタック)。
+  var undoStack = [];
+  var rowByCueId = {};
+  var rowByPhraseId = {};
+  var hoveredTarget = null; // {kind: 'cue'|'end', id: string} | null
+  function pushUndo(kind, id) {
+    var snapshot = kind === 'cue' ? getEntry(id) : getEndEntry(id);
+    undoStack.push({kind: kind, id: id, snapshot: JSON.parse(JSON.stringify(snapshot))});
+    if (undoStack.length > 50) undoStack.shift();
+    updateUndoButton();
+  }
+  function updateUndoButton() {
+    var btn = document.getElementById('undoBtn');
+    if (btn) btn.disabled = undoStack.length === 0;
+  }
+
+  var ACK_KEY = STORAGE_KEY + '_ackCount';
+  function getAckCount() {
+    var v = parseInt(localStorage.getItem(ACK_KEY) || '0', 10);
+    return isNaN(v) ? 0 : v;
+  }
+  function setAckCount(n) {
+    try { localStorage.setItem(ACK_KEY, String(n)); } catch (e) {}
+  }
+  function countJudgedTotal() {
+    var cueDone = Object.keys(state).filter(function (k) { return state[k].status === 'ok' || state[k].status === 'adjust' || state[k].status === 'reject'; }).length;
+    var endDone = Object.keys(endState).filter(function (k) { return endState[k].status === 'ok' || endState[k].status === 'adjust' || endState[k].status === 'reject'; }).length;
+    return cueDone + endDone;
+  }
+  function updateUnsavedBanner() {
+    var banner = document.getElementById('unsavedBanner');
+    if (!banner) return;
+    var diff = countJudgedTotal() - getAckCount();
+    if (diff > 0) {
+      banner.textContent = '⚠️ ' + diff + '件、まだコピー/保存していません';
+      banner.classList.add('show');
+    } else {
+      banner.classList.remove('show');
+    }
+  }
+
+  // 同じtextを持つ他の未確認cueへ、同じ補正を一括適用する(繰り返しパターン用)。
+  function checkBulkApplyOpportunity(tr, cueId, entry) {
+    var hint = tr.querySelector('[data-role=bulk-hint]');
+    if (!hint) return;
+    if (entry.status !== 'adjust' || entry.deltaMs === 0) {
+      hint.classList.remove('show');
+      return;
+    }
+    var text = tr.getAttribute('data-text');
+    var others = rowsAll.filter(function (r) {
+      if (r === tr) return false;
+      if (r.getAttribute('data-text') !== text) return false;
+      var oid = r.getAttribute('data-cueid');
+      return !getEntry(oid).status;
+    });
+    if (others.length === 0) {
+      hint.classList.remove('show');
+      return;
+    }
+    var deltaLabel = Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く');
+    hint.textContent = '同じ「' + text + '」が他に' + others.length + '件未確認 → クリックで同じ補正(' + deltaLabel + ')を一括適用';
+    hint.classList.add('show');
+    hint.onclick = function () {
+      others.forEach(function (r) {
+        var oid = r.getAttribute('data-cueid');
+        pushUndo('cue', oid);
+        var oEntry = getEntry(oid);
+        oEntry.deltaMs = entry.deltaMs;
+        oEntry.status = 'adjust';
+        renderRow(r);
+      });
+      saveState();
+      hint.classList.remove('show');
+    };
   }
 
   function buildSummaryPrompt() {
@@ -492,26 +618,34 @@ ${rows}
     var text = '判定済み: ' + done + '件 / 終わり判定: ' + endDone + '件(自動的に保存されています)';
     document.getElementById('progressCount').textContent = text;
     document.getElementById('progressCountFloating').textContent = text;
+    updateUnsavedBanner();
   }
 
   var rowsAll = Array.prototype.slice.call(document.querySelectorAll('#cueRows tr.cue-row'));
   rowsAll.forEach(function (tr) {
     var cueId = tr.getAttribute('data-cueid');
+    rowByCueId[cueId] = tr;
+    tr.addEventListener('mouseenter', function () { hoveredTarget = {kind: 'cue', id: cueId}; tr.classList.add('hover-target'); });
+    tr.addEventListener('mouseleave', function () { if (hoveredTarget && hoveredTarget.id === cueId) hoveredTarget = null; tr.classList.remove('hover-target'); });
 
     tr.querySelector('.btn-ok').addEventListener('click', function () {
+      pushUndo('cue', cueId);
       var entry = getEntry(cueId);
       entry.status = entry.status === 'ok' ? null : 'ok';
       if (entry.status === 'ok') entry.deltaMs = 0;
       renderRow(tr);
       saveState();
+      checkBulkApplyOpportunity(tr, cueId, entry);
     });
     tr.querySelector('.btn-wrong').addEventListener('click', function () {
+      pushUndo('cue', cueId);
       var entry = getEntry(cueId);
       entry.status = entry.status === 'adjust' ? null : 'adjust';
       renderRow(tr);
       saveState();
     });
     tr.querySelector('.btn-reject').addEventListener('click', function () {
+      pushUndo('cue', cueId);
       var entry = getEntry(cueId);
       entry.status = entry.status === 'reject' ? null : 'reject';
       renderRow(tr);
@@ -519,16 +653,19 @@ ${rows}
     });
     Array.prototype.slice.call(tr.querySelectorAll('.btn-nudge')).forEach(function (btn) {
       btn.addEventListener('click', function () {
+        pushUndo('cue', cueId);
         var entry = getEntry(cueId);
         entry.deltaMs += parseInt(btn.getAttribute('data-delta'), 10);
         if (entry.status !== 'reject') entry.status = 'adjust';
         renderRow(tr);
         saveState();
+        checkBulkApplyOpportunity(tr, cueId, entry);
         var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
         if (checkBtn) playAtShiftedPosition(designedSec + entry.deltaMs / 1000, checkBtn);
       });
     });
     tr.querySelector('.btn-reset').addEventListener('click', function () {
+      pushUndo('cue', cueId);
       var entry = getEntry(cueId);
       entry.deltaMs = 0;
       renderRow(tr);
@@ -536,6 +673,8 @@ ${rows}
     });
     var slider = tr.querySelector('[data-role=slider]');
     if (slider) {
+      slider.addEventListener('mousedown', function () { pushUndo('cue', cueId); });
+      slider.addEventListener('touchstart', function () { pushUndo('cue', cueId); });
       slider.addEventListener('input', function () {
         var entry = getEntry(cueId);
         entry.deltaMs = parseInt(slider.value, 10);
@@ -546,6 +685,7 @@ ${rows}
       slider.addEventListener('change', function () {
         var entry = getEntry(cueId);
         var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
+        checkBulkApplyOpportunity(tr, cueId, entry);
         if (checkBtn) playAtShiftedPosition(designedSec + entry.deltaMs / 1000, checkBtn);
       });
     }
@@ -568,8 +708,12 @@ ${rows}
   var phraseRowsAll = Array.prototype.slice.call(document.querySelectorAll('#cueRows tr.phrase-row'));
   phraseRowsAll.forEach(function (tr) {
     var phraseId = tr.getAttribute('data-phraseid');
+    rowByPhraseId[phraseId] = tr;
+    tr.addEventListener('mouseenter', function () { hoveredTarget = {kind: 'end', id: phraseId}; tr.classList.add('hover-target'); });
+    tr.addEventListener('mouseleave', function () { if (hoveredTarget && hoveredTarget.id === phraseId) hoveredTarget = null; tr.classList.remove('hover-target'); });
 
     tr.querySelector('[data-role=end-ok]').addEventListener('click', function () {
+      pushUndo('end', phraseId);
       var entry = getEndEntry(phraseId);
       entry.status = entry.status === 'ok' ? null : 'ok';
       if (entry.status === 'ok') entry.deltaMs = 0;
@@ -577,12 +721,14 @@ ${rows}
       saveEndState();
     });
     tr.querySelector('[data-role=end-wrong]').addEventListener('click', function () {
+      pushUndo('end', phraseId);
       var entry = getEndEntry(phraseId);
       entry.status = entry.status === 'adjust' ? null : 'adjust';
       renderEndRow(tr);
       saveEndState();
     });
     tr.querySelector('[data-role=end-reject]').addEventListener('click', function () {
+      pushUndo('end', phraseId);
       var entry = getEndEntry(phraseId);
       entry.status = entry.status === 'reject' ? null : 'reject';
       renderEndRow(tr);
@@ -591,6 +737,7 @@ ${rows}
     var endCheckBtn = tr.querySelector('[data-role=end-check]');
     Array.prototype.slice.call(tr.querySelectorAll('.btn-nudge')).forEach(function (btn) {
       btn.addEventListener('click', function () {
+        pushUndo('end', phraseId);
         var entry = getEndEntry(phraseId);
         entry.deltaMs += parseInt(btn.getAttribute('data-end-delta'), 10);
         if (entry.status !== 'reject') entry.status = 'adjust';
@@ -601,6 +748,7 @@ ${rows}
       });
     });
     tr.querySelector('[data-role=end-reset]').addEventListener('click', function () {
+      pushUndo('end', phraseId);
       var entry = getEndEntry(phraseId);
       entry.deltaMs = 0;
       renderEndRow(tr);
@@ -608,6 +756,8 @@ ${rows}
     });
     var endSlider = tr.querySelector('[data-role=end-slider]');
     if (endSlider) {
+      endSlider.addEventListener('mousedown', function () { pushUndo('end', phraseId); });
+      endSlider.addEventListener('touchstart', function () { pushUndo('end', phraseId); });
       endSlider.addEventListener('input', function () {
         var entry = getEndEntry(phraseId);
         entry.deltaMs = parseInt(endSlider.value, 10);
@@ -637,6 +787,60 @@ ${rows}
 
   updateProgress();
   updateSummary();
+  updateUndoButton();
+
+  document.getElementById('undoBtn').addEventListener('click', function () {
+    var last = undoStack.pop();
+    if (!last) return;
+    if (last.kind === 'cue') {
+      state[last.id] = last.snapshot;
+      var tr = rowByCueId[last.id];
+      if (tr) renderRow(tr);
+      saveState();
+    } else {
+      endState[last.id] = last.snapshot;
+      var etr = rowByPhraseId[last.id];
+      if (etr) renderEndRow(etr);
+      saveEndState();
+    }
+    updateUndoButton();
+  });
+
+  document.getElementById('jumpNextBtn').addEventListener('click', function () {
+    var next = rowsAll.find(function (tr) {
+      var cueId = tr.getAttribute('data-cueid');
+      return !getEntry(cueId).status;
+    });
+    if (!next) {
+      setHint('saveHint', 'saveHintFloating', '✅ 未確認のcueはもうありません。', false);
+      return;
+    }
+    next.scrollIntoView({behavior: 'smooth', block: 'center'});
+    next.classList.add('jump-highlight');
+    setTimeout(function () { next.classList.remove('jump-highlight'); }, 1500);
+  });
+
+  document.addEventListener('keydown', function (ev) {
+    var active = document.activeElement;
+    var isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
+    if (isTyping || !hoveredTarget) return;
+    var tr = hoveredTarget.kind === 'cue' ? rowByCueId[hoveredTarget.id] : rowByPhraseId[hoveredTarget.id];
+    if (!tr) return;
+    if (ev.code === 'Space') {
+      ev.preventDefault();
+      var checkBtnEl = hoveredTarget.kind === 'cue' ? tr.querySelector('.btn-check') : tr.querySelector('[data-role=end-check]');
+      if (checkBtnEl) checkBtnEl.click();
+    } else if (ev.key === '1') {
+      var okEl = hoveredTarget.kind === 'cue' ? tr.querySelector('.btn-ok') : tr.querySelector('[data-role=end-ok]');
+      okEl.click();
+    } else if (ev.key === '2') {
+      var wrongEl = hoveredTarget.kind === 'cue' ? tr.querySelector('.btn-wrong') : tr.querySelector('[data-role=end-wrong]');
+      wrongEl.click();
+    } else if (ev.key === '3') {
+      var rejectEl = hoveredTarget.kind === 'cue' ? tr.querySelector('.btn-reject') : tr.querySelector('[data-role=end-reject]');
+      rejectEl.click();
+    }
+  });
 
   function setHint(topId, floatingId, text, isError) {
     [topId, floatingId].forEach(function (id) {
@@ -651,6 +855,8 @@ ${rows}
     var text = document.getElementById('summaryPromptArea').value;
     function showCopied() {
       setHint('copyHint', 'saveHintFloating', '✅ コピーしました。', false);
+      setAckCount(countJudgedTotal());
+      updateUnsavedBanner();
       setTimeout(function () {
         document.getElementById('copyHint').textContent = '';
         document.getElementById('saveHintFloating').textContent = '';
@@ -752,6 +958,8 @@ ${rows}
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    setAckCount(countJudgedTotal());
+    updateUnsavedBanner();
     setHint('saveHint', 'saveHintFloating', '✅ cue' + decisions.length + '件・終わり' + phraseEndDecisions.length + '件を書き出しました。listening-decisions.local.jsonとして保存後、pnpm apply:listening-verification → pnpm sync:timing-master。', false);
   });
 })();

@@ -53,6 +53,42 @@ execFileSync('ffmpeg', ['-y', '-i', audioPath, '-ac', '2', '-b:a', '160k', fullS
 const WINDOW_BEFORE_SEC = 1.0;
 const WINDOW_AFTER_SEC = 1.2;
 
+// 簡易波形画像。file://で開いた場合、JS側でfetch()して波形を描くことは
+// できない(セキュリティ制限)ため、ffmpegでビルド時に静止画として生成する。
+// 常に「中央=設計時刻」になる対称窓で切り出すので、画像の中央に固定の
+// 縦線を1本引くだけで「ここが設計時刻」を示せる(値ごとにx座標を計算する
+// 必要がない)。耳だけでなく目でも判断材料にするための補助であり、
+// 判定ロジックには一切影響しない。
+const waveformDir = join(localDir, 'analysis/start-wedding/waveforms');
+mkdirSync(waveformDir, {recursive: true});
+const WAVEFORM_WINDOW_SEC = 1.5; // 中心の前後1.5秒(計3秒)
+const WAVEFORM_W = 480;
+const WAVEFORM_H = 56;
+const generateWaveform = (id: string, centerSec: number): string => {
+  const fileName = `${id.replace(/[^A-Za-z0-9_-]/g, '_')}.png`;
+  const outFile = join(waveformDir, fileName);
+  const start = Math.max(0, centerSec - WAVEFORM_WINDOW_SEC);
+  execFileSync(
+    'ffmpeg',
+    [
+      '-y',
+      '-ss',
+      String(start),
+      '-t',
+      String(WAVEFORM_WINDOW_SEC * 2),
+      '-i',
+      audioPath,
+      '-filter_complex',
+      `showwavespic=s=${WAVEFORM_W}x${WAVEFORM_H}:colors=0xF4C95D,drawbox=x=${Math.round(WAVEFORM_W / 2)}:y=0:w=2:h=${WAVEFORM_H}:color=0xFF5A5A:t=fill`,
+      '-frames:v',
+      '1',
+      outFile,
+    ],
+    {stdio: 'pipe'},
+  );
+  return fileName;
+};
+
 // Phase4 Golden Anchor候補(2026-08-27選定): 曲全体(intro〜final chorus/ending)に
 // 分散した10箇所。ユーザー指示のHuman Verification順(「1.Golden Anchor候補→
 // 2.60秒以降→3.3-hit→4.Critical Cue→...」)に対応するため、listening-review
@@ -90,6 +126,7 @@ type ClipEntry = {
   clipFile: string;
   clipStartSec: number;
   cueOffsetInClipSec: number;
+  waveformFile: string;
   isGoldenAnchorCandidate: boolean;
   isCritical: boolean;
   is60sPlus: boolean;
@@ -124,6 +161,7 @@ for (const p of master.phrases) {
   for (const c of p.cues) {
     const effectiveMs = resolveEffectiveCueTimeMs(c, p, master.audio);
     const clip = extractClip(c.cueId, effectiveMs);
+    const waveformFile = generateWaveform(c.cueId, effectiveMs / 1000);
     entries.push({
       cueId: c.cueId,
       phraseId: p.phraseId,
@@ -140,6 +178,7 @@ for (const p of master.phrases) {
       is60sPlus: effectiveMs >= 60000,
       isLowConfidence: c.confidenceScore != null && c.confidenceScore < 0.5,
       isUnverified: !c.verifiedByListening,
+      waveformFile,
       ...clip,
     });
   }
@@ -152,6 +191,7 @@ for (const b of master.editorialBlocks) {
   for (const c of b.letterCues ?? []) {
     const effectiveMs = c.timeMs + master.audio.globalContentOffsetMs;
     const clip = extractClip(c.cueId, effectiveMs);
+    const waveformFile = generateWaveform(c.cueId, effectiveMs / 1000);
     entries.push({
       cueId: c.cueId,
       phraseId: null,
@@ -168,6 +208,7 @@ for (const b of master.editorialBlocks) {
       is60sPlus: effectiveMs >= 60000,
       isLowConfidence: c.timingSource === 'estimated',
       isUnverified: !c.verifiedByListening,
+      waveformFile,
       ...clip,
     });
   }
@@ -206,6 +247,8 @@ const rows = entries
     <td>${escapeHtml(e.timingSource)}</td>
     <td style="color:${e.confidenceScore != null && e.confidenceScore < 0.5 ? '#f2a53f' : '#eee'}">${e.confidenceScore != null ? e.confidenceScore.toFixed(2) : ''}</td>
     <td>
+      <img class="waveform-img" src="waveforms/${e.waveformFile}" alt="波形(赤い線=設計時刻)" />
+      <br/>
       <audio controls preload="none" src="listening-clips/${e.clipFile}"></audio>
       <span style="color:#888;font-size:12px">(クリップ内 ${e.cueOffsetInClipSec.toFixed(2)}s地点が設計時刻)</span>
       <br/>
@@ -233,6 +276,7 @@ const rows = entries
         <textarea class="note-input" data-role="note" rows="2" placeholder="気になった点があれば自由にメモ(任意。細かく書いてOK)"></textarea>
       </div>
       <div class="judge-status" data-role="status">未確認</div>
+      <div class="bulk-apply-hint" data-role="bulk-hint"></div>
     </td>
   </tr>`,
   )
@@ -253,6 +297,7 @@ writeFileSync(
   td, th { border-bottom: 1px solid #333; padding: 6px 10px; text-align: left; vertical-align: middle; font-size: 13px; }
   th { position: sticky; top: 0; background: #111; z-index: 2; }
   audio { height: 30px; vertical-align: middle; }
+  .waveform-img { width: 240px; height: 32px; display: block; border-radius: 3px; background: #1a1a1a; }
   h1 { font-size: 18px; }
   p.note { color: #f2a53f; }
   .filters { display: flex; gap: 16px; flex-wrap: wrap; margin: 12px 0 16px; padding: 10px 12px; background: #1a1a1c; border-radius: 6px; }
@@ -270,8 +315,17 @@ writeFileSync(
   .toolbar input[type=text] { background: #0d0d0e; border: 1px solid #444; color: #eee; border-radius: 4px; padding: 5px 8px; font-size: 13px; }
   .toolbar .save-btn { background: #F4C95D; color: #1a1508; font-weight: 700; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; }
   .toolbar .save-btn:hover { background: #ffd873; }
+  .util-btn { background: #2a2a30; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 7px 12px; font-size: 12px; cursor: pointer; }
+  .util-btn:hover { background: #3a3a42; }
+  .util-btn:disabled { opacity: 0.4; cursor: default; }
   #progressCount { font-size: 13px; color: #ccc; }
   #saveHint { font-size: 12px; color: #888; width: 100%; }
+  .unsaved-banner { font-size: 12px; color: #1a1508; background: #F4C95D; padding: 3px 10px; border-radius: 10px; display: none; }
+  .unsaved-banner.show { display: inline-block; }
+  tr.jump-highlight { outline: 2px solid #F4C95D; outline-offset: -2px; }
+  tr.hover-target td:first-child { box-shadow: inset 3px 0 0 #F4C95D; }
+  .bulk-apply-hint { background: #2a2418; border: 1px solid #7a5a1f; border-radius: 5px; padding: 5px 8px; font-size: 11px; color: #F4C95D; margin-top: 4px; cursor: pointer; display: none; }
+  .bulk-apply-hint.show { display: block; }
 
   .judge-cell { min-width: 260px; }
   .slider-row { padding: 2px 0; }
@@ -359,8 +413,11 @@ writeFileSync(
 <div class="toolbar">
   <label style="font-size:13px;">名前: <input type="text" id="verifiedByInput" placeholder="例: しょうご" /></label>
   <button type="button" class="save-btn" id="saveBtn">💾 保存する(ダウンロード)</button>
+  <button type="button" class="util-btn" id="jumpNextBtn">⏭ 次の未確認へ</button>
+  <button type="button" class="util-btn" id="undoBtn">↺ 元に戻す</button>
   <span id="progressCount"></span>
   <span id="saveHint"></span>
+  <span id="unsavedBanner" class="unsaved-banner"></span>
 </div>
 
 <div class="summary-box">
@@ -507,6 +564,85 @@ ${rows}
     return state[cueId];
   }
 
+  // 誤操作の取り消し用。判定(status)やズレ量が変わる操作の直前だけ
+  // スナップショットを積む(メモ入力のキー1つ1つでは積まない。ノイズになるため)。
+  var undoStack = [];
+  var rowByCueId = {};
+  var hoveredCueId = null; // キーボードショートカットの対象行(マウスホバー中の行)
+  function pushUndo(cueId) {
+    undoStack.push({cueId: cueId, snapshot: JSON.parse(JSON.stringify(getEntry(cueId)))});
+    if (undoStack.length > 50) undoStack.shift();
+    updateUndoButton();
+  }
+  function updateUndoButton() {
+    var btn = document.getElementById('undoBtn');
+    if (btn) btn.disabled = undoStack.length === 0;
+  }
+
+  // 「まだ📋コピー/💾保存していない判定がある」ことを知らせるバナー。
+  // 前回コピー/保存した時点の判定件数をlocalStorageへ覚えておき、
+  // 今の件数と比較するだけ(判定ロジックには影響しない)。
+  var ACK_KEY = STORAGE_KEY + '_ackCount';
+  function getAckCount() {
+    var v = parseInt(localStorage.getItem(ACK_KEY) || '0', 10);
+    return isNaN(v) ? 0 : v;
+  }
+  function setAckCount(n) {
+    try { localStorage.setItem(ACK_KEY, String(n)); } catch (e) {}
+  }
+  function countJudged() {
+    return Object.keys(state).filter(function (k) { return state[k].status === 'ok' || state[k].status === 'adjust' || state[k].status === 'reject'; }).length;
+  }
+  function updateUnsavedBanner() {
+    var banner = document.getElementById('unsavedBanner');
+    if (!banner) return;
+    var diff = countJudged() - getAckCount();
+    if (diff > 0) {
+      banner.textContent = '⚠️ ' + diff + '件、まだコピー/保存していません';
+      banner.classList.add('show');
+    } else {
+      banner.classList.remove('show');
+    }
+  }
+
+  // 同じ「text」(例:「パッパッ」「チャプチャプ」)を持つ他の未確認行に、
+  // 同じ補正量を1クリックで一括適用できるようにする(繰り返しパターンの
+  // 確認を速くするための機能。勝手に自動適用はせず、必ず人間がクリックする)。
+  function checkBulkApplyOpportunity(tr, cueId, entry) {
+    var hint = tr.querySelector('[data-role=bulk-hint]');
+    if (!hint) return;
+    if (entry.status !== 'adjust' || entry.deltaMs === 0) {
+      hint.classList.remove('show');
+      return;
+    }
+    var text = tr.getAttribute('data-text');
+    var others = rowsAll.filter(function (r) {
+      if (r === tr) return false;
+      if (r.getAttribute('data-text') !== text) return false;
+      var oid = r.getAttribute('data-cueid');
+      return !getEntry(oid).status;
+    });
+    if (others.length === 0) {
+      hint.classList.remove('show');
+      return;
+    }
+    var deltaLabel = Math.abs(entry.deltaMs) + 'ms ' + (entry.deltaMs < 0 ? '早く' : '遅く');
+    hint.textContent = '同じ「' + text + '」が他に' + others.length + '件未確認 → クリックで同じ補正(' + deltaLabel + ')を一括適用';
+    hint.classList.add('show');
+    hint.onclick = function () {
+      others.forEach(function (r) {
+        var oid = r.getAttribute('data-cueid');
+        pushUndo(oid);
+        var oEntry = getEntry(oid);
+        oEntry.deltaMs = entry.deltaMs;
+        oEntry.status = 'adjust';
+        renderRow(r);
+      });
+      saveState();
+      hint.classList.remove('show');
+    };
+  }
+
   // 判定・±ms補正・メモをまとめて1つの文章にする。ここでは判定ロジックを
   // 何も変えず、既にstateにある情報を読みやすい文章へ変換するだけ。
   // このテキストをそのままClaudeに貼れば、cueIdごとの数字を人間が
@@ -592,17 +728,30 @@ ${rows}
   }
 
   function updateProgress() {
-    var done = Object.keys(state).filter(function (k) { return state[k].status === 'ok' || state[k].status === 'adjust' || state[k].status === 'reject'; }).length;
+    var done = countJudged();
     var text = '判定済み: ' + done + ' / ' + rowsAll.length + '件(自動的に保存されています)';
     document.getElementById('progressCount').textContent = text;
     document.getElementById('progressCountFloating').textContent = text;
+    updateUnsavedBanner();
   }
 
   var rowsAll = Array.prototype.slice.call(document.querySelectorAll('#cueRows tr'));
   rowsAll.forEach(function (tr) {
     var cueId = tr.getAttribute('data-cueid');
+    rowByCueId[cueId] = tr;
+
+    // キーボードショートカット用に「今マウスが乗っている行」を覚えておく。
+    tr.addEventListener('mouseenter', function () {
+      hoveredCueId = cueId;
+      tr.classList.add('hover-target');
+    });
+    tr.addEventListener('mouseleave', function () {
+      if (hoveredCueId === cueId) hoveredCueId = null;
+      tr.classList.remove('hover-target');
+    });
 
     tr.querySelector('.btn-ok').addEventListener('click', function () {
+      pushUndo(cueId);
       var entry = getEntry(cueId);
       // 「合ってる」は無補正の確認。誤って合ってない状態のまま押されないよう、
       // ズレ量は0へ戻す(既に⏪/⏩でズレを追い込んだ後は不要な操作)。
@@ -610,14 +759,17 @@ ${rows}
       if (entry.status === 'ok') entry.deltaMs = 0;
       renderRow(tr);
       saveState();
+      checkBulkApplyOpportunity(tr, cueId, entry);
     });
     tr.querySelector('.btn-wrong').addEventListener('click', function () {
+      pushUndo(cueId);
       var entry = getEntry(cueId);
       entry.status = entry.status === 'adjust' ? null : 'adjust';
       renderRow(tr);
       saveState();
     });
     tr.querySelector('.btn-reject').addEventListener('click', function () {
+      pushUndo(cueId);
       var entry = getEntry(cueId);
       entry.status = entry.status === 'reject' ? null : 'reject';
       renderRow(tr);
@@ -625,6 +777,7 @@ ${rows}
     });
     Array.prototype.slice.call(tr.querySelectorAll('.btn-nudge')).forEach(function (btn) {
       btn.addEventListener('click', function () {
+        pushUndo(cueId);
         var entry = getEntry(cueId);
         entry.deltaMs += parseInt(btn.getAttribute('data-delta'), 10);
         // ズレ補正ボタンを押した時点で「合ってない(補正込み)」扱いへ自動的に進める
@@ -632,6 +785,7 @@ ${rows}
         if (entry.status !== 'reject') entry.status = 'adjust';
         renderRow(tr);
         saveState();
+        checkBulkApplyOpportunity(tr, cueId, entry);
         // ボタンを押した瞬間、その場で補正込みの位置を鳴らして確認できるように
         // する(「押したらリアルタイムで直して聴きたい」というフィードバック対応)。
         // 別途▶を押す手間を無くす。
@@ -640,6 +794,7 @@ ${rows}
       });
     });
     tr.querySelector('.btn-reset').addEventListener('click', function () {
+      pushUndo(cueId);
       var entry = getEntry(cueId);
       entry.deltaMs = 0;
       renderRow(tr);
@@ -649,6 +804,8 @@ ${rows}
     if (slider) {
       // ドラッグ中(input)は数値表示だけ更新し、音は鳴らさない(ドラッグのたびに
       // 音が連打されるのを防ぐ)。指を離した瞬間(change)にその位置で確認再生する。
+      slider.addEventListener('mousedown', function () { pushUndo(cueId); });
+      slider.addEventListener('touchstart', function () { pushUndo(cueId); });
       slider.addEventListener('input', function () {
         var entry = getEntry(cueId);
         entry.deltaMs = parseInt(slider.value, 10);
@@ -659,6 +816,7 @@ ${rows}
       slider.addEventListener('change', function () {
         var entry = getEntry(cueId);
         var designedSec = parseFloat(tr.getAttribute('data-designedsec'));
+        checkBulkApplyOpportunity(tr, cueId, entry);
         if (checkBtn) playAtShiftedPosition(designedSec + entry.deltaMs / 1000, checkBtn);
       });
     }
@@ -692,6 +850,53 @@ ${rows}
   });
   updateProgress();
   updateSummary();
+  updateUndoButton();
+
+  document.getElementById('undoBtn').addEventListener('click', function () {
+    var last = undoStack.pop();
+    if (!last) return;
+    state[last.cueId] = last.snapshot;
+    var tr = rowByCueId[last.cueId];
+    if (tr) renderRow(tr);
+    saveState();
+    updateUndoButton();
+  });
+
+  document.getElementById('jumpNextBtn').addEventListener('click', function () {
+    var next = rowsAll.find(function (tr) {
+      var cueId = tr.getAttribute('data-cueid');
+      return !getEntry(cueId).status;
+    });
+    if (!next) {
+      setHint('saveHint', 'saveHintFloating', '✅ 未確認の行はもうありません。全部判定済みです。', false);
+      return;
+    }
+    next.scrollIntoView({behavior: 'smooth', block: 'center'});
+    next.classList.add('jump-highlight');
+    setTimeout(function () { next.classList.remove('jump-highlight'); }, 1500);
+  });
+
+  // キーボードショートカット: マウスが乗っている行に対して、スペース=▶再生、
+  // 1/2/3=👍/❌/🤔。名前欄・メモ欄に入力中は奪わない(スペースやテキスト入力を
+  // 邪魔しないため)。
+  document.addEventListener('keydown', function (ev) {
+    var active = document.activeElement;
+    var isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
+    if (isTyping || !hoveredCueId) return;
+    var tr = rowByCueId[hoveredCueId];
+    if (!tr) return;
+    if (ev.code === 'Space') {
+      ev.preventDefault();
+      var checkBtnEl = tr.querySelector('.btn-check');
+      if (checkBtnEl) checkBtnEl.click();
+    } else if (ev.key === '1') {
+      tr.querySelector('.btn-ok').click();
+    } else if (ev.key === '2') {
+      tr.querySelector('.btn-wrong').click();
+    } else if (ev.key === '3') {
+      tr.querySelector('.btn-reject').click();
+    }
+  });
 
   // 保存/コピーの結果メッセージを、上のhintと下固定バーのhint両方へ同時に出す。
   // ロジックを二重実装せず、下固定バーのボタンは常にこのハンドラを共有する。
@@ -708,6 +913,8 @@ ${rows}
     var text = document.getElementById('summaryPromptArea').value;
     function showCopied() {
       setHint('copyHint', 'saveHintFloating', '✅ コピーしました。Claudeに貼り付けてください。', false);
+      setAckCount(countJudged());
+      updateUnsavedBanner();
       setTimeout(function () {
         document.getElementById('copyHint').textContent = '';
         document.getElementById('saveHintFloating').textContent = '';
@@ -795,6 +1002,8 @@ ${rows}
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    setAckCount(countJudged());
+    updateUnsavedBanner();
     setHint(
       'saveHint',
       'saveHintFloating',
