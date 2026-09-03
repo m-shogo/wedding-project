@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `V30_ONLY / P02_DESIGN_COMPLETE_AFTER_FINAL_REWORK / 2026-09-03`
+Status: `V30_ONLY / P01-P02_DESIGN_LOCKED / P03_READY_FOR_CODEX_PRODUCTION / 2026-09-03`
 
 V30 is the sole current production version. V20 is history/reference only. Do not create V31 unless explicitly requested.
 
@@ -11,32 +11,28 @@ V30 is the sole current production version. V20 is history/reference only. Do no
 3. `assets/rurubu-v30/manifest.json`
 4. `assets/rurubu-v30/visual-polish-manifest.json`
 5. `assets/rurubu-v30/ornament-art-direction-manifest.json`
-6. **`assets/rurubu-v30/publication-display-system-manifest.json`**
+6. `assets/rurubu-v30/publication-display-system-manifest.json`
 7. `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md`
-8. target page manifest / polish manifest
-9. target page ornament/display override when present
-10. `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
-11. page README/production evidence when relevant
+8. target page manifest / polish manifest / latest page override
+9. `docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md`
+10. page README/production evidence when relevant
 
-For P02, latest owner override is:
-`assets/rurubu-v30/p02/post-figma-review-20260903-manifest.json`
-
-Supporting recovered history (not execution authority):
+Supporting recovered history, not execution authority:
 `docs/rurubu-v30/HISTORICAL-LESSON-RECONCILIATION-20260903.md`
 
 Newest explicit owner feedback wins.
 
 Current precedence:
-`owner feedback → latest page-specific owner override → publication display system / page ornament authority → global ornament art direction → visual-polish → true-alpha policy → older generic/root/page-main language`
+`owner feedback → latest page-specific authority → publication display system / page ornament authority → global ornament art direction → visual-polish → true-alpha policy → older generic/root/page-main language`
 
 ## Workflow ownership
 
 ### ChatGPT
-- feedback / Visual Master / live Figma screenshot review
-- Root/shared/page authority correction
+- owner feedback / Visual Master / live Figma review
+- Root/shared/page authority improvement
 - stale-rule/contradiction cleanup
 - Codex handoff
-- post-build review
+- post-build live Figma review
 
 ### Codex
 - production ImageGen
@@ -45,7 +41,7 @@ Current precedence:
 - screenshots/exports
 - Drive/Git production evidence
 
-ChatGPT does not perform production Figma/ImageGen writes unless the owner explicitly reassigns them.
+ChatGPT does not perform production Figma/ImageGen writes unless explicitly reassigned.
 
 ## Figma authority
 
@@ -61,110 +57,98 @@ Page: `V30_FINAL_PRODUCTION`
 - P07 `3535:19`
 - P08 `3535:21`
 
-## System architecture
+## System architecture — current
 
-### Rurubu / ornament
-
+Ornament/art direction:
 `RURUBU_EDITORIAL_DNA → V30_ART_DIRECTION → PAGE_VISUAL_LANGUAGE → ORNAMENT_FAMILY → ASSET_INSTANCE`
 
-Plan globally, calibrate families early, produce final page-specific ornaments in context. Do not pre-generate a giant final icon library.
+Production strategy:
+`PLAN_GLOBALLY_CALIBRATE_UPFRONT_PRODUCE_CONTEXTUALLY`
 
-For page-specific major ornaments, exact source reuse is now a separate gate:
-- compare source SHA-256 when available;
-- inspect live Figma `imageHash` when carry-over is possible;
-- exact source reuse across distinct page-specific roles fails unless explicitly declared shared/recurring.
+Display roles are classified by editorial role, mutability, saliency and reuse scope:
+- `GENERATED_DISPLAY_ASSET`
+- `NATIVE_TEXT`
+- `SHARED_PUBLICATION_COMPONENT`
+- `PAGE_SPECIFIC_ORNAMENT`
+- `PHOTO`
 
-Gate: `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS`.
+Before design lock, live Figma must match the declared role: `LIVE_ROLE_IMPLEMENTATION_PASS`.
 
-### Display roles
+Page-specific major ornaments must not silently reuse exact prior-page sources: `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS`.
 
-Classify by editorial role, mutability and saliency, not by whether an element contains text:
+Floating generated art follows the true-alpha preflight policy; checkerboard RGB is never accepted as transparency.
 
-- `GENERATED_DISPLAY_ASSET`: short locked high-saliency authored title/ribbon/name-label art when current page authority explicitly chooses it
-- `NATIVE_TEXT`: long/variable/TBD/personal/frequently changing or not-copy-locked copy
-- `SHARED_PUBLICATION_COMPONENT`: recurring cross-page furniture such as PAGE badge
-- `PAGE_SPECIFIC_ORNAMENT`: local decorative/editorial art
-- `PHOTO`: replaceable photo/proxy
+## Shared PAGE badge — HARD
 
-Canonical: `assets/rurubu-v30/publication-display-system-manifest.json`.
+PAGE 01 / 02 / 03... uses one real Figma component system:
 
-A role declaration is not enough. Before design lock, inspect live Figma and confirm the actual node/source matches the declared role.
+`PAGE_BADGE_SHARED_MASTER = 3772:2`
 
-Gate: `LIVE_ROLE_IMPLEMENTATION_PASS`.
+Only the controlled page-number property changes. Do not independently generate/redraw a PAGE badge per page.
 
-### Shared PAGE badge — HARD
+## P01 — DESIGN LOCKED
 
-PAGE 01 / 02 / 03... is one publication component system.
+Frame `3535:7`.
 
-Preferred implementation:
-`one PAGE_BADGE_SHARED_MASTER → controlled page-number variable/property → instances across pages`
+Shared PAGE migration is complete. Do not reopen unrelated P01 design.
 
-Do not independently generate/redesign a PAGE badge per page.
-
-P01 PAGE 01 is a calibration reference; migrate P01/P02 to the shared master and use the same master for later pages.
-
-`SHARED_PUBLICATION_COMPONENT_PASS` requires actual master/source provenance, not naming or visual similarity alone.
-
-## P01 — LOCKED
-
-P01 `3535:7` remains accepted. Its PAGE badge alone was migrated to instance `3773:2` of shared master `3772:2`; no other P01 object changed.
-
-Do not touch unrelated P01 design/photo/copy/ornament work.
-
-`FINAL_PHOTO_QA_PENDING = YES`
-`PRINT_READY = NO`
-
-## P02 — DESIGN COMPLETE AFTER FINAL REWORK
-
-Current screenshot after Codex commit `d730f6b60abd130c3b2e2764a2f40d3bf63df5cc` was reviewed directly in Figma.
-
-### Preserve
-
-- current accepted five rebuilt top/Q2 ornament assets, unless integrated QA later exposes a direct conflict
-- SHOGO left/blue, SHIORI right/pink
-- three clean photo slots/proxies
-- profile sheets
-- Q1/Q2 structure; Q1 one inset photo, Q2 none
-- profile/Q&A TBD/body copy native
-- border/background depth
-- P03-P08 untouched
-
-### Generated display targets — COMPLETE
-
-- `ふたりのプロフィール` → `GENERATED_DISPLAY_ASSET`
-- `私たちのこと、少しだけ紹介します♪` ribbon → `GENERATED_DISPLAY_ASSET`
-- `SHOGO` name label → `GENERATED_DISPLAY_ASSET` family
-- `SHIORI` name label → `GENERATED_DISPLAY_ASSET` family
-
-All four are installed as authored image assets with exact canonical copy recorded in `assets/rurubu-v30/p02/production/display/manifest.json`.
-
-### Shared PAGE badge — PASS
-
-P01 and P02 use instances `3773:2` and `3773:9` of the same Figma component master `3772:2`. Only the controlled page-number property differs.
-
-### Page-specific bottom-left tropical — PASS
-
-P02 now uses image hash `7cb821ff0a0dc84928231fa73e05c0bed3a63350`; P01 remains `c4300f9b1f5bf8607ec72da41aa064c2bf52e155`. Exact carry-over is closed.
-
-### Current gates
-
-- five-target calibrated ornament rebuild = `PASS_PRESERVED_AFTER_INTEGRATED_REVIEW`
-- `DISPLAY_ROLE_CLASSIFICATION_PASS = PASS`
-- `LIVE_ROLE_IMPLEMENTATION_PASS = PASS`
-- `DISPLAY_ART_QUALITY_PASS = PASS`
-- `SHARED_PUBLICATION_COMPONENT_PASS = PASS`
-- `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS = PASS`
-- `VISUAL_CARRYOVER_PASS = PASS`
-- `TRUE_ALPHA_PREFLIGHT_PASS = PASS`
-- `REFERENCE_DELTA_PASS = PASS_AFTER_FINAL_INTEGRATED_REVIEW`
 - `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-P02 design is locked. Remaining work is final owner-photo replacement and final-photo/print QA.
+## P02 — DESIGN LOCKED
 
-## P03+
+Frame `3535:9`.
 
-Inventory/planning may continue. Final page production waits for direct page review and current authority.
+Latest final rework is complete and was reviewed directly in Figma.
+Current P02 authority/evidence remains under `assets/rurubu-v30/p02/`.
 
-For every future page lock, the new live-role, shared-component and exact-source fingerprint gates apply before `FIGMA_DESIGN_COMPLETE = YES`.
+Important completed systemic fixes:
+- high-saliency title/ribbon/name labels implemented as current display authority requires
+- P01/P02 share real PAGE master provenance
+- exact P01 floral carry-over removed
+- calibrated P02 ornament rebuild preserved
+
+- `FIGMA_DESIGN_COMPLETE = YES`
+- `FINAL_PHOTO_QA_PENDING = YES`
+- `PRINT_READY = NO`
+
+## P03 — READY FOR CODEX PRODUCTION
+
+Frame: `3535:11`
+Role: `OUR STORY + Q3/Q4 / STORY_TIMELINE_EDITORIAL_PAGE`
+Visual Master: `assets/rurubu-v30/p03/P03.png`
+
+Direct live Figma review on 2026-09-03 confirmed P03 is currently a blank warm field. Build into this existing protected frame; do not create a duplicate P03.
+
+Current page authority:
+`assets/rurubu-v30/p03/polish-manifest.json`
+
+Current execution handoff:
+`docs/rurubu-v30/CODEX-P03-PRODUCTION-20260903.md`
+
+Key P03 decisions:
+- `OUR STORY` and `ふたりのこれまで♡` are coordinated generated display assets
+- 1→5 timeline labels form one coordinated but non-cloned display family
+- timeline body copy remains native/reference-only
+- Q3/Q4 are related but non-identical generated paper vessels; question/answer copy remains native until approved
+- exactly five replaceable photo roles; step 5 intentionally has no support photo
+- one continuous story-route motif spans the timeline
+- PAGE03 must be instance of shared master `3772:2`, number `03`
+- P03 page-specific ornaments may reuse V30 family grammar but not exact P01/P02 page-specific image bytes by convenience
+- Wedding Day may use locked `2026.10.24`
+
+Current state:
+- `READY_FOR_CODEX_PRODUCTION`
+- `FIGMA_DESIGN_COMPLETE = NO`
+- `FINAL_COPY_QA_PENDING = YES`
+- `FINAL_PHOTO_QA_PENDING = YES`
+- `PRINT_READY = NO`
+
+After Codex completion, ChatGPT must review the actual P03 Figma frame before design lock.
+
+## P04-P08
+
+Do not start final production until each page Visual Master is directly reviewed and current page authority is prepared.
+
+Planning/inventory may continue, but final production requires the same live-role, shared-component, fingerprint, art-direction, alpha, copy/photo and final visual gates before `FIGMA_DESIGN_COMPLETE = YES`.
