@@ -1,13 +1,13 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "project": "Rurubu WEDDING V30",
   "status": "CURRENT_SYSTEMIC_ORNAMENT_AUTHORITY",
   "scope": "P01 onward, including future added pages",
-  "purpose": "Keep ornament production rooted in Rurubu-style editorial design, coherent as Rurubu WEDDING V30, adaptable by page role, scalable when pages are added, and protected from accidental exact-asset carry-over.",
+  "purpose": "Keep ornament production rooted in Rurubu-style editorial design, coherent as Rurubu WEDDING V30, adaptable by page role, scalable when pages are added, protected from accidental exact-asset carry-over, and protected from cross-page illustration-genre drift.",
   "authorityModel": {
-    "hierarchy": ["RURUBU_EDITORIAL_DNA", "RURUBU_WEDDING_V30_ART_DIRECTION", "PAGE_VISUAL_LANGUAGE", "ORNAMENT_FAMILY", "ASSET_INSTANCE"],
-    "principle": "P01 is a successful calibration reference, not the root authority. The root is the Rurubu-inspired editorial language; P01-P08 Visual Masters collectively calibrate how V30 translates that language.",
-    "hardReject": "Do not make all later pages imitate P01 cover density, composition or ornament count merely for consistency."
+    "hierarchy": ["RURUBU_EDITORIAL_DNA", "RURUBU_WEDDING_V30_ART_DIRECTION", "CROSS_PAGE_STYLE_FAMILY", "PAGE_VISUAL_LANGUAGE", "ORNAMENT_FAMILY", "ASSET_INSTANCE"],
+    "principle": "P01/P02 are current live style anchors for the active V30 publication family, not layout templates. Target-page Visual Masters control local composition and hierarchy but do not license unrelated illustration genres.",
+    "hardReject": "Do not make later pages imitate P01/P02 composition, but also do not let a later page invent watercolor/vintage/painterly/SVG genres that break publication-family continuity."
   },
   "rurubuEditorialDna": {
     "status": "HARD / TOP_LEVEL",
@@ -15,116 +15,118 @@
       "EDITORIAL_FIRST: decoration exists to help photos, headings, information blocks and reading flow; a beautiful standalone illustration is not automatically a good magazine ornament.",
       "DENSE_BUT_READABLE: lively information density with strong size contrast, calm zones and clear hierarchy instead of uniform decorative noise.",
       "PHOTO_AND_INFORMATION_LED: ornaments support editorial content and do not become the main subject unless the page Visual Master explicitly gives them that role.",
-      "MIXED_MEDIA_UNDER_ONE_ART_DIRECTION: photos, cutouts, doodles, icons, stamps, routes, paper objects and illustrations may mix; they need not share one literal drawing style, but they must feel selected and art-directed by the same publication team.",
+      "MIXED_MEDIA_UNDER_ONE_ART_DIRECTION: photos, cutouts, doodles, icons, stamps, routes, paper objects and illustrations may mix, but high-saliency systems must remain inside one bounded publication-family realism/texture range.",
       "PLAYFUL_EDITORIAL_UTILITY: arrows, routes, stickers, cutouts, badges and small motifs should guide attention, connect modules, activate edges or add narrative meaning rather than simply fill empty space.",
       "TACTILE_PRINT_CHARACTER: use controlled hand-drawn/printed/paper character where useful, without turning the page into fine-art watercolor, vintage poster art or generic digital sticker packs.",
       "LOCAL_VARIATION_WITH_GLOBAL_COHERENCE: page roles may change density and motif mix while remaining recognizably part of the same magazine."
     ],
     "hardRejects": [
       "standalone artwork whose beauty dominates its editorial usefulness",
-      "high-detail botanical art used as a corner ornament when it reads like an independent illustration plate",
-      "retro poster illustration inserted into a lighter editorial page without a deliberate page-role reason",
+      "high-detail botanical art used as a major page ornament when it reads like an independent illustration plate",
+      "retro poster or watercolor illustration inserted into the V30 graphic family without an explicit publication-level reason",
       "generic stock/clipart packs",
       "SaaS-like flat icon systems",
-      "forcing every ornament into an identical drawing style and losing Rurubu-like mixed-media energy",
-      "mixing unrelated illustration genres with no shared editorial treatment"
+      "mixing painterly/vintage and flat-flowchart genres on one page",
+      "forcing every ornament into identical brushwork while also allowing unrelated visual genres to coexist"
     ]
   },
   "v30ArtDirection": {
     "status": "HARD / PROJECT_TRANSLATION",
-    "principle": "Translate the Rurubu editorial DNA into a joyful travel-wedding publication: bright, warm, tactile, photo-led, playful and print-oriented, but not childish, stock-like or over-illustrated.",
-    "calibrationSources": {
-      "primary": "current P01-P08 Visual Masters as a set",
-      "p01Role": "GLOBAL_STYLE_CALIBRATION_REFERENCE, especially for print tactility, cutout/sticker energy, edge activation and travel-magazine playfulness; not a page-template to clone",
-      "pageSpecific": "the target page Visual Master controls local density, motif choice, scale and calm-vs-busy balance"
-    },
-    "coherenceDimensions": ["editorial usefulness", "line-weight range", "hand-drawn/printed character", "texture amount", "realism range", "shadow/depth restraint", "palette temperature and saturation", "detail density", "cutout/sticker weight", "route/doodle grammar", "micro-accent grammar", "tactile print feeling", "relationship to photography and display/native text"],
-    "controlledVariation": "Different ornament families may use different drawing methods. Consistency means compatible editorial treatment and visual weight, not identical brushwork."
+    "principle": "Translate the Rurubu editorial DNA into a joyful travel-wedding publication: bright, warm, tactile, photo-led, playful and print-oriented, but not childish, stock-like, painterly-vintage or over-illustrated.",
+    "liveStyleAnchors": [
+      {"page": "P01", "figmaNode": "3535:7", "role": "V30_GRAPHIC_STYLE_ANCHOR_NOT_LAYOUT_TEMPLATE"},
+      {"page": "P02", "figmaNode": "3535:9", "role": "V30_INSIDE_PAGE_STYLE_ANCHOR_NOT_LAYOUT_TEMPLATE"}
+    ],
+    "styleDNA": [
+      "bright high-saturation travel-magazine energy",
+      "crisp printed/sticker-like silhouettes",
+      "strong dark outlines or equivalent high-contrast edge definition on high-saliency display art",
+      "white/yellow/bright keylines and controlled dimensional shadows where useful",
+      "clean cream/white paper treatment instead of aged parchment",
+      "bold pink/blue/yellow/green/cyan relationships",
+      "tropical/travel motifs treated as lively editorial cutouts/stickers rather than fine-art botanical/watercolor illustration",
+      "restrained tactile print texture rather than sepia/vintage surface treatment"
+    ],
+    "controlledVariation": "Different pages may vary composition, density and motif mix. They may not change the dominant illustration genre. Consistency means compatible graphic treatment and visual weight, not cloned layouts or identical assets."
+  },
+  "crossPageStyleFamilyPolicy": {
+    "status": "HARD / REQUIRED_BEFORE_DESIGN_LOCK",
+    "gate": "CROSS_PAGE_STYLE_FAMILY_PASS",
+    "comparison": "Compare the current target-page screenshot side-by-side with locked P01/P02 CURRENT before design lock.",
+    "question": "Does this page still look designed by the same V30 publication team even though its local composition is different?",
+    "hardRejects": [
+      "ANTI_CANVA correction that escapes into watercolor/vintage/painterly genre",
+      "aged parchment/scrapbook paper replacing the clean V30 paper family",
+      "realistic botanical or watercolor tropical systems replacing bold editorial cutout/sticker grammar",
+      "retro travel-poster/church illustration becoming a page-specific dominant style",
+      "generic Canva/SVG icon and route systems",
+      "one page containing both painterly-vintage blocks and flat-flowchart/SVG blocks",
+      "individual object quality used to excuse publication-family mismatch"
+    ],
+    "productionRule": "Before broad generation on a new page, generate one representative high-saliency ecology/style sample and compare it against P01/P02. If it fails the family test, regenerate the ecology before producing the rest.",
+    "importantClarification": "P01/P02 are style anchors only. Never copy their page layout, module count, exact tropical clusters or page-specific ornaments."
   },
   "ornamentFamilyRegistry": {
-    "principle": "Families are reusable visual vocabularies, not libraries of identical repeated assets. A page selects or extends a family, then creates locally appropriate variants.",
+    "principle": "Families are reusable visual vocabularies, not libraries of identical repeated assets. A page selects or extends a family, then creates locally appropriate variants inside the V30 style family.",
     "families": [
-      {"id": "TRAVEL_ROUTE_DOODLE", "role": "connect modules, imply movement, activate empty space", "examples": ["dotted route", "dashed route", "small directional marks"], "reuseMode": "grammar shared; exact path/shape normally page-specific"},
-      {"id": "TRAVEL_VEHICLE", "role": "travel cue and narrative accent", "examples": ["airplane", "train", "ship", "car where page role supports it"], "reuseMode": "family character shared; vehicle and pose generated for local page role"},
-      {"id": "TROPICAL_BOTANICAL", "role": "wedding/travel warmth and edge activation", "examples": ["hibiscus", "plumeria", "palm leaves", "monstera"], "reuseMode": "botanical vocabulary may recur, but major clusters must be independently composed"},
-      {"id": "TRAVEL_EPHEMERA", "role": "small editorial storytelling objects", "examples": ["luggage tag", "suitcase", "ticket", "postcard", "stamp", "compass", "envelope"], "reuseMode": "shared material/print treatment; object chosen for page meaning"},
-      {"id": "MICRO_ACCENT", "role": "small rhythm and emphasis", "examples": ["heart", "star", "sparkle", "tiny dot", "small handwritten mark"], "reuseMode": "intentional recurring motif family; exact placement/combination varies"}
-    ],
-    "extensionRule": "A future page may introduce a new ornament family only when its page role cannot be served well by an existing family. The new family must first pass RURUBU_EDITORIAL_DNA_PASS and V30_ART_DIRECTION_PASS before page assets are produced."
+      {"id": "TRAVEL_ROUTE_DOODLE", "role": "connect modules, imply movement, activate empty space", "examples": ["dotted route", "dashed route", "small directional marks"], "reuseMode": "grammar shared; exact path/shape normally page-specific", "styleGuard": "must read as editorial movement, not flowchart connector grammar"},
+      {"id": "TRAVEL_VEHICLE", "role": "travel cue and narrative accent", "examples": ["airplane", "train", "ship", "car where page role supports it"], "reuseMode": "family character shared; vehicle and pose generated for local page role", "styleGuard": "bold V30 editorial cutout/sticker treatment; avoid generic flat SVG"},
+      {"id": "TROPICAL_BOTANICAL", "role": "wedding/travel warmth and edge activation", "examples": ["hibiscus", "plumeria", "palm leaves", "monstera"], "reuseMode": "botanical vocabulary may recur, but major clusters must be independently composed", "styleGuard": "graphic editorial cutout/sticker energy; reject watercolor botanical plates or realistic fine-art clusters"},
+      {"id": "TRAVEL_EPHEMERA", "role": "small editorial storytelling objects", "examples": ["luggage tag", "suitcase", "ticket", "postcard", "stamp", "compass", "envelope"], "reuseMode": "shared material/print treatment; object chosen for page meaning", "styleGuard": "clean print object, not aged scrapbook unless publication-wide authority changes"},
+      {"id": "MICRO_ACCENT", "role": "small rhythm and emphasis", "examples": ["heart", "star", "sparkle", "tiny dot", "small handwritten mark"], "reuseMode": "intentional recurring motif family; exact placement/combination varies", "styleGuard": "integrate into nearby ecology where practical; do not accumulate isolated icon-pack pieces"}
+    ]
+  },
+  "groupedEcologyPolicy": {
+    "status": "HARD / P03_LESSON_SYSTEMIC",
+    "principle": "When multiple fixed elements depend on one another for visual meaning, generate/design them as a larger editorial ecology instead of isolated icon assets.",
+    "typicalUnits": ["header ecology", "Q-paper family", "story/timeline ecology", "bottom closure"],
+    "keepSeparate": ["replaceable photos", "long/personal/TBD body copy", "confirmed shared publication components"],
+    "microOrnamentRule": "When an isolated camera/palm/plumeria/route/icon looks weak, do not automatically regenerate another isolated icon. Integrate it into the nearest ecology when useful or remove it.",
+    "hardRejects": ["clipart assembly", "five separate step badges plus an independent connector line", "whole-page flatten", "bundling replaceable photography or pending personal copy merely to reduce layer count"]
   },
   "crossPageReuseFingerprintPolicy": {
     "status": "HARD / REQUIRED_BEFORE_PAGE_LOCK",
-    "reason": "P02 live review found P02_BOTTOM_LEFT_TROPICAL_CLUSTER using the exact same Figma imageHash as P01_LEFT_TROPICAL_CLUSTER while being labeled REQUALIFIED_CARRYOVER. Visual review alone did not reliably catch literal source reuse.",
     "principle": "Page-specific ornament families may repeat visual grammar, but major page-specific assets must not silently reuse identical source bytes across pages.",
-    "requiredChecks": [
-      "for active raster ornaments, compare source sha256 when available",
-      "inspect Figma IMAGE fills/imageHash for page-specific ornament targets and relevant prior locked pages when carry-over/reuse is possible",
-      "record declared reuse intent for any exact match",
-      "if exact hash/source match exists between distinct PAGE_SPECIFIC_ORNAMENT roles, fail unless the repetition is explicitly approved as a shared/recurring asset"
-    ],
-    "allowedExactReuse": [
-      "SHARED_PUBLICATION_COMPONENT implemented from one master",
-      "explicitly shared border/frame/background system",
-      "small recurring MICRO_ACCENT whose exact repetition is intentionally declared and visually appropriate"
-    ],
-    "notAllowedByDefault": [
-      "major tropical/floral clusters",
-      "airplane/vehicle ornaments",
-      "suitcase/travel-ephemera hero accents",
-      "large route compositions",
-      "page-role-specific decorative clusters"
-    ],
-    "similarityRule": "Different hashes do not automatically pass. Near-duplicate composition still requires normal visual REUSE_INTENT review.",
-    "gate": "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS",
-    "hardRejects": [
-      "same imageHash/source sha reused in distinct page-specific major ornament roles with no explicit shared declaration",
-      "REQUALIFIED_CARRYOVER based only on naming, resizing, cropping or recoloring while the active underlying image source is identical",
-      "claiming no reuse without inspecting live Figma/source provenance when a carry-over asset is involved"
-    ]
-  },
-  "inventoryArchitecture": {
-    "principle": "Inventory globally before broad production, but inventory ORNAMENT JOBS/SLOTS rather than pre-generating every final icon.",
-    "inventoryFields": ["page", "location/role", "editorial job", "candidate family", "shared-vs-page-specific", "saliency", "expected size class", "interaction with photo/text", "required/optional", "visual-master reviewed status"],
-    "currentScope": "Inventory all reviewed P01-P08 Visual Masters progressively. Pages not yet directly rereviewed remain INVENTORY_PENDING rather than receiving invented ornament lists from prose.",
-    "futurePages": "P09+ appends new ornament jobs to the same inventory. Existing family coverage is checked first; family extension is allowed when justified.",
-    "benefit": "This makes future page growth cheap without creating a giant unused icon library or forcing new pages to copy old page assets."
+    "requiredChecks": ["compare source sha256 when available", "inspect Figma imageHash/source provenance where carry-over is possible", "record declared reuse intent for exact matches"],
+    "allowedExactReuse": ["SHARED_PUBLICATION_COMPONENT", "explicit shared border/frame/background system", "small recurring MICRO_ACCENT explicitly declared shared"],
+    "notAllowedByDefault": ["major tropical/floral clusters", "airplane/vehicle ornaments", "large route compositions", "page-role-specific decorative clusters"],
+    "gate": "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS"
   },
   "productionArchitecture": {
     "strategy": "PLAN_GLOBALLY_CALIBRATE_UPFRONT_PRODUCE_CONTEXTUALLY",
-    "whyNotGenerateEverythingUpfront": [
-      "final scale, crop, negative space and overlap depend on the actual page composition",
-      "unused pre-generated assets create sunk-work pressure and encourage inappropriate carry-over",
-      "page Visual Masters or copy/photo changes can make early final assets obsolete",
-      "large one-shot batches tend to drift into multiple illustration genres or a generic asset-pack look"
-    ],
-    "whyNotPurePageByPage": [
-      "without an upfront family system, each page can invent a new style",
-      "shared publication furniture and recurring motif grammar drift",
-      "future pages cannot reliably reuse the visual language"
-    ],
     "phases": [
-      {"id": "PHASE_0_GLOBAL_INVENTORY", "when": "before scaling production across many pages", "action": "Inventory visible/likely ornament slots across all currently reviewed page Visual Masters. Record role, family candidate, shared-vs-page-specific nature, saliency and whether it is actually needed. Do not generate final art here.", "futurePageRule": "When P09+ is added, append that page's ornament-slot inventory instead of redesigning the whole system."},
-      {"id": "PHASE_1_FAMILY_CALIBRATION", "action": "For each materially used family, establish only 1-2 representative calibration anchors or reference treatments. Judge them against Rurubu editorial DNA and V30 art direction before producing many variants.", "hardRule": "Calibration anchors are style references, not assets that must be copied into every page."},
-      {"id": "PHASE_2_SHARED_COMPONENTS", "action": "Create true cross-page common components once as a coherent system. PAGE badge and other explicitly shared publication furniture belong here, not in page ornament generation."},
-      {"id": "PHASE_3_PAGE_CONTEXT_PRODUCTION", "action": "Produce final page-specific ornament variants only after the target page hierarchy, photos, display/native text and negative-space needs are known. Prefer small batches by family within the page or spread so related variants can be compared together."},
-      {"id": "PHASE_4_REGISTRY_WRITEBACK", "action": "Accepted assets write back family id, page role, local job, reuse intent, art-direction notes, source fingerprint/hash when available and alpha status. Rejected assets do not become future references merely because they exist."}
-    ],
-    "batchingRule": "Batch the DESIGN SYSTEM and inventory early; do not batch all FINAL ICONS early. For final assets, batch related variants together only when shared context makes comparison useful."
+      {"id": "PHASE_0_GLOBAL_INVENTORY", "action": "Inventory ornament jobs/slots across reviewed Visual Masters; do not generate all final art."},
+      {"id": "PHASE_1_FAMILY_AND_STYLE_CALIBRATION", "action": "Establish 1-2 representative family/style anchors. For new pages, compare one representative high-saliency ecology against P01/P02 before broad generation."},
+      {"id": "PHASE_2_SHARED_COMPONENTS", "action": "Create confirmed cross-page furniture once as shared systems."},
+      {"id": "PHASE_3_PAGE_CONTEXT_PRODUCTION", "action": "Produce page-specific variants after target hierarchy/photos/copy/negative space are known; prefer grouped ecologies where dependencies are strong."},
+      {"id": "PHASE_4_REGISTRY_WRITEBACK", "action": "Write back family, page role, reuse intent, style-family pass, source fingerprints and alpha status."}
+    ]
   },
   "futurePageScalability": {
-    "pageAdditionWorkflow": ["read new page Visual Master", "inventory ornament slots and editorial jobs", "map each need to an existing family when appropriate", "check exact-source reuse risk against prior pages", "if no existing family fits, request a family extension instead of inventing an untracked style", "produce page-specific variants in context", "write accepted family/asset decisions and fingerprints back to registry"],
-    "hardRule": "Adding a page must not require recreating all prior ornament assets or copying a previous page's ornament set."
+    "pageAdditionWorkflow": [
+      "read new page Visual Master for local composition",
+      "inspect locked P01/P02 for V30 style-family calibration",
+      "inventory ornament jobs and grouped ecologies",
+      "generate one calibration ecology/sample first",
+      "fail immediately if it drifts to watercolor/vintage/painterly/Canva-SVG/unrelated genre",
+      "map needs to existing ornament families where appropriate",
+      "check exact-source reuse risk",
+      "produce contextual page-specific variants",
+      "write accepted style/family/fingerprint decisions back"
+    ],
+    "hardRule": "Adding a page must not require copying prior layouts or inventing a new dominant art genre."
   },
   "evaluationGates": {
     "RURUBU_EDITORIAL_DNA_PASS": "Does the ornament function as Rurubu-style editorial material rather than merely good standalone art?",
-    "V30_ART_DIRECTION_PASS": "Does it feel compatible with the Rurubu WEDDING V30 publication as a whole?",
-    "PAGE_ROLE_FIT_PASS": "Is its visual weight, motif and density appropriate for this specific page role and local position?",
+    "V30_ART_DIRECTION_PASS": "Does it fit the Rurubu WEDDING V30 project translation?",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "Does the target page remain in the active P01/P02-calibrated V30 graphic family without copying their layout?",
+    "PAGE_ROLE_FIT_PASS": "Is its visual weight, motif and density appropriate for this specific page role?",
     "ORNAMENT_FAMILY_COHERENCE_PASS": "Does it belong to its declared family while remaining a locally distinct variant?",
-    "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS": "For page-specific major ornaments, is there no undeclared exact source/imageHash reuse across pages?",
-    "ORNAMENT_OBJECT_QUALITY_PASS": "Is the individual asset itself well drawn/designed at the required A5 use size?",
-    "REUSE_INTENT_PASS": "If a motif repeats, is the repetition intentional publication language rather than convenience/carry-over?",
-    "TRUE_ALPHA_PREFLIGHT_PASS": "If floating transparency is required, does the production asset satisfy the current true-alpha generation policy before Figma placement?"
+    "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS": "Is there no undeclared exact major source reuse across pages?",
+    "ORNAMENT_OBJECT_QUALITY_PASS": "Is the asset itself well designed at required A5 size?",
+    "REUSE_INTENT_PASS": "Is repetition intentional publication language rather than convenience?",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "Does floating art satisfy the current true-alpha policy?"
   },
-  "reviewOrder": ["RURUBU_EDITORIAL_DNA_PASS", "V30_ART_DIRECTION_PASS", "PAGE_ROLE_FIT_PASS", "ORNAMENT_FAMILY_COHERENCE_PASS", "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS", "ORNAMENT_OBJECT_QUALITY_PASS", "REUSE_INTENT_PASS", "TRUE_ALPHA_PREFLIGHT_PASS"],
-  "antiPattern": "Do not approve a beautiful asset at ORNAMENT_OBJECT_QUALITY_PASS if it already failed a higher-level editorial/art-direction/fingerprint gate."
+  "reviewOrder": ["RURUBU_EDITORIAL_DNA_PASS", "V30_ART_DIRECTION_PASS", "CROSS_PAGE_STYLE_FAMILY_PASS", "PAGE_ROLE_FIT_PASS", "ORNAMENT_FAMILY_COHERENCE_PASS", "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS", "ORNAMENT_OBJECT_QUALITY_PASS", "REUSE_INTENT_PASS", "TRUE_ALPHA_PREFLIGHT_PASS"],
+  "antiPattern": "Do not approve a beautiful object if it fails publication-family coherence. Technical cleanliness, different hash or local object quality never overrides CROSS_PAGE_STYLE_FAMILY_PASS."
 }
