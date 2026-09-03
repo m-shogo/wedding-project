@@ -1,9 +1,9 @@
 {
-  "schemaVersion": 8,
+  "schemaVersion": 9,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "role": "OUR STORY + Q3/Q4",
-  "status": "REOPENED_FOR_V30_STYLE_REALIGNMENT_AND_GROUPED_STORY_ECOLOGY",
+  "status": "DESIGN_LOCKED_AFTER_V30_STYLE_REALIGNMENT",
   "date": "2026-09-03",
   "authorityPrecedence": "Newest explicit owner feedback and direct live-Figma comparison against locked P01/P02 CURRENT pages override earlier grouped-regeneration PASS declarations and older P03 main-manifest execution details.",
   "visualMaster": {
@@ -136,18 +136,18 @@
     "overallP03InformationArchitecture": true
   },
   "acceptanceState": {
-    "CROSS_PAGE_STYLE_FAMILY_PASS": "FAIL_CURRENT_P03",
-    "ECOLOGY_FIT_PASS": "REOPENED",
-    "ANTI_FLOWCHART_PASS": "FAIL_CURRENT_TIMELINE",
-    "ANTI_CANVA_SVG_PASS": "REOPENED",
-    "ANTI_CLIPART_PASS": "REOPENED",
-    "ORNAMENT_FAMILY_PASS": "REOPENED",
-    "REFERENCE_DELTA_PASS": "REOPENED_AFTER_STYLE_REALIGNMENT",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS",
+    "ECOLOGY_FIT_PASS": "PASS",
+    "ANTI_FLOWCHART_PASS": "PASS",
+    "ANTI_CANVA_SVG_PASS": "PASS",
+    "ANTI_CLIPART_PASS": "PASS",
+    "ORNAMENT_FAMILY_PASS": "PASS",
+    "REFERENCE_DELTA_PASS": "PASS",
     "PHOTO_ROLE_PASS": "PASS",
     "COPY_SAFETY_PASS": "PASS_PENDING_FINAL_COPY",
-    "ALPHA_MATERIAL_PASS": "RECHECK_NEW_GROUPED_BLOCKS",
-    "FINGERPRINT_COLLISION_PASS": "RECHECK_NEW_GROUPED_BLOCKS",
-    "FIGMA_DESIGN_COMPLETE": false,
+    "ALPHA_MATERIAL_PASS": "PASS",
+    "FINGERPRINT_COLLISION_PASS": "PASS",
+    "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_COPY_QA_PENDING": true,
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false
@@ -165,5 +165,6 @@
     "run alpha/material and fingerprint checks only on new grouped blocks",
     "sync Drive/Git/PR once and stop"
   ],
-  "completionCondition": "P03 may return to FIGMA_DESIGN_COMPLETE=YES only when direct P01/P02/P03 side-by-side review passes CROSS_PAGE_STYLE_FAMILY_PASS, the story/timeline reads as one authored magazine-story ecology rather than a diagram, P03 local composition remains intact, and photos/pending body copy remain separately editable/replaceable."
+  "productionEvidence": "assets/rurubu-v30/p03/production/v30-style-realignment/manifest.json",
+  "completionCondition": "SATISFIED_2026-09-03: direct P01/P02/P03 comparison passes; Story Timeline is one authored ecology; P03 composition, five photo roles, native pending copy, shared PAGE03 and border remain intact."
 }

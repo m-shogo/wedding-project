@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `V30_ONLY / P01-P02_LOCKED / P03_STYLE_REALIGNMENT_REOPENED / 2026-09-03`
+Status: `V30_ONLY / P01-P03_DESIGN_LOCKED / 2026-09-03`
 
 V30 is the sole current production version. V20 is history/reference only. Do not create V31 unless explicitly requested.
 
@@ -129,14 +129,29 @@ Use as a V30 inside-page style anchor, not a composition template.
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-## P03 — REOPENED FOR V30 STYLE REALIGNMENT + GROUPED STORY ECOLOGY
+## P03 — DESIGN LOCKED AFTER V30 STYLE REALIGNMENT
 
 Frame: `3535:11`
 Role: `OUR STORY + Q3/Q4 / STORY_TIMELINE_EDITORIAL_PAGE`
 Visual Master: `assets/rurubu-v30/p03/P03.png`
 Current authority: `assets/rurubu-v30/p03/polish-manifest.json`
+Production evidence: `assets/rurubu-v30/p03/production/v30-style-realignment/manifest.json`
 
-### Why P03 is reopened
+The bounded realignment is complete. Header, Q3/Q4, the grouped Story Timeline and Bottom closure now use the P01/P02 V30 graphic family while preserving P03 composition, five photo roles, native pending copy and the shared PAGE03 instance.
+
+- `CROSS_PAGE_STYLE_FAMILY_PASS = PASS`
+- `ECOLOGY_FIT_PASS = PASS`
+- `ANTI_FLOWCHART_PASS = PASS`
+- `ANTI_CANVA_SVG_PASS = PASS`
+- `ANTI_CLIPART_PASS = PASS`
+- `ORNAMENT_FAMILY_PASS = PASS`
+- `REFERENCE_DELTA_PASS = PASS`
+- `FIGMA_DESIGN_COMPLETE = YES`
+- `FINAL_COPY_QA_PENDING = YES`
+- `FINAL_PHOTO_QA_PENDING = YES`
+- `PRINT_READY = NO`
+
+### Resolved realignment diagnosis
 
 Direct P01/P02/P03 live comparison found that P03 currently mixes two incompatible non-V30 tendencies:
 
@@ -145,9 +160,9 @@ Direct P01/P02/P03 live comparison found that P03 currently mixes two incompatib
 
 So the issue is no longer “timeline only.” P03 requires a bounded style realignment while preserving its information architecture, photos and pending native copy.
 
-### Owner-rejected current targets
+### Replaced owner-rejected targets
 
-REWORK:
+Removed/replaced in the locked result:
 - `P03_HEADER_ECOLOGY / GROUPED_REGENERATION / COPY_LOCKED`
 - `P03_Q3_EDITORIAL_FAMILY / GROUPED_REGENERATION / Q3_ONLY`
 - `P03_Q4_EDITORIAL_FAMILY / GROUPED_REGENERATION / Q4_ONLY`
@@ -231,14 +246,14 @@ Do not regenerate rejected isolated icons as more isolated icons.
 
 ### Current P03 gates
 
-- `CROSS_PAGE_STYLE_FAMILY_PASS = FAIL_CURRENT_P03`
-- `ECOLOGY_FIT_PASS = REOPENED`
-- `ANTI_FLOWCHART_PASS = FAIL_CURRENT_TIMELINE`
-- `ANTI_CANVA_SVG_PASS = REOPENED`
-- `ANTI_CLIPART_PASS = REOPENED`
-- `ORNAMENT_FAMILY_PASS = REOPENED`
-- `REFERENCE_DELTA_PASS = REOPENED_AFTER_STYLE_REALIGNMENT`
-- `FIGMA_DESIGN_COMPLETE = NO`
+- `CROSS_PAGE_STYLE_FAMILY_PASS = PASS`
+- `ECOLOGY_FIT_PASS = PASS`
+- `ANTI_FLOWCHART_PASS = PASS`
+- `ANTI_CANVA_SVG_PASS = PASS`
+- `ANTI_CLIPART_PASS = PASS`
+- `ORNAMENT_FAMILY_PASS = PASS`
+- `REFERENCE_DELTA_PASS = PASS`
+- `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_COPY_QA_PENDING = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`

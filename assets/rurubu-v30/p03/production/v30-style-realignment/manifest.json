@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P03",
+  "date": "2026-09-03",
+  "status": "LOCKED_AFTER_V30_STYLE_REALIGNMENT",
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "frameId": "3535:11",
+    "frameName": "V30 P03 / OUR STORY / V30 STYLE REALIGNMENT LOCKED"
+  },
+  "calibration": {
+    "representativeEcology": "calibration/V30_P03_HEADER_ECOLOGY_CALIBRATION.png",
+    "liveComparison": "qa/V30_P03_HEADER_STYLE_CALIBRATION_COMPARISON.jpg",
+    "result": "CROSS_PAGE_STYLE_FAMILY_PASS"
+  },
+  "acceptedAssets": [
+    {"role": "HEADER_ECOLOGY", "path": "final/V30_P03_HEADER_ECOLOGY_V30_ALIGNED.png", "figmaNode": "3793:20", "imageHash": "bf12ac7d4fcc31ef94fe9d5d5fa4f8a197e532d8", "sha256": "b2e1994bbca1f8cce4c346bc808a98916c8db6221da920bf150e9104298ac20e"},
+    {"role": "Q3_EDITORIAL_FAMILY", "path": "final/V30_P03_Q3_EDITORIAL_FAMILY_V30_ALIGNED.png", "figmaNode": "3794:21", "imageHash": "ebc227edc224e6e7ee5a8d10a89a38b58bb3d766", "sha256": "6e71af1c1e2c68eee20da16c20ecc7decb6263d1fcdd78dc8b43526186b2c6d1"},
+    {"role": "Q4_EDITORIAL_FAMILY", "path": "final/V30_P03_Q4_EDITORIAL_FAMILY_V30_ALIGNED.png", "figmaNode": "3794:20", "imageHash": "77bb6a1f40c5029ab0d10872d472c0ffad580cbb", "sha256": "4fe7bccaba03c351fec7d213d6b3f838cfa991a88b787e1ee4882d35e55f40be"},
+    {"role": "STORY_TIMELINE_ECOLOGY_V2", "path": "final/V30_P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED_V2.png", "figmaNode": "3797:20", "imageHash": "8c251e8e938cd2e401e175e4669d243cea9535fd", "sha256": "2184e369da65bdb32b2982b9f81d091c13c686df85bdd36bcfe39c0bd4fc8ea2"},
+    {"role": "BOTTOM_CLOSURE", "path": "final/V30_P03_BOTTOM_CLOSURE_V30_ALIGNED.png", "figmaNode": "3794:22", "imageHash": "6329d981fcbf4b1d9d95db4e66b70fdefc8225ae", "sha256": "0c161539d7df38e7bdbc4033d27c9773fd41675a07747fe81cc95c9876dc1866"}
+  ],
+  "qa": {
+    "finalScreenshot": "qa/V30_P03_V30_REALIGNMENT_FINAL.png",
+    "crossPageComparison": "qa/V30_P01_P02_P03_FINAL_STYLE_COMPARISON.png",
+    "referenceDelta": "qa/V30_P03_VISUAL_MASTER_REFERENCE_DELTA.png",
+    "a5Review": "qa/V30_P03_A5_REVIEW.png",
+    "grayscaleReview": "qa/V30_P03_GRAYSCALE_REVIEW.png",
+    "alphaLight": "qa/V30_P03_V30_ALIGNED_ALPHA_LIGHT_QA.jpg",
+    "alphaDark": "qa/V30_P03_V30_ALIGNED_ALPHA_DARK_QA.jpg",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": true,
+    "ECOLOGY_FIT_PASS": true,
+    "ANTI_FLOWCHART_PASS": true,
+    "ANTI_CANVA_SVG_PASS": true,
+    "ANTI_CLIPART_PASS": true,
+    "ORNAMENT_FAMILY_PASS": true,
+    "REFERENCE_DELTA_PASS": true,
+    "PHOTO_ROLE_PASS": true,
+    "COPY_SAFETY_PASS": true,
+    "ALPHA_INTEGRITY_PASS": true,
+    "FINGERPRINT_COLLISION_PASS": true,
+    "hiddenObsoleteNodeCount": 0,
+    "duplicateSameJobCount": 0
+  },
+  "preserved": {
+    "photoRoles": 5,
+    "supportPhotosReplaceable": 4,
+    "step5HasPhoto": false,
+    "pendingCopyIsNativeText": true,
+    "pageBadgeInstance": "3782:16",
+    "pageBadgeMaster": "3772:2",
+    "protectedPagesUntouched": ["3535:7", "3535:9", "3535:13", "3535:15", "3535:17", "3535:19", "3535:21"]
+  },
+  "removedLiveNodes": ["3786:20", "3786:21", "3786:22", "3786:23", "3779:20", "3780:14", "3780:15", "3780:17", "3780:19", "3780:21", "3780:23", "3780:25", "3780:26", "3780:27", "3782:14", "3794:23"],
+  "completion": {
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_COPY_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  }
+}
