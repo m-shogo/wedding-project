@@ -19,6 +19,21 @@ V30 is the sole current production version. V20 is history/reference only. Do no
 
 Newest explicit owner feedback wins.
 
+### P03 legacy-main-manifest override — HARD
+
+`assets/rurubu-v30/p03/manifest.json` still contains historical grouped-regeneration status/completion fields and old concrete execution descriptions. For P03, those **status / productionState / completion / old separate-asset execution details are SUPERSEDED**.
+
+The P03 main manifest remains usable only for durable Visual Master analysis, canonical facts, normalized geometry, photo-slot relationships and other non-conflicting reference data.
+
+Current P03 execution/style authority is:
+
+1. newest owner feedback;
+2. this Current Pointer;
+3. `assets/rurubu-v30/p03/polish-manifest.json`;
+4. current systemic art-direction / display / acceptance authorities.
+
+Never resurrect `FIGMA_DESIGN_COMPLETE`, old torn-paper wording, separate timeline-label/route/icon production, or prior grouped-regeneration PASS merely because it still appears in the older P03 main manifest.
+
 ## Workflow ownership
 
 ### ChatGPT
