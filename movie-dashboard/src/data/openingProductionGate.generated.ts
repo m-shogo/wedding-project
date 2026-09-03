@@ -311,7 +311,7 @@ export const openingProductionGate = {
     "assetId": "opening-bgm-main",
     "status": "missing",
     "playable": false,
-    "fileExists": true,
+    "fileExists": false,
     "intakeReceiptCurrent": false,
     "intakeReceiptPath": "out/intake/opening-bgm-intake.json",
     "intakeReceiptBlockerCodes": [
