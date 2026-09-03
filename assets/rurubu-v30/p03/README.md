@@ -13,7 +13,8 @@ P01 `3535:7` and P02 `3535:9` are current **style anchors, not layout templates*
 Current P03 mixes two non-V30 tendencies:
 
 - Header / Q3 / Q4 / Bottom drifted into painterly, vintage, parchment and botanical illustration language;
-- timeline pieces remain Canva/SVG/flowchart-like.
+- timeline pieces remain Canva/SVG/flowchart-like;
+- isolated camera/palm/plumeria and the generic Wedding Day card reinforce the style seam.
 
 `ANTI_CANVA` does not mean switching to watercolor/vintage. Correct direction is:
 
