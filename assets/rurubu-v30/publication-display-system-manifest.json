@@ -1,20 +1,38 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "Rurubu WEDDING V30",
   "status": "CURRENT_SYSTEMIC_DISPLAY_AUTHORITY",
   "scope": "P01 onward, including future added pages",
   "purpose": "Separate high-saliency authored display art, variable native copy, shared publication furniture, photos and page-specific ornaments so V30 stays editorially rich without rasterizing everything or flattening the publication into generic Figma UI.",
-  "authorityPrinciple": "Latest owner feedback wins. This manifest supersedes older page-specific rules that classified a visible element as NATIVE_TEXT merely because it contains text, when that element is actually a short locked high-saliency authored display object.",
+  "authorityPrinciple": "Latest owner feedback and item/page authority win. Do not classify by text-vs-image ideology. Classify by editorial role, mutability, saliency, reuse scope and actual implementation need.",
+  "historicalReconciliation": {
+    "status": "RECOVERED_2026_09_03",
+    "evidence": [
+      "V10 P02 recipe explicitly expected TITLE_PROFILE_* as a major asset role.",
+      "V10 Anti-AI authority states that strong Rurubu display typography has a silhouette and hero display art may be generated/composed when that materially improves quality.",
+      "V10 also states that motifs should be reused with variation rather than exact cloning.",
+      "The project-wide AI-Figma Hybrid Authoring Policy correctly protects variable semantic copy as native, but its old examples of names/headings must not be interpreted as an unconditional ban on item-authorized locked display art.",
+      "Earlier Drive/V20 production includes generated P02 editorial parts such as V20_P02_PROFILE_BADGE_GEN_A.png."
+    ],
+    "resolution": "Variable/long/TBD/factual copy remains native by default. Short locked high-saliency display text may become GENERATED_DISPLAY_ASSET only when current item/page authority explicitly classifies it that way and the canonical exact string remains recorded outside the raster asset.",
+    "hardReject": "Do not let an older generic native-text default override a newer explicit item/page display-art classification."
+  },
   "roles": {
     "GENERATED_DISPLAY_ASSET": {
       "definition": "Short locked high-saliency editorial display art whose lettering, vessel, outline, shadow and local accents materially behave as one authored object.",
       "examples": ["main section/title art", "short locked ribbon/callout art", "locked name labels where lettering treatment is part of the page identity"],
-      "rules": ["exact visible wording must be owner-approved/locked before generation", "source text remains recorded in authority/metadata", "generate the complete visual object when native reconstruction would look generic or materially weaker", "QA spelling and art character at A5 size"]
+      "rules": [
+        "exact visible wording must be owner-approved/locked before generation",
+        "canonical source text remains recorded in authority/metadata even when visible lettering is raster/vector art",
+        "use only when authored display treatment materially improves the Rurubu/V30 result versus native reconstruction",
+        "QA spelling, silhouette, alpha/material integrity and A5 readability",
+        "do not use this role for long, personal, TBD or frequently changing copy"
+      ]
     },
     "NATIVE_TEXT": {
-      "definition": "Copy that benefits from continued editability or is long, variable, TBD, factual/personal, or likely to change.",
+      "definition": "Copy that benefits from continued editability or is long, variable, TBD, factual/personal, frequently changing, or not explicitly approved for baked display-art treatment.",
       "examples": ["profile values", "Q&A answers", "long body copy", "unapproved personal facts", "frequently changing text"],
-      "rule": "Native text is not the default merely because an element contains text. Role and editorial saliency decide first."
+      "rule": "Native text is not the default merely because an element contains text; mutability and editorial role decide first."
     },
     "SHARED_PUBLICATION_COMPONENT": {
       "definition": "Cross-page recurring publication furniture with one master visual system and controlled variable content.",
@@ -23,7 +41,7 @@
     },
     "PAGE_SPECIFIC_ORNAMENT": {
       "definition": "Local decorative/editorial art whose composition belongs to one page position and narrative job.",
-      "rule": "May belong to a global ornament family, but final composition is page-specific unless repetition is intentionally designed."
+      "rule": "May belong to a global ornament family, but final composition is page-specific unless repetition is intentionally declared."
     },
     "PHOTO": {
       "definition": "Replaceable real or clean standalone proxy photography."
@@ -33,9 +51,26 @@
     "Does it repeat across pages with only controlled variable content? -> SHARED_PUBLICATION_COMPONENT",
     "Is it replaceable photography? -> PHOTO",
     "Is it page-specific decoration with no essential locked display copy? -> PAGE_SPECIFIC_ORNAMENT",
-    "Is it long/variable/TBD/personal/frequently changing copy? -> NATIVE_TEXT",
-    "Is it short, locked, high-saliency editorial lettering whose authored treatment materially defines the page? -> GENERATED_DISPLAY_ASSET"
+    "Is it long/variable/TBD/personal/frequently changing or not copy-locked? -> NATIVE_TEXT",
+    "Is it short, locked, high-saliency editorial lettering whose authored treatment materially defines the page and is explicitly item/page-authorized? -> GENERATED_DISPLAY_ASSET"
   ],
+  "liveImplementationContract": {
+    "status": "HARD / REQUIRED_BEFORE_DESIGN_LOCK",
+    "principle": "A manifest role is not a PASS until the live Figma implementation actually matches it.",
+    "checks": [
+      "GENERATED_DISPLAY_ASSET declared -> verify the live high-saliency role is actually installed as the approved authored asset rather than leftover generic native reconstruction",
+      "NATIVE_TEXT declared -> verify wording remains separately controllable and is not silently baked into unrelated art",
+      "SHARED_PUBLICATION_COMPONENT declared -> verify actual shared-master provenance, not just similar naming or visual resemblance",
+      "PAGE_SPECIFIC_ORNAMENT declared -> verify its active source is page-specific or intentionally declared recurring, not an undeclared exact carry-over",
+      "PHOTO declared -> verify stable replaceable photo role/mask rather than page screenshot or decorated proxy"
+    ],
+    "gate": "LIVE_ROLE_IMPLEMENTATION_PASS",
+    "hardRejects": [
+      "marking a shared component PASS because the manifest says shared while Figma contains unrelated page-specific constructions",
+      "marking generated display art PASS while the live page still uses the rejected native placeholder treatment",
+      "marking page-specific ornament PASS without checking active source provenance"
+    ]
+  },
   "sharedPageBadgeSystem": {
     "status": "HARD / GLOBAL_P01_ONWARD",
     "componentIdConcept": "PAGE_BADGE_SHARED_MASTER",
@@ -44,21 +79,39 @@
       "master": "one authored/generated decorative badge shell derived from the V30/Rurubu visual language, installed as one Figma component",
       "variable": "page number is a component text/property variable; PAGE label may remain fixed within the component",
       "instances": "P01 onward use instances/variants of the same master",
-      "reason": "This preserves exact cross-page design while avoiding eight independently generated PNGs and scales naturally to P09+."
+      "reason": "This preserves exact cross-page design while avoiding independently generated page PNGs and scales naturally to P09+."
     },
-    "currentCalibration": "P01 PAGE 01 is a useful visual reference but must be rebuilt/extracted into the shared system rather than copied as an isolated P01-only raster.",
-    "hardRejects": ["P01 raster badge beside a separately designed P02 ellipse badge", "independent page-specific PAGE badge generation", "same semantic PAGE furniture drifting in stroke, typography, backing, icon or scale across pages"]
+    "implementationProof": [
+      "inspect actual Figma component/instance relationship or approved master-source relationship",
+      "verify shell, stroke, typography behavior, icon treatment and scale are inherited from one master",
+      "verify only declared variable content changes between pages",
+      "do not accept semantic naming alone as proof"
+    ],
+    "currentCalibration": "P01 PAGE 01 is a visual calibration source, but must migrate into the shared master rather than remain an isolated P01-only raster beside unrelated later badges.",
+    "hardRejects": [
+      "P01 raster badge beside a separately designed P02 ellipse badge",
+      "independent page-specific PAGE badge generation",
+      "same semantic PAGE furniture drifting in stroke, typography, backing, icon or scale across pages",
+      "claiming SHARED_PUBLICATION_COMPONENT_PASS without live master/instance provenance"
+    ]
+  },
+  "sharedComponentInventoryPolicy": {
+    "principle": "Identify recurring publication furniture globally before per-page completion, but promote something to SHARED_PUBLICATION_COMPONENT only after its repeated semantic job is confirmed.",
+    "currentConfirmed": ["PAGE_BADGE_SHARED_MASTER"],
+    "futurePageRule": "P09+ first consumes existing confirmed shared masters. New shared furniture is added only when recurrence is real, not predicted from convenience."
   },
   "displayFamilyProduction": {
     "rule": "Related display assets should be designed/calibrated as a small family or batch when they share one semantic system, then installed independently where composition requires.",
-    "examples": ["SHOGO and SHIORI name-label pair", "title plus subtitle/ribbon treatment when they form one header ecology"]
+    "examples": ["SHOGO and SHIORI name-label pair", "title plus subtitle/ribbon treatment when they form one header ecology"],
+    "antiPattern": "Do not generate a large unrelated display-asset library before page context is known."
   },
   "gates": {
-    "DISPLAY_ROLE_CLASSIFICATION_PASS": "All material visible elements are classified by editorial role rather than text-vs-image alone.",
+    "DISPLAY_ROLE_CLASSIFICATION_PASS": "All material visible elements are classified by editorial role, mutability and saliency rather than text-vs-image alone.",
+    "LIVE_ROLE_IMPLEMENTATION_PASS": "The live Figma node/source implementation matches the declared role.",
     "DISPLAY_ART_QUALITY_PASS": "Generated display assets have publication-grade authored lettering/vessels and do not look like generic Figma text effects.",
-    "SHARED_PUBLICATION_COMPONENT_PASS": "Shared furniture is implemented from one master and visually consistent across applicable pages.",
-    "COPY_LOCK_PASS": "Any generated visible wording is exact and owner-approved.",
+    "SHARED_PUBLICATION_COMPONENT_PASS": "Shared furniture is implemented from one verifiable master and visually consistent across applicable pages.",
+    "COPY_LOCK_PASS": "Any generated visible wording is exact, approved and recorded canonically outside the asset.",
     "TRUE_ALPHA_PREFLIGHT_PASS": "Floating generated display art follows the current true-alpha generation policy."
   },
-  "futurePageRule": "P09+ inherits the shared component masters automatically and classifies new high-saliency display art using the same decision order. Do not create a new visual system merely because a new page is added."
+  "futurePageRule": "P09+ inherits confirmed shared component masters automatically and classifies new high-saliency display art using the same decision order. Do not create a new visual system merely because a new page is added."
 }
