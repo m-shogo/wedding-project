@@ -1,9 +1,9 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "date": "2026-09-03",
-  "status": "LOCKED_AFTER_V30_STYLE_REALIGNMENT",
+  "status": "DESIGN_LOCKED_EDGE_ALPHA_REPLACEMENT_PREPARED_FIGMA_SWAP_PENDING",
   "figma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "page": "V30_FINAL_PRODUCTION",
@@ -16,12 +16,111 @@
     "result": "CROSS_PAGE_STYLE_FAMILY_PASS"
   },
   "acceptedAssets": [
-    {"role": "HEADER_ECOLOGY", "path": "final/V30_P03_HEADER_ECOLOGY_V30_ALIGNED.png", "figmaNode": "3793:20", "imageHash": "bf12ac7d4fcc31ef94fe9d5d5fa4f8a197e532d8", "sha256": "b2e1994bbca1f8cce4c346bc808a98916c8db6221da920bf150e9104298ac20e"},
-    {"role": "Q3_EDITORIAL_FAMILY", "path": "final/V30_P03_Q3_EDITORIAL_FAMILY_V30_ALIGNED.png", "figmaNode": "3794:21", "imageHash": "ebc227edc224e6e7ee5a8d10a89a38b58bb3d766", "sha256": "6e71af1c1e2c68eee20da16c20ecc7decb6263d1fcdd78dc8b43526186b2c6d1"},
-    {"role": "Q4_EDITORIAL_FAMILY", "path": "final/V30_P03_Q4_EDITORIAL_FAMILY_V30_ALIGNED.png", "figmaNode": "3794:20", "imageHash": "77bb6a1f40c5029ab0d10872d472c0ffad580cbb", "sha256": "4fe7bccaba03c351fec7d213d6b3f838cfa991a88b787e1ee4882d35e55f40be"},
-    {"role": "STORY_TIMELINE_ECOLOGY_V2", "path": "final/V30_P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED_V2.png", "figmaNode": "3797:20", "imageHash": "8c251e8e938cd2e401e175e4669d243cea9535fd", "sha256": "2184e369da65bdb32b2982b9f81d091c13c686df85bdd36bcfe39c0bd4fc8ea2"},
-    {"role": "BOTTOM_CLOSURE", "path": "final/V30_P03_BOTTOM_CLOSURE_V30_ALIGNED.png", "figmaNode": "3794:22", "imageHash": "6329d981fcbf4b1d9d95db4e66b70fdefc8225ae", "sha256": "0c161539d7df38e7bdbc4033d27c9773fd41675a07747fe81cc95c9876dc1866"}
+    {
+      "role": "HEADER_ECOLOGY",
+      "path": "final/V30_P03_HEADER_ECOLOGY_V30_ALIGNED.png",
+      "figmaNode": "3793:20",
+      "imageHash": "bf12ac7d4fcc31ef94fe9d5d5fa4f8a197e532d8",
+      "sha256": "b2e1994bbca1f8cce4c346bc808a98916c8db6221da920bf150e9104298ac20e"
+    },
+    {
+      "role": "Q3_EDITORIAL_FAMILY",
+      "path": "final/V30_P03_Q3_EDITORIAL_FAMILY_V30_ALIGNED.png",
+      "figmaNode": "3794:21",
+      "imageHash": "ebc227edc224e6e7ee5a8d10a89a38b58bb3d766",
+      "sha256": "6e71af1c1e2c68eee20da16c20ecc7decb6263d1fcdd78dc8b43526186b2c6d1"
+    },
+    {
+      "role": "Q4_EDITORIAL_FAMILY",
+      "path": "final/V30_P03_Q4_EDITORIAL_FAMILY_V30_ALIGNED.png",
+      "figmaNode": "3794:20",
+      "imageHash": "77bb6a1f40c5029ab0d10872d472c0ffad580cbb",
+      "sha256": "4fe7bccaba03c351fec7d213d6b3f838cfa991a88b787e1ee4882d35e55f40be"
+    },
+    {
+      "role": "STORY_TIMELINE_ECOLOGY_V2",
+      "path": "final/V30_P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED_V2.png",
+      "figmaNode": "3797:20",
+      "imageHash": "8c251e8e938cd2e401e175e4669d243cea9535fd",
+      "sha256": "2184e369da65bdb32b2982b9f81d091c13c686df85bdd36bcfe39c0bd4fc8ea2"
+    },
+    {
+      "role": "BOTTOM_CLOSURE",
+      "path": "final/V30_P03_BOTTOM_CLOSURE_V30_ALIGNED.png",
+      "figmaNode": "3794:22",
+      "imageHash": "6329d981fcbf4b1d9d95db4e66b70fdefc8225ae",
+      "sha256": "0c161539d7df38e7bdbc4033d27c9773fd41675a07747fe81cc95c9876dc1866"
+    }
   ],
+  "edgeAlphaCorrection": {
+    "diagnosis": "All five accepted grouped PNGs had real outside transparency and opaque interiors, but their alpha channels were binary {0,255} only. This is true alpha with weak edge antialiasing, not a design failure.",
+    "designReopen": false,
+    "rgbArtworkPreserved": true,
+    "method": "edge-only alpha refinement at original source resolution; nearest opaque RGB extended into newly partial edge pixels to reduce matte/fringe contamination; no interior blur or redesign",
+    "sourceAlphaState": {
+      "HEADER_ECOLOGY": {"uniqueAlphaValues": 2},
+      "Q3_EDITORIAL_FAMILY": {"uniqueAlphaValues": 2},
+      "Q4_EDITORIAL_FAMILY": {"uniqueAlphaValues": 2},
+      "STORY_TIMELINE_ECOLOGY_V2": {"uniqueAlphaValues": 2},
+      "BOTTOM_CLOSURE": {"uniqueAlphaValues": 2}
+    },
+    "preparedAssets": [
+      {
+        "role": "HEADER_ECOLOGY",
+        "driveFileId": "1m61wsQCUGWP4kMKLj-aEeidp5SYLmtRB",
+        "fileName": "V30_P03_HEADER_ECOLOGY_V30_ALIGNED_EDGEAA.png",
+        "sha256": "05f100778bd28b9e31bdcd76ac8b392dcb1e29cf4b930b311b2c67818b342737",
+        "uniqueAlphaValues": 24,
+        "partialAlphaPixels": 17962,
+        "targetFigmaNode": "3793:20"
+      },
+      {
+        "role": "Q3_EDITORIAL_FAMILY",
+        "driveFileId": "14VLtZzigJBoTqjepgezmIxEzgpQF0Coj",
+        "fileName": "V30_P03_Q3_EDITORIAL_FAMILY_V30_ALIGNED_EDGEAA.png",
+        "sha256": "516a8b42246c4c479c3d654fefa44c7e9b9f4ad2897eac40437231d9231107cb",
+        "uniqueAlphaValues": 37,
+        "partialAlphaPixels": 6062,
+        "targetFigmaNode": "3794:21"
+      },
+      {
+        "role": "Q4_EDITORIAL_FAMILY",
+        "driveFileId": "1T9zvRgWY8GBlmrA4_zgimXkT6XCFyPTr",
+        "fileName": "V30_P03_Q4_EDITORIAL_FAMILY_V30_ALIGNED_EDGEAA.png",
+        "sha256": "d66b6ed62940081be9d25726594d60ed7458f8daf8035e9460e568bba3e4b800",
+        "uniqueAlphaValues": 42,
+        "partialAlphaPixels": 7063,
+        "targetFigmaNode": "3794:20"
+      },
+      {
+        "role": "STORY_TIMELINE_ECOLOGY_V2",
+        "driveFileId": "1rItZVU-AvtGMkIPpCQUTEIqm14aRyjIF",
+        "fileName": "V30_P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED_V2_EDGEAA.png",
+        "sha256": "c387379dca6f2f75da7630ea41f49c398c4c52484d4b0caafada4c273799798c",
+        "uniqueAlphaValues": 31,
+        "partialAlphaPixels": 20075,
+        "targetFigmaNode": "3797:20"
+      },
+      {
+        "role": "BOTTOM_CLOSURE",
+        "driveFileId": "1KEe5YeVHNu5v0sztqxhKbnwcM3ltiEok",
+        "fileName": "V30_P03_BOTTOM_CLOSURE_V30_ALIGNED_EDGEAA.png",
+        "sha256": "87800844a38f059c2dbe0f63fc19554757b46f3bfd2facdcc7943eec762f0312",
+        "uniqueAlphaValues": 38,
+        "partialAlphaPixels": 13847,
+        "targetFigmaNode": "3794:22"
+      }
+    ],
+    "EDGE_ALPHA_QUALITY_PASS": "PREPARED_SOURCE_ASSETS / FIGMA_SWAP_AND_LIVE_QA_PENDING",
+    "figmaSwapStatus": "PENDING_TOOL_UPLOAD_TRANSPORT",
+    "finalQaRequired": [
+      "light background",
+      "mid-gray background",
+      "dark background",
+      "actual P03 A5/full-page view"
+    ],
+    "systemicAuthority": "docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md"
+  },
   "qa": {
     "finalScreenshot": "qa/V30_P03_V30_REALIGNMENT_FINAL.png",
     "crossPageComparison": "qa/V30_P01_P02_P03_FINAL_STYLE_COMPARISON.png",
@@ -39,7 +138,8 @@
     "REFERENCE_DELTA_PASS": true,
     "PHOTO_ROLE_PASS": true,
     "COPY_SAFETY_PASS": true,
-    "ALPHA_INTEGRITY_PASS": true,
+    "ALPHA_INTEGRITY_PASS": "PASS_FOR_TRUE_ALPHA_AND_INTERIOR_OPACITY_ONLY",
+    "EDGE_ALPHA_QUALITY_PASS": "PENDING_FIGMA_SWAP_AND_LIVE_QA",
     "FINGERPRINT_COLLISION_PASS": true,
     "hiddenObsoleteNodeCount": 0,
     "duplicateSameJobCount": 0
@@ -58,6 +158,7 @@
     "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_COPY_QA_PENDING": true,
     "FINAL_PHOTO_QA_PENDING": true,
+    "FINAL_ASSET_ALPHA_QA_PENDING": true,
     "PRINT_READY": false
   }
 }
