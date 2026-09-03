@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "project": "Rurubu WEDDING V30",
   "page": "P02",
   "status": "FIGMA_DESIGN_COMPLETE_FINAL_PHOTO_QA_PENDING",
@@ -8,7 +8,8 @@
     "page": "V30_FINAL_PRODUCTION",
     "currentNode": "3535:9",
     "frameName": "V30 P02 / PROFILE / CURRENT",
-    "firstProductionChildCount": 76
+    "firstProductionChildCount": 76,
+    "finalDisplayReworkChildCount": 67
   },
   "cleanStandaloneProxies": [
     {
@@ -34,8 +35,9 @@
     }
   ],
   "assetRoleClassification": {
-    "NATIVE_TEXT": ["ふたりの", "プロフィール", "私たちのこと、少しだけ紹介します♪", "SHOGO", "SHIORI", "profile labels and values", "Q1/Q2 question and answer copy"],
-    "SHARED_COMMON_COMPONENT": ["PAGE 02 / P01-P08 PAGE-badge family"],
+    "GENERATED_DISPLAY_ASSET": ["ふたりのプロフィール", "私たちのこと、少しだけ紹介します♪", "SHOGO", "SHIORI"],
+    "NATIVE_TEXT": ["profile labels and values", "Q1/Q2 question and answer copy"],
+    "SHARED_PUBLICATION_COMPONENT": ["PAGE 02 / instance 3773:9 / master 3772:2"],
     "PAGE_SPECIFIC_ORNAMENT": ["travel/tropical/route/icon art"],
     "PHOTO": ["SHOGO portrait", "SHIORI portrait", "Q1 couple inset"],
     "rule": "Fixed or stylized text is not automatically an image asset. Cross-page publication furniture is not page-specific generated art."
@@ -71,6 +73,11 @@
     "EDGE_SAFETY_PASS": "PASS_PRESERVED",
     "BORDER_Z_ORDER_PASS": "PASS_PRESERVED",
     "ASSET_ROLE_CLASSIFICATION_PASS": "PASS_AFTER_OWNER_CORRECTION",
+    "DISPLAY_ROLE_CLASSIFICATION_PASS": "PASS",
+    "LIVE_ROLE_IMPLEMENTATION_PASS": "PASS",
+    "DISPLAY_ART_QUALITY_PASS": "PASS",
+    "SHARED_PUBLICATION_COMPONENT_PASS": "PASS_MASTER_3772_2",
+    "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS": "PASS",
     "RURUBU_EDITORIAL_DNA_PASS": "PASS",
     "V30_ART_DIRECTION_PASS": "PASS",
     "PAGE_ROLE_FIT_PASS": "PASS",
@@ -79,8 +86,8 @@
     "ORNAMENT_ORIGINALITY_PASS": "PASS",
     "REUSE_INTENT_PASS": "PASS",
     "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
-    "VISUAL_CARRYOVER_PASS": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
-    "REFERENCE_DELTA_PASS": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+    "VISUAL_CARRYOVER_PASS": "PASS_AFTER_P02_SPECIFIC_BOTTOM_LEFT_REPLACEMENT",
+    "REFERENCE_DELTA_PASS": "PASS_AFTER_FINAL_INTEGRATED_REVIEW",
     "A5_GRAYSCALE_PASS": "PASS_BASELINE_PRESERVED",
     "HIDDEN_OBSOLETE_COUNT": 0,
     "DUPLICATE_SAME_JOB_LIVE_COUNT": 0,
@@ -93,7 +100,7 @@
     "q2PhotoSlotCount": 0,
     "borderTopLevelIndex": 1,
     "officialP02FrameOnly": true,
-    "p01Untouched": true,
+    "p01OnlySharedPageBadgeMigrated": true,
     "p03ToP08Untouched": true
   },
   "firstProductionEvidence": {
@@ -113,5 +120,16 @@
     "figmaChildCount": 76,
     "acceptedStructurePreserved": true,
     "p01AndP03ToP08Untouched": true
+  },
+  "finalDisplayAndSharedBadgePatch": {
+    "date": "2026-09-03",
+    "status": "COMPLETE",
+    "manifest": "assets/rurubu-v30/p02/production/display/manifest.json",
+    "pageBadgeMasterId": "3772:2",
+    "p01PageBadgeInstanceId": "3773:2",
+    "p02PageBadgeInstanceId": "3773:9",
+    "p02FinalScreenshotSha256": "188c7165ed1a4221e7e8bb87abebc7c0fafb9c2ca03d7dc14c78d03ce7bbc2f4",
+    "p01BadgeMigrationScreenshotSha256": "13fadabd2e8cc099951a1b16f83a443ecb71863e702b742e13bc9326c242c6f3",
+    "p03ToP08Untouched": true
   }
 }

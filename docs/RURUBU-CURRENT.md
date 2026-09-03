@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `V30_ONLY / P02_POST_FIGMA_REVIEW_REOPENED / 2026-09-03`
+Status: `V30_ONLY / P02_DESIGN_COMPLETE_AFTER_FINAL_REWORK / 2026-09-03`
 
 V30 is the sole current production version. V20 is history/reference only. Do not create V31 unless explicitly requested.
 
@@ -105,16 +105,16 @@ P01 PAGE 01 is a calibration reference; migrate P01/P02 to the shared master and
 
 `SHARED_PUBLICATION_COMPONENT_PASS` requires actual master/source provenance, not naming or visual similarity alone.
 
-## P01 — LOCKED EXCEPT SHARED PAGE BADGE MIGRATION
+## P01 — LOCKED
 
-P01 `3535:7` remains accepted. New owner feedback reopens **only the PAGE badge** so it can migrate into the cross-page shared component system.
+P01 `3535:7` remains accepted. Its PAGE badge alone was migrated to instance `3773:2` of shared master `3772:2`; no other P01 object changed.
 
 Do not touch unrelated P01 design/photo/copy/ornament work.
 
 `FINAL_PHOTO_QA_PENDING = YES`
 `PRINT_READY = NO`
 
-## P02 — POST-FIGMA REVIEW REOPENED
+## P02 — DESIGN COMPLETE AFTER FINAL REWORK
 
 Current screenshot after Codex commit `d730f6b60abd130c3b2e2764a2f40d3bf63df5cc` was reviewed directly in Figma.
 
@@ -129,46 +129,39 @@ Current screenshot after Codex commit `d730f6b60abd130c3b2e2764a2f40d3bf63df5cc`
 - border/background depth
 - P03-P08 untouched
 
-### Reopened display targets
+### Generated display targets — COMPLETE
 
 - `ふたりのプロフィール` → `GENERATED_DISPLAY_ASSET`
 - `私たちのこと、少しだけ紹介します♪` ribbon → `GENERATED_DISPLAY_ASSET`
 - `SHOGO` name label → `GENERATED_DISPLAY_ASSET` family
 - `SHIORI` name label → `GENERATED_DISPLAY_ASSET` family
 
-This latest owner feedback supersedes the older P02-specific rule that forced these four roles to remain native text.
+All four are installed as authored image assets with exact canonical copy recorded in `assets/rurubu-v30/p02/production/display/manifest.json`.
 
-### Shared PAGE badge failure
+### Shared PAGE badge — PASS
 
-Current P02 PAGE 02 is a native ellipse/text/heart construction while P01 PAGE 01 is a different completed-art treatment. This is **not** a valid shared-component pass.
+P01 and P02 use instances `3773:2` and `3773:9` of the same Figma component master `3772:2`. Only the controlled page-number property differs.
 
-Create one shared PAGE badge master and migrate P01/P02 to it; later pages inherit it.
+### Page-specific bottom-left tropical — PASS
 
-### Exact carry-over failure
-
-`P02_BOTTOM_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER` uses the exact same image hash as `P01_LEFT_TROPICAL_CLUSTER`:
-`c4300f9b1f5bf8607ec72da41aa064c2bf52e155`
-
-Status: `REPLACE_REQUIRED`.
-Replace with a P02-specific compact `TROPICAL_BOTANICAL` composition or remove if unnecessary. Do not reuse P01 image bytes.
+P02 now uses image hash `7cb821ff0a0dc84928231fa73e05c0bed3a63350`; P01 remains `c4300f9b1f5bf8607ec72da41aa064c2bf52e155`. Exact carry-over is closed.
 
 ### Current gates
 
-- five-target calibrated ornament rebuild = `PASS_PRESERVED_PENDING_INTEGRATED_REVIEW`
-- `DISPLAY_ROLE_CLASSIFICATION_PASS = REOPENED`
-- `LIVE_ROLE_IMPLEMENTATION_PASS = REOPENED`
-- `DISPLAY_ART_QUALITY_PASS = REOPENED`
-- `SHARED_PUBLICATION_COMPONENT_PASS = FAIL_CURRENT_PAGE_BADGE_DRIFT`
-- `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS = FAIL_EXACT_P01_FLORAL_REUSE`
-- `VISUAL_CARRYOVER_PASS = FAIL_EXACT_P01_FLORAL_REUSE`
-- `REFERENCE_DELTA_PASS = REOPENED`
-- `FIGMA_DESIGN_COMPLETE = NO`
+- five-target calibrated ornament rebuild = `PASS_PRESERVED_AFTER_INTEGRATED_REVIEW`
+- `DISPLAY_ROLE_CLASSIFICATION_PASS = PASS`
+- `LIVE_ROLE_IMPLEMENTATION_PASS = PASS`
+- `DISPLAY_ART_QUALITY_PASS = PASS`
+- `SHARED_PUBLICATION_COMPONENT_PASS = PASS`
+- `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS = PASS`
+- `VISUAL_CARRYOVER_PASS = PASS`
+- `TRUE_ALPHA_PREFLIGHT_PASS = PASS`
+- `REFERENCE_DELTA_PASS = PASS_AFTER_FINAL_INTEGRATED_REVIEW`
+- `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-The prior P02 ornament rebuild report is evidence, not a current design lock.
-
-Do not start P03 production until P02 closes or the owner explicitly defers it.
+P02 design is locked. Remaining work is final owner-photo replacement and final-photo/print QA.
 
 ## P03+
 

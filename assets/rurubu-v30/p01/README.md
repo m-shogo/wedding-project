@@ -4,6 +4,8 @@ Status: `P01_BEST_CURRENT / TARGETED_POST_LOCK_PATCH_COMPLETE / FINAL_PHOTO_QA_P
 
 P01 CURRENT remains Figma node `3535:7`. Do not roll back to FIRST BUILD and do not create another P01 frame.
 
+2026-09-03 shared-component migration: the former raster PAGE 01 node `3681:117` was replaced only by instance `3773:2` of `PAGE_BADGE_SHARED_MASTER` `3772:2`. All other P01 nodes remain accepted and unchanged. Older PAGE 01 raster records below are historical production evidence.
+
 The large REWORK and first 2026-09-02 micro-polish remain the accepted baseline for:
 - clean standalone Hero + Feature photo proxies;
 - Feature 1–3 opaque-paper fix;

@@ -340,7 +340,7 @@
     {
       "id": "P02_MASTHEAD_FUTARI_NO",
       "role": "top lead-in display masthead",
-      "renderMode": "generated-art",
+      "renderMode": "generated-display-asset / bundled with P02_TITLE_PROFILE",
       "factClass": "EDITORIAL_COPY",
       "referenceText": "ふたりの",
       "geometry": {
@@ -361,9 +361,9 @@
     {
       "id": "P02_TITLE_PROFILE",
       "role": "first-read page title",
-      "renderMode": "generated-art",
+      "renderMode": "generated-display-asset / bundled with P02_MASTHEAD_FUTARI_NO",
       "factClass": "EDITORIAL_COPY",
-      "referenceText": "プロフィール",
+      "referenceText": "ふたりのプロフィール",
       "geometry": {
         "referencePx": {"x": 194, "y": 122, "width": 669, "height": 147},
         "normalized": {"x": 0.1839, "y": 0.0818, "width": 0.6341, "height": 0.0986},
@@ -382,7 +382,7 @@
     {
       "id": "P02_LEAD_RIBBON",
       "role": "secondary page promise",
-      "renderMode": "generated-art + native-text",
+      "renderMode": "generated-display-asset",
       "factClass": "EDITORIAL_COPY",
       "referenceText": "私たちのこと、少しだけ紹介します♪",
       "geometry": {
@@ -398,14 +398,14 @@
       "overlaps": ["title lower field", "portrait-frame top edges"],
       "mustNotCover": ["portrait faces"],
       "saliency": 48,
-      "visualRule": "Deep travel-blue ribbon with white native/editable line of copy; ribbon is authored art, copy remains editable."
+      "visualRule": "Deep travel-blue ribbon and exact locked white copy behave as one authored generated display asset."
     },
     {
       "id": "P02_NAME_BUBBLE_SHOGO",
       "role": "canonical Shogo name marker",
-      "renderMode": "generated-art + native-text",
+      "renderMode": "generated-display-asset",
       "factClass": "FACT",
-      "nativeText": "SHOGO",
+      "canonicalDisplayText": "SHOGO",
       "secondaryKanaStatus": "TBD_CONFIRM_FROM_GROUNDED_COPY",
       "referenceKanaVisibleInMaster": "しょうご",
       "geometry": {
@@ -417,7 +417,7 @@
         "tolerance": "±3% page position / ±4% size"
       },
       "zIndex": 83,
-      "layerGroup": "native-copy-and-facts",
+      "layerGroup": "display-art",
       "overlaps": ["left portrait edge"],
       "mustNotCover": ["Shogo face/eyes", "profile-sheet reading rows"],
       "saliency": 70,
@@ -426,9 +426,9 @@
     {
       "id": "P02_NAME_BUBBLE_SHIORI",
       "role": "canonical Shiori name marker",
-      "renderMode": "generated-art + native-text",
+      "renderMode": "generated-display-asset",
       "factClass": "FACT",
-      "nativeText": "SHIORI",
+      "canonicalDisplayText": "SHIORI",
       "secondaryKanaStatus": "TBD_CONFIRM_FROM_GROUNDED_COPY",
       "referenceKanaVisibleInMaster": "しおり",
       "geometry": {
@@ -440,7 +440,7 @@
         "tolerance": "±3% page position / ±4% size"
       },
       "zIndex": 83,
-      "layerGroup": "native-copy-and-facts",
+      "layerGroup": "display-art",
       "overlaps": ["right portrait edge"],
       "mustNotCover": ["Shiori face/eyes", "profile-sheet reading rows"],
       "saliency": 70,

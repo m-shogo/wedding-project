@@ -2,13 +2,13 @@
   "schemaVersion": 4,
   "project": "Rurubu WEDDING V30",
   "page": "P02",
-  "status": "P02_DESIGN_LOCKED_AFTER_ORNAMENT_ART_DIRECTION_REBUILD",
+  "status": "P02_DESIGN_LOCKED_AFTER_FINAL_DISPLAY_AND_SHARED_COMPONENT_REWORK",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
     "assets/rurubu-v30/visual-polish-manifest.json",
     "assets/rurubu-v30/p02/manifest.json"
   ],
-  "purpose": "Current P02 authority after owner review of the first production build. Preserve the successful structure/copy/photo work, correct element-role classification, and reopen only weak reused travel/tropical ornaments before full design lock.",
+  "purpose": "Current P02 authority after final display-role, shared PAGE badge and page-specific fingerprint correction.",
   "authorityPrecedence": "This page-polish manifest overrides conflicting execution/render-mode assumptions in the older P02 main manifest. Root canonical facts remain inherited.",
   "currentFigma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
@@ -23,25 +23,26 @@
     "asymmetry": "SHOGO left/blue and SHIORI right/pink form a semantic pair but are not mechanically mirrored. Q1 owns one inset couple photo; Q2 owns none."
   },
   "assetRoleClassification": {
-    "status": "OWNER_CORRECTED_2026_09_02",
+    "status": "OWNER_CORRECTED_AND_LIVE_VERIFIED_2026_09_03",
     "hardRule": "Do not decide image generation from visual prominence alone. Follow Root assetRoleClassificationPolicy before generation or review.",
     "NATIVE_TEXT": [
-      "P02_HEADER_FUTARI_NO / ふたりの",
-      "P02_TITLE_PROFILE / プロフィール",
-      "P02_HEADER_RIBBON_TEXT / 私たちのこと、少しだけ紹介します♪",
-      "P02_SHOGO_LATIN / SHOGO",
-      "P02_SHIORI_LATIN / SHIORI",
       "profile row labels and variable profile values",
       "Q1/Q2 question and answer copy while not copy-locked"
     ],
-    "SHARED_COMMON_COMPONENT": [
-      "P02_PAGE_BADGE / PAGE 02 — same publication component family as P01 PAGE 01; page number is the variable"
+    "GENERATED_DISPLAY_ASSET": [
+      "P02_HEADER_TITLE / ふたりのプロフィール",
+      "P02_HEADER_RIBBON / 私たちのこと、少しだけ紹介します♪",
+      "P02_SHOGO_NAME_LABEL / SHOGO",
+      "P02_SHIORI_NAME_LABEL / SHIORI"
+    ],
+    "SHARED_PUBLICATION_COMPONENT": [
+      "P02_PAGE_BADGE / instance 3773:9 of PAGE_BADGE_SHARED_MASTER 3772:2"
     ],
     "GENERATED_OR_PREPARED_SHELLS": [
       "warm paper/background field where raster treatment is useful",
       "profile paper shells/backings where authored tactile art materially improves fidelity",
       "Q1/Q2 paper shells/backings where authored tactile art materially improves fidelity",
-      "speech-bubble backings if kept separate from native SHOGO/SHIORI text"
+      "profile/Q1/Q2 paper shells that remain independent from variable native copy"
     ],
     "PHOTO": [
       "P02_PHOTO_SHOGO",
@@ -57,16 +58,15 @@
       "other local hearts/flowers/routes/icons whose overlap matters"
     ],
     "hardRejects": [
-      "treating プロフィール title as a generated image requirement",
-      "treating 私たちのこと、少しだけ紹介します♪ as a generated image requirement",
-      "treating SHOGO/SHIORI as image text",
+      "leaving the four owner-authorized high-saliency display roles as generic native reconstruction",
       "treating PAGE 02 as an independent page-specific generated badge instead of a shared common component family",
       "bundling Q2 plane/route/suitcase into the Q2 shell merely for convenience"
     ]
   },
   "copySafety": {
     "lockedFacts": ["Shogo", "Shiori", "2026.10.24", "PAGE 02 page number"],
-    "referenceOrTbd": ["Japanese name readings", "personal profile values", "header ribbon editorial sentence until owner copy-lock", "Q1 question until owner copy-lock", "Q1 answer", "Q2 question until owner copy-lock", "Q2 answer"],
+    "generatedDisplayCopyLocked": ["ふたりのプロフィール", "私たちのこと、少しだけ紹介します♪", "SHOGO", "SHIORI"],
+    "referenceOrTbd": ["Japanese name readings", "personal profile values", "Q1 question until owner copy-lock", "Q1 answer", "Q2 question until owner copy-lock", "Q2 answer"],
     "hardRule": "Unapproved copy may remain visible only as separately controllable native REFERENCE_ONLY/TBD text. It must not be factized or baked into generated art."
   },
   "photoProxyPolicy": {
@@ -81,10 +81,10 @@
     "q2PhotoSlotCount": 0
   },
   "sharedPageBadgePolicy": {
-    "status": "HARD_OVERRIDE",
+    "status": "PASS_LIVE_MASTER_3772_2",
     "componentFamily": "P01-P08 PAGE badge family",
     "currentValue": "02",
-    "rule": "PAGE 02 must visually align with the P01 PAGE 01 common component system. Do not independently restyle/regenerate it as a P02-only image asset. Keep the common backing/typography/stroke behavior coherent and vary the page number/content only unless a future owner-approved exception is explicit."
+    "rule": "P01 instance 3773:2 and P02 instance 3773:9 share master 3772:2; only the Page Number text property differs."
   },
   "ornamentQualityDebtLatest": {
     "status": "CLOSED / PASS_AFTER_CALIBRATED_FAMILY_REBUILD",
@@ -170,7 +170,11 @@
     "COPY_SAFETY_PASS": "PASS_PRESERVED",
     "BORDER_Z_ORDER_PASS": "PASS_PRESERVED",
     "ASSET_ROLE_CLASSIFICATION_PASS": "PASS_AFTER_OWNER_CORRECTION",
-    "SHARED_COMPONENT_PASS": "PASS_WITH_PAGE_BADGE_RULE_CORRECTED",
+    "DISPLAY_ROLE_CLASSIFICATION_PASS": "PASS",
+    "LIVE_ROLE_IMPLEMENTATION_PASS": "PASS",
+    "DISPLAY_ART_QUALITY_PASS": "PASS",
+    "SHARED_PUBLICATION_COMPONENT_PASS": "PASS_MASTER_3772_2",
+    "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS": "PASS",
     "RURUBU_EDITORIAL_DNA_PASS": "PASS",
     "V30_ART_DIRECTION_PASS": "PASS",
     "PAGE_ROLE_FIT_PASS": "PASS",
@@ -179,8 +183,8 @@
     "ORNAMENT_ORIGINALITY_PASS": "PASS",
     "REUSE_INTENT_PASS": "PASS",
     "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
-    "VISUAL_CARRYOVER_PASS": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
-    "REFERENCE_DELTA_PASS": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+    "VISUAL_CARRYOVER_PASS": "PASS_AFTER_P02_SPECIFIC_BOTTOM_LEFT_REPLACEMENT",
+    "REFERENCE_DELTA_PASS": "PASS_AFTER_FINAL_INTEGRATED_REVIEW",
     "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false

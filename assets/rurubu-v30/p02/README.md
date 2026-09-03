@@ -14,17 +14,19 @@ P02 CURRENT is the official Figma frame `3535:9`. No duplicate or TEMP P02 frame
 - Profile/Q paper interiors are opaque.
 - Airmail border remains background-adjacent.
 - Unapproved personal copy remains native/separate and is not factized.
-- P01 and P03–P08 remain untouched.
+- P01 changed only by the authorized shared PAGE badge migration; P03–P08 remain untouched.
 
 ## Correct asset-role classification
 
 Do not infer render mode from whether text is fixed or stylized. P02 uses these roles:
 
-- `NATIVE_TEXT`: `ふたりの`, `プロフィール`, `私たちのこと、少しだけ紹介します♪`, `SHOGO`, `SHIORI`, profile labels/values, Q1/Q2 question/answer copy.
-- `SHARED_COMMON_COMPONENT`: `PAGE 02`, which belongs to the P01–P08 shared PAGE-badge family.
+- `GENERATED_DISPLAY_ASSET`: `ふたりのプロフィール`, `私たちのこと、少しだけ紹介します♪`, `SHOGO`, `SHIORI`.
+- `NATIVE_TEXT`: profile labels/values and Q1/Q2 question/answer copy.
+- `SHARED_PUBLICATION_COMPONENT`: `PAGE 02`, instance `3773:9` of `PAGE_BADGE_SHARED_MASTER` `3772:2`.
 - `PAGE_SPECIFIC_ORNAMENT`: travel/tropical/route/icon art used to shape this page's local editorial character.
 - `PHOTO`: SHOGO portrait, SHIORI portrait, Q1 couple inset.
-- `GENERATED_DISPLAY_ASSET`: only where an authored visual object genuinely benefits from being prepared as one display asset; fixed/stylized text alone is not a reason to rasterize it.
+
+The canonical display strings, production hashes and Figma image hashes are recorded in `production/display/manifest.json`.
 
 ## Ornament art-direction patch — COMPLETE
 
@@ -63,7 +65,12 @@ Final owner photos can replace only these fills.
 - `ORNAMENT_OBJECT_QUALITY_PASS = PASS`
 - `REUSE_INTENT_PASS = PASS`
 - `TRUE_ALPHA_PREFLIGHT_PASS = PASS`
-- `REFERENCE_DELTA_PASS = PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD`
+- `REFERENCE_DELTA_PASS = PASS_AFTER_FINAL_INTEGRATED_REVIEW`
+- `DISPLAY_ROLE_CLASSIFICATION_PASS = PASS`
+- `LIVE_ROLE_IMPLEMENTATION_PASS = PASS`
+- `DISPLAY_ART_QUALITY_PASS = PASS`
+- `SHARED_PUBLICATION_COMPONENT_PASS = PASS`
+- `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS = PASS`
 - `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`

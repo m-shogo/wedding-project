@@ -72,7 +72,7 @@
     ]
   },
   "sharedPageBadgeSystem": {
-    "status": "HARD / GLOBAL_P01_ONWARD",
+    "status": "LIVE_MASTER_ESTABLISHED_2026_09_03 / GLOBAL_P01_ONWARD",
     "componentIdConcept": "PAGE_BADGE_SHARED_MASTER",
     "designRule": "PAGE 01, PAGE 02 and later page badges are one publication component, not separate page designs.",
     "recommendedArchitecture": {
@@ -88,6 +88,13 @@
       "do not accept semantic naming alone as proof"
     ],
     "currentCalibration": "P01 PAGE 01 is a visual calibration source, but must migrate into the shared master rather than remain an isolated P01-only raster beside unrelated later badges.",
+    "liveProduction": {
+      "masterId": "3772:2",
+      "pageNumberProperty": "Page Number#3772:0",
+      "p01InstanceId": "3773:2",
+      "p02InstanceId": "3773:9",
+      "sameMasterProvenanceVerified": true
+    },
     "hardRejects": [
       "P01 raster badge beside a separately designed P02 ellipse badge",
       "independent page-specific PAGE badge generation",
