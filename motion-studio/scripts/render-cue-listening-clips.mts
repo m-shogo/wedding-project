@@ -592,6 +592,28 @@ ${rows}
     if (btn) btn.disabled = undoStack.length === 0;
   }
 
+  // 「もっと良くして」→ 判定したら勝手に次の未確認行へ進む。ボタンからも
+  // 👍/🤔を押した直後からも呼べる共通関数にする(二重実装しない)。
+  // silent=trueの時は「全部終わりました」メッセージを出さない
+  // (自動遷移で毎回出ると鬱陶しいため。手動の⏭ボタンの時だけ出す)。
+  function jumpToNextUnverified(silent) {
+    var next = rowsAll.find(function (tr) {
+      var cueId = tr.getAttribute('data-cueid');
+      return !getEntry(cueId).status;
+    });
+    if (!next) {
+      if (!silent) setHint('saveHint', 'saveHintFloating', '✅ 未確認の行はもうありません。全部判定済みです。', false);
+      return;
+    }
+    next.scrollIntoView({behavior: 'smooth', block: 'center'});
+    next.classList.add('jump-highlight');
+    setTimeout(function () { next.classList.remove('jump-highlight'); }, 1500);
+    // マウスを動かさずキーボードだけで連続作業できるよう、自動で移動した先の
+    // 行をショートカットの対象にも切り替える(次に1/2/3/スペースを押した時、
+    // 実際にマウスが乗っている行ではなく、この移動先が対象になる)。
+    hoveredCueId = next.getAttribute('data-cueid');
+  }
+
   // 「まだ📋コピー/💾保存していない判定がある」ことを知らせるバナー。
   // 前回コピー/保存した時点の判定件数をlocalStorageへ覚えておき、
   // 今の件数と比較するだけ(判定ロジックには影響しない)。
@@ -781,6 +803,7 @@ ${rows}
       renderRow(tr);
       saveState();
       checkBulkApplyOpportunity(tr, cueId, entry);
+      if (entry.status === 'ok') setTimeout(function () { jumpToNextUnverified(true); }, 400);
     });
     tr.querySelector('.btn-wrong').addEventListener('click', function () {
       pushUndo(cueId);
@@ -795,6 +818,7 @@ ${rows}
       entry.status = entry.status === 'reject' ? null : 'reject';
       renderRow(tr);
       saveState();
+      if (entry.status === 'reject') setTimeout(function () { jumpToNextUnverified(true); }, 400);
     });
     Array.prototype.slice.call(tr.querySelectorAll('.btn-nudge')).forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -884,17 +908,7 @@ ${rows}
   });
 
   document.getElementById('jumpNextBtn').addEventListener('click', function () {
-    var next = rowsAll.find(function (tr) {
-      var cueId = tr.getAttribute('data-cueid');
-      return !getEntry(cueId).status;
-    });
-    if (!next) {
-      setHint('saveHint', 'saveHintFloating', '✅ 未確認の行はもうありません。全部判定済みです。', false);
-      return;
-    }
-    next.scrollIntoView({behavior: 'smooth', block: 'center'});
-    next.classList.add('jump-highlight');
-    setTimeout(function () { next.classList.remove('jump-highlight'); }, 1500);
+    jumpToNextUnverified(false);
   });
 
   // キーボードショートカット: マウスが乗っている行に対して、スペース=▶再生、

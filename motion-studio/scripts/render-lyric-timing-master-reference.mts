@@ -430,6 +430,23 @@ ${rows}
     if (btn) btn.disabled = undoStack.length === 0;
   }
 
+  // 判定したら勝手に次の未確認cueへ進む(cue行のみ対象。フレーズ終わりは
+  // 数が少なく、まとめて上から見ても負担が大きくないため対象外)。
+  function jumpToNextUnverified(silent) {
+    var next = rowsAll.find(function (tr) {
+      var cueId = tr.getAttribute('data-cueid');
+      return !getEntry(cueId).status;
+    });
+    if (!next) {
+      if (!silent) setHint('saveHint', 'saveHintFloating', '✅ 未確認のcueはもうありません。', false);
+      return;
+    }
+    next.scrollIntoView({behavior: 'smooth', block: 'center'});
+    next.classList.add('jump-highlight');
+    setTimeout(function () { next.classList.remove('jump-highlight'); }, 1500);
+    hoveredTarget = {kind: 'cue', id: next.getAttribute('data-cueid')};
+  }
+
   var ACK_KEY = STORAGE_KEY + '_ackCount';
   function getAckCount() {
     var v = parseInt(localStorage.getItem(ACK_KEY) || '0', 10);
@@ -636,6 +653,7 @@ ${rows}
       renderRow(tr);
       saveState();
       checkBulkApplyOpportunity(tr, cueId, entry);
+      if (entry.status === 'ok') setTimeout(function () { jumpToNextUnverified(true); }, 400);
     });
     tr.querySelector('.btn-wrong').addEventListener('click', function () {
       pushUndo('cue', cueId);
@@ -650,6 +668,7 @@ ${rows}
       entry.status = entry.status === 'reject' ? null : 'reject';
       renderRow(tr);
       saveState();
+      if (entry.status === 'reject') setTimeout(function () { jumpToNextUnverified(true); }, 400);
     });
     Array.prototype.slice.call(tr.querySelectorAll('.btn-nudge')).forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -807,17 +826,7 @@ ${rows}
   });
 
   document.getElementById('jumpNextBtn').addEventListener('click', function () {
-    var next = rowsAll.find(function (tr) {
-      var cueId = tr.getAttribute('data-cueid');
-      return !getEntry(cueId).status;
-    });
-    if (!next) {
-      setHint('saveHint', 'saveHintFloating', '✅ 未確認のcueはもうありません。', false);
-      return;
-    }
-    next.scrollIntoView({behavior: 'smooth', block: 'center'});
-    next.classList.add('jump-highlight');
-    setTimeout(function () { next.classList.remove('jump-highlight'); }, 1500);
+    jumpToNextUnverified(false);
   });
 
   document.addEventListener('keydown', function (ev) {
