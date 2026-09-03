@@ -11,11 +11,11 @@ export const openingProductionGate = {
     "audio": "motion-studio/src/data/assets.ts"
   },
   "expectedPhotoCount": 11,
-  "resolvedPhotoCount": 11,
-  "photoMissingCount": 0,
+  "resolvedPhotoCount": 0,
+  "photoMissingCount": 11,
   "photos": {
     "ready": false,
-    "fileReady": true,
+    "fileReady": false,
     "intakeReceiptCurrent": false,
     "intakeReceiptPath": "out/intake/opening-media-intake.json",
     "intakeReceiptVerifiedCount": 0,
@@ -28,7 +28,7 @@ export const openingProductionGate = {
       "metadataValid": true,
       "assetHintCount": 0,
       "coverCount": 7,
-      "coverPresentCount": 7,
+      "coverPresentCount": 0,
       "humanCropQaState": "NOT_RUN",
       "humanCropQaReviewedCount": 0,
       "humanCropQaRequiredCount": 0,
@@ -44,8 +44,8 @@ export const openingProductionGate = {
   "photoSlots": [
     {
       "key": "okinawa-01",
-      "resolved": true,
-      "path": "photos/opening/okinawa-01.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
@@ -68,8 +68,8 @@ export const openingProductionGate = {
     },
     {
       "key": "okinawa-02",
-      "resolved": true,
-      "path": "photos/opening/okinawa-02.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
@@ -92,8 +92,8 @@ export const openingProductionGate = {
     },
     {
       "key": "okinawa-03",
-      "resolved": true,
-      "path": "photos/opening/okinawa-03.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
@@ -116,8 +116,8 @@ export const openingProductionGate = {
     },
     {
       "key": "seoul-01",
-      "resolved": true,
-      "path": "photos/opening/seoul-01.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
@@ -140,8 +140,8 @@ export const openingProductionGate = {
     },
     {
       "key": "seoul-02",
-      "resolved": true,
-      "path": "photos/opening/seoul-02.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
@@ -164,8 +164,8 @@ export const openingProductionGate = {
     },
     {
       "key": "seoul-03",
-      "resolved": true,
-      "path": "photos/opening/seoul-03.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
@@ -188,8 +188,8 @@ export const openingProductionGate = {
     },
     {
       "key": "hawaii-01",
-      "resolved": true,
-      "path": "photos/opening/hawaii-01.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
@@ -212,8 +212,8 @@ export const openingProductionGate = {
     },
     {
       "key": "hawaii-02",
-      "resolved": true,
-      "path": "photos/opening/hawaii-02.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
@@ -236,8 +236,8 @@ export const openingProductionGate = {
     },
     {
       "key": "hawaii-03",
-      "resolved": true,
-      "path": "photos/opening/hawaii-03.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
@@ -260,8 +260,8 @@ export const openingProductionGate = {
     },
     {
       "key": "hero-01",
-      "resolved": true,
-      "path": "photos/opening/hero-01.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
@@ -284,8 +284,8 @@ export const openingProductionGate = {
     },
     {
       "key": "hero-02",
-      "resolved": true,
-      "path": "photos/opening/hero-02.jpg",
+      "resolved": false,
+      "path": null,
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
       "scenePresentation": {
