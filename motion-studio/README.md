@@ -410,10 +410,118 @@ Gitへ残す:
 - prompt / QA / decision
 - docs / CSV / contract scripts
 
+## StaRt 129秒 3案ショーケース(研究・比較用。Extended/Short本番とは別枠)
+
+`docs/opening-authority.md`のProduct authority(Extended本命/Short fallback)を変更しない、129秒通し比較用の研究実装。詳細: `../docs/handoff/start-129-showcase-review-guide.md`。
+
+- A案(旅の記録映画) / B案(冒険アニメOP) / C案(リズム・タイポMV)
+- 共通14 section・129秒・歌詞32slotデータモデルは `src/data/start129/`
+- 実写真・正規音源・歌詞は未投入(placeholderでrender可能)
+
+```sh
+pnpm dev:start-129              # Studioで6 Composition(A/B/C × Clean/Guide)を確認
+pnpm render:start-129:a         # A案 低解像度preview
+pnpm render:start-129:b         # B案
+pnpm render:start-129:c         # C案
+pnpm qa:start-129                # 代表15時点 × 3案のstillを一括render(要目視)
+pnpm check:start-129             # データ契約チェック(129秒/歌詞32slot順序/重複)。Visual QAの代替にはならない
+```
+
+ローカルデータ配置(すべてGit管理外):
+
+```text
+motion-studio/local/lyrics.local.json     権利確認済み歌詞32句(schema: src/data/start129/localLyrics.ts)
+motion-studio/local/rights.local.json     権利メモ(schema: src/data/start129/localRights.ts)
+motion-studio/local/audio/start-129.mp3   権利確認済み音源(mp3/wav/m4a/aac)
+```
+
+無料ダミー素材(Pexels公式API。`PEXELS_API_KEY`必要):
+
+```sh
+python3 scripts/fetch-start-129-demo-assets.py --role HERO_WIDE --count 3          # 候補確認
+python3 scripts/fetch-start-129-demo-assets.py --role HERO_WIDE --count 3 --write  # 取得
+pnpm sync:start-129-demo-assets                                                     # 目視確認後、Remotionへ反映
+```
+
+## StaRt Wedding Edit(音楽主導版。129秒固定を撤回した実装)
+
+`Start129`(上記、129秒/14 section/歌詞32 slot固定)は旧仕様。Wedding Editは
+「曲の先頭〜2番サビ後の間奏が終わる地点」を実測(2026-08-26時点145.6秒)で使う、
+Palmier Pro on-device beat detectionによる実測beat同期版。詳細:
+`../docs/decisions/2026-08-25-start-wedding-edit-scope-change.md`。
+
+- 実音源: `motion-studio/local/audio/StaRt.m4a`(gitignore済み)
+- 実歌詞: 1〜37行目(2回目のサビ主要impact行=P030まで)を30 phraseとして可変長timing
+- 冒頭は「S→StaRt」を実測beatへ同期させて組み立てる(旧「ようこそ」は削除)
+- 歌詞animation familyは12種類を実使用(character-build 20%、3連続同一familyなし):
+  character-build / word-hit / three-hit-build / held-note-stretch / whisper-reveal /
+  impact-word / split-conflict / question-pause / repetition-echo / baseline-travel /
+  type-mask / foreground-reveal
+- ローカルデータ: `local/{structure,phrase,word-accent,beat,transition}-map.local.json`
+  (すべてgitignore済み。`verifiedByListening: false` — 人間の聴取による最終確認は未実施)
+
+```sh
+pnpm sync:start-wedding-edit-local        # 音源trim + データ検証 + generated.ts更新
+pnpm dev:start-wedding-edit                # Studioで6 Composition確認
+pnpm render:start-wedding-edit:v2          # フル解像度6本 → out/start-wedding-edit-final-v2/
+pnpm typecheck
+pnpm check:start-wedding-edit-phrase-qa    # 歌詞データ契約(coverage/family分布/StaRt完成)
+pnpm check:timing-master                    # TimingMasterのschema/整合性(offset architecture含む)
+pnpm check:choreography-event-timing        # ChoreographyEvent.timeSecに隠れたoffset加算が無いかの静的検査
+pnpm check:post60-regression                 # 60秒以降のcanonical→generated変換一致(Render Truth監査対応)
+node --no-warnings scripts/check-start-wedding-edit-render-qa.mts --dir=out/start-wedding-edit-final-v2
+```
+
+既知の限界: 音声を人間が聴取して確認したものではない(2026-08-26まで、この環境に
+聴取手段が無かった)。Type Maskは実shot連動ではなく固定写真を使用。
+Lyric-to-Transition / Call-and-Response Layout / Ending Dissolveは独立animation
+familyとしては未実装。
+
+### Cue聴取確認(TimingMaster、人間が実際に聴いて`verifiedByListening`を上げる手段)
+
+```sh
+pnpm render:cue-listening-clips   # 全78 cue(vocal cue 73 + letterCue 5)の前後クリップを生成
+open local/analysis/start-wedding/listening-review.local.html   # ブラウザで聴取
+```
+
+聴取結果は `local/analysis/start-wedding/listening-decisions.local.json`(手で作成、
+すべてgitignore済み)へ次の形式で記録する。
+
+```json
+{
+  "verifiedBy": "人間の名前",
+  "decisions": [
+    {"cueId": "P012-H01", "status": "ok"},
+    {"cueId": "P012-H02", "status": "adjust", "deltaMs": -40, "note": "少し早く感じる"},
+    {"cueId": "INTRO-START-S", "status": "reject", "note": "確認できない"}
+  ]
+}
+```
+
+```sh
+pnpm apply:listening-verification   # decisionsに列挙したcueだけへ安全に反映
+pnpm sync:timing-master             # generated.tsへ反映
+pnpm export:timing-interchange      # 歌詞本文なしのAI向けJSON + LYRIC_### WebVTT/SRT + SHA-256 manifestをlocalへ生成
+```
+
+decisionsに列挙されていないcueは一切変更されない(全件一律verified化はしない)。
+`status=adjust`のdeltaMsは既存`cueOffsetMs`への加算であり、置換ではない
+(二重適用防止のため`resolveEffectiveCueTimeMs()`経由でのみ最終合成される)。
+`status=reject`のcueは`verifiedByListening`をtrueにせず、再確認が必要な状態のまま残す。
+
+AIや字幕ツールへタイミングだけ渡す場合は`pnpm export:timing-interchange`を使う。
+`local/analysis/start-wedding/interchange/timing-master.interchange-manifest.local.json`には、JSON/WebVTT/SRTそれぞれのSHA-256・byte数と、3ファイルをまとめた`bundleSha256`が入る。同じmaster revisionから生成された内容が途中で差し替わっていないか、人間とAIのどちらからも検証できる。manifestは生成日時を持たず、同じ入力では同じ内容になる。
+出力先は`local/analysis/start-wedding/interchange/`で、JSONにはphrase/cueの時刻、
+補正量、confidence、検証状態、解析provenanceを含む。WebVTT/SRTの表示本文は
+`LYRIC_### | P### | section | status`だけで、歌詞本文・音源・音源ファイル名は含めない。
+生成時に歌詞本文または音源名の混入を検出した場合はfail-closedで停止する。
+
 ## 関連
 
 - `../docs/task-board.md`
 - `../docs/opening-v1-motion-map.md`
 - `../docs/02_style-bible.md`
+- `../docs/handoff/start-129-showcase-review-guide.md`
+- `../docs/decisions/start-129-three-showcase-directions.md`
 - `CLAUDE.md`
 - `MANUAL.md`

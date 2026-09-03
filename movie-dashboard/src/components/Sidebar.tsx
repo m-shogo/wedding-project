@@ -52,6 +52,7 @@ const navSections: SidebarSection[] = [
       { to: "/movie-coach/reference", label: "Reference Breakdown", icon: "⌗" },
       { to: "/movie-coach/start-showcase", label: "StaRt全体見本", icon: "▶" },
       { to: "/movie-coach/director-recipes", label: "演出レシピ図鑑（97）", icon: "🎞" },
+      { to: "/movie-coach/start-129", label: "StaRt 129秒・3案比較", icon: "🎬" },
     ],
   },
   {
@@ -73,6 +74,7 @@ const navSections: SidebarSection[] = [
     sectionId: "production",
     label: "PRODUCTION",
     links: [
+      { to: "/lyric-timing", label: "歌詞タイミング調整", icon: "🎧" },
       { to: "/opening-photo-intake", label: "Opening写真11枚", icon: "📷" },
       { to: "/opening-bgm-intake", label: "Opening BGM", icon: "♫" },
       { to: "/storyboard", label: "絵コンテ", icon: "🎬" },
