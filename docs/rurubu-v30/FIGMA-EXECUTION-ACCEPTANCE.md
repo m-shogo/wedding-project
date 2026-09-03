@@ -1,8 +1,8 @@
 # Rurubu WEDDING V30 — Figma Execution Acceptance Gate
 
-Status: `CURRENT_V30_REQUIRED_READ / ORNAMENT_ART_DIRECTION_AWARE / 2026-09-02`
+Status: `CURRENT_V30_REQUIRED_READ / DISPLAY_SYSTEM_AND_FINGERPRINT_AWARE / 2026-09-03`
 
-Purpose: prevent technically clean or individually attractive work from being called complete when editorial DNA, V30 art direction, page role, asset roles, ornament family coherence, transparency, carry-over, copy, photo replaceability, or Visual Master fidelity are wrong.
+Purpose: prevent a page from being called complete when the **live Figma implementation** disagrees with current authority, shared components are only shared in name, page-specific ornaments reuse identical sources, or high-saliency display art is flattened into generic native treatment despite current page authority.
 
 ## Authority
 
@@ -10,242 +10,218 @@ Newest explicit owner feedback wins.
 
 Current execution precedence:
 
-`owner feedback → page-specific ornament/page-polish authority → assets/rurubu-v30/ornament-art-direction-manifest.json → assets/rurubu-v30/visual-polish-manifest.json → TRUE-ALPHA policy → this Acceptance gate → older generic/root/page-main execution language`
+`owner feedback → latest page-specific owner override → assets/rurubu-v30/publication-display-system-manifest.json → page ornament/page-polish authority → assets/rurubu-v30/ornament-art-direction-manifest.json → visual-polish → TRUE-ALPHA policy → this Acceptance gate → older generic/root/page-main language`
 
-Older language that broadly rasterizes fixed/stylized text, treats P01 as the literal template for later pages, accepts good standalone illustration without publication-family review, or uses checkerboard-looking output as a transparency workflow is superseded.
+Older generic rules remain useful as defaults, but may not override a newer explicit item/page classification.
 
 ## Required read set
 
 1. `docs/RURUBU-CURRENT.md`
-2. actual page Visual Master
+2. actual target-page Visual Master
 3. `assets/rurubu-v30/manifest.json`
-4. `assets/rurubu-v30/visual-polish-manifest.json`
+4. `assets/rurubu-v30/publication-display-system-manifest.json`
 5. `assets/rurubu-v30/ornament-art-direction-manifest.json`
-6. page manifest
-7. page polish manifest when present
-8. page-specific ornament manifest when present
+6. `assets/rurubu-v30/visual-polish-manifest.json`
+7. page manifest / page polish manifest
+8. latest page-specific owner/display/ornament override when present
 9. `docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md`
-10. `docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md`
-11. this document
-12. page README when production exists
+10. this document
+11. page README/production evidence when relevant
 
-For a bounded correction, also read `docs/rurubu-v30/FAST-TARGETED-PATCH-POLICY.md`.
+For P02, current owner override is:
+`assets/rurubu-v30/p02/post-figma-review-20260903-manifest.json`.
 
-## 1. Rurubu editorial DNA — HARD / FIRST GATE
+## 1. Rurubu editorial DNA — HARD / FIRST
 
-Before judging whether an ornament is beautiful, judge whether it functions as editorial material.
+Before judging individual craft, confirm the page reads as Rurubu-style editorial material:
 
-Required characteristics:
-- decoration supports photography, headings, information blocks, eye movement or page rhythm;
-- lively density has hierarchy and calm zones;
-- mixed media may coexist, but it must feel art-directed by one publication team;
-- cutouts, routes, doodles, stickers, stamps and small illustrations are editorial tools, not independent artwork by default;
-- tactile print character is controlled and subordinate to readability/content.
+- strong first read;
+- photo/information-led hierarchy;
+- dense but readable clusters;
+- mixed media under one art direction;
+- decoration has a job;
+- tactile print character without generic stock/AI polish.
 
-Hard reject:
-- attractive standalone illustration that competes with the page's editorial lead without a Visual Master reason;
-- botanical/fine-art plate behavior where a compact corner accent is needed;
-- strong retro-poster treatment inserted into a lighter page without deliberate page-role justification;
-- generic stock/clipart or SaaS icon language;
-- unrelated illustration genres mixed with no editorial unifier.
+A beautiful standalone asset does not override a page-level editorial failure.
 
 Gate: `RURUBU_EDITORIAL_DNA_PASS`.
 
-## 2. V30 art direction — HARD
+## 2. V30 art direction / page role — HARD
 
-P01 is a calibration reference, not the root authority and not a template to clone.
+P01 is a calibration reference, not a page template.
 
-P01-P08 Visual Masters collectively calibrate the V30 translation of the Rurubu editorial DNA.
+Judge compatibility with the V30 publication as a whole, then fit to the exact page role and Visual Master.
 
-Judge compatibility across:
-- editorial usefulness;
-- line-weight range;
-- hand-drawn/printed character;
-- texture amount;
-- realism/detail range;
-- shadow/depth restraint;
-- palette temperature/saturation;
-- cutout/sticker weight;
-- route/doodle grammar;
-- micro-accent grammar;
-- relationship to photography and native text.
+Gates:
+- `V30_ART_DIRECTION_PASS`
+- `PAGE_ROLE_FIT_PASS`
 
-Different families may use different drawing methods. Consistency means compatible editorial treatment and visual weight, not identical brushwork.
+## 3. Asset role classification — HARD
 
-Gate: `V30_ART_DIRECTION_PASS`.
-
-## 3. Page role fit — HARD
-
-The target page Visual Master controls local density, scale, motif choice, negative space and ornament dominance.
-
-Do not import P01 cover ornament density into a profile/story/closing page merely for continuity.
-
-Ask: does this ornament have the right job and visual weight for this exact location?
-
-Gate: `PAGE_ROLE_FIT_PASS`.
-
-## 4. Ornament family coherence — HARD
-
-Use the registry and workflow in `assets/rurubu-v30/ornament-art-direction-manifest.json`.
-
-Current family vocabulary includes:
-- `TRAVEL_ROUTE_DOODLE`
-- `TRAVEL_VEHICLE`
-- `TROPICAL_BOTANICAL`
-- `TRAVEL_EPHEMERA`
-- `MICRO_ACCENT`
-
-Families share grammar, not identical final assets.
-
-Hard reject both:
-- unrelated family members that look selected from different stock packs/illustration genres;
-- forcing every object into one identical drawing style and losing controlled mixed-media energy.
-
-Gate: `ORNAMENT_FAMILY_COHERENCE_PASS`.
-
-## 5. Production architecture — HARD
-
-Use:
-
-`PLAN_GLOBALLY_CALIBRATE_UPFRONT_PRODUCE_CONTEXTUALLY`
-
-Meaning:
-1. inventory ornament slots across reviewed pages first;
-2. establish only 1–2 family calibration anchors where needed;
-3. create genuine cross-page shared components once;
-4. generate final page-specific ornaments after page hierarchy/photos/native text/negative-space needs are known;
-5. write accepted family decisions back to the registry.
-
-Do **not** generate every final icon upfront.
-
-Do **not** work pure page-by-page without a global family system.
-
-When future pages are added, map new needs to existing families or explicitly extend the family registry.
-
-## 6. Asset-role classification — HARD
-
-Before choosing render mode, classify material elements as:
-- `NATIVE_TEXT`
-- `SHARED_COMMON_COMPONENT`
-- `GENERATED_DISPLAY_ASSET`
-- `PAGE_SPECIFIC_ORNAMENT`
-- `PHOTO`
+Classify by **editorial role + mutability + saliency + reuse scope**, not by text-vs-image ideology.
 
 Decision order:
-1. cross-page recurring publication furniture → `SHARED_COMMON_COMPONENT`
-2. editable/consistent/separately controllable text → `NATIVE_TEXT`
-3. local decorative art/icon/route/cluster → `PAGE_SPECIFIC_ORNAMENT`
-4. replaceable photography → `PHOTO`
-5. only then consider `GENERATED_DISPLAY_ASSET` for a truly inseparable authored object with locked copy.
 
-Hard rejects:
-- stylized/fixed text called an image merely because it is rich;
-- PAGE-number family independently generated per page;
-- rasterizing native names/titles for convenience;
-- using `GENERATED_DISPLAY_ASSET` as a default ambiguity bucket.
+1. repeats across pages with controlled variable content → `SHARED_PUBLICATION_COMPONENT`
+2. replaceable photography → `PHOTO`
+3. page-specific decoration → `PAGE_SPECIFIC_ORNAMENT`
+4. long/variable/TBD/personal/frequently changing or not copy-locked → `NATIVE_TEXT`
+5. short, locked, high-saliency authored lettering explicitly authorized by current item/page authority → `GENERATED_DISPLAY_ASSET`
 
-## 7. Shared common components — HARD
+Important:
+- names/headings are **not automatically native**;
+- names/headings are **not automatically generated**;
+- variable semantic copy stays native;
+- high-saliency fixed display art may be generated only when current authority explicitly chooses that representation and canonical text is retained in metadata/authority.
 
-Recurring publication furniture remains one coherent cross-page system unless owner/Visual Master explicitly requires an exception.
+Hard reject:
+- baking TBD/personal/long copy into generated art;
+- keeping a rejected generic native title/name treatment merely because an older generic policy listed names/headings as native;
+- generating display copy without exact copy lock;
+- using `GENERATED_DISPLAY_ASSET` only for convenience.
 
-Current example: PAGE 01 / PAGE 02 / ... badge family.
+Gate: `DISPLAY_ROLE_CLASSIFICATION_PASS`.
 
-## 8. Ornament object quality / reuse intent
+## 4. Live role implementation — HARD
 
-Only after the higher-level editorial/art-direction/page/family gates pass, judge individual asset craft quality.
+**Manifest classification is not implementation proof.** Inspect actual Figma nodes/sources.
 
-Gate: `ORNAMENT_OBJECT_QUALITY_PASS`.
+Required:
+- generated display role → approved authored asset is actually installed;
+- native text role → text remains independently controllable;
+- shared component role → actual common master/source relationship exists;
+- page-specific ornament role → active source provenance is page-specific or intentionally recurring;
+- photo role → stable replaceable image/mask contract exists.
 
-If a motif repeats, verify it is deliberate publication language rather than convenience/carry-over.
+Do not accept node names or prior reports as substitutes for live inspection.
 
-Gate: `REUSE_INTENT_PASS`.
+Gate: `LIVE_ROLE_IMPLEMENTATION_PASS`.
 
-A beautiful individual PNG cannot override a failure in Rurubu DNA, V30 art direction, page fit or family coherence.
+## 5. Shared publication components — HARD
 
-## 9. Clean photo proxies — HARD
+Recurring furniture is one system, not page-by-page lookalikes.
 
-Visual Master/page screenshots are comparison references only, never active photo fills.
+Confirmed current example:
+`PAGE_BADGE_SHARED_MASTER`.
 
-Allowed:
-1. suitable user photo;
-2. clean standalone representative photo;
-3. clean generated standalone photo proxy with no page-layout decoration.
+For PAGE badges:
+- build one master shell/system;
+- page number is controlled variable content;
+- P01 onward use the same master/approved source architecture;
+- P09+ extends by value, not a new design.
 
-Reject a proxy containing title, border, badge, paper shell, flower, route, frame, page background or other layout decoration.
+Before PASS, inspect actual Figma master/instance or approved master-source provenance.
 
-## 10. True-alpha generation preflight — HARD
+Hard reject:
+- P01 raster badge + independently designed P02 ellipse badge;
+- eight separately generated PAGE PNGs;
+- same name/style but no real shared master;
+- claiming shared PASS from manifest text alone.
 
-For generated floating art:
+Gate: `SHARED_PUBLICATION_COMPONENT_PASS`.
 
-`true-alpha generation/export → immediate alpha-channel preflight → only PASS assets enter Figma`
+## 6. Ornament family + exact-source fingerprint — HARD
 
-If direct true alpha is unavailable:
+Use `assets/rurubu-v30/ornament-art-direction-manifest.json`.
+
+Families share visual grammar, not major exact assets.
+
+For page-specific major ornaments, before page lock:
+- compare source SHA-256 when available;
+- inspect Figma imageHash/source provenance when carry-over is possible;
+- an exact hash/source match across distinct PAGE_SPECIFIC_ORNAMENT roles fails unless explicitly declared as allowed recurring/shared material.
+
+Different hashes do not automatically pass; near-duplicate composition still needs visual reuse review.
+
+Gates:
+- `ORNAMENT_FAMILY_COHERENCE_PASS`
+- `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS`
+- `REUSE_INTENT_PASS`
+
+Historical recovered rule: **reuse motifs with variation rather than exact cloning**.
+
+## 7. Ornament/display object quality
+
+Only after the higher-level gates pass, judge individual craft quality.
+
+Require:
+- publication-grade silhouette/line/detail;
+- correct local visual weight;
+- no generic clipart/stock-pack feel;
+- no hybrid style seam against surrounding content.
+
+Gates:
+- `ORNAMENT_OBJECT_QUALITY_PASS`
+- `DISPLAY_ART_QUALITY_PASS` when applicable.
+
+## 8. True-alpha and material integrity — HARD
+
+For floating generated art:
+
+`true-alpha generation/export → immediate alpha preflight → Figma`
+
+If direct alpha is unavailable:
 
 `single safe flat matte → one extraction → alpha preflight`
 
-Never request/accept checkerboard as matte/background. Baked checkerboard RGB is `GENERATION_ALPHA_FAIL`.
+Checkerboard RGB is `GENERATION_ALPHA_FAIL`.
 
-Before Figma placement require:
-- `ART_QUALITY_PASS`
+Verify outside transparency and inside intended opacity separately.
+
+Gates:
 - `TRUE_ALPHA_PREFLIGHT_PASS`
+- `ALPHA_INTEGRITY_PASS`
 
-Figma must not be where fake transparency is discovered first.
+## 9. Clean photos / copy / border
 
-## 11. Alpha integrity after cutout — HARD
+- Visual Master/page screenshot is never an active photo fill.
+- replaceable photos use stable masks/roles.
+- newest owner-approved copy wins.
+- TBD/personal body copy remains native/separate.
+- default depth: `background → border/frame → photos → authored modules → foreground accents`.
 
-`TRUE ALPHA ≠ CORRECT ALPHA`.
+## 10. Carry-over status
 
-Verify intended outside transparency and intended interior opacity separately.
-
-Reject checkerboard RGB, matte halo, opaque rectangle, fringe, unintended holes, erased white/light art or broken thin routes/details.
-
-Opaque paper/vessel interiors normally use alpha `>= 0.95`, preferably `1.00`.
-
-If one same-family opaque-paper module fails, run one bounded sibling sweep and repair source-side alpha. Do not hide defects with rescue rectangles/Figma opacity.
-
-## 12. Border / copy / carry-over — HARD
-
-Default border depth:
-
-`background → border/frame → Hero/photos → authored modules → major foreground accents`
-
-Newest owner-approved copy overrides stale generated/native copy. Unapproved personal facts remain separate/non-factual.
-
-Carry-over statuses:
+Allowed statuses:
 - `UNREVIEWED_CARRYOVER`
 - `KEEP_REQUALIFIED`
 - `REWORK_REQUIRED`
 - `REPLACE_REQUIRED`
 - `SUPERSEDED`
 
-Existing visible assets have no permanent grandfathered visual PASS.
+`KEEP_REQUALIFIED` requires current visual review **and** source-provenance/fingerprint review when exact reuse is possible.
 
-## 13. Reference Delta / design completion
+Prior production status never grants permanent PASS.
 
-Use the current screenshot and actual Visual Master, not layer names or prior reports.
+## 11. Design-completion gate
 
-Before `FIGMA_DESIGN_COMPLETE = YES`, confirm applicable gates in this order:
+Before `FIGMA_DESIGN_COMPLETE = YES`, use the **current Figma screenshot + live node/source inspection**, not only manifests/reports.
+
+Confirm applicable gates:
+
 1. `RURUBU_EDITORIAL_DNA_PASS`
 2. `V30_ART_DIRECTION_PASS`
 3. `PAGE_ROLE_FIT_PASS`
-4. `ORNAMENT_FAMILY_COHERENCE_PASS`
-5. correct asset-role classification/shared components
-6. `ORNAMENT_OBJECT_QUALITY_PASS`
-7. `REUSE_INTENT_PASS`
-8. clean photo-proxy integrity
-9. true-alpha/material alpha
-10. copy safety/sync
-11. border depth
-12. 3-second hierarchy/editorial rhythm
-13. A5 readability/edge safety
+4. `DISPLAY_ROLE_CLASSIFICATION_PASS`
+5. `LIVE_ROLE_IMPLEMENTATION_PASS`
+6. `SHARED_PUBLICATION_COMPONENT_PASS`
+7. `ORNAMENT_FAMILY_COHERENCE_PASS`
+8. `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS`
+9. `ORNAMENT_OBJECT_QUALITY_PASS` / `DISPLAY_ART_QUALITY_PASS`
+10. `REUSE_INTENT_PASS`
+11. clean photo-proxy integrity
+12. `TRUE_ALPHA_PREFLIGHT_PASS` / material alpha
+13. copy safety/sync
+14. border/edge/A5 readability
+15. final direct Visual Master/current-page comparison
 
-Structure-only cleanliness or isolated PNG quality is never design completion.
+A manifest saying PASS cannot override contradictory live Figma evidence.
 
-## 14. Fast close
+## 12. Fast close
 
 For bounded corrections:
 
-`fix reopened scope → one bounded dependency/sibling check if required → one integrated final screenshot/QA → protected-page check → one remote sync check → close gates → STOP`
+`fix reopened scope → bounded dependency/fingerprint/shared-component check once → one integrated final screenshot → protected-page check → one remote sync → close → STOP`
 
 Do not restart unrelated prior-PASS audits unless the patch disturbed them.
 
@@ -253,23 +229,26 @@ Do not restart unrelated prior-PASS audits unless the patch disturbed them.
 
 ### P01
 
-`DESIGN_LOCKED / FINAL_PHOTO_QA_PENDING / PRINT_READY_NO`
+`MOSTLY_DESIGN_LOCKED / PAGE_BADGE_SHARED_MIGRATION_REOPENED_ONLY / FINAL_PHOTO_QA_PENDING / PRINT_READY_NO`
 
-P01 is a calibration reference for V30, not a template whose ornament density/exact motifs must be copied.
+Do not reopen unrelated P01 design. Its PAGE 01 badge is a visual reference/source for building the shared PAGE master, not permission to reuse P01-specific ornaments elsewhere.
 
 ### P02
 
-`STRUCTURE_COPY_PHOTO_PASS / ORNAMENT_ART_DIRECTION_REDESIGN_OPEN`
+`POST_FIGMA_REVIEW_REOPENED_DISPLAY_AND_CARRYOVER`
 
-Preserve accepted structure/photo/copy/material-alpha/border work.
+The five newly rebuilt top/Q2 ornaments remain accepted pending integrated review.
 
-Read `assets/rurubu-v30/p02/ornament-art-direction-manifest.json` before another ornament run.
+Current reopened scope:
+- `ふたりのプロフィール` → generated high-saliency display asset per latest owner override;
+- `私たちのこと、少しだけ紹介します♪` → generated ribbon/display asset;
+- SHOGO / SHIORI label pair → coordinated generated display family;
+- PAGE 02 → shared PAGE master instance, not independent page design;
+- bottom-left tropical cluster → replace/remove because live `imageHash` exactly matched P01 left tropical cluster.
 
-Current five targets:
-- `P02_Q2_PLANE_AND_ROUTE`
-- `P02_TOP_AIRPLANE_ROUTE`
-- `P02_Q2_SUITCASE`
-- `P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER`
-- `P02_TOP_LEFT_TROPICAL_CLUSTER`
+Current P02:
+- `FIGMA_DESIGN_COMPLETE = NO`
+- `FINAL_PHOTO_QA_PENDING = YES`
+- `PRINT_READY = NO`
 
-The latest candidates show strong standalone craft quality but unresolved illustration-genre drift. P02 returns to `FIGMA_DESIGN_COMPLETE = YES` only after the higher-level editorial/art-direction/page/family gates and final true-alpha preflight pass.
+Do not regenerate the already accepted five ornament targets unless the integrated final page review finds a direct compatibility problem.
