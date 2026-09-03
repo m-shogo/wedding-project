@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P03",
+  "date": "2026-09-03",
+  "status": "FIGMA_DESIGN_COMPLETE_FINAL_COPY_AND_PHOTO_QA_PENDING",
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "frameId": "3535:11",
+    "frameName": "V30 P03 / OUR STORY / PRODUCTION",
+    "finalChildCount": 39,
+    "pageBadgeMasterId": "3772:2",
+    "pageBadgeInstanceId": "3782:16",
+    "pageBadgeValue": "03",
+    "sharedBorderImageHash": "d70879a710893621756281489107cf9f3ca65c32"
+  },
+  "drive": {
+    "productionFolderId": "1_oXdgMjNsWCYv9PnYA3atOlqcrs0dDVw",
+    "qaFolderId": "1fyNeq5CGQYewooEYLs-RQeJq9sKOMBv1"
+  },
+  "assetRoleClassification": {
+    "GENERATED_DISPLAY_ASSET": [
+      "OUR STORY",
+      "ふたりのこれまで♡",
+      "1 出会い",
+      "2 デート",
+      "3 旅",
+      "4 プロポーズ",
+      "5 今日",
+      "Q3 paper display",
+      "Q4 paper display",
+      "Wedding Day / 2026.10.24"
+    ],
+    "NATIVE_TEXT": [
+      "intro copy / approval pending",
+      "timeline body copy 1-5 / approval pending",
+      "Q3 question and answer / approval pending",
+      "Q4 question and answer / approval pending"
+    ],
+    "SHARED_PUBLICATION_COMPONENT": [
+      "PAGE 03 / instance 3782:16 / master 3772:2",
+      "V30 airmail border / shared imageHash d70879a710893621756281489107cf9f3ca65c32"
+    ],
+    "PHOTO": [
+      "P03_PHOTO_HERO",
+      "P03_PHOTO_ENCOUNTER",
+      "P03_PHOTO_DATE",
+      "P03_PHOTO_TRAVEL",
+      "P03_PHOTO_PROPOSAL"
+    ]
+  },
+  "majorAssetEvidence": [
+    {
+      "id": "P03_HEADER_TITLE",
+      "path": "assets/rurubu-v30/p03/production/display/final/V30_P03_HEADER_TITLE.png",
+      "sha256": "719125f857edf7e60859c3f80721104d861fdc6ee1be7b76bba30c999855b1c0",
+      "figmaNodeId": "3779:15",
+      "figmaImageHash": "a1a9dbc4699f9e8c0dedf735b6edb205dc6adf4f"
+    },
+    {
+      "id": "P03_HEADER_RIBBON",
+      "path": "assets/rurubu-v30/p03/production/display/final/V30_P03_HEADER_RIBBON.png",
+      "sha256": "4d29ffc666fbaf0510e0bb5970c31cf6e17f15b2ff3638910000ec089f05ee08",
+      "figmaNodeId": "3779:17",
+      "figmaImageHash": "0cd1b04a7af5cc4b33d9a1bf9fe18d86aaa82665"
+    },
+    {
+      "id": "P03_Q3_PAPER_DISPLAY",
+      "path": "assets/rurubu-v30/p03/production/display/final/V30_P03_Q3_PAPER_DISPLAY.png",
+      "sha256": "4f72c3fd0fe21d984ad6a8638d22781f50ac49d8813b74e7777f20bedacc68c8",
+      "figmaNodeId": "3781:14",
+      "figmaImageHash": "3a385fca54a2a46ef46974de43957e611bed05df"
+    },
+    {
+      "id": "P03_Q4_PAPER_DISPLAY",
+      "path": "assets/rurubu-v30/p03/production/display/final/V30_P03_Q4_PAPER_DISPLAY.png",
+      "sha256": "6205081cc6a65d051c4041901aaf61d5efd8bad8520d8d55c6dd69794e8d9313",
+      "figmaNodeId": "3781:15",
+      "figmaImageHash": "48a5ba449e7b9995d789d0b2c8cd840a6a775d72"
+    },
+    {
+      "id": "P03_BOTTOM_CHURCH_TROPICAL_CLUSTER",
+      "path": "assets/rurubu-v30/p03/production/ornaments/final/V30_P03_BOTTOM_CHURCH_TROPICAL_CLUSTER.png",
+      "sha256": "29d0449022746a337f469e2e912988d43d11709c08d313e903af51d008b8caaf",
+      "figmaNodeId": "3782:15",
+      "figmaImageHash": "d99356d349f6ae9cb11ff165950e0c65d284fb3d"
+    }
+  ],
+  "photoEvidence": {
+    "roleCount": 5,
+    "cleanStandaloneProxyPass": true,
+    "visualMasterCropUsed": false,
+    "step5PhotoSlotCount": 0,
+    "proposalProxy": {
+      "path": "assets/rurubu-v30/p03/production/proxies/V30_P03_PROPOSAL_CLEAN_STANDALONE_PROXY.png",
+      "sha256": "e88431dba49e470874ef50e0007a3029e9b598c1238d21734dfe2c52874464e0",
+      "figmaImageHash": "cf52bbe88644de8fa99bf9b5133c00e382e87cc7"
+    }
+  },
+  "copySafety": {
+    "lockedVisibleCopy": [
+      "OUR STORY",
+      "ふたりのこれまで♡",
+      "1 出会い",
+      "2 デート",
+      "3 旅",
+      "4 プロポーズ",
+      "5 今日",
+      "Q3",
+      "Q4",
+      "Wedding Day",
+      "2026.10.24",
+      "PAGE 03"
+    ],
+    "personalStoryFactized": false,
+    "qaCopyFactized": false,
+    "pendingCopyImplementation": "native M PLUS 1 text explicitly marked approval pending"
+  },
+  "alphaQa": {
+    "floatingAssetCount": 21,
+    "outsideTransparencyPass": true,
+    "transparentBorderPass": true,
+    "q3CenterAlpha": 255,
+    "q4CenterAlpha": 255,
+    "lightCompositeSha256": "e8ac64160dbdafed0da572a3002d250783c88270c209f0bcfba20c1e781f8521",
+    "darkCompositeSha256": "54104b03a1038bfa342dbc9cbd04a7ba0a402bd228bf0f857a72f9a62d7e6fe9"
+  },
+  "fingerprintQa": {
+    "pageSpecificMajorHashCollisionsAgainstP01P02": 0,
+    "intentionalSharedExceptions": [
+      "airmail border",
+      "PAGE_BADGE_SHARED_MASTER"
+    ]
+  },
+  "finalQa": {
+    "firstScreenshotSha256": "8a072c323f0b627c32b90becd4e67db941ab3aa6c4a01c013846df9363bab974",
+    "finalScreenshotSha256": "cf236ddb6f46a338b1e9ae8185c2aa0a7fbf755429ba1188fd49f9cd77b59fc6",
+    "referenceDeltaContactSha256": "08b3f642404ce0ff2376fa1a2d8815ea44e4e8092b8691da459b372ec429f78f",
+    "targetedFix": "lifted and rebalanced Wedding Day card, church cluster and PAGE 03 away from trim collision",
+    "protectedPages": {
+      "P01": "untouched / childCount 25",
+      "P02": "untouched / childCount 67",
+      "P04_P08": "untouched / childCount 0"
+    }
+  },
+  "acceptance": {
+    "RURUBU_EDITORIAL_DNA_PASS": "PASS",
+    "V30_ART_DIRECTION_PASS": "PASS",
+    "PAGE_ROLE_FIT_PASS": "PASS",
+    "DISPLAY_ROLE_CLASSIFICATION_PASS": "PASS",
+    "LIVE_ROLE_IMPLEMENTATION_PASS": "PASS",
+    "SHARED_PUBLICATION_COMPONENT_PASS": "PASS_MASTER_3772_2",
+    "ORNAMENT_FAMILY_COHERENCE_PASS": "PASS",
+    "ORNAMENT_OBJECT_QUALITY_PASS": "PASS",
+    "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS": "PASS_NO_MAJOR_COLLISIONS",
+    "REUSE_INTENT_PASS": "PASS",
+    "CLEAN_PHOTO_PROXY_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS_21_OF_21",
+    "COPY_SAFETY_PASS": "PASS",
+    "REFERENCE_DELTA_PASS": "PASS_AFTER_TARGETED_BOTTOM_FIX",
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_COPY_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  }
+}

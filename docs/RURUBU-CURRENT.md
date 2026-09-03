@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `V30_ONLY / P01-P02_DESIGN_LOCKED / P03_READY_FOR_CODEX_PRODUCTION / 2026-09-03`
+Status: `V30_ONLY / P01-P03_DESIGN_COMPLETE / 2026-09-03`
 
 V30 is the sole current production version. V20 is history/reference only. Do not create V31 unless explicitly requested.
 
@@ -113,13 +113,13 @@ Important completed systemic fixes:
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-## P03 — READY FOR CODEX PRODUCTION
+## P03 — FIGMA DESIGN COMPLETE
 
 Frame: `3535:11`
 Role: `OUR STORY + Q3/Q4 / STORY_TIMELINE_EDITORIAL_PAGE`
 Visual Master: `assets/rurubu-v30/p03/P03.png`
 
-Direct live Figma review on 2026-09-03 confirmed P03 is currently a blank warm field. Build into this existing protected frame; do not create a duplicate P03.
+P03 production was completed directly in the protected frame on 2026-09-03. No duplicate or TEMP P03 frame exists.
 
 Current page authority:
 `assets/rurubu-v30/p03/polish-manifest.json`
@@ -139,13 +139,12 @@ Key P03 decisions:
 - Wedding Day may use locked `2026.10.24`
 
 Current state:
-- `READY_FOR_CODEX_PRODUCTION`
-- `FIGMA_DESIGN_COMPLETE = NO`
+- `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_COPY_QA_PENDING = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-After Codex completion, ChatGPT must review the actual P03 Figma frame before design lock.
+Production evidence and final screenshots are recorded under `assets/rurubu-v30/p03/production/`.
 
 ## P04-P08
 

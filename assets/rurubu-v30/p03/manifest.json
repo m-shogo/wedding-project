@@ -4,8 +4,8 @@
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "role": "OUR STORY + Q3/Q4",
-  "status": "VISUAL_MASTER_LOCKED",
-  "productionState": "VISUAL_MASTER_LOCKED",
+  "status": "FIGMA_DESIGN_COMPLETE_FINAL_COPY_AND_PHOTO_QA_PENDING",
+  "productionState": "FIGMA_DESIGN_COMPLETE",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualLockAuditPolicy": "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
   "visualMaster": {
@@ -309,7 +309,7 @@
     "rule": "Preserve photo/frame separation and front/back overlaps; exact z integers may be tuned against the visual master."
   },
   "assetDecompositionPlan": {
-    "status": "PROPOSED_AFTER_VISUAL_REVIEW_NOT_YET_PART_MAP_APPROVED",
+    "status": "IMPLEMENTED_P03_PRODUCTION_20260903",
     "onePartOneImage": true,
     "proposedGeneratedEditorialObjects": [
       "OUR STORY display-title system",
@@ -416,29 +416,29 @@
     "grayscaleCheck": "Hierarchy must survive reduced saturation; timeline cannot rely on color alone to distinguish sequence."
   },
   "partGenerationGate": {
-    "status": "READY_FOR_PART_MAP_APPROVAL",
+    "status": "COMPLETE_FROM_CURRENT_EXECUTION_HANDOFF",
     "visualMasterReviewed": true,
     "passA24PointReviewComplete": true,
     "secondPassOmissionAuditComplete": true,
     "threeSecondHierarchyLocked": true,
     "backgroundFramePhotoRolesMapped": true,
     "referenceDeltaDirectionLocked": true,
-    "partMapApproved": false,
-    "rule": "Visual lock is complete. Isolated generation remains blocked until PART_MAP_APPROVED."
+    "partMapApproved": true,
+    "rule": "The current P03 execution handoff approved the contextual part map; production and integrated QA are complete."
   },
   "qa": {
     "orderedGates": ["G0_VISUAL_IDENTITY_3_SECOND","G1_REFERENCE_DELTA","G2_CANONICAL_FACTS","G3_RELATIONAL_HIERARCHY_AND_SALIENCY","G4_QUIET_ZONES_AND_OCCLUSION","G5_PHOTO_MASK_FACE_SAFE_AND_REPLACEABILITY","G6_A5_READABILITY_AND_SAFE_AREA","G7_ALPHA_PADDING_AND_ASSET_INTEGRITY","G8_EXPORT_AND_PRINT","G9_HIDDEN_STALE_PLACEHOLDER_SCAN"],
     "currentGateEvidence": {
       "G0": "Visual master reviewed twice; title/hero/timeline/Q&A hierarchy recorded.",
-      "G1": "Reference Delta priorities and fail conditions recorded; Figma production comparison pending.",
+      "G1": "Final Figma screenshot compared side-by-side with the Visual Master; title/hero/timeline/Q stack and bottom closure pass.",
       "G2": "Root date/name facts retained; personal story/Q&A copy explicitly not promoted to FACT.",
       "G3": "Role locks, asymmetry, photo-count and saliency rules recorded.",
       "G4": "Hero/timeline/Q&A/page-badge quiet zones recorded.",
-      "G5": "Five replaceable real-photo slots specified with face/focal-safe behavior; actual Figma swap test pending.",
-      "G6": "A5 readability/print-safety targets specified; actual-size proof pending.",
-      "G7": "Independent asset/padding contract specified; production assets pending.",
-      "G8": "Pending Figma production/export.",
-      "G9": "Pending final production scan."
+      "G5": "Five replaceable real-photo slots are live with clean standalone proxies; step 5 has no photo.",
+      "G6": "Final 559x794 screenshot confirms the title, hero, step headings, Q hierarchy, date and PAGE badge remain readable.",
+      "G7": "Twenty-one floating assets passed true-alpha and transparent-border preflight; Q3/Q4 paper centers are alpha 255.",
+      "G8": "Figma production and final PNG screenshot are complete; print-ready remains false pending final content and print QA.",
+      "G9": "Upload staging frames were removed and the final live-role scan found no obsolete duplicate P03 production frame."
     },
     "technicalQaCannotOverrideVisualQa": true
   }
