@@ -298,12 +298,13 @@ Style anchor for V30 inside-page paper/display/ornament treatment. Not a layout 
 Current live P03 fails `CROSS_PAGE_STYLE_FAMILY_PASS` because:
 - grouped Header/Q3/Q4/Bottom drifted into painterly/vintage/parchment/botanical illustration language;
 - preserved Timeline remained SVG/flowchart-like;
-- the page therefore mixes two non-V30 genres.
+- current isolated camera/palm/plumeria and generic Wedding Day treatment reinforce the style seam;
+- the page therefore mixes incompatible non-V30 visual genres.
 
 Current P03 authority:
 `assets/rurubu-v30/p03/polish-manifest.json`.
 
-P03 must realign Header, Q3/Q4, Story Timeline + Wedding Day/date, and Bottom closure to the P01/P02 V30 graphic family while preserving P03's own composition, photo roles and pending native copy.
+P03 must realign Header, Q3/Q4, Story Timeline + fixed local accents + Wedding Day/date, and Bottom closure to the P01/P02 V30 graphic family while preserving P03's own composition, photo roles and pending native copy.
 
 ### P04-P08
 
