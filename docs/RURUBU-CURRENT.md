@@ -19,17 +19,14 @@ V30 is the sole current production version. V20 is history/reference only. Do no
 
 Newest explicit owner feedback wins.
 
-Current precedence:
-`owner feedback → latest page-specific authority → publication display system / page ornament authority → global ornament art direction → visual-polish → true-alpha policy → older generic/root/page-main language`
-
 ## Workflow ownership
 
 ### ChatGPT
 - owner feedback / Visual Master / live Figma review
 - Root/shared/page authority improvement
-- stale-rule/contradiction cleanup
+- contradiction cleanup
 - Codex handoff
-- post-build live Figma review
+- post-build live review
 
 ### Codex
 - production ImageGen
@@ -56,81 +53,52 @@ Page: `V30_FINAL_PRODUCTION`
 
 ## V30 CROSS-PAGE STYLE FAMILY — HARD
 
-P01 `3535:7` and P02 `3535:9` are the current **V30 style anchors**.
+P01 `3535:7` and P02 `3535:9` are the current V30 **style anchors**, not layout templates.
 
-They are **not layout templates**. Later pages must not copy their composition, module count or cover/profile structure.
-
-They do define the active publication family for major display art, editorial papers and travel/tropical ornament treatment.
+Later pages keep their own local composition, density and page role, but major display art/paper/ornament systems must remain in the same publication family.
 
 ### Active V30 style DNA
 
-- bright, high-saturation travel-magazine energy;
+- bright high-saturation travel-magazine energy;
 - crisp printed/sticker-like silhouettes;
-- strong dark outlines or equivalent high-contrast edge definition for high-saliency display art;
+- strong dark outline or equivalent high-contrast edge definition on high-saliency display art;
 - white/yellow/bright keylines and controlled dimensional shadows where useful;
 - clean cream/white editorial paper rather than aged parchment;
-- bold pink / blue / yellow / green / cyan relationships;
-- tropical/travel motifs used as lively editorial cutouts/stickers rather than fine-art illustrations;
-- restrained tactile print texture, never a new vintage/watercolor genre;
-- mixed media is allowed only within a bounded realism/texture range that still looks art-directed by one V30 publication team.
+- bold pink/blue/yellow/green/cyan relationships;
+- tropical/travel motifs as lively editorial cutouts/stickers rather than watercolor/fine-art illustrations;
+- restrained tactile print texture rather than sepia/vintage genre treatment;
+- mixed media only inside a bounded realism/texture range that still reads as one V30 publication.
 
-### HARD REJECT — cross-page style drift
+### HARD REJECT
 
-Do not allow a later page to become:
-- watercolor / painterly tropical art;
-- vintage/sepia scrapbook or aged parchment;
+- watercolor/painterly tropical systems;
+- vintage/sepia scrapbook or aged parchment as a dominant page language;
 - retro travel-poster illustration;
-- realistic botanical illustration plate;
-- a generic Canva/SVG icon system;
-- a mixture of painterly vintage blocks and flat flowchart/SVG parts.
+- fine-art botanical/church illustration plates;
+- generic Canva/SVG icon language;
+- painterly-vintage blocks mixed with flat flowchart/SVG parts on one page.
 
-`ANTI_CANVA` does **not** mean “switch to watercolor/vintage.”
+`ANTI_CANVA` does not mean “switch to watercolor/vintage.”
 
-The correct target is:
+Correct target:
 
 `P01/P02 V30 GRAPHIC FAMILY + TARGET PAGE'S OWN COMPOSITION`
 
-Gate before design lock:
+Gate: `CROSS_PAGE_STYLE_FAMILY_PASS`.
 
-`CROSS_PAGE_STYLE_FAMILY_PASS`
-
-A page may not reach `FIGMA_DESIGN_COMPLETE = YES` until a direct side-by-side review against at least the locked P01/P02 style anchors confirms it still looks like the same publication.
-
-## System architecture — current
-
-Ornament/art direction:
-`RURUBU_EDITORIAL_DNA → V30_ART_DIRECTION → CROSS_PAGE_STYLE_FAMILY → PAGE_VISUAL_LANGUAGE → ORNAMENT_FAMILY → ASSET_INSTANCE`
-
-Production strategy:
-`PLAN_GLOBALLY_CALIBRATE_UPFRONT_PRODUCE_CONTEXTUALLY`
-
-Display roles:
-- `GENERATED_DISPLAY_ASSET`
-- `NATIVE_TEXT`
-- `SHARED_PUBLICATION_COMPONENT`
-- `PAGE_SPECIFIC_ORNAMENT`
-- `PHOTO`
-
-Before design lock:
-- `LIVE_ROLE_IMPLEMENTATION_PASS`
-- `CROSS_PAGE_STYLE_FAMILY_PASS`
-- `PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS`
-
-Floating generated art follows true-alpha preflight; checkerboard RGB is never accepted as transparency.
+Before broad generation on P04+, generate one representative ecology/sample and compare against P01/P02 first. Do not generate the whole batch until the style-family direction passes.
 
 ## Shared PAGE badge — HARD
 
-PAGE 01 / 02 / 03... uses one real Figma component system:
-
 `PAGE_BADGE_SHARED_MASTER = 3772:2`
 
-Only the controlled page-number property changes. Do not independently generate/redraw PAGE badges per page.
+Only the controlled page-number value changes.
 
 ## P01 — DESIGN LOCKED
 
 Frame `3535:7`.
 
-Use as a V30 style anchor, not as a composition template.
+Use as a V30 style anchor, not a composition template.
 
 - `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
@@ -140,7 +108,7 @@ Use as a V30 style anchor, not as a composition template.
 
 Frame `3535:9`.
 
-Use as a V30 inside-page style anchor, not as a composition template.
+Use as a V30 inside-page style anchor, not a composition template.
 
 - `FIGMA_DESIGN_COMPLETE = YES`
 - `FINAL_PHOTO_QA_PENDING = YES`
@@ -155,16 +123,14 @@ Current authority: `assets/rurubu-v30/p03/polish-manifest.json`
 
 ### Why P03 is reopened
 
-A direct P01/P02/P03 live comparison found two simultaneous style failures:
+Direct P01/P02/P03 live comparison found that P03 currently mixes two incompatible non-V30 tendencies:
 
-1. grouped-regeneration blocks drifted too far into painterly / vintage / parchment / botanical illustration language;
-2. preserved timeline pieces remained Canva/SVG/flowchart-like.
+1. Header / Q3 / Q4 / Bottom grouped regeneration drifted into painterly/vintage/parchment/botanical illustration language;
+2. Timeline / isolated icons remained Canva/SVG/flowchart-like.
 
-So P03 currently contains **two different non-V30 genres on one page**.
+So the issue is no longer “timeline only.” P03 requires a bounded style realignment while preserving its information architecture, photos and pending native copy.
 
-The prior grouped-regeneration PASS declarations are superseded by the latest owner feedback and live cross-page review.
-
-### Rework targets
+### Owner-rejected current targets
 
 REWORK:
 - `P03_HEADER_ECOLOGY / GROUPED_REGENERATION / COPY_LOCKED`
@@ -192,17 +158,17 @@ One V30-aligned grouped block:
 - ribbon / airplane / heart-route logic
 - necessary tropical accents
 
-Must match P01/P02 graphic/sticker/print energy. No watercolor/vintage genre drift.
+No watercolor/vintage/painterly genre drift.
 
 #### B. Q3/Q4 editorial family
 
-Calibrate one bright V30 paper family, then create two non-mirrored blocks.
+One calibrated bright V30 paper family, then two non-mirrored blocks.
 
 Keep question/answer copy native until approved.
 
-Use clean bright paper comparable to the V30/P02 publication family. No aged parchment/scrapbook treatment.
+No aged parchment/scrapbook treatment.
 
-#### C. Story timeline ecology — one block
+#### C. Story Timeline ecology — one block
 
 Group together:
 - `1 出会い`
@@ -212,9 +178,9 @@ Group together:
 - `5 今日`
 - route/movement logic
 - step-number/headline family
-- camera/palm and only required fixed accents
+- camera/palm and only necessary fixed accents
 - `Wedding Day`
-- `2026.10.24` as the terminal story endpoint
+- `2026.10.24` as terminal story endpoint
 
 Keep separate:
 - all personal/body copy;
@@ -222,32 +188,30 @@ Keep separate:
 - Hero;
 - Step5 remains no-photo.
 
-Reject the current orange dotted connector + separate heart-label/icon grammar.
+Reject orange dotted connector + separate heart-label/icon grammar.
 
 #### D. Bottom closure
 
-One V30-aligned support block.
+One V30-aligned support ecology in bold editorial cutout/sticker language.
 
-Use bold editorial cutout/sticker language compatible with P01/P02, not watercolor church / realistic botanical / retro travel-poster language.
+No watercolor church / realistic botanical / retro travel-poster language.
 
-PAGE03 shared instance remains separate.
+PAGE03 shared instance stays separate.
 
-### Micro ornament rule
+### Micro-ornament rule
 
-Do not regenerate rejected isolated icons as new isolated icons.
+Do not regenerate rejected isolated icons as more isolated icons.
 
-`P03_STEP3_CAMERA`, `P03_STEP2_PALM`, `P03_HERO_LOWER_PLUMERIA` and similar accents must either:
-- be integrated into the nearest grouped ecology; or
-- be removed if not necessary.
+`P03_STEP3_CAMERA`, `P03_STEP2_PALM`, `P03_HERO_LOWER_PLUMERIA` and similar accents must either be integrated into the nearest grouped ecology or removed.
 
 ### Preserve
 
-- Hero role and main geometry;
+- Hero role and primary geometry;
 - five total photo roles;
 - Step5 no-photo behavior;
 - personal/native pending body copy;
 - PAGE03 `3782:16` / master `3772:2` / value `03`;
-- airmail border;
+- shared airmail border;
 - overall P03 information architecture.
 
 ### Current P03 gates
@@ -264,7 +228,7 @@ Do not regenerate rejected isolated icons as new isolated icons.
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-P03 may relock only after a direct P01/P02/P03 side-by-side review confirms:
+P03 may relock only after direct P01/P02/P03 side-by-side review confirms:
 
 1. same V30 publication family;
 2. no painterly/vintage genre drift;
@@ -276,13 +240,13 @@ P03 may relock only after a direct P01/P02/P03 side-by-side review confirms:
 
 Do not start final production until each page Visual Master is directly reviewed and current page authority is prepared.
 
-For every future page, before broad ImageGen:
+For every future page before broad ImageGen:
 
 1. inspect target Visual Master for local composition;
 2. inspect locked P01/P02 CURRENT for V30 style family;
-3. define grouped ecologies before generating small ornaments;
-4. generate one calibration sample first;
+3. define grouped ecologies;
+4. generate one style-calibration ecology/sample first;
 5. fail immediately if it drifts into watercolor/vintage/Canva/SVG/another unrelated genre;
-6. only then produce the page-specific assets.
+6. only then scale production.
 
-The target page may have a different layout, density and motif selection, but it must still pass `CROSS_PAGE_STYLE_FAMILY_PASS` before `FIGMA_DESIGN_COMPLETE = YES`.
+No later page can reach `FIGMA_DESIGN_COMPLETE = YES` without `CROSS_PAGE_STYLE_FAMILY_PASS`.
