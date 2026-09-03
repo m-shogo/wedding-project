@@ -119,7 +119,7 @@ Frame: `3535:11`
 Role: `OUR STORY + Q3/Q4 / STORY_TIMELINE_EDITORIAL_PAGE`
 Visual Master: `assets/rurubu-v30/p03/P03.png`
 
-P03 production was completed directly in the protected frame on 2026-09-03. No duplicate or TEMP P03 frame exists.
+P03 production and the latest owner-review grouped regeneration were completed directly in the protected frame on 2026-09-03. No duplicate or TEMP P03 frame exists.
 
 Current page authority:
 `assets/rurubu-v30/p03/polish-manifest.json`
@@ -128,13 +128,14 @@ Current execution handoff:
 `docs/rurubu-v30/CODEX-P03-PRODUCTION-20260903.md`
 
 Key P03 decisions:
-- `OUR STORY` and `ふたりのこれまで♡` are coordinated generated display assets
+- `OUR STORY`, `ふたりのこれまで♡`, ribbon, airplane, heart route and local header ornaments are one grouped Header ecology
 - 1→5 timeline labels form one coordinated but non-cloned display family
 - timeline body copy remains native/reference-only
-- Q3/Q4 are related but non-identical generated paper vessels; question/answer copy remains native until approved
+- Q3/Q4 are a related but non-identical grouped editorial paper family with integrated local ornament logic; question/answer copy remains native until approved
 - exactly five replaceable photo roles; step 5 intentionally has no support photo
 - one continuous story-route motif spans the timeline
 - PAGE03 must be instance of shared master `3772:2`, number `03`
+- bottom chapel/tropical/tide/ribbon art is one grouped closure ecology behind the preserved Wedding Day and shared PAGE 03 modules
 - P03 page-specific ornaments may reuse V30 family grammar but not exact P01/P02 page-specific image bytes by convenience
 - Wedding Day may use locked `2026.10.24`
 
@@ -144,7 +145,7 @@ Current state:
 - `FINAL_PHOTO_QA_PENDING = YES`
 - `PRINT_READY = NO`
 
-Production evidence and final screenshots are recorded under `assets/rurubu-v30/p03/production/`.
+Latest production evidence and final screenshots are recorded under `assets/rurubu-v30/p03/production/grouped-regeneration/`.
 
 ## P04-P08
 

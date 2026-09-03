@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P03",
+  "date": "2026-09-03",
+  "status": "OWNER_GROUPED_REGENERATION_COMPLETE_RELOCK_APPROVED",
+  "authority": "latest owner review in PR #878 workflow",
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "frameId": "3535:11",
+    "finalChildCount": 34,
+    "pageBadgeInstanceId": "3782:16",
+    "pageBadgeMasterId": "3772:2"
+  },
+  "groupedBlocks": [
+    {
+      "id": "P03_HEADER_ECOLOGY",
+      "path": "assets/rurubu-v30/p03/production/grouped-regeneration/final/V30_P03_HEADER_ECOLOGY_GROUPED.png",
+      "sha256": "731c8b5300cfc92e0b1bde32d9824e12cb23c4c29124420d8691132d7214d230",
+      "figmaNodeId": "3786:20",
+      "figmaImageHash": "7ce5d1f5819cc99b22e69576c048f217ad191d49"
+    },
+    {
+      "id": "P03_Q3_EDITORIAL_FAMILY",
+      "path": "assets/rurubu-v30/p03/production/grouped-regeneration/final/V30_P03_Q3_EDITORIAL_FAMILY_GROUPED.png",
+      "sha256": "6e343c77f1790837f6aff989404c607454542dd9c76426e7b951f469d588d194",
+      "figmaNodeId": "3786:21",
+      "figmaImageHash": "2b646ec0e674ae1479c5449c86e2a1585abb759e"
+    },
+    {
+      "id": "P03_Q4_EDITORIAL_FAMILY",
+      "path": "assets/rurubu-v30/p03/production/grouped-regeneration/final/V30_P03_Q4_EDITORIAL_FAMILY_GROUPED.png",
+      "sha256": "b964fec1489378f216fdf85e5bcf9cd6d7f086cc6fb8dd43e5b324ef95a4cfcd",
+      "figmaNodeId": "3786:22",
+      "figmaImageHash": "8f6f541b8b7497855e7be271e253a9923316abff"
+    },
+    {
+      "id": "P03_BOTTOM_CLOSURE_ECOLOGY",
+      "path": "assets/rurubu-v30/p03/production/grouped-regeneration/final/V30_P03_BOTTOM_CLOSURE_ECOLOGY_GROUPED.png",
+      "sha256": "246f0884857f99af5aac5429fd139c37f4f1ec387b7b5c9581787b1f80e9e356",
+      "figmaNodeId": "3786:23",
+      "figmaImageHash": "40f165d36a2b7011eef5ef96996f9c28c7b8c9c0"
+    }
+  ],
+  "supersededLiveNodeIds": [
+    "3779:14",
+    "3779:15",
+    "3779:16",
+    "3779:17",
+    "3781:14",
+    "3781:15",
+    "3781:20",
+    "3781:21",
+    "3782:15"
+  ],
+  "preserved": {
+    "photoRoleCount": 5,
+    "step5PhotoRoleCount": 0,
+    "nativePendingCopy": true,
+    "weddingDayNodeId": "3782:14",
+    "pageBadgeInstanceId": "3782:16",
+    "airmailBorderNodeId": "3778:15"
+  },
+  "drive": {
+    "productionFolderId": "1_oXdgMjNsWCYv9PnYA3atOlqcrs0dDVw",
+    "qaFolderId": "1fyNeq5CGQYewooEYLs-RQeJq9sKOMBv1",
+    "productionFileIds": [
+      "15KcTEp_88zq1AMUDR9kwhIptFljA5yYt",
+      "1-cX3Cj78keiKvyBOppk9vI7-S1qyt1wV",
+      "1u1cGt_FVNU4XHQgLZwolm6leeIzHBPjl",
+      "1x7VSZPyvOcEnVCyCpIKFUgSRDc40JKBY",
+      "15QuE7ZJvvactGBjqqIOmjE2JWxpoHOpA"
+    ],
+    "qaFileIds": [
+      "1W3y0VBi6EjSv8QnwwGx3FwofbQsUdjUF",
+      "1vpPKb6MxrOrRlRs8iFKdaLKqx7F2vZrs",
+      "1PI_oOigpazZzZLj0M0qAV-36FpTWb8Wr",
+      "1_n3fbwPB0Z42p0A36YqBGPz-VKJNgB_i"
+    ]
+  },
+  "qa": {
+    "firstScreenshot": "assets/rurubu-v30/p03/production/grouped-regeneration/qa/V30_P03_GROUPED_FIRST_FULL_QA.png",
+    "firstScreenshotSha256": "91cb7042ff4e7eb2cd51a20e6dd773e5cef55edbd03d02b42fb75545d2c960b1",
+    "targetedFix": "moved the bottom closure ecology behind timeline and Q native copy without changing its art or geometry",
+    "finalScreenshot": "assets/rurubu-v30/p03/production/grouped-regeneration/qa/V30_P03_GROUPED_FINAL_FULL_QA.png",
+    "finalScreenshotSha256": "4d81912935a7a17f7cd86be031e9a64ed5419ac5f220c621af6f6fd9f0886440",
+    "outsideTransparencyPass": true,
+    "paperInteriorOpaque": true,
+    "transparentBorderPass": true,
+    "p01P02MajorImageHashCollisions": 0,
+    "protectedPages": {
+      "P01": "untouched / childCount 25",
+      "P02": "untouched / childCount 67",
+      "P04_P08": "untouched / childCount 0"
+    }
+  },
+  "acceptance": {
+    "ECOLOGY_FIT_PASS": true,
+    "ANTI_FLOWCHART_PASS": true,
+    "ANTI_CANVA_SVG_PASS": true,
+    "ANTI_CLIPART_PASS": true,
+    "ORNAMENT_FAMILY_PASS": true,
+    "REFERENCE_DELTA_PASS": true,
+    "PHOTO_ROLE_PASS": true,
+    "COPY_SAFETY_PASS": true,
+    "ALPHA_MATERIAL_PASS": true,
+    "FINGERPRINT_COLLISION_PASS": true,
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_COPY_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  }
+}

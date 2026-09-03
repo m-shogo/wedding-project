@@ -1,9 +1,9 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "role": "OUR STORY + Q3/Q4",
-  "status": "FIGMA_DESIGN_COMPLETE_FINAL_COPY_AND_PHOTO_QA_PENDING",
+  "status": "OWNER_GROUPED_REGENERATION_COMPLETE_RELOCK_APPROVED_FINAL_COPY_AND_PHOTO_QA_PENDING",
   "date": "2026-09-03",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
@@ -26,8 +26,31 @@
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
     "frameId": "3535:11",
     "reviewedOn": "2026-09-03",
-    "currentState": "P03_PRODUCTION_COMPLETE_39_CHILDREN",
+    "currentState": "P03_GROUPED_REGENERATION_COMPLETE_34_CHILDREN",
     "rule": "P03 was built directly in the existing protected frame. Do not repurpose P01/P02 or create a duplicate P03 frame."
+  },
+  "latestOwnerGroupedRegeneration": {
+    "status": "CURRENT_OVERRIDE_2026_09_03",
+    "evidence": "assets/rurubu-v30/p03/production/grouped-regeneration/manifest.json",
+    "principle": "High-dependency regions are authored as grouped ecologies rather than isolated transparent parts.",
+    "liveBlocks": [
+      "P03_HEADER_ECOLOGY / GROUPED_REGENERATION / COPY_LOCKED",
+      "P03_Q3_EDITORIAL_FAMILY / GROUPED_REGENERATION / Q3_ONLY",
+      "P03_Q4_EDITORIAL_FAMILY / GROUPED_REGENERATION / Q4_ONLY",
+      "P03_BOTTOM_CLOSURE_ECOLOGY / GROUPED_REGENERATION / P03_SPECIFIC"
+    ],
+    "supersedesLiveImplementations": [
+      "P03_HEADER_TROPICAL_ACCENT",
+      "P03_HEADER_TITLE",
+      "P03_HEADER_AIRPLANE_HEART_ROUTE",
+      "P03_HEADER_RIBBON",
+      "P03_Q3_PAPER_DISPLAY",
+      "P03_Q4_PAPER_DISPLAY",
+      "P03_Q3_FLORAL_ACCENT",
+      "P03_Q4_FLORAL_ACCENT",
+      "P03_BOTTOM_CHURCH_TROPICAL_CLUSTER"
+    ],
+    "preserved": "Hero, five-step timeline skeleton, five photo roles with no step-5 photo, native pending copy, Wedding Day, PAGE03 shared instance and airmail border."
   },
   "pageVisualLanguage": {
     "id": "STORY_TIMELINE_EDITORIAL_PAGE",
@@ -219,7 +242,7 @@
     "REFERENCE_DELTA_PASS"
   ],
   "completionState": {
-    "current": "FIGMA_DESIGN_COMPLETE_FINAL_COPY_AND_PHOTO_QA_PENDING",
+    "current": "OWNER_GROUPED_REGENERATION_COMPLETE_RELOCK_APPROVED_FINAL_COPY_AND_PHOTO_QA_PENDING",
     "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_COPY_QA_PENDING": true,
     "FINAL_PHOTO_QA_PENDING": true,

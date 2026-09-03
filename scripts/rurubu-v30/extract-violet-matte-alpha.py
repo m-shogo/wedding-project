@@ -20,13 +20,16 @@ def extract(source: Path, destination: Path) -> None:
     green = pixels[:, :, 1].astype(np.int16)
     blue = pixels[:, :, 2].astype(np.int16)
 
+    # Image generators sometimes add a small vignette to an explicitly flat
+    # violet matte. Accept that wider violet hue/value range, while edge-only
+    # flood filling still protects any enclosed artwork pixels.
     violet = (
-        (red >= 65)
-        & (blue >= 80)
-        & (green <= 95)
-        & (green * 2 < red + 25)
-        & (green * 2 < blue + 25)
-        & (np.abs(red - blue) <= 115)
+        (red >= 40)
+        & (blue >= 120)
+        & (green <= 115)
+        & (blue * 100 >= red * 115)
+        & (blue >= green * 2)
+        & (red >= green + 25)
     )
 
     height, width = violet.shape

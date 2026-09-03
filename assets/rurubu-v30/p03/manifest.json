@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 3,
-  "reviewRevision": 1,
+  "schemaVersion": 4,
+  "reviewRevision": 2,
   "project": "Rurubu WEDDING V30",
   "page": "P03",
   "role": "OUR STORY + Q3/Q4",
-  "status": "FIGMA_DESIGN_COMPLETE_FINAL_COPY_AND_PHOTO_QA_PENDING",
+  "status": "OWNER_GROUPED_REGENERATION_COMPLETE_RELOCK_APPROVED_FINAL_COPY_AND_PHOTO_QA_PENDING",
   "productionState": "FIGMA_DESIGN_COMPLETE",
+  "latestOwnerImplementationEvidence": "assets/rurubu-v30/p03/production/grouped-regeneration/manifest.json",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualLockAuditPolicy": "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
   "visualMaster": {
