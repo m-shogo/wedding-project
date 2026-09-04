@@ -3,7 +3,7 @@
   "project": "Rurubu WEDDING V30",
   "page": "P04",
   "role": "ALL TRAVEL MEMORIES / OUR JOURNEY",
-  "status": "PHASE_A_HEADER_CALIBRATION_PASS_STOPPED_BEFORE_PHASE_B",
+  "status": "PHASE_B_FULL_ASSEMBLY_PASS_FIGMA_DESIGN_COMPLETE",
   "date": "2026-09-04",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
@@ -19,8 +19,8 @@
     "page": "V30_FINAL_PRODUCTION",
     "frameId": "3535:13",
     "reviewedOn": "2026-09-04",
-    "observedState": "BLANK_CREAM_FRAME / NO_ACTIVE_P04_PRODUCTION_MODULES",
-    "meaning": "P04 is not a carry-over cleanup job. Build safely from the reviewed Visual Master into the existing frame. Do not create a duplicate P04 frame.",
+    "observedState": "FULL_P04_ASSEMBLY / 16 TOP_LEVEL CHILDREN / NO_DUPLICATE_FRAME",
+    "meaning": "Owner-opened Phase B completed in the existing P04 frame. Four photos remain independent replaceable fills; message copy remains native/editable; PAGE 04 remains a shared-master instance.",
     "protectedFrames": ["3535:7", "3535:9", "3535:11", "3535:15", "3535:17", "3535:19", "3535:21"]
   },
   "styleAnchorsVerifiedLive": {
@@ -100,17 +100,34 @@
     ],
     "hardStop": "DO NOT generate/install location labels, route, bottom closure, message vessel or photo-frame production until CROSS_PAGE_STYLE_FAMILY_PASS has been explicitly proven from live screenshots."
   },
+  "phaseB": {
+    "ownerInstruction": "OPEN",
+    "status": "PASS_FULL_ASSEMBLY",
+    "completedModules": [
+      "P04_LOCATION_LABEL_FAMILY",
+      "P04_TRAVEL_ROUTE_CONNECTOR",
+      "P04_BOTTOM_CLOSURE_ECOLOGY",
+      "P04_MESSAGE_PANEL_DECORATIVE_VESSEL_PLUS_NATIVE_TEXT",
+      "P04_PHOTO_HERO_OKINAWA",
+      "P04_PHOTO_KOREA",
+      "P04_PHOTO_HAWAII",
+      "P04_PHOTO_LOWER_CENTER",
+      "PAGE 04",
+      "FULL P04 ASSEMBLY"
+    ],
+    "evidence": "assets/rurubu-v30/p04/production/phase-b-full-production/manifest.json"
+  },
   "alphaContract": {
     "requiredBeforePlacement": ["ART_QUALITY_PASS", "TRUE_ALPHA_PREFLIGHT_PASS", "ALPHA_INTERIOR_OPACITY_PASS", "EDGE_ALPHA_QUALITY_PASS"],
     "specificRisk": "Flowers, leaves, ribbon tails, airplane, heart route and display lettering have curved/organic contours. Outside transparency alone is not enough; binary 0/255 edges require review and must composite cleanly on light/mid/dark backgrounds at A5 use size.",
     "noRescue": "No fake white rectangles or Figma opacity hacks behind a poor cutout."
   },
   "futurePhasesBlockedUntilA": {
-    "P04_LOCATION_LABEL_FAMILY": "BLOCKED",
-    "P04_TRAVEL_ROUTE_CONNECTOR": "BLOCKED",
-    "P04_BOTTOM_CLOSURE_ECOLOGY": "BLOCKED",
-    "P04_MESSAGE_PANEL": "BLOCKED",
-    "P04_PHOTO_MASKS_AND_PROXIES": "BLOCKED_FOR_FULL_PRODUCTION_BUT_MAY_PREPARE_GEOMETRY_OFFLINE_WITHOUT_LIVE_INSTALL"
+    "P04_LOCATION_LABEL_FAMILY": "COMPLETED",
+    "P04_TRAVEL_ROUTE_CONNECTOR": "COMPLETED",
+    "P04_BOTTOM_CLOSURE_ECOLOGY": "COMPLETED",
+    "P04_MESSAGE_PANEL": "COMPLETED_DECORATIVE_VESSEL_PLUS_NATIVE_TEXT",
+    "P04_PHOTO_MASKS_AND_PROXIES": "COMPLETED_FOUR_REPLACEABLE_FILLS"
   },
   "reporting": {
     "returnOnlyAfterPhaseA": [
@@ -129,8 +146,8 @@
     "LIVE_FIGMA_BASELINE_REVIEW": "PASS_BLANK_SAFE_START",
     "P04_HEADER_ECOLOGY_GENERATION": "PASS",
     "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS",
-    "FULL_P04_PRODUCTION": "BLOCKED",
-    "FIGMA_DESIGN_COMPLETE": false,
+    "FULL_P04_PRODUCTION": "PASS",
+    "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_COPY_QA_PENDING": true,
     "FINAL_PHOTO_QA_PENDING": true,
     "PRINT_READY": false

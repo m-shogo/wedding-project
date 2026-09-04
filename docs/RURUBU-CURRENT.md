@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `V30_ONLY / P01-P03_DESIGN_LOCKED / P04_PHASE_A_HEADER_PASS / 2026-09-04`
+Status: `V30_ONLY / P01-P03_DESIGN_LOCKED / P04_PHASE_B_FIGMA_DESIGN_COMPLETE / 2026-09-04`
 
 V30 is the sole current production version. V20 is history/reference only. Do not create V31 unless explicitly requested.
 
@@ -266,23 +266,30 @@ P03 may relock only after direct P01/P02/P03 side-by-side review confirms:
 4. target P03 composition remains intact;
 5. photos/body copy remain independently replaceable/editable.
 
-## P04 — PHASE A HEADER CALIBRATION PASSED
+## P04 — PHASE B FULL ASSEMBLY COMPLETE
 
 Frame `3535:13`.
 
-The representative `P04_HEADER_ECOLOGY_V30_ALIGNED` is installed as the only live P04 module. It passed matte-recovery alpha QA and direct P01/P02/P03 family comparison.
+The accepted `P04_HEADER_ECOLOGY_V30_ALIGNED` remains installed, and owner-opened Phase B has completed the location-label family, route connector, bottom closure ecology, decorative message vessel with native text, four independent replaceable photo fills, shared PAGE 04 component and full page assembly.
 
 - `ART_QUALITY_PASS = PASS`
 - `TRUE_ALPHA_PREFLIGHT_PASS = PASS`
 - `ALPHA_INTERIOR_OPACITY_PASS = PASS`
 - `EDGE_ALPHA_QUALITY_PASS = PASS`
 - `CROSS_PAGE_STYLE_FAMILY_PASS = PASS`
-- `FIGMA_DESIGN_COMPLETE = NO`
-- `PHASE_B = NOT_OPENED`
+- `PHOTO_ROLE_PASS = PASS`
+- `ANTI_FLOWCHART_PASS = PASS`
+- `ANTI_CANVA_SVG_PASS = PASS`
+- `ORNAMENT_FAMILY_PASS = PASS`
+- `REFERENCE_DELTA_PASS = PASS`
+- `FIGMA_DESIGN_COMPLETE = YES`
+- `FINAL_COPY_QA_PENDING = YES`
+- `FINAL_PHOTO_QA_PENDING = YES`
+- `PRINT_READY = NO`
 
-Evidence: `assets/rurubu-v30/p04/production/phase-a-header-calibration/manifest.json`.
+Evidence: `assets/rurubu-v30/p04/production/phase-b-full-production/manifest.json`.
 
-Do not call P04 complete. Location labels, route, bottom closure, message panel and photo assembly remain blocked until a later owner instruction explicitly opens Phase B.
+P01/P02/P03 fresh screenshots match the saved Phase A hashes exactly. P05-P08 remain untouched. Do not start P05-P08 production without their own current owner instruction and page gate.
 
 ## P05-P08 — before production
 
