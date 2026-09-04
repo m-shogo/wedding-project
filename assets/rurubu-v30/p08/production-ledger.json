@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 3,
+  "project": "Rurubu WEDDING V30",
+  "page": "P08",
+  "role": "MAGAZINE BACK COVER",
+  "purpose": "Prevent duplicate generation and make every P08 production object advance through an explicit acceptance pipeline.",
+  "authority": {
+    "visualMaster": "assets/rurubu-v30/p08/P08.png",
+    "visualMasterSha256": "3757fee202dd5a3e7d05292a78b0020ab62c1d5ce9b5fa2300e3d43af9bad3a5",
+    "figmaFrame": "3535:21",
+    "styleAnchors": ["P01 3535:7", "P02 3535:9", "P03 3535:11"]
+  },
+  "duplicatePrevention": {
+    "hardRule": "Before any ImageGen call, read this ledger. ACCEPTED items are not regenerated unless explicitly reopened by owner feedback or a concrete QA defect.",
+    "ownerAcceptedTransportRule": "A transport/upload failure must never trigger regeneration of owner-accepted artwork. Fix the transport path instead.",
+    "reuseFirst": "Search accepted V30 assets before generating a visually equivalent module.",
+    "acceptedAssetRule": "ACCEPTED assets are immutable for routine continuation.",
+    "oneRepresentativeAtATime": true
+  },
+  "items": [
+    {
+      "id": "P08_BG_PAPER_FIELD",
+      "role": "warm cream paper background",
+      "productionMethod": "FIGMA_NATIVE",
+      "imageGenRequired": false,
+      "status": "ACCEPTED",
+      "figma": {"frameId": "3535:21", "fill": "#fffdf6"},
+      "qa": "PASS_SPARSE_BACK_COVER_FIELD"
+    },
+    {
+      "id": "P08_CENTER_CLOSURE_ECOLOGY",
+      "role": "representative centered chapel + tropical ornament + fixed names/date closure",
+      "productionMethod": "IMAGEGEN_GROUPED_ECOLOGY",
+      "imageGenRequired": true,
+      "representative": true,
+      "status": "ACCEPTED",
+      "acceptedMaster": {
+        "fileName": "V30_P08_CENTER_CLOSURE_SOURCE_RGBA.png",
+        "sha256": "5622236afbc05947709e6c5356d4989da8d334e04bb8011b5ab5d9b53913baa1",
+        "dimensionsPx": {"width": 1448, "height": 1086},
+        "rgba": true,
+        "ownerAccepted": true,
+        "exactFixedCopy": ["SHOGO & SHIORI", "2026.10.24"]
+      },
+      "alphaQa": {
+        "alphaExtrema": [0, 255],
+        "uniqueAlphaValues": 256,
+        "pctFullyTransparent": 81.79161197765636,
+        "pctPartial": 18.15280872582237,
+        "pctFullyOpaque": 0.055579296521270215,
+        "ART_QUALITY_PASS": "PASS_OWNER_ACCEPTED",
+        "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+        "ALPHA_INTERIOR_OPACITY_PASS": "PASS",
+        "EDGE_ALPHA_QUALITY_PASS": "PASS"
+      },
+      "drive": {
+        "folderId": "1Z-pH0-iRmsBrz5jfRn3WXcIUxkXDE1tT",
+        "sourceFileId": "1NuIUWWw8I-yLd_hf34qid4v0TN0k_vm2",
+        "productionFileId": "1gN0ys6Y1yeMwPmmc7bjLrdu7k4PuIIIi",
+        "lightQaFileId": "1IacZzyg7xePX8rv9iGXbW28U5Jwr-Yf5",
+        "darkQaFileId": "1JZYzE2G2JvAKGUdkzB2wL-2xWheTw82_"
+      },
+      "figma": {
+        "nodeId": "3852:26",
+        "x": 196,
+        "y": 308,
+        "width": 145,
+        "height": 122,
+        "imageHash": "a8066ca887a956282ce794a640e56ef364103b91",
+        "freshScreenshotVisible": true,
+        "transportMethod": "160x133 RGBA derivative -> 1000-char base64 chunks in temporary hidden Figma nodes -> exact reassembly -> PNG signature validation -> figma.createImage -> temp cleanup"
+      },
+      "crossPageQa": {
+        "anchorsReviewedFresh": ["3535:7", "3535:9", "3535:11", "3535:21"],
+        "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS"
+      },
+      "nextAction": "DO_NOT_REGENERATE"
+    },
+    {
+      "id": "P08_LEFT_SPINE_BRAND_ECOLOGY",
+      "role": "vertical compact Rurubu/WEDDING tropical brand cluster at upper-left edge",
+      "productionMethod": "REUSE_ACCEPTED_P01_ASSETS",
+      "imageGenRequired": false,
+      "status": "ACCEPTED",
+      "reuseSources": [
+        {"nodeId": "3681:104", "name": "P01_MASTHEAD_RURUBU / REWORK DISPLAY ART"},
+        {"nodeId": "3681:94", "name": "P01_WEDDING_TITLE / PRODUCTION_RGBA"},
+        {"nodeId": "3681:95", "name": "P01_LEFT_TROPICAL_CLUSTER / PRODUCTION_RGBA"}
+      ],
+      "figma": {
+        "nodeId": "3884:26",
+        "geometryPx": {"x": 12, "y": 17, "width": 56, "height": 138},
+        "weddingRotationCorrection": {"nodeId": "3884:29", "rotation": -90, "x": 45, "y": 34}
+      },
+      "qa": {
+        "REUSE_CHECKED": "PASS",
+        "SCREENSHOT_QA_PASS": "PASS",
+        "pageEdgeTreatment": "PASS",
+        "quietZonePreserved": true
+      },
+      "nextAction": "DO_NOT_IMAGEGEN"
+    },
+    {
+      "id": "P08_LEFT_SPINE_META",
+      "role": "vertical 2026 SPECIAL ISSUE / heart / SHOGO & SHIORI / 2026.10.24",
+      "productionMethod": "FIGMA_NATIVE_TEXT_GROUP",
+      "imageGenRequired": false,
+      "status": "ACCEPTED",
+      "exactFacts": ["2026 SPECIAL ISSUE", "SHOGO & SHIORI", "2026.10.24"],
+      "figma": {"nodeId": "3886:26", "geometryPx": {"x": 24, "y": 144, "width": 22, "height": 250}},
+      "qa": {"FACT_COPY_PASS": "PASS", "SCREENSHOT_QA_PASS": "PASS", "editable": true}
+    },
+    {
+      "id": "P08_BARCODE_META_MODULE",
+      "role": "bottom-right issue line + heart + barcode bars + exact visible digits",
+      "productionMethod": "DETERMINISTIC_GROUPED_MODULE",
+      "imageGenRequired": false,
+      "status": "ACCEPTED",
+      "exactBarcodeDigits": "2026102400000",
+      "hardRule": "Do not use EAN-13 checksum substitution or alter the final digit.",
+      "implementation": "Deterministic EAN-like visual bar sequence generated from every canonical digit; intentionally treated as editorial barcode artwork rather than checksum-substituted EAN-13.",
+      "figma": {"nodeId": "3884:35", "geometryPx": {"x": 379, "y": 672, "width": 148, "height": 88}},
+      "qa": {"BARCODE_VISIBLE_DIGITS_PASS": "2026102400000", "SCREENSHOT_QA_PASS": "PASS", "imageGenUsed": false}
+    },
+    {
+      "id": "P08_PAGE_NUMBER",
+      "role": "bottom-left 08",
+      "productionMethod": "FIGMA_NATIVE_TEXT",
+      "imageGenRequired": false,
+      "status": "ACCEPTED",
+      "exactText": "08",
+      "figma": {"nodeId": "3884:85", "x": 27, "y": 750},
+      "qa": {"COPY_PASS": "PASS", "SCREENSHOT_QA_PASS": "PASS"}
+    }
+  ],
+  "fullPageQa": {
+    "freshScreenshotReviewed": true,
+    "visualMasterDelta": "PASS",
+    "threeAnchorComposition": "PASS",
+    "intentionalSparseSpace": "PASS",
+    "leftSpineEcology": "PASS_AFTER_ROTATION_POSITION_FIX",
+    "centerClosure": "PASS",
+    "barcodeMeta": "PASS",
+    "pageNumber": "PASS",
+    "barcodeDigits": "2026102400000",
+    "inventedPhotoSlots": 0,
+    "dominantPurpleDrift": false,
+    "thankYouPageRoleDrift": false
+  },
+  "currentGate": {
+    "representativeItem": "P08_CENTER_CLOSURE_ECOLOGY",
+    "crossPageStyleFamilyPass": "PASS",
+    "status": "P08_FIGMA_DESIGN_COMPLETE",
+    "remaining": [
+      "Git binary sync for P08 production PNG if/when a binary-capable path is available",
+      "optional stable Drive copy of full-page screenshot if a Figma screenshot file-reference bridge becomes available"
+    ]
+  }
+}

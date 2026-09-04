@@ -1,0 +1,49 @@
+{
+  "source": "assets/rurubu-v30/p04/production/phase-a-header-calibration/P04_HEADER_ECOLOGY_V30_ALIGNED_SOURCE_MATTE.png",
+  "source_mode": "RGB",
+  "source_dimensions": [
+    1921,
+    819
+  ],
+  "matte_nominal_hex": "#6C00A8",
+  "matte_model": "violet-only pixel selection + cubic 2D background-field fit",
+  "cutout": {
+    "distance_low": 47.679,
+    "distance_high": 105.0,
+    "decontamination": "inverse matte compositing on partial-alpha pixels",
+    "crop_box": [
+      0,
+      1,
+      1921,
+      767
+    ]
+  },
+  "output": "assets/rurubu-v30/p04/production/phase-a-header-calibration/P04_HEADER_ECOLOGY_V30_ALIGNED.png",
+  "output_mode": "RGBA",
+  "output_dimensions": [
+    1921,
+    766
+  ],
+  "sha256": "2dee5af97936dafea0f2b306151f8c80435958aa009f19a3646dbe4a7e1388b4",
+  "alpha": {
+    "min": 0,
+    "max": 255,
+    "unique_count": 256,
+    "transparent_pixels": 537439,
+    "partial_pixels": 14164,
+    "opaque_pixels": 919883,
+    "opaque_or_near_opaque_pixels": 922362,
+    "corner_values": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "background_fit": {
+    "matte_pixels_for_fit": 642905,
+    "fit_residual_p50": 2.437,
+    "fit_residual_p95": 20.888,
+    "fit_residual_p99": 44.679
+  }
+}

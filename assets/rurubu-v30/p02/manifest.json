@@ -1,0 +1,1014 @@
+{
+  "schemaVersion": 3,
+  "reviewRevision": 2,
+  "project": "Rurubu WEDDING V30",
+  "page": "P02",
+  "role": "PROFILE + Q1/Q2",
+  "status": "VISUAL_MASTER_LOCKED",
+  "productionState": "VISUAL_MASTER_LOCKED",
+  "inherits": "assets/rurubu-v30/manifest.json",
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p02/P02.png",
+    "authority": "PRIMARY_VISUAL_AUTHORITY",
+    "analysisSource": "user-provided P02.png reviewed visually in ChatGPT on 2026-09-02",
+    "reviewedDimensionsPx": {"width": 1055, "height": 1491},
+    "reviewMode": "direct visual review + second-pass omission/misclassification audit; no OCR-derived fact promotion",
+    "rule": "Reconstruct P02 from this visual master first. The image is authoritative for composition, hierarchy, framing, scale, overlap and visual character, but text visible inside generated/reference art is not automatically authoritative autobiographical FACT."
+  },
+  "reviewCompleteness": {
+    "firstPass": "COMPLETE",
+    "secondPassOmissionAudit": "COMPLETE",
+    "requiredChecklist": [
+      "3-second read order",
+      "background",
+      "outer frame",
+      "photo frames",
+      "article/profile/Q&A vessels",
+      "title/headings",
+      "photo count",
+      "photo size hierarchy",
+      "object positions",
+      "object sizes",
+      "normalized geometry",
+      "Figma 559x794 conversion",
+      "z-index",
+      "overlap",
+      "mustNotCover",
+      "quiet zones",
+      "saliency",
+      "face safe",
+      "renderMode",
+      "factClass",
+      "asset decomposition",
+      "hard rejects",
+      "reference delta QA",
+      "A5 QA"
+    ],
+    "secondPassFindingsResolved": [
+      "separated the portrait/profile seam plumeria cluster from the lower Q1/Q2 seam hibiscus",
+      "added side hearts and micro-accent fields as low-saliency FLEXIBLE objects",
+      "added an explicit independent Q1 inset-photo frame contract",
+      "locked left=SHOGO/blue and right=SHIORI/pink role assignment",
+      "locked the intentional Q1/Q2 asymmetry: Q1 has an inset photo; Q2 does not",
+      "added anti-mirroring hard rejects to prevent UI-like symmetry"
+    ],
+    "futureRule": "A page must not be declared VISUAL_MASTER_LOCKED until the first 24-point review is followed by a second visual sweep specifically for omitted micro-elements, wrong object identity, left/right role swaps, unintended symmetry and hidden photo-frame dependencies."
+  },
+  "canonicalFacts": {
+    "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
+    "weddingDate": "2026.10.24",
+    "displayCaseMayVary": true,
+    "rule": "Latin-name spelling and wedding date are immutable unless explicitly changed by the user."
+  },
+  "visualMasterTextSafety": {
+    "principle": "Visual-master text may be recorded as reference copy for reconstruction, but must not be promoted to guest-facing FACT solely because it appears in the image.",
+    "lockedFactsFromRoot": ["Shogo", "Shiori", "2026.10.24"],
+    "referenceOnlyUntilGrounded": [
+      "Japanese name readings shown in speech bubbles",
+      "birthplace/profile answers",
+      "likes/hobbies",
+      "travel-style answers",
+      "today-one-word answers",
+      "Q1 answer copy",
+      "Q2 answer copy"
+    ],
+    "rule": "Keep the above as TBD/REFERENCE_ONLY in production until a grounded copy source or explicit user approval exists."
+  },
+  "threeSecondReadOrder": [
+    "large pink プロフィール display title",
+    "two large bride/groom portrait photos as a paired hero",
+    "SHOGO / SHIORI speech-bubble name labels",
+    "blue lead ribbon directly under the title",
+    "paired blue/pink profile fact sheets",
+    "Q1 / Q2 lower editorial modules",
+    "PAGE 02 badge and secondary travel/tropical ornaments"
+  ],
+  "pageSpec": {
+    "trimMm": {"width": 148, "height": 210},
+    "bleedMm": 3,
+    "safeTextMarginMm": 6,
+    "figmaTrimPx": {"width": 559, "height": 794},
+    "visualMasterPx": {"width": 1055, "height": 1491},
+    "geometryRule": "Use normalized geometry as the durable target. Figma trim-pixel values are reconstruction approximations. Visual-master comparison and relational constraints outrank exact pixels."
+  },
+  "visualAuthority": {
+    "firstImpression": "A bright Japanese travel-magazine profile page: oversized hot-pink display title, a matched pair of large resort/wedding portraits, asymmetric speech-bubble name labels, two color-coded profile sheets, and two paper-note Q&A modules. It reads as lively editorial print, not a generic wedding profile card layout.",
+    "signatureMove": "The page is split into a strong blue-vs-pink two-person system without becoming a rigid grid: two nearly equal portrait anchors dominate the middle, while irregular bubbles, paper vessels, tropical ornaments and Q&A modules create tactile magazine depth.",
+    "composition": "Top 21% is title/ornament territory; middle 30% is dominated by two large portrait prints; the next 19% is paired profile information; the bottom 24% is two large Q&A paper vessels. The page is vertically stacked but locally irregular, with deliberate overlap at portrait/name/profile boundaries.",
+    "density": "high but edited; busy around title/photo edges and calmer inside profile/Q&A reading fields",
+    "asymmetryRule": "Semantic pairing is strong, but local objects are intentionally not mirrored one-for-one. Q1 includes a small couple-photo inset; Q2 deliberately does not.",
+    "colorBehavior": {
+      "dominant": ["hot pink", "travel blue", "warm cream paper", "white"],
+      "support": ["sun yellow", "black ink", "tropical green", "hibiscus/plumeria pink-red"],
+      "pairingRule": "Blue consistently codes Shogo/Q1; pink consistently codes Shiori/Q2, but the page must still feel like one publication system rather than two isolated UI columns.",
+      "reject": ["generic beige luxury wedding minimalism", "gradient SaaS cards", "muted monochrome", "equal-color-everywhere treatment"]
+    }
+  },
+  "backgroundSystem": {
+    "backgroundId": "P02_BG_WARM_PAPER_AIRMAIL_FIELD",
+    "role": "Provide tactile warm magazine paper and unify the dense blue/pink/tropical editorial objects.",
+    "renderMode": "generated-art or prepared raster",
+    "fullBleed": true,
+    "description": "Warm ivory/cream paper texture with subtle speckle and a thin multicolor airmail-style perimeter. The field is quiet enough for dense content but visibly print-like.",
+    "geometry": {
+      "referencePx": {"x": 16, "y": 16, "width": 1023, "height": 1458},
+      "normalized": {"x": 0.0152, "y": 0.0107, "width": 0.9697, "height": 0.9779},
+      "figmaTrimPxApprox": {"x": 8.5, "y": 8.5, "width": 542.0, "height": 776.4},
+      "anchor": "top-left",
+      "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+      "tolerance": "±2% page position/size; preserve perimeter relationship to trim"
+    },
+    "zIndex": 0,
+    "layerGroup": "background-field",
+    "mustPreserve": ["warm tactile paper tone", "subtle paper texture", "clean readable center field", "airmail perimeter relationship"],
+    "quietZonesCreated": ["interiors of both profile sheets", "interiors of Q1/Q2 answer fields"],
+    "hardRejects": ["plain white canvas", "generic gradient", "heavy noisy scrapbook texture behind body copy"]
+  },
+  "frameSystem": {
+    "outerBorder": {
+      "id": "P02_BORDER_AIRMAIL",
+      "renderMode": "generated-art",
+      "description": "Thin repeating diagonal blue/pink/yellow/white airmail perimeter with soft white inner separation.",
+      "geometry": {
+        "referencePx": {"x": 16, "y": 16, "width": 1023, "height": 1458},
+        "normalized": {"x": 0.0152, "y": 0.0107, "width": 0.9697, "height": 0.9779},
+        "figmaTrimPxApprox": {"x": 8.5, "y": 8.5, "width": 542.0, "height": 776.4},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±2% page position/size"
+      },
+      "zIndex": 105,
+      "layerGroup": "trim-border-and-print-overlay",
+      "overlaps": ["background-field edges"],
+      "mustNotCover": ["critical copy", "portrait faces", "PAGE 02 numerals"],
+      "rule": "Do not replace with a generic solid stroke."
+    },
+    "portraitFrames": [
+      {
+        "id": "P02_SHOGO_PORTRAIT_PRINT",
+        "photoSlotId": "P02_PHOTO_SHOGO",
+        "visualTreatment": "large white printed-photo/polaroid-like mat, slightly rotated counterclockwise, cropped close to face/upper body",
+        "geometry": {
+          "referencePx": {"x": 125, "y": 321, "width": 390, "height": 447},
+          "normalized": {"x": 0.1185, "y": 0.2153, "width": 0.3697, "height": 0.2998},
+          "figmaTrimPxApprox": {"x": 66.2, "y": 170.9, "width": 206.6, "height": 238.0},
+          "anchor": "top-left",
+          "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+          "tolerance": "±3% page position / ±4% size first pass; tighten by direct reference comparison"
+        },
+        "rotationDegreesTarget": -1.2,
+        "frameZIndex": 43
+      },
+      {
+        "id": "P02_SHIORI_PORTRAIT_PRINT",
+        "photoSlotId": "P02_PHOTO_SHIORI",
+        "visualTreatment": "large white printed-photo/polaroid-like mat, slightly rotated clockwise, cropped close to face/upper body",
+        "geometry": {
+          "referencePx": {"x": 529, "y": 321, "width": 388, "height": 450},
+          "normalized": {"x": 0.5014, "y": 0.2153, "width": 0.3678, "height": 0.3018},
+          "figmaTrimPxApprox": {"x": 280.3, "y": 170.9, "width": 205.6, "height": 239.6},
+          "anchor": "top-left",
+          "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+          "tolerance": "±3% page position / ±4% size first pass; tighten by direct reference comparison"
+        },
+        "rotationDegreesTarget": 1.2,
+        "frameZIndex": 43
+      }
+    ],
+    "q1InsetPhotoFrame": {
+      "id": "P02_Q1_INSET_COUPLE_PHOTO_FRAME",
+      "photoSlotId": "P02_Q1_INSET_COUPLE_PHOTO",
+      "renderMode": "generated-art or figma-shape-ok",
+      "visualTreatment": "small white printed-photo frame with subtle tactile shadow and slight clockwise rotation; frame stays independent from the replaceable photo",
+      "geometry": {
+        "referencePx": {"x": 315, "y": 1064, "width": 186, "height": 148},
+        "normalized": {"x": 0.2986, "y": 0.7136, "width": 0.1763, "height": 0.0993},
+        "figmaTrimPxApprox": {"x": 166.9, "y": 566.7, "width": 98.6, "height": 78.9},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±3% position / ±4% size"
+      },
+      "rotationDegreesTarget": 2.0,
+      "zIndex": 44,
+      "mustNotCover": ["both faces", "Q1 question headline"],
+      "rule": "Use backing/mask/photo/front-frame separation. Q1 photo replacement must never require rebuilding this frame."
+    },
+    "profileVessels": [
+      {
+        "id": "P02_PROFILE_SHEET_SHOGO",
+        "renderMode": "generated-art + native-text",
+        "geometry": {
+          "referencePx": {"x": 42, "y": 746, "width": 469, "height": 280},
+          "normalized": {"x": 0.0398, "y": 0.5003, "width": 0.4445, "height": 0.1878},
+          "figmaTrimPxApprox": {"x": 22.3, "y": 397.3, "width": 248.5, "height": 149.1},
+          "anchor": "top-left",
+          "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+          "tolerance": "±3% page position / ±4% size first pass; tighten by direct reference comparison"
+        },
+        "visualTreatment": "white/cream paper sheet with blue hand-drawn/printed outline, row separators, blue pictogram labels and slight tactile shadow; almost rectangular but not sterile UI-card geometry",
+        "zIndex": 52,
+        "accent": "blue"
+      },
+      {
+        "id": "P02_PROFILE_SHEET_SHIORI",
+        "renderMode": "generated-art + native-text",
+        "geometry": {
+          "referencePx": {"x": 516, "y": 759, "width": 476, "height": 271},
+          "normalized": {"x": 0.4891, "y": 0.5091, "width": 0.4512, "height": 0.1818},
+          "figmaTrimPxApprox": {"x": 273.4, "y": 404.2, "width": 252.2, "height": 144.3},
+          "anchor": "top-left",
+          "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+          "tolerance": "±3% page position / ±4% size first pass; tighten by direct reference comparison"
+        },
+        "visualTreatment": "white/cream paper sheet with pink hand-drawn/printed outline, row separators, pink pictogram labels and slight tactile shadow; mirrors the Shogo sheet semantically but preserves local irregularity",
+        "zIndex": 52,
+        "accent": "pink"
+      }
+    ],
+    "qaVessels": [
+      {
+        "id": "P02_Q1_PAPER_VESSEL",
+        "renderMode": "generated-art + native-text",
+        "geometry": {
+          "referencePx": {"x": 42, "y": 1037, "width": 474, "height": 353},
+          "normalized": {"x": 0.0398, "y": 0.6955, "width": 0.4493, "height": 0.2368},
+          "figmaTrimPxApprox": {"x": 22.3, "y": 552.2, "width": 251.2, "height": 188.0},
+          "anchor": "top-left",
+          "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+          "tolerance": "±3% page position / ±4% size first pass; tighten by direct reference comparison"
+        },
+        "visualTreatment": "large cream note/paper field with blue stitched/dotted edge, slightly irregular corners, tape fragment at top and ample answer-reading area",
+        "zIndex": 50,
+        "accent": "blue"
+      },
+      {
+        "id": "P02_Q2_PAPER_VESSEL",
+        "renderMode": "generated-art + native-text",
+        "geometry": {
+          "referencePx": {"x": 518, "y": 1040, "width": 474, "height": 351},
+          "normalized": {"x": 0.491, "y": 0.6975, "width": 0.4493, "height": 0.2354},
+          "figmaTrimPxApprox": {"x": 274.5, "y": 553.8, "width": 251.2, "height": 186.9},
+          "anchor": "top-left",
+          "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+          "tolerance": "±3% page position / ±4% size first pass; tighten by direct reference comparison"
+        },
+        "visualTreatment": "large cream note/paper field with pink stitched/dotted edge and ample answer-reading area; paired with travel icons rather than copied identically from Q1",
+        "zIndex": 50,
+        "accent": "pink"
+      }
+    ],
+    "rule": "Do not reduce portrait frames, profile sheets and Q&A vessels to one reusable rounded-card component. Each family has a different editorial job."
+  },
+  "photoSlots": [
+    {
+      "id": "P02_PHOTO_SHOGO",
+      "role": "PORTRAIT / primary Shogo identity anchor",
+      "renderMode": "replaceable-photo",
+      "geometry": {
+        "referencePx": {"x": 125, "y": 321, "width": 390, "height": 447},
+        "normalized": {"x": 0.1185, "y": 0.2153, "width": 0.3697, "height": 0.2998},
+        "figmaTrimPxApprox": {"x": 66.2, "y": 170.9, "width": 206.6, "height": 238.0},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±3% page position / ±4% size first pass; tighten by direct reference comparison"
+      },
+      "rotationDegreesTarget": -1.2,
+      "zIndex": 31,
+      "layerGroup": "photos",
+      "replaceable": true,
+      "maskRequired": true,
+      "clipsContent": true,
+      "nonDestructiveCrop": true,
+      "defaultFit": "FILL_CROP",
+      "frameSeparate": true,
+      "faceSafe": {"slotRelative": {"x": 0.27, "y": 0.08, "width": 0.48, "height": 0.37}, "priority": ["eyes", "face contour", "hair/head", "boutonniere when feasible"]},
+      "mustNotCover": ["eyes", "face", "name bubble tail", "profile-sheet text"],
+      "cropRule": "Preserve a bright face-first portrait; shoulder/torso cropping may vary before face safety is violated."
+    },
+    {
+      "id": "P02_PHOTO_SHIORI",
+      "role": "PORTRAIT / primary Shiori identity anchor",
+      "renderMode": "replaceable-photo",
+      "geometry": {
+        "referencePx": {"x": 529, "y": 321, "width": 388, "height": 450},
+        "normalized": {"x": 0.5014, "y": 0.2153, "width": 0.3678, "height": 0.3018},
+        "figmaTrimPxApprox": {"x": 280.3, "y": 170.9, "width": 205.6, "height": 239.6},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±3% page position / ±4% size first pass; tighten by direct reference comparison"
+      },
+      "rotationDegreesTarget": 1.2,
+      "zIndex": 32,
+      "layerGroup": "photos",
+      "replaceable": true,
+      "maskRequired": true,
+      "clipsContent": true,
+      "nonDestructiveCrop": true,
+      "defaultFit": "FILL_CROP",
+      "frameSeparate": true,
+      "faceSafe": {"slotRelative": {"x": 0.28, "y": 0.06, "width": 0.5, "height": 0.36}, "priority": ["eyes", "face contour", "veil/head", "bouquet/shoulder line when feasible"]},
+      "mustNotCover": ["eyes", "face", "name bubble tail", "profile-sheet text"],
+      "cropRule": "Preserve face and veil silhouette first; adjust TARGET crop before allowing decoration to cross the face."
+    },
+    {
+      "id": "P02_Q1_INSET_COUPLE_PHOTO",
+      "role": "supporting memory inset for Q1",
+      "renderMode": "replaceable-photo",
+      "geometry": {
+        "referencePx": {"x": 318, "y": 1068, "width": 179, "height": 140},
+        "normalized": {"x": 0.3014, "y": 0.7163, "width": 0.1697, "height": 0.0939},
+        "figmaTrimPxApprox": {"x": 168.5, "y": 568.7, "width": 94.8, "height": 74.6},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±3% page position / ±4% size first pass; tighten by direct reference comparison"
+      },
+      "rotationDegreesTarget": 2.0,
+      "zIndex": 33,
+      "layerGroup": "photos",
+      "replaceable": true,
+      "maskRequired": true,
+      "clipsContent": true,
+      "nonDestructiveCrop": true,
+      "defaultFit": "FILL_CROP",
+      "frameSeparate": true,
+      "faceSafe": {"slotRelative": {"x": 0.18, "y": 0.12, "width": 0.65, "height": 0.58}, "priority": ["both faces", "eyes", "hands if visible"]},
+      "mustNotCover": ["both faces", "Q1 question headline"],
+      "cropRule": "Small A5 inset must keep both people immediately recognizable; choose a face-dense crop."
+    }
+  ],
+  "objects": [
+    {
+      "id": "P02_MASTHEAD_FUTARI_NO",
+      "role": "top lead-in display masthead",
+      "renderMode": "generated-display-asset / bundled with P02_TITLE_PROFILE",
+      "factClass": "EDITORIAL_COPY",
+      "referenceText": "ふたりの",
+      "geometry": {
+        "referencePx": {"x": 244, "y": 57, "width": 323, "height": 87},
+        "normalized": {"x": 0.2313, "y": 0.0382, "width": 0.3062, "height": 0.0584},
+        "figmaTrimPxApprox": {"x": 129.3, "y": 30.4, "width": 171.1, "height": 46.3},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±3% page position / ±4% size"
+      },
+      "zIndex": 63,
+      "layerGroup": "display-art",
+      "overlaps": ["main profile title upper edge", "top-left floral energy field"],
+      "mustNotCover": ["primary title legibility"],
+      "saliency": 66,
+      "visualRule": "Chunky black Japanese display lettering with strong white/yellow outline; visually attached to the main title, not treated as small native heading."
+    },
+    {
+      "id": "P02_TITLE_PROFILE",
+      "role": "first-read page title",
+      "renderMode": "generated-display-asset / bundled with P02_MASTHEAD_FUTARI_NO",
+      "factClass": "EDITORIAL_COPY",
+      "referenceText": "ふたりのプロフィール",
+      "geometry": {
+        "referencePx": {"x": 194, "y": 122, "width": 669, "height": 147},
+        "normalized": {"x": 0.1839, "y": 0.0818, "width": 0.6341, "height": 0.0986},
+        "figmaTrimPxApprox": {"x": 102.8, "y": 65.0, "width": 354.5, "height": 78.3},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±3% page position / ±4% size"
+      },
+      "zIndex": 65,
+      "layerGroup": "display-art",
+      "overlaps": ["top ornament field", "blue lead ribbon vicinity"],
+      "mustNotCover": ["portrait faces"],
+      "saliency": 100,
+      "visualRule": "Very large glossy/hot-pink Japanese title with thick white, dark and yellow dimensional outlines. This is expressive display art; do not replace with clean native pink type."
+    },
+    {
+      "id": "P02_LEAD_RIBBON",
+      "role": "secondary page promise",
+      "renderMode": "generated-display-asset",
+      "factClass": "EDITORIAL_COPY",
+      "referenceText": "私たちのこと、少しだけ紹介します♪",
+      "geometry": {
+        "referencePx": {"x": 295, "y": 260, "width": 516, "height": 64},
+        "normalized": {"x": 0.2796, "y": 0.1744, "width": 0.4891, "height": 0.0429},
+        "figmaTrimPxApprox": {"x": 156.3, "y": 138.5, "width": 273.4, "height": 34.1},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±3% page position / ±4% size"
+      },
+      "zIndex": 67,
+      "layerGroup": "display-art",
+      "overlaps": ["title lower field", "portrait-frame top edges"],
+      "mustNotCover": ["portrait faces"],
+      "saliency": 48,
+      "visualRule": "Deep travel-blue ribbon and exact locked white copy behave as one authored generated display asset."
+    },
+    {
+      "id": "P02_NAME_BUBBLE_SHOGO",
+      "role": "canonical Shogo name marker",
+      "renderMode": "generated-display-asset",
+      "factClass": "FACT",
+      "canonicalDisplayText": "SHOGO",
+      "secondaryKanaStatus": "TBD_CONFIRM_FROM_GROUNDED_COPY",
+      "referenceKanaVisibleInMaster": "しょうご",
+      "geometry": {
+        "referencePx": {"x": 37, "y": 369, "width": 165, "height": 149},
+        "normalized": {"x": 0.0351, "y": 0.2475, "width": 0.1564, "height": 0.0999},
+        "figmaTrimPxApprox": {"x": 19.6, "y": 196.5, "width": 87.4, "height": 79.3},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±3% page position / ±4% size"
+      },
+      "zIndex": 83,
+      "layerGroup": "display-art",
+      "overlaps": ["left portrait edge"],
+      "mustNotCover": ["Shogo face/eyes", "profile-sheet reading rows"],
+      "saliency": 70,
+      "visualRule": "Blue cloud/speech bubble with bold condensed display name. Bubble may overlap the photo edge but not the face."
+    },
+    {
+      "id": "P02_NAME_BUBBLE_SHIORI",
+      "role": "canonical Shiori name marker",
+      "renderMode": "generated-display-asset",
+      "factClass": "FACT",
+      "canonicalDisplayText": "SHIORI",
+      "secondaryKanaStatus": "TBD_CONFIRM_FROM_GROUNDED_COPY",
+      "referenceKanaVisibleInMaster": "しおり",
+      "geometry": {
+        "referencePx": {"x": 845, "y": 365, "width": 166, "height": 149},
+        "normalized": {"x": 0.8009, "y": 0.2448, "width": 0.1573, "height": 0.0999},
+        "figmaTrimPxApprox": {"x": 447.7, "y": 194.4, "width": 88.0, "height": 79.3},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±3% page position / ±4% size"
+      },
+      "zIndex": 83,
+      "layerGroup": "display-art",
+      "overlaps": ["right portrait edge"],
+      "mustNotCover": ["Shiori face/eyes", "profile-sheet reading rows"],
+      "saliency": 70,
+      "visualRule": "Pink cloud/speech bubble paired with Shogo marker; preserve strong side-specific color coding."
+    },
+    {
+      "id": "P02_PROFILE_COPY_SHOGO",
+      "role": "Shogo profile labels and values",
+      "renderMode": "native-text",
+      "factClass": "TBD",
+      "geometry": {
+        "referencePx": {"x": 42, "y": 746, "width": 469, "height": 280},
+        "normalized": {"x": 0.0398, "y": 0.5003, "width": 0.4445, "height": 0.1878},
+        "figmaTrimPxApprox": {"x": 22.3, "y": 397.3, "width": 248.5, "height": 149.1},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 84,
+      "layerGroup": "native-copy-and-facts",
+      "referenceLabels": ["出身地", "好きなこと", "旅のスタイル", "今日のひとこと"],
+      "referenceValuesVisibleInMaster": ["神奈川県横浜市", "カメラ、サッカー、海辺のカフェ巡り", "計画を立てつつ、現地で自由に動くのが好き！", "最高の思い出をつくるぞー！"],
+      "truthStatus": "VISUAL_REFERENCE_ONLY_NOT_APPROVED",
+      "mustNotCover": ["row icons", "row separators"],
+      "saliency": 53,
+      "rule": "Labels may guide structure; values must remain TBD until grounded. Do not bake them into generated sheet art."
+    },
+    {
+      "id": "P02_PROFILE_COPY_SHIORI",
+      "role": "Shiori profile labels and values",
+      "renderMode": "native-text",
+      "factClass": "TBD",
+      "geometry": {
+        "referencePx": {"x": 516, "y": 759, "width": 476, "height": 271},
+        "normalized": {"x": 0.4891, "y": 0.5091, "width": 0.4512, "height": 0.1818},
+        "figmaTrimPxApprox": {"x": 273.4, "y": 404.2, "width": 252.2, "height": 144.3},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 84,
+      "layerGroup": "native-copy-and-facts",
+      "referenceLabels": ["出身地", "好きなこと", "旅のスタイル", "今日のひとこと"],
+      "referenceValuesVisibleInMaster": ["東京都世田谷区", "カフェ巡り、映画鑑賞、写真を撮ること", "リゾートでのんびり＆観光もバランスよく♪", "わくわくが止まらない〜！"],
+      "truthStatus": "VISUAL_REFERENCE_ONLY_NOT_APPROVED",
+      "mustNotCover": ["row icons", "row separators"],
+      "saliency": 53,
+      "rule": "Keep values native/editable and unapproved until grounded."
+    },
+    {
+      "id": "P02_Q1_BADGE",
+      "role": "Q1 navigation badge",
+      "renderMode": "generated-art + native-text",
+      "factClass": "EDITORIAL_COPY",
+      "nativeText": "Q1",
+      "geometry": {
+        "referencePx": {"x": 61, "y": 1059, "width": 111, "height": 112},
+        "normalized": {"x": 0.0578, "y": 0.7103, "width": 0.1052, "height": 0.0751},
+        "figmaTrimPxApprox": {"x": 32.3, "y": 563.9, "width": 58.8, "height": 59.6},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 70,
+      "layerGroup": "display-art",
+      "overlaps": ["Q1 vessel upper-left"],
+      "mustNotCover": ["Q1 headline", "answer copy"],
+      "saliency": 61,
+      "visualRule": "Large blue circular stitched/outlined badge. Must read clearly at A5."
+    },
+    {
+      "id": "P02_Q1_COPY",
+      "role": "Q1 question and answer",
+      "renderMode": "native-text",
+      "factClass": "TBD",
+      "referenceQuestionVisibleInMaster": "ふたりの出会いは？",
+      "referenceAnswerVisibleInMaster": "友だちの紹介で知り合い、共通の“旅行好き”ですぐに意気投合しました！",
+      "truthStatus": "VISUAL_REFERENCE_ONLY_NOT_APPROVED",
+      "geometry": {
+        "referencePx": {"x": 42, "y": 1037, "width": 474, "height": 353},
+        "normalized": {"x": 0.0398, "y": 0.6955, "width": 0.4493, "height": 0.2368},
+        "figmaTrimPxApprox": {"x": 22.3, "y": 552.2, "width": 251.2, "height": 188.0},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 85,
+      "layerGroup": "native-copy-and-facts",
+      "mustNotCover": ["Q1 badge", "Q1 inset photo", "bottom floral cluster"],
+      "saliency": 58,
+      "rule": "Question/answer remain native and editable; highlighted phrase is a local editorial emphasis, not a flattened generated text block."
+    },
+    {
+      "id": "P02_Q2_BADGE",
+      "role": "Q2 navigation badge",
+      "renderMode": "generated-art + native-text",
+      "factClass": "EDITORIAL_COPY",
+      "nativeText": "Q2",
+      "geometry": {
+        "referencePx": {"x": 536, "y": 1062, "width": 109, "height": 111},
+        "normalized": {"x": 0.5081, "y": 0.7123, "width": 0.1033, "height": 0.0744},
+        "figmaTrimPxApprox": {"x": 284.0, "y": 565.5, "width": 57.8, "height": 59.1},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 70,
+      "layerGroup": "display-art",
+      "overlaps": ["Q2 vessel upper-left"],
+      "mustNotCover": ["Q2 headline", "answer copy"],
+      "saliency": 61,
+      "visualRule": "Large pink circular stitched/outlined badge paired with Q1 but not mechanically cloned."
+    },
+    {
+      "id": "P02_Q2_COPY",
+      "role": "Q2 question and answer",
+      "renderMode": "native-text",
+      "factClass": "TBD",
+      "referenceQuestionVisibleInMaster": "ふたりの旅のテーマは？",
+      "referenceAnswerVisibleInMaster": "「笑顔になれる場所へ！」 おいしいもの、きれいな景色、心に残る体験をたくさんしたいね♪",
+      "truthStatus": "VISUAL_REFERENCE_ONLY_NOT_APPROVED",
+      "geometry": {
+        "referencePx": {"x": 518, "y": 1040, "width": 474, "height": 351},
+        "normalized": {"x": 0.491, "y": 0.6975, "width": 0.4493, "height": 0.2354},
+        "figmaTrimPxApprox": {"x": 274.5, "y": 553.8, "width": 251.2, "height": 186.9},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 85,
+      "layerGroup": "native-copy-and-facts",
+      "mustNotCover": ["Q2 badge", "airplane icon", "suitcase icon", "PAGE 02 badge"],
+      "saliency": 58,
+      "rule": "Keep question/answer native/editable. Preserve generous line spacing and calm reading field."
+    },
+    {
+      "id": "P02_PAGE_BADGE",
+      "role": "page meta",
+      "renderMode": "generated-art + native-text",
+      "factClass": "EDITORIAL_COPY",
+      "nativeText": "PAGE 02",
+      "geometry": {
+        "referencePx": {"x": 884, "y": 1364, "width": 124, "height": 117},
+        "normalized": {"x": 0.8379, "y": 0.9148, "width": 0.1175, "height": 0.0785},
+        "figmaTrimPxApprox": {"x": 468.4, "y": 726.4, "width": 65.7, "height": 62.3},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 96,
+      "layerGroup": "page-meta-and-critical-badges",
+      "overlaps": ["bottom-right Q2 vessel edge", "airmail border vicinity"],
+      "mustNotCover": ["Q2 answer copy"],
+      "saliency": 18,
+      "visualRule": "Small blue circular page badge with a pink heart; subordinate to all editorial content."
+    }
+  ],
+  "decorativeObjects": [
+    {
+      "id": "P02_TOP_LEFT_TROPICAL_CLUSTER",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 31, "y": 59, "width": 205, "height": 245},
+        "normalized": {"x": 0.0294, "y": 0.0396, "width": 0.1943, "height": 0.1643},
+        "figmaTrimPxApprox": {"x": 16.4, "y": 31.4, "width": 108.6, "height": 130.5},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 74,
+      "layerGroup": "decorative-overlays",
+      "saliency": 34,
+      "overlaps": ["background", "masthead vicinity"],
+      "mustNotCover": ["masthead legibility", "portrait faces"],
+      "description": "Large hibiscus + monstera + plumeria cluster anchoring the upper-left active edge."
+    },
+    {
+      "id": "P02_TOP_HEART",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 574, "y": 73, "width": 78, "height": 91},
+        "normalized": {"x": 0.5441, "y": 0.049, "width": 0.0739, "height": 0.061},
+        "figmaTrimPxApprox": {"x": 304.1, "y": 38.9, "width": 41.3, "height": 48.5},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 74,
+      "layerGroup": "decorative-overlays",
+      "saliency": 28,
+      "description": "Glossy hot-pink heart used as a punctuation mark near the masthead."
+    },
+    {
+      "id": "P02_TOP_PLANE_ROUTE",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 680, "y": 48, "width": 210, "height": 120},
+        "normalized": {"x": 0.6445, "y": 0.0322, "width": 0.1991, "height": 0.0805},
+        "figmaTrimPxApprox": {"x": 360.3, "y": 25.6, "width": 111.3, "height": 63.9},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 74,
+      "layerGroup": "decorative-overlays",
+      "saliency": 31,
+      "description": "Blue airplane plus dotted pink heart-route cue; decorative travel identity, not factual transport information."
+    },
+    {
+      "id": "P02_TOP_CAMERA",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 870, "y": 103, "width": 109, "height": 101},
+        "normalized": {"x": 0.8246, "y": 0.0691, "width": 0.1033, "height": 0.0677},
+        "figmaTrimPxApprox": {"x": 461.0, "y": 54.9, "width": 57.8, "height": 53.8},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 74,
+      "layerGroup": "decorative-overlays",
+      "saliency": 27,
+      "description": "Retro camera object at top-right; thematic, not a factual equipment claim."
+    },
+    {
+      "id": "P02_TOP_RIGHT_FLORAL_CLUSTER",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 875, "y": 220, "width": 133, "height": 110},
+        "normalized": {"x": 0.8294, "y": 0.1476, "width": 0.1261, "height": 0.0738},
+        "figmaTrimPxApprox": {"x": 463.6, "y": 117.2, "width": 70.5, "height": 58.6},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 74,
+      "layerGroup": "decorative-overlays",
+      "saliency": 24,
+      "description": "Small tropical foliage/plumeria cluster near the top-right edge."
+    },
+    {
+      "id": "P02_SHOGO_SIDE_HEART",
+      "renderMode": "generated-art or figma-shape-ok",
+      "geometry": {
+        "referencePx": {"x": 73, "y": 323, "width": 45, "height": 48},
+        "normalized": {"x": 0.0692, "y": 0.2166, "width": 0.0427, "height": 0.0322},
+        "figmaTrimPxApprox": {"x": 38.7, "y": 172.0, "width": 23.9, "height": 25.6},
+        "anchor": "center",
+        "constraintLevel": {"position": "FLEXIBLE", "size": "FLEXIBLE"}
+      },
+      "zIndex": 75,
+      "layerGroup": "decorative-overlays",
+      "saliency": 13,
+      "description": "Small blue heart punctuation above/near the SHOGO bubble. Preserve as micro character, not a new focal point."
+    },
+    {
+      "id": "P02_SHIORI_SIDE_HEART",
+      "renderMode": "generated-art or figma-shape-ok",
+      "geometry": {
+        "referencePx": {"x": 953, "y": 513, "width": 42, "height": 47},
+        "normalized": {"x": 0.9033, "y": 0.3441, "width": 0.0398, "height": 0.0315},
+        "figmaTrimPxApprox": {"x": 504.9, "y": 273.2, "width": 22.3, "height": 25.0},
+        "anchor": "center",
+        "constraintLevel": {"position": "FLEXIBLE", "size": "FLEXIBLE"}
+      },
+      "zIndex": 75,
+      "layerGroup": "decorative-overlays",
+      "saliency": 13,
+      "description": "Small pink heart punctuation near the SHIORI bubble/right portrait edge."
+    },
+    {
+      "id": "P02_PORTRAIT_PROFILE_SEAM_PLUMERIA",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 457, "y": 686, "width": 143, "height": 91},
+        "normalized": {"x": 0.4332, "y": 0.4601, "width": 0.1355, "height": 0.061},
+        "figmaTrimPxApprox": {"x": 242.2, "y": 365.3, "width": 75.7, "height": 48.5},
+        "anchor": "center",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"},
+        "tolerance": "±4% because exact petal bounds are irregular"
+      },
+      "zIndex": 76,
+      "layerGroup": "decorative-overlays",
+      "saliency": 30,
+      "overlaps": ["lower edge of both portraits", "upper seam of profile sheets"],
+      "mustNotCover": ["portrait faces", "profile row text"],
+      "description": "White/yellow/orange plumeria cluster bridging the bottom of the two portraits and the top of the profile-paper band. This is distinct from the red hibiscus between Q1/Q2 below."
+    },
+    {
+      "id": "P02_MID_RIGHT_HIBISCUS",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 900, "y": 681, "width": 92, "height": 104},
+        "normalized": {"x": 0.8531, "y": 0.4567, "width": 0.0872, "height": 0.0698},
+        "figmaTrimPxApprox": {"x": 476.9, "y": 362.7, "width": 48.7, "height": 55.4},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 74,
+      "layerGroup": "decorative-overlays",
+      "saliency": 22,
+      "description": "Single hibiscus/leaf accent bridging portrait and right profile sheet."
+    },
+    {
+      "id": "P02_QA_SEAM_HIBISCUS",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 524, "y": 1009, "width": 101, "height": 85},
+        "normalized": {"x": 0.4967, "y": 0.6767, "width": 0.0957, "height": 0.057},
+        "figmaTrimPxApprox": {"x": 277.6, "y": 537.3, "width": 53.5, "height": 45.3},
+        "anchor": "center",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 76,
+      "layerGroup": "decorative-overlays",
+      "saliency": 27,
+      "description": "Red/pink hibiscus at the seam above and between Q1/Q2 modules. Previously misidentified as a plumeria cluster; this ID/description is canonical."
+    },
+    {
+      "id": "P02_Q1_MICRO_ACCENT_FIELD",
+      "renderMode": "generated-art or figma-shape-ok",
+      "geometry": {
+        "referencePx": {"x": 52, "y": 1120, "width": 430, "height": 250},
+        "normalized": {"x": 0.0493, "y": 0.7512, "width": 0.4076, "height": 0.1677},
+        "figmaTrimPxApprox": {"x": 27.6, "y": 596.4, "width": 227.8, "height": 133.1},
+        "anchor": "field",
+        "constraintLevel": {"position": "FLEXIBLE", "size": "FLEXIBLE"}
+      },
+      "zIndex": 77,
+      "layerGroup": "decorative-overlays",
+      "saliency": 12,
+      "description": "Low-saliency yellow sparkle and pink hand-drawn heart-line accents in Q1. Preserve authored irregularity but never let them compete with question/answer or inset photo."
+    },
+    {
+      "id": "P02_Q2_MICRO_ACCENT_FIELD",
+      "renderMode": "generated-art or figma-shape-ok",
+      "geometry": {
+        "referencePx": {"x": 765, "y": 1120, "width": 220, "height": 250},
+        "normalized": {"x": 0.7251, "y": 0.7512, "width": 0.2085, "height": 0.1677},
+        "figmaTrimPxApprox": {"x": 405.3, "y": 596.4, "width": 116.6, "height": 133.1},
+        "anchor": "field",
+        "constraintLevel": {"position": "FLEXIBLE", "size": "FLEXIBLE"}
+      },
+      "zIndex": 77,
+      "layerGroup": "decorative-overlays",
+      "saliency": 12,
+      "description": "Low-saliency pink heart/music-line accents around Q2 answer copy. Keep sparse and subordinate."
+    },
+    {
+      "id": "P02_Q2_PLANE",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 773, "y": 1057, "width": 112, "height": 57},
+        "normalized": {"x": 0.7327, "y": 0.7089, "width": 0.1062, "height": 0.0382},
+        "figmaTrimPxApprox": {"x": 409.6, "y": 562.9, "width": 59.3, "height": 30.4},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 76,
+      "layerGroup": "decorative-overlays",
+      "saliency": 22,
+      "description": "Blue airplane inside upper Q2 vessel, accompanied by a dotted path."
+    },
+    {
+      "id": "P02_Q2_SUITCASE",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 856, "y": 1156, "width": 123, "height": 92},
+        "normalized": {"x": 0.8114, "y": 0.7753, "width": 0.1166, "height": 0.0617},
+        "figmaTrimPxApprox": {"x": 453.6, "y": 615.6, "width": 65.2, "height": 49.0},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 76,
+      "layerGroup": "decorative-overlays",
+      "saliency": 24,
+      "description": "Brown travel suitcase with sticker-like marks; decorative only, no implied booking/route fact."
+    },
+    {
+      "id": "P02_BOTTOM_LEFT_TROPICAL_CLUSTER",
+      "renderMode": "generated-art",
+      "geometry": {
+        "referencePx": {"x": 17, "y": 1298, "width": 149, "height": 118},
+        "normalized": {"x": 0.0161, "y": 0.8706, "width": 0.1412, "height": 0.0791},
+        "figmaTrimPxApprox": {"x": 9.0, "y": 691.2, "width": 78.9, "height": 62.8},
+        "anchor": "top-left",
+        "constraintLevel": {"position": "TARGET", "size": "TARGET"}
+      },
+      "zIndex": 76,
+      "layerGroup": "decorative-overlays",
+      "saliency": 23,
+      "description": "Leaf/plumeria cluster activating the bottom-left border and partially overlapping Q1 vessel."
+    }
+  ],
+  "roleLocks": {
+    "leftPerson": {"identity": "Shogo", "colorSystem": "blue", "constraintLevel": "LOCKED"},
+    "rightPerson": {"identity": "Shiori", "colorSystem": "pink", "constraintLevel": "LOCKED"},
+    "q1Side": {"side": "left", "accent": "blue", "hasInsetPhoto": true, "constraintLevel": "LOCKED"},
+    "q2Side": {"side": "right", "accent": "pink", "hasInsetPhoto": false, "constraintLevel": "LOCKED"},
+    "rule": "Never swap people, side colors or Q1/Q2 roles to create a more symmetrical layout."
+  },
+  "relationalConstraints": [
+    {"type": "dominates", "subject": "P02_TITLE_PROFILE", "object": ["all decorative objects", "profile sheets", "Q1/Q2 modules"], "level": "LOCKED"},
+    {"type": "dominates", "subject": ["P02_PHOTO_SHOGO", "P02_PHOTO_SHIORI"], "object": ["profile sheets", "Q1/Q2 inset/decorations"], "level": "LOCKED"},
+    {"type": "alignedWith", "subject": ["P02_PHOTO_SHOGO", "P02_PHOTO_SHIORI"], "object": "shared portrait band", "level": "TARGET", "rule": "Top edges and visual weight are near-matched, but slight rotation/offset preserves editorial irregularity."},
+    {"type": "overlaps", "subject": "P02_NAME_BUBBLE_SHOGO", "object": "P02_PHOTO_SHOGO left edge", "level": "TARGET"},
+    {"type": "overlaps", "subject": "P02_NAME_BUBBLE_SHIORI", "object": "P02_PHOTO_SHIORI right edge", "level": "TARGET"},
+    {"type": "overlaps", "subject": "P02_PORTRAIT_PROFILE_SEAM_PLUMERIA", "object": ["both portrait lower edges", "profile sheet upper seam"], "level": "TARGET"},
+    {"type": "near", "subject": "P02_LEAD_RIBBON", "object": "P02_TITLE_PROFILE lower edge", "level": "TARGET"},
+    {"type": "subordinateTo", "subject": ["P02_PROFILE_SHEET_SHOGO", "P02_PROFILE_SHEET_SHIORI"], "object": ["paired portraits", "primary title"], "level": "LOCKED"},
+    {"type": "alignedWith", "subject": ["P02_PROFILE_SHEET_SHOGO", "P02_PROFILE_SHEET_SHIORI"], "object": "paired blue/pink information band", "level": "TARGET"},
+    {"type": "subordinateTo", "subject": ["P02_Q1_PAPER_VESSEL", "P02_Q2_PAPER_VESSEL"], "object": ["paired portraits", "primary title"], "level": "LOCKED"},
+    {"type": "behind", "subject": "profile/Q&A paper vessels", "object": "native copy and badges", "level": "LOCKED"},
+    {"type": "inFrontOf", "subject": "decorative floral edge accents", "object": ["paper vessels", "background"], "level": "TARGET"},
+    {"type": "mustNotCover", "subject": "all decorative art", "object": ["portrait eyes/faces", "profile value text", "Q1/Q2 answer copy"], "level": "LOCKED"},
+    {"type": "leftOf", "subject": "P02_PHOTO_SHOGO", "object": "P02_PHOTO_SHIORI", "level": "LOCKED"},
+    {"type": "leftOf", "subject": "P02_Q1_PAPER_VESSEL", "object": "P02_Q2_PAPER_VESSEL", "level": "LOCKED"},
+    {"type": "mustNotAdd", "subject": "Q2 module", "object": "mirrored inset photo copied from Q1", "level": "LOCKED"}
+  ],
+  "quietZones": [
+    {"id": "P02_QZ_SHOGO_FACE", "type": "face-safe quiet zone", "host": "P02_PHOTO_SHOGO", "slotRelative": {"x": 0.27, "y": 0.08, "width": 0.48, "height": 0.37}, "rule": "No new sticker, bubble tail, flower or copy across eyes/face."},
+    {"id": "P02_QZ_SHIORI_FACE", "type": "face-safe quiet zone", "host": "P02_PHOTO_SHIORI", "slotRelative": {"x": 0.28, "y": 0.06, "width": 0.5, "height": 0.36}, "rule": "No new sticker, bubble tail, flower or copy across eyes/face."},
+    {"id": "P02_QZ_PROFILE_READING_LEFT", "type": "critical-copy quiet zone", "host": "P02_PROFILE_SHEET_SHOGO", "hostRelative": {"x": 0.12, "y": 0.08, "width": 0.84, "height": 0.84}, "rule": "Keep added decorative art out of row-value reading lanes."},
+    {"id": "P02_QZ_PROFILE_READING_RIGHT", "type": "critical-copy quiet zone", "host": "P02_PROFILE_SHEET_SHIORI", "hostRelative": {"x": 0.12, "y": 0.08, "width": 0.84, "height": 0.84}, "rule": "Keep added decorative art out of row-value reading lanes."},
+    {"id": "P02_QZ_Q1_ANSWER", "type": "intentional breathing space", "host": "P02_Q1_PAPER_VESSEL", "hostRelative": {"x": 0.08, "y": 0.38, "width": 0.8, "height": 0.48}, "rule": "This is a readable note field, not empty space to fill with stickers."},
+    {"id": "P02_QZ_Q2_ANSWER", "type": "intentional breathing space", "host": "P02_Q2_PAPER_VESSEL", "hostRelative": {"x": 0.08, "y": 0.38, "width": 0.78, "height": 0.48}, "rule": "Preserve the calmer answer field and line spacing."}
+  ],
+  "saliency": {
+    "P02_TITLE_PROFILE": 100,
+    "P02_PHOTO_SHOGO": 90,
+    "P02_PHOTO_SHIORI": 90,
+    "P02_NAME_BUBBLE_SHOGO": 70,
+    "P02_NAME_BUBBLE_SHIORI": 70,
+    "P02_MASTHEAD_FUTARI_NO": 66,
+    "P02_Q1_BADGE": 61,
+    "P02_Q2_BADGE": 61,
+    "P02_Q1_COPY": 58,
+    "P02_Q2_COPY": 58,
+    "P02_PROFILE_COPY_SHOGO": 53,
+    "P02_PROFILE_COPY_SHIORI": 53,
+    "P02_LEAD_RIBBON": 48,
+    "P02_PORTRAIT_PROFILE_SEAM_PLUMERIA": 30,
+    "top-tropical/travel decorations": "22-34",
+    "micro hearts/sparkles/line doodles": "10-15",
+    "P02_PAGE_BADGE": 18,
+    "rule": "Do not strengthen ornaments or micro accents until they compete with the title or paired portraits."
+  },
+  "layerOrder": {
+    "0": "warm paper background",
+    "10": "subtle background texture",
+    "20-29": "portrait/profile/Q&A backings and masks",
+    "30-39": "replaceable photos",
+    "40-49": "portrait and Q1 inset frame fronts",
+    "50-59": "profile/Q&A paper vessels",
+    "60-69": "masthead/title/ribbon and Q1/Q2 display badges",
+    "70-79": "flowers, hearts, sparkles, airplane, camera, suitcase, doodle overlays",
+    "80-89": "native names/profile/Q&A copy",
+    "90-99": "PAGE 02 meta badge",
+    "100-109": "airmail/print perimeter overlay",
+    "rule": "Preserve front/back relationships; exact numbers may shift if direct visual comparison demands it."
+  },
+  "assetDecompositionPlan": {
+    "status": "PROPOSED_AFTER_VISUAL_REVIEW_NOT_YET_PART_MAP_APPROVED",
+    "onePartOneImage": true,
+    "proposedGeneratedEditorialObjects": [
+      "P02 title display art: ふたりの + プロフィール may be one intentionally inseparable title system or two independently placeable title assets after part-map decision",
+      "blue lead ribbon vessel without baked factual/personal copy",
+      "SHOGO speech-bubble vessel without name text",
+      "SHIORI speech-bubble vessel without name text",
+      "Shogo portrait frame front/backing",
+      "Shiori portrait frame front/backing",
+      "Q1 inset photo frame front/backing",
+      "Shogo blue profile-sheet vessel without values",
+      "Shiori pink profile-sheet vessel without values",
+      "Q1 paper vessel",
+      "Q2 paper vessel",
+      "Q1 blue badge vessel if not native",
+      "Q2 pink badge vessel if not native",
+      "top-left tropical cluster",
+      "top airplane/heart-route editorial object",
+      "top camera object",
+      "top-right tropical cluster",
+      "portrait/profile seam plumeria cluster",
+      "mid-right hibiscus",
+      "Q1/Q2 seam hibiscus",
+      "Q2 suitcase object",
+      "bottom-left tropical cluster",
+      "PAGE 02 badge vessel if not native"
+    ],
+    "microAccentPolicy": "Small hearts, sparkles and line doodles are visually recorded but need not be raster-generated individually when simple native Figma shapes can reproduce them without weakening the master. Do not pack unrelated accents into one production sprite.",
+    "nativePrecisionObjects": ["all names and factual/personal copy", "profile labels/values", "Q1/Q2 question and answer copy", "photo masks/clipping frames", "row separator precision if simple", "simple hearts/sparkles/doodle lines when visually faithful", "PAGE 02 numerals/text", "safe/trim guides"],
+    "rule": "Do not start production generation until the proposed object split is reviewed for semantic independence and transparent-padding requirements."
+  },
+  "assetPaddingContract": {
+    "requiredForFloatingAssets": true,
+    "requiredFields": ["canvas dimensions", "visual bounds", "transparent padding top/right/bottom/left", "anchor", "intended crop behavior"],
+    "priorityAssets": ["title art", "speech bubbles", "Q badges", "flowers", "airplane", "camera", "suitcase", "page badge"],
+    "rule": "Perceived Figma placement must follow visible bounds, not unmeasured transparent canvas padding."
+  },
+  "hardRejects": [
+    "generic two-column wedding profile brochure",
+    "small clean native-text replacement for the oversized pink プロフィール title",
+    "equal rounded cards for portraits, profile data and Q&A",
+    "removing or weakening the paired large portrait band",
+    "swapping Shogo to the right or Shiori to the left",
+    "swapping the blue/pink person-role color system",
+    "covering either face/eyes with bubbles, flowers, badges or copy",
+    "turning the profile area into a sterile equal-grid UI",
+    "flattening photo + frame so portrait replacement requires frame reconstruction",
+    "flattening the Q1 inset photo with its white frame",
+    "baking profile/Q&A autobiographical values into generated art",
+    "treating visible reference text as confirmed FACT without grounding",
+    "plain white or generic gradient background",
+    "removing the airmail/tropical/travel-magazine identity",
+    "adding filler decorations inside Q1/Q2 answer quiet zones",
+    "mechanically mirroring every blue object into an identical pink object",
+    "making Q1 and Q2 visually identical beyond their shared editorial family",
+    "adding a mirrored Q2 photo merely because Q1 has an inset photo",
+    "removing the portrait/profile seam plumeria cluster and thereby weakening the central vertical transition",
+    "misclassifying the lower red Q1/Q2 seam hibiscus as the upper plumeria cluster"
+  ],
+  "referenceDelta": {
+    "method": "side-by-side or overlay against assets/rurubu-v30/p02/P02.png",
+    "priorityOrder": [
+      "3-second identity: oversized pink profile title + paired portraits",
+      "relative title/photo scale",
+      "locked left SHOGO/blue vs right SHIORI/pink roles",
+      "two-person blue/pink coding without rigid-grid appearance",
+      "speech-bubble overlap on portrait edges",
+      "portrait tilt/spacing and central seam relationship",
+      "portrait/profile seam plumeria bridge",
+      "profile-sheet vertical position and information density",
+      "Q1/Q2 vessel scale and lower-page rhythm",
+      "intentional Q1-photo / Q2-no-photo asymmetry",
+      "airmail/tropical/travel ornament character",
+      "micro hearts/sparkles/doodle accents",
+      "micro geometry and decoration positions"
+    ],
+    "failConditions": [
+      "title no longer dominates",
+      "portraits become equal generic cards with large dead margins",
+      "Shogo/Shiori sides or blue/pink identities are swapped",
+      "page reads as wedding SaaS/profile UI instead of Japanese travel magazine",
+      "profile/Q&A fields become too cramped at A5",
+      "decorations compete with faces or reading copy",
+      "blue/pink system becomes overly symmetrical or componentized",
+      "Q2 gains a mirrored inset photo not present in the visual master",
+      "central floral transition is lost or the two distinct central flower objects are collapsed into one"
+    ]
+  },
+  "a5Qa": {
+    "threeSecondTest": "At actual A5 size, first read must be プロフィール, then both faces, then SHOGO/SHIORI. Q1/Q2 should remain obviously discoverable without competing with the title.",
+    "readabilityTargets": ["profile labels remain readable at actual size", "profile values are not shrunk to preserve an overloaded layout", "Q1/Q2 questions read before answers", "answer copy has enough line spacing and contrast", "Q1 inset still shows both faces clearly", "PAGE 02 remains subordinate"],
+    "printSafety": ["airmail border may activate trim edge but critical text stays inside safe region", "bottom-left floral and PAGE 02 badge may approach/cross visual edge only without endangering critical copy", "no portrait face/eye enters unsafe trim/decoration collision"],
+    "grayscaleCheck": "Title/portrait hierarchy must survive reduced saturation; do not rely only on blue-vs-pink color coding for structure."
+  },
+  "partGenerationGate": {
+    "status": "READY_FOR_PART_MAP_APPROVAL",
+    "visualMasterReviewed": true,
+    "secondPassOmissionAuditComplete": true,
+    "threeSecondHierarchyLocked": true,
+    "backgroundFramePhotoRolesMapped": true,
+    "referenceDeltaDirectionLocked": true,
+    "partMapApproved": false,
+    "rule": "Visual review and omission audit are complete, but isolated production generation remains blocked until PART_MAP_APPROVED."
+  },
+  "qa": {
+    "orderedGates": ["G0_VISUAL_IDENTITY_3_SECOND", "G1_REFERENCE_DELTA", "G2_CANONICAL_FACTS", "G3_RELATIONAL_HIERARCHY_AND_SALIENCY", "G4_QUIET_ZONES_AND_OCCLUSION", "G5_PHOTO_MASK_FACE_SAFE_AND_REPLACEABILITY", "G6_A5_READABILITY_AND_SAFE_AREA", "G7_ALPHA_PADDING_AND_ASSET_INTEGRITY", "G8_EXPORT_AND_PRINT", "G9_HIDDEN_STALE_PLACEHOLDER_SCAN"],
+    "currentGateEvidence": {
+      "G0": "Visual master directly reviewed twice; intended title/paired-portrait/name/Q&A hierarchy and omitted micro-elements recorded.",
+      "G1": "Comparison targets recorded; production delta not yet testable because Figma rebuild has not started.",
+      "G2": "Root canonical names/date retained; visible biographical/Q&A reference text explicitly not promoted to FACT; left/right person-role lock added.",
+      "G3": "Relational constraints, asymmetry constraints and saliency weights recorded.",
+      "G4": "Face/copy/breathing quiet zones recorded; micro accents constrained to remain subordinate.",
+      "G5": "Three replaceable photo slots plus an explicit independent Q1 inset frame are specified; actual Figma swap test pending.",
+      "G6": "A5 targets specified; actual-size production proof pending.",
+      "G7": "Padding contract specified; generated production assets pending.",
+      "G8": "Pending production/export.",
+      "G9": "Pending production scan."
+    },
+    "technicalQaCannotOverrideVisualQa": true
+  }
+}

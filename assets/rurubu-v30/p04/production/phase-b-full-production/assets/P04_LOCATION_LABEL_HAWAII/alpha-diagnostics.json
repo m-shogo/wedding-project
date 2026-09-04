@@ -1,0 +1,62 @@
+{
+  "asset_id": "P04_LOCATION_LABEL_HAWAII",
+  "input": "assets/rurubu-v30/p04/production/phase-b-full-production/sources/raw-generated/P04_LOCATION_LABEL_HAWAII_RAW.png",
+  "input_sha256": "1e456e99d8e327be73d5134eefbeeb61c56c1ef94432a4671be4abaf3204f4c6",
+  "normalized_flat_matte": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_HAWAII/P04_LOCATION_LABEL_HAWAII_SOURCE_MATTE.png",
+  "normalized_flat_matte_sha256": "6585018d6f11bf0a4b95b0e47a67d6fb94a28dbc557624f48f2e98e1fc9d67ba",
+  "matte_nominal_hex": "#6C00A8",
+  "normalization": {
+    "method": "violet-only cubic field fit, edge-aware foreground recovery, exact flat matte recomposite",
+    "generated_field_fit": {
+      "violet_pixels": 794495,
+      "fit_residual_p50": 4.891,
+      "fit_residual_p95": 28.979,
+      "fit_residual_p99": 75.604
+    },
+    "first_distance_low": 78.604,
+    "first_distance_high": 105.0
+  },
+  "production_extraction": {
+    "input": "normalized exact flat matte",
+    "distance_low": 7.0,
+    "distance_high": 105.0,
+    "edge_rgb_treatment": "inverse flat-matte compositing plus narrow violet-spill suppression on partial-alpha pixels",
+    "violet_spill_pixels_suppressed": 794616,
+    "violet_partial_pixels_removed": 794612,
+    "opaque_violet_shadow_pixels_recolored_navy": 5,
+    "final_violet_edge_pixels_removed": 794620,
+    "final_violet_opaque_pixels_recolored_navy": 10,
+    "crop_box": [
+      108,
+      75,
+      1478,
+      905
+    ]
+  },
+  "output": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_HAWAII/P04_LOCATION_LABEL_HAWAII.png",
+  "output_sha256": "b61c5d024dbca7f12106861347ab753160f2de4fa7d0a62da9e2b1903acbf4c6",
+  "output_mode": "RGBA",
+  "output_dimensions": [
+    1370,
+    830
+  ],
+  "alpha": {
+    "min": 0,
+    "max": 255,
+    "unique_count": 238,
+    "transparent_pixels": 358856,
+    "partial_pixels": 3013,
+    "opaque_pixels": 775231,
+    "opaque_or_near_opaque_pixels": 775597,
+    "corner_values": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "qa": {
+    "light_gray_dark_contact": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_HAWAII/qa/composite-contact-sheet.jpg",
+    "alpha_mask": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_HAWAII/qa/alpha-mask.png"
+  }
+}

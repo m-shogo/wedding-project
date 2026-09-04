@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P02",
+  "status": "FINAL_DISPLAY_REWORK_COMPLETE",
+  "date": "2026-09-03",
+  "canonicalCopy": {
+    "headerTitle": "ふたりのプロフィール",
+    "headerRibbon": "私たちのこと、少しだけ紹介します♪",
+    "shogoLabel": "SHOGO",
+    "shioriLabel": "SHIORI"
+  },
+  "generation": {
+    "mode": "built-in ImageGen",
+    "promptSet": "P02 Visual Master-guided tactile Japanese travel-magazine title, blue ribbon and coordinated blue/pink name-label family; P02-specific compact tropical botanical ornament.",
+    "alphaWorkflow": "direct alpha failed with checkerboard RGB; regenerated once on violet matte, extracted once, then verified on light and dark backgrounds"
+  },
+  "assets": [
+    {
+      "role": "P02_HEADER_TITLE / GENERATED_DISPLAY_ASSET",
+      "path": "assets/rurubu-v30/p02/production/display/final/V30_P02_HEADER_TITLE_DISPLAY.png",
+      "sha256": "c0c0926c84895478adb6ef7096f89223fb042439057d645c50446f749aaefd10",
+      "figmaNodeId": "3771:5",
+      "figmaImageHash": "30b664de7acd0e018e03ebebe549e84b511fcd15"
+    },
+    {
+      "role": "P02_HEADER_RIBBON / GENERATED_DISPLAY_ASSET",
+      "path": "assets/rurubu-v30/p02/production/display/final/V30_P02_HEADER_RIBBON_DISPLAY.png",
+      "sha256": "4d3be5fcb3ba3102e68309b36b7a06dc924cb60009deb40ee619c9f9b584a943",
+      "figmaNodeId": "3771:2",
+      "figmaImageHash": "fe098675f1a277ccf57f3ac48a67ddda5482d12d"
+    },
+    {
+      "role": "P02_SHOGO_NAME_LABEL / GENERATED_DISPLAY_ASSET",
+      "path": "assets/rurubu-v30/p02/production/display/final/V30_P02_SHOGO_NAME_LABEL.png",
+      "sha256": "227e79375b131aa77de684ce1fccc067ae3bafe5ec60e3c981304851f0c55c38",
+      "figmaNodeId": "3771:3",
+      "figmaImageHash": "2a0c06498f7f6bf3d22e84f9c4ad29e1954d9658"
+    },
+    {
+      "role": "P02_SHIORI_NAME_LABEL / GENERATED_DISPLAY_ASSET",
+      "path": "assets/rurubu-v30/p02/production/display/final/V30_P02_SHIORI_NAME_LABEL.png",
+      "sha256": "e3063968f24539208b29b00134636e1b0092e79bdc0ab5ea983bc239764a7c90",
+      "figmaNodeId": "3771:6",
+      "figmaImageHash": "a52792d977417c45a8bee335f253e926d43c12f9"
+    },
+    {
+      "role": "P02_BOTTOM_LEFT_TROPICAL_CLUSTER / PAGE_SPECIFIC_ORNAMENT",
+      "path": "assets/rurubu-v30/p02/production/display/final/V30_P02_BOTTOM_LEFT_TROPICAL_CLUSTER.png",
+      "sha256": "3352e51aba3650be32ff6c79f6179ff066dbdbce966f8e6aef95437d5e05e58d",
+      "figmaNodeId": "3771:4",
+      "figmaImageHash": "7cb821ff0a0dc84928231fa73e05c0bed3a63350",
+      "p01ComparisonImageHash": "c4300f9b1f5bf8607ec72da41aa064c2bf52e155",
+      "exactReuse": false
+    }
+  ],
+  "alphaPreflight": {
+    "allAssets": "PASS",
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "borderOpaquePixelCount": 0,
+    "lightDarkCompositeQa": "PASS"
+  },
+  "sharedPageBadge": {
+    "masterId": "3772:2",
+    "componentName": "PAGE_BADGE_SHARED_MASTER",
+    "propertyKey": "Page Number#3772:0",
+    "p01InstanceId": "3773:2",
+    "p01Value": "01",
+    "p02InstanceId": "3773:9",
+    "p02Value": "02",
+    "sameMasterProvenance": true
+  },
+  "finalQa": {
+    "p01ScreenshotSha256": "13fadabd2e8cc099951a1b16f83a443ecb71863e702b742e13bc9326c242c6f3",
+    "p02ScreenshotSha256": "188c7165ed1a4221e7e8bb87abebc7c0fafb9c2ca03d7dc14c78d03ce7bbc2f4",
+    "preservedFiveOrnaments": true,
+    "preservedPhotoHashes": true,
+    "p03ToP08Untouched": true
+  }
+}

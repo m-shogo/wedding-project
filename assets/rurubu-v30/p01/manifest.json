@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 5,
+  "reviewRevision": 5,
+  "project": "Rurubu WEDDING V30",
+  "page": "P01",
+  "role": "COVER",
+  "status": "PROMOTED_CURRENT_WITH_CARRYOVER_AND_PROXY_DEBT",
+  "productionState": "PROMOTED_CURRENT_WITH_CARRYOVER_AND_PROXY_DEBT",
+  "inherits": "assets/rurubu-v30/manifest.json",
+  "visualPolishPolicy": "assets/rurubu-v30/visual-polish-manifest.json",
+  "pagePolishPolicy": "assets/rurubu-v30/p01/polish-manifest.json",
+  "visualLockAuditPolicy": "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
+  "executionAcceptancePolicy": "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md",
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p01/P01.png",
+    "authority": "PRIMARY_VISUAL_AUTHORITY",
+    "reviewedDimensionsPx": {"width": 1055, "height": 1491},
+    "reviewMode": "direct full-page review + reverse omission audit + post-build screenshot review",
+    "rule": "Use P01.png to understand and compare the page. Do not crop P01.png into active photo slots. Visual Master is comparison authority, not photo-source material."
+  },
+  "reviewCompleteness": {
+    "passA": "COMPLETE",
+    "passBReverseOmissionAudit": "COMPLETE",
+    "visualMasterUnderstanding": "LOCKED",
+    "postBuildHistory": "FIRST BUILD failed visually; targeted REWORK clearly improved major anchors and was validly promoted; later owner review reopened clean-proxy, bundled-module and carry-over acceptance.",
+    "requiredCurrentRechecks": ["clean photo proxy contamination", "bundled display-module fidelity", "visible inherited asset carry-over", "fresh Reference Delta after those changes"]
+  },
+  "feedbackDebt": {
+    "status": "OPEN",
+    "types": ["VISUAL_CARRYOVER", "PROXY_CONTAMINATION", "BUNDLED_DISPLAY_MODULE_REBUILD"],
+    "systemicWritebackCompleted": true,
+    "pageWritebackCompleted": true,
+    "blockNextProductionPage": true,
+    "rule": "P01 remains best CURRENT but final visual acceptance is reopened. Do not scale the current partial-rework method to P02 until P01 debt is resolved or explicitly deferred."
+  },
+  "knownFigmaCleanup": {
+    "currentFrame": "3535:7",
+    "temporaryDuplicate": "3708:2",
+    "temporaryDuplicateName": "V30 P01 / CARRYOVER REWORK / TEMP",
+    "action": "CODEX_DELETE_AT_START_OF_NEXT_P01_RUN",
+    "mustPreserve": ["P01 CURRENT 3535:7", "real P02 3535:9"],
+    "hardRule": "Delete only 3708:2; do not delete/overwrite 3535:9."
+  },
+  "canonicalFacts": {
+    "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
+    "weddingDate": "2026.10.24",
+    "year": "2026",
+    "pageMeta": "PAGE 01",
+    "displayCaseMayVary": true,
+    "sourceRule": "Exact fixed FACT strings/numbers are authoritative here/parent manifest/asset metadata. Visible fixed display art need not have a duplicate native Figma text layer."
+  },
+  "visualMasterTextSafety": {
+    "lockedFacts": ["Shogo", "Shiori", "2026", "2026.10.24", "PAGE 01"],
+    "fixedApprovedDisplay": ["るるぶ", "WEDDING", "Shogo & Shiori", "2026", "WEDDING DATE", "SAT.", "1", "ふたりのプロフィール", "2", "旅の思い出", "3", "家族と友達", "ふたりの“楽しい!”を詰めこんだ", "わたしたちの旅ストーリー", "OUR JOURNEY", "TAKE A TRIP", "PAGE", "01"],
+    "referenceOnlyWarning": "P01 Feature 3 wording 家族と友達 is cover-reference wording and does not change P05's FRIENDS-only role.",
+    "rule": "Fixed approved short display text may be baked into its complete display module. Long/TBD/personal copy is not covered by this permission."
+  },
+  "threeSecondReadOrder": [
+    "るるぶ + WEDDING cover title system",
+    "central two-person couple Hero",
+    "Shogo & Shiori ribbon lockup",
+    "2026 + 2026.10.24 date cues",
+    "Feature 1/2/3 left teaser stack",
+    "bottom story hook",
+    "OUR JOURNEY + PAGE 01"
+  ],
+  "pageSpec": {
+    "trimMm": {"width": 148, "height": 210},
+    "bleedMm": 3,
+    "safeTextMarginMm": 6,
+    "figmaTrimPx": {"width": 559, "height": 794},
+    "visualMasterPx": {"width": 1055, "height": 1491},
+    "geometryRule": "Normalized/approximate geometry guides reconstruction. Visual Master first impression, relationships, face safety and current acceptance outrank mechanical pixel matching."
+  },
+  "visualAuthority": {
+    "firstImpression": "Bright high-energy Japanese travel-magazine wedding cover; playful, dense, layered, tropical, tactile and immediately magazine-like rather than generic wedding brochure/UI.",
+    "signatureMove": "Huge hot-pink WEDDING dominates upper third; large two-person Hero rises beneath; narrow asymmetric Feature stack sits left; postal/date ephemera and tropical destination art activate edges; bottom story hook closes the cover.",
+    "colorBehavior": {"dominant": ["hot pink", "sky blue", "sun yellow", "white"], "support": ["green foliage", "hibiscus red/pink", "navy/black ink"], "reject": ["luxury beige minimalism", "generic gradient-only background", "muted monochrome"]}
+  },
+  "identityAnchors": {
+    "P01_MASTHEAD_RURUBU": {
+      "currentStatus": "PASS_CURRENT_REWORK",
+      "referenceText": "るるぶ",
+      "renderMode": "generated/prepared display art",
+      "mustMatch": ["three-block identity", "chunky playful glyph character", "strong light/dark dimensional outline", "authored irregularity", "integration with top floral/route ecology"],
+      "hardRejects": ["flat generic colored squares", "ordinary native glyph treatment", "weaker visual just because it is editable"]
+    },
+    "P01_TITLE_WEDDING": {
+      "currentStatus": "KEEP_REQUALIFIED",
+      "referenceText": "WEDDING",
+      "renderMode": "generated display art",
+      "mustMatch": ["very large hot-pink mass", "thick layered outline/depth", "cover-dominant scale", "strong Hero relationship"]
+    },
+    "P01_NAMES_LOCKUP": {
+      "currentStatus": "PASS_CURRENT_REWORK",
+      "exactText": "Shogo & Shiori",
+      "renderMode": "generated/prepared display art with source metadata",
+      "visibleCharacter": "hot-pink script/hand-lettered energetic lockup on yellow/blue ribbon",
+      "nativeFigmaDuplicateRequired": false,
+      "hardRejects": ["heavy navy sans", "generic bold Inter-style lockup", "correct text with wrong personality"]
+    },
+    "P01_YEAR_DISPLAY": {
+      "currentStatus": "PASS_ANCHOR_REQUALIFY_AS_COMPLETE_MODULE",
+      "exactText": "2026",
+      "renderMode": "bundled-display-module",
+      "mustMatch": ["yellow cloud/burst silhouette", "playful outlined character", "attached heart/airplane-route ecology where visually one cluster"]
+    }
+  },
+  "cleanPhotoProxyContracts": {
+    "hardRule": "P01.png crops/page screenshots are prohibited as active proxy photos.",
+    "historicalCropFiles": [
+      "V30_P01_HERO_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png",
+      "V30_P01_FEATURE_1_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png",
+      "V30_P01_FEATURE_2_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png",
+      "V30_P01_FEATURE_3_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png"
+    ],
+    "historicalCropStatus": "QA_HISTORY_ONLY_DO_NOT_USE_ACTIVE",
+    "P01_PHOTO_HERO_MASK": {
+      "saliency": 92,
+      "subjectClass": "people/couple",
+      "importantSubjectCount": 2,
+      "requiredVisualMass": ["two large faces", "upper bodies", "bright wedding-white mass", "bouquet/organic mass when feasible"],
+      "allowedSources": ["user real couple photo", "clean standalone representative couple/wedding photo", "clean generated standalone couple proxy without page decoration"],
+      "hardRejects": ["P01.png crop", "page screenshot", "map/camera/passport still life", "landscape-only proxy", "single small person", "proxy containing page title/border/flowers/ticket/frame/badge"]
+    },
+    "P01_FEATURE_1_PHOTO": {"role": "couple/profile", "subjectClass": "people", "importantSubjectCount": 2, "cleanStandaloneRequired": true},
+    "P01_FEATURE_2_PHOTO": {"role": "travel/place", "subjectClass": "place/landscape", "cleanStandaloneRequired": true},
+    "P01_FEATURE_3_PHOTO": {"role": "group/friends", "subjectClass": "group/people", "importantSubjectCount": "3+ preferred", "cleanStandaloneRequired": true}
+  },
+  "backgroundSystem": {
+    "id": "P01_BG_RESORT_SKY_FIELD",
+    "renderMode": "generated-art",
+    "fullBleed": true,
+    "geometry": {"referencePx": {"x": 16, "y": 16, "width": 1023, "height": 1458}, "normalized": {"x": 0.0152, "y": 0.0107, "width": 0.9697, "height": 0.9779}, "figmaTrimPxApprox": {"x": 8.5, "y": 8.5, "width": 542.1, "height": 776.5}},
+    "mustPreserve": ["sky brightness", "destination/church cue", "tropical atmosphere", "clear pockets behind critical display"]
+  },
+  "frameSystem": {
+    "outerBorder": {"id": "P01_BORDER_AIRMAIL", "renderMode": "generated-art", "geometry": {"normalized": {"x": 0.0152, "y": 0.0107, "width": 0.9697, "height": 0.9779}, "figmaTrimPxApprox": {"x": 8.5, "y": 8.5, "width": 542.1, "height": 776.5}}, "zIndex": 105, "mustNotCover": ["critical text", "faces", "PAGE 01"]},
+    "heroPhotoMask": {"id": "P01_PHOTO_HERO_MASK", "geometry": {"referencePx": {"x": 245, "y": 590, "width": 750, "height": 730}, "normalized": {"x": 0.2322, "y": 0.3957, "width": 0.7109, "height": 0.4896}, "figmaTrimPxApprox": {"x": 129.8, "y": 314.2, "width": 397.4, "height": 388.7}}, "visibleFrame": "none/open editorial Hero", "replaceable": true, "clipsContent": true, "nonDestructiveCrop": true, "zIndex": 30, "faceSafe": "both faces/eyes first; adjust TARGET crop before allowing decoration across face"},
+    "featurePhotoMasks": [
+      {"id": "P01_FEATURE_1_PHOTO", "geometry": {"referencePx": {"x": 62, "y": 937, "width": 162, "height": 88}, "figmaTrimPxApprox": {"x": 32.9, "y": 498.9, "width": 85.9, "height": 46.9}}, "replaceable": true, "zIndex": 34, "frameZIndex": 44},
+      {"id": "P01_FEATURE_2_PHOTO", "geometry": {"referencePx": {"x": 70, "y": 1118, "width": 160, "height": 92}, "figmaTrimPxApprox": {"x": 37.1, "y": 595.3, "width": 84.8, "height": 49.0}}, "replaceable": true, "zIndex": 34, "frameZIndex": 44},
+      {"id": "P01_FEATURE_3_PHOTO", "geometry": {"referencePx": {"x": 62, "y": 1306, "width": 165, "height": 88}, "figmaTrimPxApprox": {"x": 32.9, "y": 695.7, "width": 87.4, "height": 46.9}}, "replaceable": true, "zIndex": 34, "frameZIndex": 44}
+    ],
+    "featureFrameRule": "Support photos stay independently replaceable. Feature display modules may bundle their number/heading/icon/vessel but never the photo content."
+  },
+  "majorObjects": [
+    {"id": "P01_MASTHEAD_RURUBU", "geometry": {"referencePx": {"x": 215, "y": 35, "width": 520, "height": 215}, "figmaTrimPxApprox": {"x": 113.9, "y": 18.6, "width": 275.5, "height": 114.5}}, "zIndex": 62, "saliency": 100},
+    {"id": "P01_TITLE_WEDDING", "geometry": {"referencePx": {"x": 45, "y": 225, "width": 930, "height": 305}, "figmaTrimPxApprox": {"x": 23.9, "y": 119.8, "width": 492.8, "height": 162.4}}, "zIndex": 60, "saliency": 100},
+    {"id": "P01_YEAR_DISPLAY_MODULE", "geometry": {"referencePx": {"x": 725, "y": 70, "width": 290, "height": 195}, "figmaTrimPxApprox": {"x": 384.1, "y": 37.3, "width": 153.7, "height": 103.9}}, "zIndex": 76, "saliency": 56, "renderMode": "bundled-display-module"},
+    {"id": "P01_NAMES_RIBBON_LOCKUP", "geometry": {"referencePx": {"x": 265, "y": 480, "width": 535, "height": 142}, "figmaTrimPxApprox": {"x": 140.4, "y": 255.6, "width": 283.5, "height": 75.6}}, "zIndex": 82, "saliency": 66, "renderMode": "display-art-with-source-metadata"},
+    {"id": "P01_DATE_TICKET_MODULE", "geometry": {"referencePx": {"x": 54, "y": 685, "width": 275, "height": 145}, "figmaTrimPxApprox": {"x": 28.6, "y": 364.8, "width": 145.7, "height": 77.2}}, "zIndex": 84, "saliency": 58, "renderMode": "bundled-display-module", "exactText": ["WEDDING DATE", "2026.10.24", "SAT."]},
+    {"id": "P01_FEATURE_1_DISPLAY_MODULE", "geometry": {"referencePx": {"x": 28, "y": 845, "width": 310, "height": 180}, "figmaTrimPxApprox": {"x": 14.8, "y": 450.0, "width": 164.3, "height": 95.8}}, "zIndex": 88, "saliency": 42, "exactText": ["1", "ふたりのプロフィール"]},
+    {"id": "P01_FEATURE_2_DISPLAY_MODULE", "geometry": {"referencePx": {"x": 30, "y": 1025, "width": 330, "height": 190}, "figmaTrimPxApprox": {"x": 15.9, "y": 545.9, "width": 174.8, "height": 101.2}}, "zIndex": 88, "saliency": 42, "exactText": ["2", "旅の思い出"]},
+    {"id": "P01_FEATURE_3_DISPLAY_MODULE", "geometry": {"referencePx": {"x": 30, "y": 1217, "width": 320, "height": 180}, "figmaTrimPxApprox": {"x": 15.9, "y": 648.1, "width": 169.6, "height": 95.8}}, "zIndex": 88, "saliency": 42, "referenceText": ["3", "家族と友達"]},
+    {"id": "P01_BOTTOM_STORY_MODULE", "geometry": {"referencePx": {"x": 278, "y": 1218, "width": 505, "height": 170}, "figmaTrimPxApprox": {"x": 147.3, "y": 648.6, "width": 267.6, "height": 90.5}}, "zIndex": 96, "saliency": 48, "exactText": ["ふたりの“楽しい!”を詰めこんだ", "わたしたちの旅ストーリー"]},
+    {"id": "P01_JOURNEY_STAMP_MODULE", "geometry": {"referencePx": {"x": 735, "y": 1135, "width": 260, "height": 198}, "figmaTrimPxApprox": {"x": 389.5, "y": 604.4, "width": 137.7, "height": 105.4}}, "zIndex": 92, "saliency": 28, "exactText": ["OUR JOURNEY", "TAKE A TRIP"]},
+    {"id": "P01_PAGE_BADGE_MODULE", "geometry": {"referencePx": {"x": 870, "y": 1305, "width": 125, "height": 150}, "figmaTrimPxApprox": {"x": 461.0, "y": 695.0, "width": 66.2, "height": 79.9}}, "zIndex": 98, "saliency": 18, "exactText": ["PAGE", "01"]}
+  ],
+  "decorativeObjects": [
+    {"id": "P01_TOP_LEFT_RING_SPARKLE_CLUSTER", "geometry": {"referencePx": {"x": 69, "y": 92, "width": 164, "height": 149}, "figmaTrimPxApprox": {"x": 36.6, "y": 49.0, "width": 86.9, "height": 79.3}}, "zIndex": 74, "saliency": 22},
+    {"id": "P01_TOP_CENTER_PLUMERIA_FOLIAGE", "geometry": {"referencePx": {"x": 604, "y": 48, "width": 139, "height": 169}, "figmaTrimPxApprox": {"x": 320.0, "y": 25.6, "width": 73.6, "height": 90.0}}, "zIndex": 72, "saliency": 20},
+    {"id": "P01_TOP_RIGHT_HEART_PLANE_ROUTE", "geometry": {"referencePx": {"x": 742, "y": 61, "width": 218, "height": 130}, "figmaTrimPxApprox": {"x": 393.1, "y": 32.5, "width": 115.5, "height": 69.3}}, "zIndex": 75, "saliency": 23},
+    {"id": "P01_LEFT_TROPICAL_CLUSTER", "geometry": {"referencePx": {"x": 30, "y": 430, "width": 310, "height": 215}, "figmaTrimPxApprox": {"x": 15.9, "y": 229.0, "width": 164.3, "height": 114.5}}, "zIndex": 72, "saliency": 35},
+    {"id": "P01_RIGHT_DESTINATION_CLUSTER", "geometry": {"referencePx": {"x": 685, "y": 470, "width": 315, "height": 205}, "figmaTrimPxApprox": {"x": 363.0, "y": 250.3, "width": 166.9, "height": 109.2}}, "zIndex": 72, "saliency": 34, "description": "chapel + sea + palms + tropical flowers + pink heart"},
+    {"id": "P01_BOTTOM_FLORAL_CLUSTER", "geometry": {"referencePx": {"x": 215, "y": 1365, "width": 515, "height": 125}, "figmaTrimPxApprox": {"x": 113.9, "y": 727.0, "width": 272.9, "height": 66.5}}, "zIndex": 74, "saliency": 29, "rule": "Separate from Bottom Story module; recheck after story-module replacement."},
+    {"id": "P01_MICRO_ACCENTS", "constraintLevel": "FLEXIBLE", "saliency": "8-12", "rule": "Presence contributes to cover character; exact micro placement may flex."
+    }
+  ],
+  "bundledDisplayModulePolicy": {
+    "visibleFixedTextEditableRequired": false,
+    "modules": ["P01_YEAR_DISPLAY_MODULE", "P01_DATE_TICKET_MODULE", "P01_FEATURE_1_DISPLAY_MODULE", "P01_FEATURE_2_DISPLAY_MODULE", "P01_FEATURE_3_DISPLAY_MODULE", "P01_BOTTOM_STORY_MODULE", "P01_JOURNEY_STAMP_MODULE", "P01_PAGE_BADGE_MODULE"],
+    "mustRemainSeparate": ["Hero replaceable photo", "Feature 1 replaceable photo", "Feature 2 replaceable photo", "Feature 3 replaceable photo", "bottom floral cluster when independent", "independent top title ecology when overlap requires it"],
+    "rule": "Do not recreate these fixed modules as generic native Figma primitives merely to retain editability. Generate the authored visible module, keep exact text/number in manifest/asset metadata, and preserve photo replaceability."
+  },
+  "featureRoleLocks": {
+    "feature1": {"accent": "pink", "icon": "camera", "photoRole": "couple/profile"},
+    "feature2": {"accent": "blue", "icon": "airplane + dotted route", "photoRole": "travel/place"},
+    "feature3": {"accent": "green", "icon": "floral/leaf", "photoRole": "group/friends"},
+    "rule": "Related family, intentionally non-identical. Preserve Visual Master differences in width/height/photo size/icon position/spacing. Do not randomize rotation."
+  },
+  "relationalConstraints": [
+    {"type": "dominates", "subject": ["P01_MASTHEAD_RURUBU", "P01_TITLE_WEDDING"], "object": ["feature modules", "date", "micro decoration", "page meta"], "level": "LOCKED"},
+    {"type": "dominates", "subject": "P01_PHOTO_HERO_MASK", "object": ["support photos", "micro decoration"], "level": "LOCKED"},
+    {"type": "overlaps", "subject": "P01_NAMES_RIBBON_LOCKUP", "object": ["WEDDING lower edge", "Hero upper edge"], "level": "TARGET"},
+    {"type": "alignedWith", "subject": ["P01_FEATURE_1_DISPLAY_MODULE", "P01_FEATURE_2_DISPLAY_MODULE", "P01_FEATURE_3_DISPLAY_MODULE"], "object": "left reading sequence without equal-card normalization", "level": "TARGET"},
+    {"type": "inFrontOf", "subject": "P01_BOTTOM_STORY_MODULE", "object": ["Hero lower area", "bottom floral partly behind"], "level": "TARGET"},
+    {"type": "mustNotCover", "subject": "all decoration/modules", "object": ["Hero eyes/faces", "Shogo & Shiori", "2026.10.24", "feature headings", "bottom story text"], "level": "LOCKED"}
+  ],
+  "quietZones": [
+    {"id": "P01_QZ_HERO_FACES", "type": "face-safe", "rule": "No decoration across either eye/face."},
+    {"id": "P01_QZ_DATE", "type": "critical-copy", "rule": "2026.10.24 remains fully readable."},
+    {"id": "P01_QZ_STORY", "type": "critical-display", "rule": "Bottom Story fixed text remains readable at A5."},
+    {"id": "P01_QZ_FEATURE", "type": "critical-display/photo", "rule": "Feature heading + photo remain recognizable at A5."}
+  ],
+  "visualCarryOver": {
+    "status": "OPEN",
+    "keepRequalified": ["P01_WEDDING_TITLE", "P01_RIGHT_DESTINATION_CLUSTER", "P01_LEFT_TROPICAL_CLUSTER", "P01_AIRMAIL_BORDER"],
+    "keepRequalifiedButRecheckAdjacency": ["P01_BOTTOM_FLORAL_CLUSTER"],
+    "unreviewed": ["P01_NAMES_RIBBON_BACKING"],
+    "replaceWithBundledModule": ["old P01_DATE_TICKET", "old P01_FEATURE_1_VESSEL", "old P01_FEATURE_2_VESSEL", "old P01_FEATURE_3_VESSEL", "old P01_BOTTOM_STORY_VESSEL"],
+    "reworkAsBundledModule": ["old P01_JOURNEY_STAMP", "old P01_PAGE_BADGE"],
+    "rule": "No inherited visible asset receives permanent approval from ADOPTED/unchanged status."
+  },
+  "promotedReworkAssets": [
+    {"assetId": "P01_MASTHEAD_RURUBU_REWORK", "path": "assets/rurubu-v30/p01/V30_P01_MASTHEAD_RURUBU_REWORK_FINAL_RGBA.png", "status": "ADOPTED_CURRENT", "alphaMode": "RGBA_TRUE_ALPHA", "sha256": "5218885f840843e8b9463a0884d2ac7b866acf96a353155e9430db8373502c7f"},
+    {"assetId": "P01_NAMES_LOCKUP_REWORK", "path": "assets/rurubu-v30/p01/V30_P01_NAMES_LOCKUP_REWORK_FINAL_RGBA.png", "status": "ADOPTED_CURRENT", "alphaMode": "RGBA_TRUE_ALPHA", "sha256": "af9e10fa4aaf1a17e995bc08d206208699bf3bccd5d23923842e64947320814b"},
+    {"assetId": "P01_HERO_VISUAL_PROXY_CALIBRATION", "path": "assets/rurubu-v30/p01/V30_P01_HERO_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png", "status": "DEPRECATED_QA_HISTORY_ONLY", "reason": "Visual Master crop proxy now prohibited"},
+    {"assetId": "P01_FEATURE_1_VISUAL_PROXY_CALIBRATION", "path": "assets/rurubu-v30/p01/V30_P01_FEATURE_1_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png", "status": "DEPRECATED_QA_HISTORY_ONLY"},
+    {"assetId": "P01_FEATURE_2_VISUAL_PROXY_CALIBRATION", "path": "assets/rurubu-v30/p01/V30_P01_FEATURE_2_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png", "status": "DEPRECATED_QA_HISTORY_ONLY"},
+    {"assetId": "P01_FEATURE_3_VISUAL_PROXY_CALIBRATION", "path": "assets/rurubu-v30/p01/V30_P01_FEATURE_3_VISUAL_PROXY_FROM_MASTER_CALIBRATION.png", "status": "DEPRECATED_QA_HISTORY_ONLY"}
+  ],
+  "hardRejects": [
+    "generic wedding brochure/minimal luxury cover",
+    "generic/native editability overriding authored display fidelity",
+    "P01.png crop or page screenshot used as active photo proxy",
+    "proxy containing baked page decoration",
+    "heavy dark/navy sans Shogo & Shiori",
+    "generic oval/circle year treatment",
+    "small/weak WEDDING",
+    "white/polaroid frame around Hero",
+    "equal Feature cards",
+    "Feature modules flattened with their replaceable photos",
+    "Date ticket rebuilt as generic background + generic editable text",
+    "Bottom Story rebuilt as generic white box + native text merely for editability",
+    "OUR JOURNEY and PAGE 01 merged into unrelated one object",
+    "photo spill outside masks",
+    "faces/eyes covered",
+    "invented/misspelled Shogo/Shiori/date",
+    "technical QA used as proof of visual completion",
+    "old asset retained solely because work was already spent"
+  ],
+  "referenceDelta": {
+    "method": "After clean proxies and bundled modules are installed, capture CURRENT and compare against P01.png at matching aspect ratio.",
+    "priorityOrder": ["3-second るるぶ WEDDING identity", "clean two-person Hero mass", "Shogo & Shiori", "2026 module", "title/Hero ratio", "Date module", "Feature 1/2/3 rhythm", "right destination cluster", "Bottom Story + separate floral closure", "OUR JOURNEY + PAGE 01", "mixed-generation coherence", "micro accents"],
+    "currentStatus": "REOPENED_AFTER_OWNER_FB",
+    "blockingFailures": ["active contaminated proxy", "stale Feature/Date/Story module", "mixed old/new design language", "identity regression", "A5 critical fixed text unreadable"]
+  },
+  "a5Qa": {
+    "threeSecondTest": "At physical A5 the cover reads るるぶ WEDDING → couple Hero → names/date → Feature stack → Bottom Story.",
+    "readabilityTargets": ["Shogo & Shiori", "2026.10.24", "Feature headings", "Bottom Story", "PAGE 01"],
+    "finalPrintRaster": "PENDING_REAL_PHOTOS_AND_FINAL_MODULES"
+  },
+  "executionAcceptance": {
+    "figmaNode": "3535:7",
+    "bestCurrentPromotion": true,
+    "FIGMA_STRUCTURE_READY": true,
+    "CLEAN_PROXY_PASS": false,
+    "BUNDLED_DISPLAY_MODULE_PASS": false,
+    "REPRESENTATIVE_VISUAL_PROXY_READY": false,
+    "IDENTITY_ANCHOR_PASS": true,
+    "VISUAL_CARRYOVER_PASS": false,
+    "REFERENCE_DELTA_PASS": false,
+    "PHOTO_SWAP_PASS": "HISTORICAL_STRUCTURAL_PASS_RERUN_AFTER_CLEAN_PROXY",
+    "A5_PRINT_QA_PASS": false,
+    "HUMAN_FEEDBACK_REVIEWED": true,
+    "FIGMA_DESIGN_COMPLETE": false,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "nextRequiredActions": ["Codex delete TEMP 3708:2 only", "install four clean standalone proxies", "replace/rework fixed stale modules according to bundled-module policy", "requalify names ribbon backing and bottom adjacency", "capture fresh CURRENT", "run clean proxy → bundled module → identity → carry-over → Reference Delta → photo swap/A5 QA"]
+  },
+  "promotionHistory": {
+    "reworkWasClearImprovement": true,
+    "currentNodePreserved": "3535:7",
+    "previousTemporaryReworkRemoved": "3674:2",
+    "newMistakenTemporaryDuplicateToDelete": "3708:2",
+    "driveQaFolder": "https://drive.google.com/drive/folders/1WCUtnm_trU9tEeuZ3tMFjN-PP0KEGw4d",
+    "firstBuildBaselineFolder": "https://drive.google.com/drive/folders/1ggtQ4j0TCqBKm8O3hwVqkC0wbPDhZAKW",
+    "rule": "Keep historical evidence, but historical PASS cannot override newer owner feedback and authority."
+  }
+}
