@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wedding Opening Studio — StaRt × Travel</title>
+  <meta name="description" content="やりたい演出から始める、結婚式オープニングムービー制作専用ページ。DaVinci Resolveで必要なところを1操作ずつ作る。" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./studio.css" />
+  <style>
+    .hero-tags[aria-label="制作の現在地"]{margin-top:10px}
+    .hero-tags[aria-label="制作の現在地"] span{transition:.18s ease}
+    .hero-tags[aria-label="制作の現在地"] span.is-active{border-color:transparent;background:#ffd65a;color:#403516;box-shadow:0 8px 18px rgba(0,0,0,.12)}
+    .hero-tags[aria-label="制作の現在地"] span.is-done{border-color:rgba(185,236,211,.38);background:rgba(88,190,139,.2);color:#e8fff4}
+    .hero-tags[aria-label="制作の現在地"] span.is-locked{opacity:.52}
+    .now-section.is-complete .task-main{border-color:#9bcdb8;background:linear-gradient(180deg,#fbfffd 0%,#f1fbf6 100%)}
+    .now-section.is-complete .task-label{color:#287257}
+    .next-step-button{margin-top:18px}
+
+    .idea-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+    .idea-ticket{position:relative;display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;padding:20px;border:1px solid var(--studio-line);border-radius:18px;background:#fff;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+    .idea-ticket:hover{transform:translateY(-2px);border-color:#b7cedb;box-shadow:0 12px 26px rgba(25,47,62,.08)}
+    .idea-ticket.is-favorite{border-color:#e4bd34;background:linear-gradient(145deg,#fffdf4,#fff)}
+    .idea-ticket.is-favorite::after{content:"KEEP";position:absolute;right:-27px;top:14px;width:100px;padding:3px 0;background:#ffd65a;color:#5d4b10;font-size:9px;font-weight:950;letter-spacing:.13em;text-align:center;transform:rotate(34deg)}
+    .idea-no{display:grid;place-items:center;align-self:start;width:58px;height:58px;border-radius:16px;background:#edf7fc;color:#27698d;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;font-weight:950}
+    .idea-ticket.strong-idea .idea-no{background:#123b63;color:#fff}
+    .idea-topline{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:5px}
+    .idea-topline span{display:inline-flex;padding:4px 7px;border-radius:999px;background:#f0f3f5;color:#5f6b74;font-size:9px;font-weight:900;letter-spacing:.08em}
+    .idea-topline .push{background:#fff0ad;color:#78621f}
+    .idea-ticket h3{margin:0;font-size:20px;line-height:1.3}
+    .idea-ticket p{margin:8px 0 12px;color:var(--studio-muted);font-size:13px;line-height:1.7}
+    .idea-meta{display:flex;gap:6px;flex-wrap:wrap}
+    .idea-meta span{padding:5px 8px;border-radius:8px;background:#f6f8f9;color:#64727b;font-size:10px;font-weight:800}
+    .idea-keep{margin-top:13px;padding:7px 10px;border:1px solid #d8e1e6;border-radius:9px;background:#fff;color:#53636e;font:inherit;font-size:11px;font-weight:900;cursor:pointer}
+    .idea-keep:hover{border-color:#d9b536;background:#fffaf0;color:#79631d}
+    .idea-ticket.is-favorite .idea-keep{border-color:#e5c75d;background:#fff6c9;color:#735f17}
+    .idea-rule{margin-top:16px;padding:14px 16px;border-radius:13px;background:#f5f8fa;color:#53616b;font-size:12px;line-height:1.7}
+    .idea-rule strong{color:var(--studio-ink)}
+    .idea-summary{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .idea-summary span{padding:6px 9px;border-radius:999px;background:#eef4f7;color:#607783;font-size:10px;font-weight:850}
+    .idea-summary .saved-count{background:#fff0ad;color:#735f17}
+    @media(max-width:760px){.idea-deck{grid-template-columns:1fr}.idea-ticket{grid-template-columns:54px minmax(0,1fr);padding:16px}.idea-no{width:46px;height:46px;border-radius:13px}}
+  </style>
+</head>
+<body class="studio-body">
+  <header class="studio-hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">WEDDING OPENING STUDIO / 2026.10.24</p>
+        <h1>旅のはじまりを、<br><span>StaRt</span>でつくる。</h1>
+        <p class="hero-lead">「ここ、こうしたい」から始めればOK。<br><strong>作りたい演出を決めたら、DaVinciでその場で形にする。</strong> 難しいところはテンプレやAIも借りる。</p>
+        <div class="hero-tags" aria-label="現在の制作条件">
+          <span>🎵 StaRt</span>
+          <span>✈️ TRAVEL</span>
+          <span>⏱ 約2:08</span>
+          <span>🎬 DaVinci Resolve 21</span>
+        </div>
+        <div class="hero-tags" aria-label="制作の現在地">
+          <span id="journeyMusic">① 曲を置く</span>
+          <span id="journeyMarkers">② 目印を置く</span>
+          <span id="journeyScenes">③ 好きな場面を作る</span>
+        </div>
+      </div>
+      <div class="today-card">
+        <p class="today-kicker">TODAY</p>
+        <strong>まず、曲を置く。</strong>
+        <p>StaRtをA1に置いて、再生できるところまで。今日はここから。</p>
+        <a class="primary-button" href="#now">やる →</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="studio-nav" aria-label="ページ内ナビゲーション">
+    <a href="#now">今やる</a>
+    <a href="#want">やりたい演出</a>
+    <a href="#ideas">アイデア</a>
+    <a href="#timeline">曲の流れ</a>
+    <a href="./template-usage-guide.html">テンプレの使い方</a>
+    <a href="./templates.html">テンプレ候補</a>
+  </nav>
+
+  <main class="studio-main">
+    <section class="studio-section now-section" id="now">
+      <div class="section-heading">
+        <div>
+          <p class="chapter-no">NOW</p>
+          <h2>いまは、これだけ。</h2>
+        </div>
+        <span class="status-pill">STEP 01</span>
+      </div>
+
+      <div class="single-task">
+        <div class="task-main">
+          <p class="task-label">やること</p>
+          <h3>StaRtをタイムラインに置く</h3>
+          <p class="task-note">まだ写真も文字もいじらない。まず音楽の土台を作る。</p>
+
+          <ol class="big-steps">
+            <li><span>1</span><div><strong>画面下の「Edit」を押す</strong><small>ここが編集するメイン画面。</small></div></li>
+            <li><span>2</span><div><strong>左上の「Media Pool」を見る</strong><small>入れた素材が並ぶ場所。</small></div></li>
+            <li><span>3</span><div><strong>StaRtを下のタイムラインへドラッグ</strong><small>音声なのでA1に入ればOK。</small></div></li>
+            <li><span>4</span><div><strong>▶︎を押して再生</strong><small>波形が見えて、音が流れれば成功。</small></div></li>
+          </ol>
+
+          <label class="check action-check">
+            <input type="checkbox" data-progress="music-on-timeline" />
+            <span>できた。StaRtが再生できた</span>
+          </label>
+        </div>
+
+        <aside class="task-side">
+          <p class="side-title">NEXT</p>
+          <strong>次は曲に目印をつける。</strong>
+          <p>「ここでWELCOME」「ここがサビ」「ここで5→1」が見えるようにする。</p>
+          <div class="mini-flow">
+            <span>曲を置く</span><b>→</b><span>目印</span><b>→</b><span>演出</span>
+          </div>
+          <a class="primary-button next-step-button" href="./markers.html" hidden>STEP 02へ →</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="studio-section" id="want">
+      <div class="section-heading">
+        <div>
+          <p class="chapter-no">CHOOSE A SCENE</p>
+          <h2>今日は、どこを作る？</h2>
+          <p>機能名は知らなくていい。見せたいものから選ぶ。</p>
+        </div>
+      </div>
+
+      <div class="want-grid">
+        <article class="want-card">
+          <div class="want-icon">✈️</div>
+          <div><span>OPENING</span><h3>旅行っぽく始めたい</h3><p>WELCOME ABOARD、搭乗案内、地図、飛行機、出発スタンプ。</p></div>
+          <a href="./template-usage-guide.html#travel">使える候補を見る →</a>
+        </article>
+
+        <article class="want-card">
+          <div class="want-icon">Aa</div>
+          <div><span>LYRICS</span><h3>歌詞を気持ちよく出したい</h3><p>短い言葉を、曲の勢いに合わせてパッと見せる。</p></div>
+          <a href="./template-usage-guide.html#lyrics">歌詞系を見る →</a>
+        </article>
+
+        <article class="want-card">
+          <div class="want-icon">📸</div>
+          <div><span>PHOTO</span><h3>写真をテンポよく見せたい</h3><p>サビだけ写真ラッシュ。全部を派手にしないから効く。</p></div>
+          <a href="./template-usage-guide.html#photos">写真系を見る →</a>
+        </article>
+
+        <article class="want-card">
+          <div class="want-icon">👰</div>
+          <div><span>INTRODUCE</span><h3>新郎新婦を紹介したい</h3><p>写真＋名前＋短いひとこと。OPらしく軽く、テンポよく。</p></div>
+          <a href="./template-usage-guide.html#intro">紹介系を見る →</a>
+        </article>
+
+        <article class="want-card">
+          <div class="want-icon">5</div>
+          <div><span>COUNTDOWN</span><h3>最後を5→1で上げたい</h3><p>入場直前に一気に上げる。テンプレを使う価値が高いところ。</p></div>
+          <a href="./template-usage-guide.html#countdown">カウントダウンを見る →</a>
+        </article>
+
+        <article class="want-card accent-card">
+          <div class="want-icon">★</div>
+          <div><span>TEMPLATE</span><h3>難しいところだけ借りたい</h3><p>丸ごと使わず、1〜8秒の「ここ好き」だけ使う。</p></div>
+          <a href="./templates.html">候補をまとめて見る →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="studio-section" id="ideas">
+      <div class="section-heading">
+        <div>
+          <p class="chapter-no">IDEA DECK</p>
+          <h2>このOPなら、こんなのも面白い。</h2>
+          <p>まだ採用しない。気になる案だけ ★ で残して、実際に作る時に使う。</p>
+        </div>
+        <div class="idea-summary"><span>OPTION</span><span class="saved-count" id="ideaSavedCount">★ 0 KEEP</span></div>
+      </div>
+
+      <div class="idea-deck">
+        <article class="idea-ticket strong-idea" data-idea-id="boarding-open">
+          <div class="idea-no">01</div>
+          <div>
+            <div class="idea-topline"><span class="push">強推し</span><span>0:00–0:04</span><span>INTRO</span></div>
+            <h3>空港の「搭乗開始」からスタート</h3>
+            <p>最初の数秒を出発案内板にして、<strong>FLIGHT 1024 / DESTINATION: WEDDING / BOARDING NOW</strong>。曲が走り出す直前に旅行テーマを一発で伝える。</p>
+            <div class="idea-meta"><span>テンプレ向き</span><span>文字はDaVinci</span><span>難易度 低</span></div>
+            <button class="idea-keep" type="button" data-idea-toggle>☆ 候補に残す</button>
+          </div>
+        </article>
+
+        <article class="idea-ticket strong-idea" data-idea-id="start-stamp">
+          <div class="idea-no">02</div>
+          <div>
+            <div class="idea-topline"><span class="push">強推し</span><span>イントロ</span><span>TITLE</span></div>
+            <h3>「StaRt」を出発スタンプにする</h3>
+            <p>曲名そのものが「始まり」なので、パスポートの出国印みたいに<strong>StaRt</strong>をバンッと押す。普通のタイトルより今回だけの意味が出る。</p>
+            <div class="idea-meta"><span>Stampテンプレ</span><span>1〜2秒</span><span>難易度 低</span></div>
+            <button class="idea-keep" type="button" data-idea-toggle>☆ 候補に残す</button>
+          </div>
+        </article>
+
+        <article class="idea-ticket" data-idea-id="ticket-profile">
+          <div class="idea-no">03</div>
+          <div>
+            <div class="idea-topline"><span>1番</span><span>INTRODUCE</span></div>
+            <h3>新郎新婦紹介を「航空券 / 荷物タグ」に</h3>
+            <p>写真の横に普通のプロフィール文字を置く代わりに、<strong>GROOM / SHOGO</strong>、<strong>BRIDE / SHIORI</strong>を搭乗券やバゲージタグ風の情報として見せる。</p>
+            <div class="idea-meta"><span>写真＋テキスト</span><span>各2〜3秒</span><span>難易度 低〜中</span></div>
+            <button class="idea-keep" type="button" data-idea-toggle>☆ 候補に残す</button>
+          </div>
+        </article>
+
+        <article class="idea-ticket" data-idea-id="route-beat">
+          <div class="idea-no">04</div>
+          <div>
+            <div class="idea-topline"><span>0:58間奏</span><span>TRAVEL</span></div>
+            <h3>地図のルートが拍に合わせて伸びる</h3>
+            <p>地図を長々見せず、点→線→飛行機→次の地点を<strong>曲の拍ごとに短く進める</strong>。Route Plannerをそのまま使うよりStaRtらしくなる。</p>
+            <div class="idea-meta"><span>Route Planner</span><span>3〜6秒</span><span>難易度 中</span></div>
+            <button class="idea-keep" type="button" data-idea-toggle>☆ 候補に残す</button>
+          </div>
+        </article>
+
+        <article class="idea-ticket" data-idea-id="passport-photo-burst">
+          <div class="idea-no">05</div>
+          <div>
+            <div class="idea-topline"><span>サビ</span><span>PHOTO</span></div>
+            <h3>写真ラッシュを「旅の記録」にする</h3>
+            <p>ただ写真を高速で替えるのではなく、数枚だけ<strong>日付・地名・小さなスタンプ</strong>を混ぜる。旅行写真が「思い出のページ」に見える。</p>
+            <div class="idea-meta"><span>写真テンプレ＋装飾</span><span>5〜10秒</span><span>難易度 中</span></div>
+            <button class="idea-keep" type="button" data-idea-toggle>☆ 候補に残す</button>
+          </div>
+        </article>
+
+        <article class="idea-ticket" data-idea-id="departure-board-words">
+          <div class="idea-no">06</div>
+          <div>
+            <div class="idea-topline"><span>歌詞</span><span>TEXT</span></div>
+            <h3>大事な短い言葉だけ「出発案内板」で切り替える</h3>
+            <p>歌詞全部ではなく、使いたい短い言葉だけを<strong>Split-flap / Departure Board</strong>風に切り替える。曲の速さと旅行テーマを同時に使える。</p>
+            <div class="idea-meta"><span>Quick Switch系</span><span>1〜2秒ずつ</span><span>難易度 低</span></div>
+            <button class="idea-keep" type="button" data-idea-toggle>☆ 候補に残す</button>
+          </div>
+        </article>
+
+        <article class="idea-ticket" data-idea-id="guest-passengers">
+          <div class="idea-no">07</div>
+          <div>
+            <div class="idea-topline"><span>WELCOME</span><span>GUEST</span></div>
+            <h3>ゲストを「今日の乗客」にする</h3>
+            <p><strong>PASSENGERS: ALL OF YOU</strong> や <strong>WELCOME ABOARD</strong> を一瞬だけ。ゲストがムービーの中に入った感じが出る。長文にしないのがポイント。</p>
+            <div class="idea-meta"><span>旅行タイトル</span><span>1〜3秒</span><span>難易度 低</span></div>
+            <button class="idea-keep" type="button" data-idea-toggle>☆ 候補に残す</button>
+          </div>
+        </article>
+
+        <article class="idea-ticket" data-idea-id="flight-code-easter-egg">
+          <div class="idea-no">08</div>
+          <div>
+            <div class="idea-topline"><span>全編</span><span>DETAIL</span></div>
+            <h3>「1024」をフライト番号として散らす</h3>
+            <p>結婚式の日付をそのまま説明せず、<strong>FLIGHT 1024 / GATE 24 / 2026.10.24</strong> のように空港情報へ混ぜる。細部まで旅行テーマがつながる。</p>
+            <div class="idea-meta"><span>小ネタ</span><span>何度か再利用</span><span>難易度 低</span></div>
+            <button class="idea-keep" type="button" data-idea-toggle>☆ 候補に残す</button>
+          </div>
+        </article>
+
+        <article class="idea-ticket" data-idea-id="window-transition">
+          <div class="idea-no">09</div>
+          <div>
+            <div class="idea-topline"><span>TRANSITION</span><span>PHOTO</span></div>
+            <h3>飛行機の窓を「1回だけ」トランジションに使う</h3>
+            <p>毎回やるとくどいので、旅行ゾーンへ入る1回だけ。窓の外へ寄る→次の写真へ抜ける、くらいの短い演出にする。</p>
+            <div class="idea-meta"><span>マスク / テンプレ</span><span>1秒前後</span><span>難易度 中</span></div>
+            <button class="idea-keep" type="button" data-idea-toggle>☆ 候補に残す</button>
+          </div>
+        </article>
+
+        <article class="idea-ticket strong-idea" data-idea-id="departure-countdown">
+          <div class="idea-no">10</div>
+          <div>
+            <div class="idea-topline"><span class="push">強推し</span><span>ラスト</span><span>COUNTDOWN</span></div>
+            <h3>最後を「DEPARTURE 5→1」にする</h3>
+            <p>ただ数字を出すだけでなく、最初に<strong>DEPARTURE IN</strong>を出してから 5・4・3・2・1。最後に <strong>LET'S GO!</strong> や出発表示で入場へつなぐ。</p>
+            <div class="idea-meta"><span>Countdownテンプレ</span><span>5〜8秒</span><span>難易度 低</span></div>
+            <button class="idea-keep" type="button" data-idea-toggle>☆ 候補に残す</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="idea-rule"><strong>この棚のルール：</strong> ★は「気になる」だけ。採用決定ではない。実際に曲へ置いて、合わなければ捨てる。アイデアのためにOPを複雑にしない。</div>
+    </section>
+
+    <section class="studio-section" id="timeline">
+      <div class="section-heading">
+        <div>
+          <p class="chapter-no">MUSIC MAP</p>
+          <h2>StaRtの流れに、演出を置いていく。</h2>
+          <p>秒数も演出も、いまは仮。実際に曲を聴いて「ここがいい」で変えてOK。</p>
+        </div>
+      </div>
+
+      <div class="music-map" role="list">
+        <article class="music-row" role="listitem"><time>0:00–0:16</time><div><strong>イントロ</strong><p>WELCOME / 旅のはじまり / StaRtタイトル</p></div><span class="use-chip travel">旅行</span></article>
+        <article class="music-row" role="listitem"><time>0:17–0:37</time><div><strong>1番</strong><p>新郎・新婦 / 写真 / 短いテキスト</p></div><span class="use-chip intro">紹介</span></article>
+        <article class="music-row hot" role="listitem"><time>0:38–0:58</time><div><strong>1番サビ</strong><p>写真ラッシュ＋歌詞を数カ所だけ強く</p></div><span class="use-chip photo">写真</span></article>
+        <article class="music-row" role="listitem"><time>0:58–1:07</time><div><strong>間奏</strong><p>地図や飛行機で、旅の感じをひと押し</p></div><span class="use-chip travel">旅行</span></article>
+        <article class="music-row" role="listitem"><time>1:08–1:27</time><div><strong>2番</strong><p>2人の旅 / ゲストへの短いメッセージ候補</p></div><span class="use-chip intro">紹介</span></article>
+        <article class="music-row hot" role="listitem"><time>1:28–1:48</time><div><strong>2番サビ</strong><p>一番楽しい写真・動画をテンポよく</p></div><span class="use-chip photo">写真</span></article>
+        <article class="music-row finale" role="listitem"><time>1:48–2:08</time><div><strong>ラスト間奏</strong><p>高める → 5・4・3・2・1 → 入場</p></div><span class="use-chip countdown">5→1</span></article>
+      </div>
+    </section>
+
+    <section class="studio-section compact-section" id="toolbox">
+      <div class="section-heading">
+        <div><p class="chapter-no">TOOLBOX</p><h2>必要になったら開く。</h2></div>
+      </div>
+      <div class="tool-links">
+        <a href="./template-usage-guide.html"><strong>テンプレの入れ方・切り方</strong><span>ダウンロードからDaVinciまで</span></a>
+        <a href="./templates.html"><strong>StaRt向けテンプレ候補</strong><span>第一候補＋補佐候補</span></a>
+        <a href="#ai-help"><strong>AIを使う時</strong><span>必要なカットだけ手伝わせる</span></a>
+      </div>
+    </section>
+
+    <section class="studio-section compact-section" id="ai-help">
+      <div class="section-heading">
+        <div>
+          <p class="chapter-no">AI HELP</p>
+          <h2>AIは、欲しいものがある時だけ。</h2>
+        </div>
+      </div>
+      <div class="ai-note-grid">
+        <article><strong>旅行素材が足りない</strong><p>背景・地図・スタンプなどを作る。文字はDaVinciで後から載せる。</p></article>
+        <article><strong>短い映像が1カットほしい</strong><p>生成動画AI。まず構図を決めてから回して、無料クレジットを無駄にしない。</p></article>
+        <article><strong>この動きだけ難しい</strong><p>まずテンプレ。それでも無ければFusionやAIを使う。</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="studio-footer">
+    <strong>Wedding Opening Studio</strong>
+    <span>「ここ、こうしたい」から作る。</span>
+  </footer>
+
+  <script src="./app.js"></script>
+  <script>
+    (() => {
+      const IDEA_KEY = 'wedding-opening-studio-ideas-v1';
+      const tickets = [...document.querySelectorAll('[data-idea-id]')];
+      const count = document.getElementById('ideaSavedCount');
+      let saved = {};
+      try { saved = JSON.parse(localStorage.getItem(IDEA_KEY) || '{}'); } catch (_) { saved = {}; }
+
+      const renderIdeas = () => {
+        let total = 0;
+        tickets.forEach((ticket) => {
+          const id = ticket.dataset.ideaId;
+          const kept = Boolean(saved[id]);
+          ticket.classList.toggle('is-favorite', kept);
+          const button = ticket.querySelector('[data-idea-toggle]');
+          if (button) button.textContent = kept ? '★ 残してある' : '☆ 候補に残す';
+          if (kept) total += 1;
+        });
+        if (count) count.textContent = `★ ${total} KEEP`;
+      };
+
+      tickets.forEach((ticket) => {
+        ticket.querySelector('[data-idea-toggle]')?.addEventListener('click', () => {
+          const id = ticket.dataset.ideaId;
+          saved[id] = !saved[id];
+          localStorage.setItem(IDEA_KEY, JSON.stringify(saved));
+          renderIdeas();
+        });
+      });
+      renderIdeas();
+    })();
+  </script>
+</body>
+</html>
