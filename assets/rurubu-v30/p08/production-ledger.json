@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P08",
+  "role": "MAGAZINE BACK COVER",
+  "purpose": "Prevent duplicate generation and make every P08 production object advance through an explicit acceptance pipeline.",
+  "authority": {
+    "visualMaster": "assets/rurubu-v30/p08/P08.png",
+    "visualMasterSha256": "3757fee202dd5a3e7d05292a78b0020ab62c1d5ce9b5fa2300e3d43af9bad3a5",
+    "figmaFrame": "3535:21",
+    "styleAnchors": ["P01 3535:7", "P02 3535:9", "P03 3535:11"]
+  },
+  "stateMachine": [
+    "PLANNED",
+    "REUSE_CHECKED",
+    "GENERATED_DRAFT",
+    "ART_QUALITY_PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS",
+    "ALPHA_INTERIOR_OPACITY_PASS",
+    "EDGE_ALPHA_QUALITY_PASS",
+    "DRIVE_SAVED",
+    "FIGMA_PLACED",
+    "SCREENSHOT_QA_PASS",
+    "ACCEPTED"
+  ],
+  "duplicatePrevention": {
+    "hardRule": "Before any ImageGen call, read this ledger. If an item is GENERATED_DRAFT or later, do not generate the same role again unless its status is explicitly changed to REWORK_REQUIRED with a reason.",
+    "reuseFirst": "Before generating a new module, search existing accepted V30 production assets for a reusable visual family match.",
+    "acceptedAssetRule": "ACCEPTED assets are immutable for routine continuation; reopen only for an explicit visual defect or owner instruction.",
+    "oneRepresentativeAtATime": true
+  },
+  "items": [
+    {
+      "id": "P08_BG_PAPER_FIELD",
+      "role": "cream paper background",
+      "productionMethod": "FIGMA_NATIVE",
+      "imageGenRequired": false,
+      "status": "PLANNED",
+      "notes": "Near-white warm cream full-page field; preserve intentional sparse back-cover space."
+    },
+    {
+      "id": "P08_CENTER_CLOSURE_ECOLOGY",
+      "role": "representative centered chapel + tropical ornament + fixed names/date closure",
+      "productionMethod": "IMAGEGEN_GROUPED_ECOLOGY",
+      "imageGenRequired": true,
+      "representative": true,
+      "status": "REWORK_REQUIRED",
+      "currentDraft": {
+        "runtimeFile": "a_clean_transparent_background_png_illustration_wi_1.png",
+        "sha256": "00711834c78ca3b1cae4a6dba5fa0757eb5a0f70b16be2e7a85d9d22bf84e4c6",
+        "dimensionsPx": {"width": 1448, "height": 1086},
+        "rgba": true,
+        "alphaExtrema": [0, 255],
+        "artReview": "FAIL",
+        "reason": "Correct object identity and exact fixed copy, but too bulky, glossy and realistic relative to the Visual Master; palm/flower mass dominates and the emblem loses the master's compact delicate back-cover restraint. Do not upload to Figma/Drive as accepted production."
+      },
+      "attemptHistory": [
+        {"sha256": "852b9ed4efb341aa59d8a996f0c4a85b23f6b17648d1a347bfa98d04bb4d44c6", "result": "DRAFT_NOT_ACCEPTED"},
+        {"sha256": "ecadae75959d4547420ac2541fee6e4152feab46108c5ac2d610be7e462a77e6", "result": "DRAFT_NOT_ACCEPTED"},
+        {"sha256": "00711834c78ca3b1cae4a6dba5fa0757eb5a0f70b16be2e7a85d9d22bf84e4c6", "result": "REWORK_REQUIRED"}
+      ],
+      "nextAction": "Generate exactly one refined candidate only after manifest visual-review lock; target smaller palms/flowers, lower detail density, lighter authored magazine illustration character, and the same exact fixed names/date."
+    },
+    {
+      "id": "P08_LEFT_SPINE_BRAND_ECOLOGY",
+      "role": "vertical compact Rurubu/WEDDING tropical brand cluster at upper-left edge",
+      "productionMethod": "REUSE_FIRST_THEN_IMAGEGEN_IF_NEEDED",
+      "imageGenRequired": "CONDITIONAL",
+      "status": "PLANNED",
+      "blockedBy": "P08_CENTER_CLOSURE_ECOLOGY representative cross-page gate",
+      "nextAction": "Search P01/P02/P03 accepted production assets for reusable masthead/title/ornament family before any new generation."
+    },
+    {
+      "id": "P08_LEFT_SPINE_META",
+      "role": "vertical 2026 SPECIAL ISSUE / heart / SHOGO & SHIORI / 2026.10.24",
+      "productionMethod": "FIGMA_NATIVE_TEXT_GROUP",
+      "imageGenRequired": false,
+      "status": "PLANNED",
+      "exactFacts": ["2026 SPECIAL ISSUE", "SHOGO & SHIORI", "2026.10.24"]
+    },
+    {
+      "id": "P08_BARCODE_META_MODULE",
+      "role": "bottom-right issue line + heart + barcode bars + exact visible digits",
+      "productionMethod": "DETERMINISTIC_GROUPED_MODULE",
+      "imageGenRequired": false,
+      "status": "PLANNED",
+      "exactBarcodeDigits": "2026102400000",
+      "hardRule": "Do not use EAN-13 checksum substitution or alter the final digit. Visible digits must remain exactly 2026102400000."
+    },
+    {
+      "id": "P08_PAGE_NUMBER",
+      "role": "bottom-left 08",
+      "productionMethod": "FIGMA_NATIVE_TEXT",
+      "imageGenRequired": false,
+      "status": "PLANNED",
+      "exactText": "08"
+    }
+  ],
+  "currentGate": {
+    "representativeItem": "P08_CENTER_CLOSURE_ECOLOGY",
+    "crossPageStyleFamilyPass": "BLOCKED_UNTIL_REWORKED_REPRESENTATIVE_IS_ALPHA_QA_PASS_AND_PLACED",
+    "scaleOutOtherImageGen": false
+  }
+}
