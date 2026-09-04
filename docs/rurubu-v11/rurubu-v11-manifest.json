@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "rurubu-v11-clean-slate-v1",
+  "status": "CANONICAL_CLEAN_SLATE",
+  "date": "2026-08-30",
+  "reference": {
+    "driveFileId": "12ppT-SV-8OmOgz_a0MuhrkT3gNOOKsY3",
+    "fileName": "0c570e8f-ebc5-42c6-8512-b05644a8aa6a.png",
+    "role": "primary visual-language authority"
+  },
+  "authorities": {
+    "cutover": "docs/rurubu-v11/README.md",
+    "referenceBible": "docs/rurubu-v11/RURUBU-V11-REFERENCE-BIBLE.md",
+    "bookArchitecture": "docs/rurubu-v11/RURUBU-V11-BOOK-ARCHITECTURE.md",
+    "designTokens": "docs/rurubu-v11/RURUBU-V11-DESIGN-TOKENS.md",
+    "copyCapacity": "docs/rurubu-v11/RURUBU-V11-COPY-CAPACITY.md",
+    "photoSlots": "docs/rurubu-v11/rurubu-v11-photo-slots.json",
+    "layoutBlueprints": "docs/rurubu-v11/rurubu-v11-layout-blueprints.json",
+    "partsLibrary": "docs/rurubu-v11/RURUBU-V11-PARTS-LIBRARY.md",
+    "assetNeeds": "docs/rurubu-v11/RURUBU-V11-ASSET-NEEDS-MATRIX.md",
+    "generationPrompts": "docs/rurubu-v11/RURUBU-V11-GENERATION-PROMPT-TEMPLATES.md",
+    "contentTruth": "docs/rurubu-v11/RURUBU-V11-CONTENT-TRUTH.md",
+    "figmaExecutionPrompt": "docs/rurubu-v11/RURUBU-V11-FIGMA-EXECUTION-PROMPT.md",
+    "qaGate": "docs/rurubu-v11/RURUBU-V11-QA-GATE.md",
+    "printSpec": "docs/rurubu-v11/RURUBU-V11-PRINT-SPEC.md"
+  },
+  "pages": {
+    "P01": {"role": "COVER", "spec": "docs/rurubu-v11/page-specs/P01-COVER.md"},
+    "P02": {"role": "WEDDING_JOURNEY", "spec": "docs/rurubu-v11/page-specs/P02-WEDDING-JOURNEY.md"},
+    "P03": {"role": "PROFILE", "spec": "docs/rurubu-v11/page-specs/P03-PROFILE.md"},
+    "P04": {"role": "MEMORIES", "spec": "docs/rurubu-v11/page-specs/P04-MEMORIES.md"},
+    "P05": {"role": "VENUE_GUIDE", "spec": "docs/rurubu-v11/page-specs/P05-VENUE-GUIDE.md"},
+    "P06": {"role": "ONE_DAY", "spec": "docs/rurubu-v11/page-specs/P06-1DAY.md"},
+    "P07": {"role": "QA", "spec": "docs/rurubu-v11/page-specs/P07-QA.md"},
+    "P08": {"role": "MESSAGE_BACK", "spec": "docs/rurubu-v11/page-specs/P08-MESSAGE-BACK.md"}
+  },
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "recommendedProductionPage": "11_RURUBU_V11_CLEAN_SLATE_A5_8P_PRODUCTION",
+    "frameNames": [
+      "P01_COVER",
+      "P02_WEDDING_JOURNEY",
+      "P03_PROFILE",
+      "P04_MEMORIES",
+      "P05_VENUE_GUIDE",
+      "P06_1DAY",
+      "P07_QA",
+      "P08_MESSAGE_BACK"
+    ],
+    "inheritV10Geometry": false,
+    "inheritV10Children": false
+  },
+  "allowedInheritance": [
+    "verified stable factual content",
+    "verified real source photos/assets after V11 role review",
+    "printer/bleed/output facts that remain applicable"
+  ],
+  "forbiddenInheritance": [
+    "V10 page-role map",
+    "V10 Figma node geometry",
+    "V10 page recipes",
+    "V10 visual reference nodes",
+    "V10 aesthetic linter scores/baselines",
+    "old Auto Layout/card structures",
+    "any design decision reused only because it already exists"
+  ],
+  "hardRules": [
+    "specification precedes Figma composition",
+    "whole-page raster cannot be sole production master when factual text or photos must remain editable",
+    "all provisional/real photography uses independent semantic replacement slots",
+    "authoritative and changeable copy remains native editable text",
+    "unknown personal facts remain explicit TBD and are never invented",
+    "copy overflow is solved structurally before shrinking readable body text",
+    "structural hierarchy is fixed before micro-decoration",
+    "layout blueprint constrains placement but does not turn the page into a rigid UI grid",
+    "generated parts require semantic/size/transparency/print QA before promotion",
+    "V11 QA uses only the V11 reference and V11 QA gate",
+    "adjacent pages must vary composition while sharing part vocabulary",
+    "Figma V11 starts on a new clean production page rather than modifying old V10 frames in place",
+    "PRINT_READY requires final content/photo/resolution/bleed/output preflight independent of structural approval"
+  ]
+}
