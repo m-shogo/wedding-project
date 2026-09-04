@@ -289,9 +289,31 @@ The accepted `P04_HEADER_ECOLOGY_V30_ALIGNED` remains installed, and owner-opene
 
 Evidence: `assets/rurubu-v30/p04/production/phase-b-full-production/manifest.json`.
 
-P01/P02/P03 fresh screenshots match the saved Phase A hashes exactly. P05-P08 remain untouched. Do not start P05-P08 production without their own current owner instruction and page gate.
+P01/P02/P03 fresh screenshots match the saved Phase A hashes exactly. P05-P08 were untouched during P04 production. Do not start any later page production without its own current owner instruction and page gate.
 
-## P05-P08 — before production
+## P05 — PHASE A HEADER CALIBRATION PASS / STOPPED
+
+Frame `3535:15`.
+
+Only `P05_HEADER_ECOLOGY_V30_ALIGNED` was generated as one grouped upper ecology and installed in the existing blank cream P05 frame. The generated violet field was normalized to one exact flat extraction matte, then converted to real RGBA with edge-aware alpha, matte-contamination removal and light/gray/dark QA.
+
+- Header node `3959:32`
+- imageHash `38387f9a869f1896caa6c87c59150ed0f5775ba9`
+- `ART_QUALITY_PASS = PASS`
+- `TRUE_ALPHA_PREFLIGHT_PASS = PASS`
+- `ALPHA_INTERIOR_OPACITY_PASS = PASS`
+- `EDGE_ALPHA_QUALITY_PASS = PASS`
+- `CROSS_PAGE_STYLE_FAMILY_PASS = PASS`
+- `FIGMA_DESIGN_COMPLETE = NO`
+- `FINAL_COPY_QA_PENDING = YES`
+- `FINAL_PHOTO_QA_PENDING = YES`
+- `PRINT_READY = NO`
+
+Fresh P01/P02/P03/P04 screenshots match the saved locked hashes exactly. P06-P08 remain untouched. Phase B was not opened; Section Headers, exactly eight future photo slots (SHOGO 4 + SHIORI 4), captions, closing bubble and PAGE 05 remain unbuilt.
+
+Evidence: `assets/rurubu-v30/p05/production/phase-a-header-calibration/manifest.json`.
+
+## P06-P08 — before production
 
 Do not start final production until each page Visual Master is directly reviewed and current page authority is prepared.
 

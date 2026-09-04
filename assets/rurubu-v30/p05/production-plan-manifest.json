@@ -3,7 +3,7 @@
   "project": "Rurubu WEDDING V30",
   "page": "P05",
   "role": "FRIENDS MEMORIES ONLY",
-  "status": "LIVE_FIGMA_REVIEWED_PHASE_A_HEADER_ONLY",
+  "status": "PHASE_A_HEADER_CALIBRATION_PASS_STOPPED",
   "date": "2026-09-04",
   "inherits": [
     "assets/rurubu-v30/manifest.json",
@@ -62,7 +62,15 @@
       "dominant purple",
       "muted beige",
       "thin flat vector-only styling"
-    ]
+    ],
+    "result": {
+      "status": "PASS",
+      "assetPath": "assets/rurubu-v30/p05/production/phase-a-header-calibration/assets/P05_HEADER_ECOLOGY_V30_ALIGNED/P05_HEADER_ECOLOGY_V30_ALIGNED.png",
+      "assetSha256": "979edf0f075b4dbf8dc8c1f53006e2b02729214735a1da4c7680d30c51b1b8d5",
+      "figmaNodeId": "3959:32",
+      "figmaImageHash": "38387f9a869f1896caa6c87c59150ed0f5775ba9",
+      "evidenceManifest": "assets/rurubu-v30/p05/production/phase-a-header-calibration/manifest.json"
+    }
   },
   "alphaContract": {
     "requiredBeforePlacement": [
@@ -98,8 +106,12 @@
   "currentGateState": {
     "VISUAL_MASTER_REVIEW": "PASS",
     "LIVE_FIGMA_BASELINE_REVIEW": "PASS_BLANK_SAFE_START",
-    "P05_HEADER_ECOLOGY_GENERATION": "OPEN",
-    "CROSS_PAGE_STYLE_FAMILY_PASS": "PENDING",
+    "P05_HEADER_ECOLOGY_GENERATION": "PASS_INSTALLED_ONE_HEADER_ONLY",
+    "ART_QUALITY_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "ALPHA_INTERIOR_OPACITY_PASS": "PASS",
+    "EDGE_ALPHA_QUALITY_PASS": "PASS",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS",
     "FULL_P05_PRODUCTION": "BLOCKED",
     "FIGMA_DESIGN_COMPLETE": false,
     "FINAL_COPY_QA_PENDING": true,
