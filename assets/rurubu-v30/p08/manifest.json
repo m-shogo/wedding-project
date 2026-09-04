@@ -1,11 +1,11 @@
 {
   "schemaVersion": 5,
-  "reviewRevision": 1,
+  "reviewRevision": 2,
   "project": "Rurubu WEDDING V30",
   "page": "P08",
   "role": "MAGAZINE BACK COVER",
-  "status": "VISUAL_MASTER_REVIEWED_REPRESENTATIVE_SELECTED",
-  "productionState": "REPRESENTATIVE_ECOLOGY_REWORK_REQUIRED",
+  "status": "VISUAL_MASTER_LOCKED_REPRESENTATIVE_CALIBRATED",
+  "productionState": "REPRESENTATIVE_GATE_PASS_REQUIRED_STOP",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualPolishPolicy": "assets/rurubu-v30/visual-polish-manifest.json",
   "ornamentArtDirectionPolicy": "assets/rurubu-v30/ornament-art-direction-manifest.json",
@@ -27,8 +27,10 @@
     "passBReverseOmissionAudit": "COMPLETE",
     "visualMasterUnderstanding": "LOCKED",
     "representativeEcologySelected": true,
-    "productionScaleOutAllowed": false,
-    "reason": "Representative center closure ecology must first pass art, alpha and cross-page style-family QA."
+    "representativeEcologyCalibrated": true,
+    "productionScaleOutAllowed": true,
+    "requiredStopBeforeScaleOut": true,
+    "reason": "Representative center closure has passed owner art acceptance, true-alpha QA, live Figma placement and fresh P01/P02/P03/P08 style-family comparison. Stop/writeback is required before remaining P08 production."
   },
   "canonicalFacts": {
     "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
@@ -97,7 +99,8 @@
       "saliency": 68,
       "zIndex": 55,
       "fixedText": ["SHOGO & SHIORI", "2026.10.24"],
-      "representativeEcology": true
+      "representativeEcology": true,
+      "productionState": "ACCEPTED_REPRESENTATIVE"
     },
     {
       "id": "P08_BARCODE_META_MODULE",
@@ -153,13 +156,7 @@
       "Within P08_CENTER_CLOSURE_ECOLOGY, chapel/palms/flowers/ribbon overlap as one authored group.",
       "Within P08_LEFT_SPINE_BRAND_ECOLOGY, logo/title/tropical accents may overlap as one authored group."
     ],
-    "mustNotCover": [
-      "barcode digits",
-      "barcode bars",
-      "SHOGO & SHIORI",
-      "2026.10.24",
-      "page number 08"
-    ]
+    "mustNotCover": ["barcode digits", "barcode bars", "SHOGO & SHIORI", "2026.10.24", "page number 08"]
   },
   "photoPolicy": {
     "photoSlotsPresent": false,
@@ -168,22 +165,15 @@
   },
   "displayModuleClassification": {
     "status": "COMPLETE",
-    "bundledFixedModules": [
-      "P08_CENTER_CLOSURE_ECOLOGY",
-      "P08_LEFT_SPINE_BRAND_ECOLOGY",
-      "P08_BARCODE_META_MODULE"
-    ],
-    "nativeOrDeterministic": [
-      "P08_BG_PAPER_FIELD",
-      "P08_LEFT_SPINE_META",
-      "P08_PAGE_NUMBER"
-    ],
+    "bundledFixedModules": ["P08_CENTER_CLOSURE_ECOLOGY", "P08_LEFT_SPINE_BRAND_ECOLOGY", "P08_BARCODE_META_MODULE"],
+    "nativeOrDeterministic": ["P08_BG_PAPER_FIELD", "P08_LEFT_SPINE_META", "P08_PAGE_NUMBER"],
     "rule": "Fixed visible copy may be bundled where the Visual Master treats it as one authored object. Barcode digits are always QA-checked against canonical metadata."
   },
   "groupedEcologyPlan": {
     "representative": "P08_CENTER_CLOSURE_ECOLOGY",
     "laterConditional": ["P08_LEFT_SPINE_BRAND_ECOLOGY"],
-    "scaleOutRule": "Do not generate the later ecology until the representative passes ART_QUALITY, true-alpha and CROSS_PAGE_STYLE_FAMILY QA."
+    "representativeGate": "PASS",
+    "scaleOutRule": "Representative gate now permits later ecology work, but this run must stop after writeback before scale-out."
   },
   "reverseOmissionAudit": {
     "status": "COMPLETE",
@@ -200,13 +190,49 @@
       "no hidden thank-you panel or additional repeated content module"
     ]
   },
-  "representativeDraftAssessment": {
+  "representativeCalibration": {
     "ledgerItem": "P08_CENTER_CLOSURE_ECOLOGY",
-    "latestDraftSha256": "00711834c78ca3b1cae4a6dba5fa0757eb5a0f70b16be2e7a85d9d22bf84e4c6",
-    "artQualityPass": "FAIL",
-    "technicalAlphaObservation": "RGBA with alpha range 0-255 exists, but technical alpha acceptance is not granted because art quality failed first.",
-    "failureReason": "Draft is too bulky, glossy and realistic versus the compact delicate Visual Master ecology; palms and flowers overpower the chapel and sparse editorial balance.",
-    "nextAction": "One targeted rework only; then art review before alpha QA."
+    "acceptedMaster": {
+      "fileName": "V30_P08_CENTER_CLOSURE_SOURCE_RGBA.png",
+      "sha256": "5622236afbc05947709e6c5356d4989da8d334e04bb8011b5ab5d9b53913baa1",
+      "dimensionsPx": {"width": 1448, "height": 1086},
+      "ownerAccepted": true
+    },
+    "alphaDiagnostics": {
+      "alphaExtrema": [0, 255],
+      "uniqueAlphaValues": 256,
+      "pctFullyTransparent": 81.79161197765636,
+      "pctPartial": 18.15280872582237,
+      "pctFullyOpaque": 0.055579296521270215
+    },
+    "figma": {
+      "nodeId": "3852:26",
+      "imageHash": "a8066ca887a956282ce794a640e56ef364103b91",
+      "geometryPx": {"x": 196, "y": 308, "width": 145, "height": 122},
+      "freshScreenshotVisible": true
+    },
+    "drive": {
+      "folderId": "1Z-pH0-iRmsBrz5jfRn3WXcIUxkXDE1tT",
+      "sourceFileId": "1NuIUWWw8I-yLd_hf34qid4v0TN0k_vm2",
+      "productionFileId": "1gN0ys6Y1yeMwPmmc7bjLrdu7k4PuIIIi",
+      "lightQaFileId": "1IacZzyg7xePX8rv9iGXbW28U5Jwr-Yf5",
+      "darkQaFileId": "1JZYzE2G2JvAKGUdkzB2wL-2xWheTw82_"
+    },
+    "transportEvidence": {
+      "method": "compact 160x133 RGBA transport derivative, 1000-character chunk persistence in temporary hidden Figma nodes, exact 24208-character reassembly, 18155-byte decode, PNG signature check, figma.createImage, temporary-node cleanup",
+      "productionMasterUnchanged": true
+    },
+    "crossPageStyleFamily": {
+      "freshFrames": ["3535:7", "3535:9", "3535:11", "3535:21"],
+      "result": "PASS",
+      "reason": [
+        "bright cyan/blue/hot-pink/green palette stays inside V30 family",
+        "crisp digital editorial silhouette avoids watercolor/vintage/Canva drift",
+        "tropical chapel/flower/palm vocabulary visually relates to P01/P03 ornament language",
+        "lighter outline weight is subordinate rather than genre-breaking at back-cover scale",
+        "compact placement preserves the Visual Master's large intentional quiet zones"
+      ]
+    }
   },
   "barcodeModuleRule": {
     "exactDigits": "2026102400000",
@@ -215,7 +241,7 @@
   },
   "systemicPreproductionGates": {
     "styleAnchors": ["P01 3535:7", "P02 3535:9", "P03 3535:11"],
-    "crossPageStyleFamilyPass": "REQUIRED_AFTER_REPRESENTATIVE_ECOLOGY_FIGMA_PLACEMENT",
+    "crossPageStyleFamilyPass": "PASS",
     "alphaGates": ["ART_QUALITY_PASS", "TRUE_ALPHA_PREFLIGHT_PASS", "ALPHA_INTERIOR_OPACITY_PASS", "EDGE_ALPHA_QUALITY_PASS"],
     "purpleDriftRule": "#7e08f9 and nearby saturated purple must not become a dominant fill/background color without owner approval"
   },
@@ -230,16 +256,21 @@
     "barcode digits invented or altered",
     "checkerboard RGB treated as transparency",
     "binary alpha accepted solely because outside transparency exists",
-    "duplicate ImageGen of an already GENERATED_DRAFT-or-later ledger item without REWORK_REQUIRED reason"
+    "duplicate ImageGen of an accepted owner-approved module to solve a transport/upload failure"
   ],
-  "partGenerationGate": "ONLY_P08_CENTER_CLOSURE_ECOLOGY_REWORK_ALLOWED_UNTIL_REPRESENTATIVE_GATE_PASS",
+  "partGenerationGate": "REPRESENTATIVE_PASS_RECORDED_STOP_BEFORE_REMAINING_P08_SCALE_OUT",
   "qa": {
     "visualMasterReview": "PASS",
     "reverseOmissionAudit": "PASS",
     "bundledDisplayModuleClassification": "PASS",
     "representativeSelection": "PASS",
-    "representativeArtQuality": "FAIL_REWORK_REQUIRED",
-    "crossPageStyleFamilyPass": "BLOCKED",
-    "barcodeDigitsMustEqual": "2026102400000"
+    "representativeArtQuality": "PASS_OWNER_ACCEPTED",
+    "trueAlphaPreflightPass": "PASS",
+    "alphaInteriorOpacityPass": "PASS",
+    "edgeAlphaQualityPass": "PASS",
+    "figmaPlacementPass": "PASS_FRESH_SCREENSHOT_VISIBLE",
+    "crossPageStyleFamilyPass": "PASS",
+    "barcodeDigitsMustEqual": "2026102400000",
+    "nextRun": "May open remaining P08 production after this required stop/writeback."
   }
 }
