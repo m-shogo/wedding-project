@@ -1,10 +1,11 @@
 {
   "schemaVersion": 5,
+  "reviewRevision": 1,
   "project": "Rurubu WEDDING V30",
   "page": "P08",
   "role": "MAGAZINE BACK COVER",
-  "status": "AWAITING_VISUAL_REVIEW",
-  "productionState": "VISUAL_MASTER_PENDING",
+  "status": "VISUAL_MASTER_REVIEWED_REPRESENTATIVE_SELECTED",
+  "productionState": "REPRESENTATIVE_ECOLOGY_REWORK_REQUIRED",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualPolishPolicy": "assets/rurubu-v30/visual-polish-manifest.json",
   "ornamentArtDirectionPolicy": "assets/rurubu-v30/ornament-art-direction-manifest.json",
@@ -12,18 +13,233 @@
   "preproductionPageGatesPolicy": "assets/rurubu-v30/preproduction-page-gates-manifest.json",
   "visualLockAuditPolicy": "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
   "executionAcceptancePolicy": "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md",
-  "visualMaster": {"path": "assets/rurubu-v30/p08/P08.png", "authority": "PRIMARY_VISUAL_AUTHORITY_PENDING_CHAT_REVIEW", "rule": "Do not infer page-specific geometry, module bundling or styling from prose. Review the actual user-provided page image and complete both visual-review passes before locking."},
-  "canonicalFacts": {"names": {"Shogo": "LOCKED", "Shiori": "LOCKED"}, "weddingDate": "2026.10.24", "barcodeDigits": "2026102400000"},
-  "hardRoleRejects": ["primary thank-you-page role", "barcode digits other than 2026102400000"],
-  "constraintProfile": {"visualMasterWins": true, "defaultPositionLevel": "TARGET", "defaultSizeLevel": "TARGET", "decorativeMicroPlacementLevel": "FLEXIBLE", "locked": ["page role", "canonical facts", "barcode digits", "three-second hierarchy after review", "mustNotCover", "photo masks", "hard rejects", "clean-photo-proxy rule", "fixed-display-module classification before generation"]},
-  "requiredAfterVisualReview": ["threeSecondReadOrder", "saliency weights 0-100", "quiet zones", "relational constraints", "pageSpec confirmation", "visualAuthority", "backgroundSystem", "frameSystem", "objects with normalized + Figma geometry", "constraintLevel and tolerance per major object", "layerOrder/zIndex", "overlap and mustNotCover rules", "photo masks, face-safe zones and replaceability", "renderMode per object", "factClass per text object", "fixed bundled display-module classification", "native/variable-copy classification", "clean standalone photo-proxy roles", "grouped ecology plan", "representative ecology selection", "assetDecompositionPlan only after representative ecology gate", "asset padding/visual-bounds contract", "hardRejects", "ordered QA gates", "reference-delta comparison targets", "second-pass omission/misclassification audit"],
-  "reviewProcess": {"passA24PointReview": "REQUIRED", "passBReverseOmissionAudit": "REQUIRED", "passBChecks": ["top/middle/bottom scan", "left/center/right scan", "micro accents", "wrong object identity", "photo/frame dependency", "intentional sparse/quiet back-cover space", "intentional asymmetry", "back-cover meta/barcode separation", "repeated-module non-identity", "factClass safety", "which fixed badge/meta/title groups are one bundled display object", "whether any photo proxy contains page decoration"], "lockCondition": "Do not set VISUAL_MASTER_LOCKED until both passes are complete and all findings plus display-module/proxy classifications are corrected in this manifest."},
-  "displayModuleClassification": {"status": "REQUIRED_DURING_VISUAL_REVIEW", "rule": "Classify fixed short back-cover titles, meta badges, page labels, decorative price/code-like modules and other fixed visible microcopy with their backgrounds/icons as complete generated display modules when the Visual Master treats them as one object. Visible fixed text need not remain editable. The decorative barcode module may include the bars + exact digits 2026102400000 as one asset only if the digits are QA-checked against canonical metadata. Do not bake variable/personal copy before approval."},
-  "barcodeModuleRule": {"exactDigits": "2026102400000", "mayBundle": ["barcode bars", "2026102400000", "fixed surrounding back-cover badge/frame when Visual Master treats it as one object"], "hardReject": "Any visible barcode digits other than 2026102400000."},
-  "pageSpecificPending": {"relationalConstraints": "AWAITING_VISUAL_REVIEW", "quietZones": "AWAITING_VISUAL_REVIEW", "saliency": "AWAITING_VISUAL_REVIEW", "faceSafeZones": "AWAITING_VISUAL_REVIEW", "geometryTolerances": "INHERIT_ROOT_UNTIL_REVIEW", "secondPassOmissionAudit": "REQUIRED_BEFORE_LOCK", "bundledDisplayModules": "REQUIRED_BEFORE_PART_GENERATION", "nativeOrVariableCopy": "REQUIRED_BEFORE_PART_GENERATION", "photoProxyRoles": "REQUIRED_BEFORE_PART_GENERATION", "representativeEcology": "MUST_BE_SELECTED_AFTER_ACTUAL_VISUAL_REVIEW"},
-  "photoPolicy": {"inheritRoot": true, "visualPolishOverride": true, "visualMasterCropProxy": "PROHIBITED", "rule": "Every real-photo slot, if present after visual review, must be a separate clipped/masked replaceable image. Use only clean standalone real/representative photos with no P08 barcode, title, badge, border, label or page decoration baked into the proxy."},
-  "systemicPreproductionGates": {"styleAnchors": ["P01 3535:7", "P02 3535:9", "P03 3535:11"], "crossPageStyleFamilyPass": "REQUIRED_AFTER_REPRESENTATIVE_ECOLOGY", "alphaGates": ["TRUE_ALPHA_PREFLIGHT_PASS", "ALPHA_INTERIOR_OPACITY_PASS", "EDGE_ALPHA_QUALITY_PASS"], "purpleDriftRule": "#7e08f9 and nearby saturated purple must not become a dominant fill/route/background color without owner approval", "rule": "Inherited from preproduction-page-gates-manifest.json; page-specific details still require direct P08 Visual Master review before production."},
-  "hardExecutionRejects": ["crop from P08.png used as a photo fill", "page screenshot used as photo proxy", "primary thank-you-page role restored", "generic editable Figma primitives replacing an authored fixed back-cover module solely for editability", "barcode digits invented or altered", "generic Canva/SVG icon pack", "watercolor/painterly/vintage escape from V30 graphic family", "dominant #7e08f9 purple drift", "binary alpha accepted solely because outside transparency is real", "fixed display module flattening a replaceable real photo"],
-  "partGenerationGate": "BLOCKED_UNTIL_VISUAL_REVIEW_SECOND_PASS_DISPLAY_MODULE_PROXY_CLASSIFICATION_AND_REPRESENTATIVE_ECOLOGY_SELECTION",
-  "qa": {"gate0": "Pending direct visual review of actual page master plus second-pass reverse omission audit.", "technicalQaCannotPassBeforeVisualQa": true, "proxyContaminationMustPass": true, "bundledDisplayModuleClassificationMustPass": true, "crossPageStyleFamilyPass": "PENDING_VISUAL_REVIEW", "edgeAlphaQualityPass": "PENDING_GENERATED_ASSET", "barcodeDigitsMustEqual": "2026102400000"}
+  "productionLedger": "assets/rurubu-v30/p08/production-ledger.json",
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p08/P08.png",
+    "authority": "PRIMARY_VISUAL_AUTHORITY",
+    "reviewedDimensionsPx": {"width": 1055, "height": 1491},
+    "sha256": "3757fee202dd5a3e7d05292a78b0020ab62c1d5ce9b5fa2300e3d43af9bad3a5",
+    "reviewMode": "direct full-page visual review + reverse omission audit",
+    "rule": "The actual user-provided P08 page image is the page-specific authority. P01/P02/P03 are rendering-family anchors only, not layout templates."
+  },
+  "reviewCompleteness": {
+    "passA": "COMPLETE",
+    "passBReverseOmissionAudit": "COMPLETE",
+    "visualMasterUnderstanding": "LOCKED",
+    "representativeEcologySelected": true,
+    "productionScaleOutAllowed": false,
+    "reason": "Representative center closure ecology must first pass art, alpha and cross-page style-family QA."
+  },
+  "canonicalFacts": {
+    "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
+    "weddingDate": "2026.10.24",
+    "barcodeDigits": "2026102400000",
+    "pageNumber": "08"
+  },
+  "hardRoleRejects": [
+    "primary thank-you-page role",
+    "barcode digits other than 2026102400000"
+  ],
+  "threeSecondReadOrder": [
+    "centered tropical chapel closure ecology with SHOGO & SHIORI / 2026.10.24",
+    "upper-left vertical Rurubu/WEDDING tropical brand ecology",
+    "bottom-right issue meta + barcode module",
+    "bottom-left page number 08"
+  ],
+  "visualAuthority": {
+    "firstImpression": "A deliberately sparse premium magazine back cover on warm cream paper. Small authored destination/wedding ecologies punctuate a very large quiet field; it is not a dense thank-you page or a second cover.",
+    "signatureMove": "Massive intentional negative space separates three small editorial anchors: upper-left vertical brand spine, compact central tropical chapel closure, and bottom-right barcode/meta block.",
+    "colorBehavior": {
+      "dominant": ["warm cream paper", "white"],
+      "accent": ["hot pink", "vivid blue", "tropical green", "cyan/aqua", "sun yellow"],
+      "ink": ["warm dark brown", "black barcode"],
+      "reject": ["dominant #7e08f9 purple", "muted beige wedding editorial", "watercolor wash", "aged parchment"]
+    }
+  },
+  "pageSpec": {
+    "visualMasterPx": {"width": 1055, "height": 1491},
+    "figmaTrimPx": {"width": 559, "height": 794},
+    "geometryRule": "Preserve relationships and sparse-space ratios from the Visual Master. Minor micro-placement is flexible, but moving modules into the quiet field or enlarging them enough to destroy the sparse back-cover read is a failure."
+  },
+  "backgroundSystem": {
+    "id": "P08_BG_PAPER_FIELD",
+    "renderMode": "FIGMA_NATIVE",
+    "fullBleed": true,
+    "visualCharacter": "clean near-white warm cream paper with extremely subtle print/paper softness; no scenic full-page background",
+    "saliency": 10
+  },
+  "majorObjects": [
+    {
+      "id": "P08_LEFT_SPINE_BRAND_ECOLOGY",
+      "role": "compact vertical Rurubu/WEDDING tropical logo cluster",
+      "renderMode": "REUSE_FIRST_THEN_GENERATED_GROUPED_ECOLOGY_IF_NEEDED",
+      "geometry": {"normalizedApprox": {"x": 0.027, "y": 0.023, "width": 0.086, "height": 0.151}},
+      "constraintLevel": "TARGET",
+      "saliency": 48,
+      "zIndex": 50
+    },
+    {
+      "id": "P08_LEFT_SPINE_META",
+      "role": "vertical issue/names/date metadata",
+      "renderMode": "FIGMA_NATIVE_TEXT_GROUP",
+      "geometry": {"normalizedApprox": {"x": 0.051, "y": 0.185, "width": 0.026, "height": 0.313}},
+      "constraintLevel": "TARGET",
+      "saliency": 25,
+      "zIndex": 42,
+      "exactVisibleFacts": ["2026 SPECIAL ISSUE", "SHOGO & SHIORI", "2026.10.24"]
+    },
+    {
+      "id": "P08_CENTER_CLOSURE_ECOLOGY",
+      "role": "small seaside chapel + aqua shore + palms + tropical floral/ribbon ecology with fixed names/date",
+      "renderMode": "IMAGEGEN_GROUPED_ECOLOGY",
+      "geometry": {"normalizedApprox": {"x": 0.35, "y": 0.39, "width": 0.24, "height": 0.16}},
+      "constraintLevel": "TARGET",
+      "saliency": 68,
+      "zIndex": 55,
+      "fixedText": ["SHOGO & SHIORI", "2026.10.24"],
+      "representativeEcology": true
+    },
+    {
+      "id": "P08_BARCODE_META_MODULE",
+      "role": "bottom-right issue line, pink heart, barcode bars and exact digits",
+      "renderMode": "DETERMINISTIC_GROUPED_MODULE",
+      "geometry": {"normalizedApprox": {"x": 0.68, "y": 0.848, "width": 0.25, "height": 0.116}},
+      "constraintLevel": "LOCKED_FACTS_TARGET_GEOMETRY",
+      "saliency": 38,
+      "zIndex": 46,
+      "exactBarcodeDigits": "2026102400000"
+    },
+    {
+      "id": "P08_PAGE_NUMBER",
+      "role": "bottom-left page number",
+      "renderMode": "FIGMA_NATIVE_TEXT",
+      "geometry": {"normalizedApprox": {"x": 0.048, "y": 0.929, "width": 0.03, "height": 0.022}},
+      "constraintLevel": "TARGET",
+      "saliency": 12,
+      "zIndex": 40,
+      "exactText": "08"
+    }
+  ],
+  "quietZones": [
+    {
+      "id": "P08_QUIET_UPPER_MAIN",
+      "normalizedApprox": {"x": 0.16, "y": 0.03, "width": 0.78, "height": 0.34},
+      "rule": "Keep visually empty; do not add headings, photos, stickers, maps or filler decoration."
+    },
+    {
+      "id": "P08_QUIET_MIDDLE_LOWER",
+      "normalizedApprox": {"x": 0.14, "y": 0.56, "width": 0.76, "height": 0.27},
+      "rule": "Preserve as deliberate back-cover breathing room."
+    }
+  ],
+  "relationalConstraints": [
+    "Center closure remains compact and isolated; it must not grow into a hero occupying the page.",
+    "Upper-left brand/meta stays edge-oriented and vertically composed.",
+    "Barcode/meta stays clearly separated at bottom-right with ample cream margin.",
+    "Page number 08 stays isolated at bottom-left.",
+    "No decorative connector lines or flowchart relationships between the three anchors.",
+    "The negative space itself is a primary composition element and must not be filled."
+  ],
+  "layerOrder": [
+    "P08_BG_PAPER_FIELD",
+    "P08_LEFT_SPINE_META",
+    "P08_PAGE_NUMBER",
+    "P08_BARCODE_META_MODULE",
+    "P08_LEFT_SPINE_BRAND_ECOLOGY",
+    "P08_CENTER_CLOSURE_ECOLOGY"
+  ],
+  "overlapRules": {
+    "allowed": [
+      "Within P08_CENTER_CLOSURE_ECOLOGY, chapel/palms/flowers/ribbon overlap as one authored group.",
+      "Within P08_LEFT_SPINE_BRAND_ECOLOGY, logo/title/tropical accents may overlap as one authored group."
+    ],
+    "mustNotCover": [
+      "barcode digits",
+      "barcode bars",
+      "SHOGO & SHIORI",
+      "2026.10.24",
+      "page number 08"
+    ]
+  },
+  "photoPolicy": {
+    "photoSlotsPresent": false,
+    "visualMasterCropProxy": "PROHIBITED",
+    "rule": "P08 contains no real-photo slot. Do not invent one and do not use a page crop as a decorative proxy."
+  },
+  "displayModuleClassification": {
+    "status": "COMPLETE",
+    "bundledFixedModules": [
+      "P08_CENTER_CLOSURE_ECOLOGY",
+      "P08_LEFT_SPINE_BRAND_ECOLOGY",
+      "P08_BARCODE_META_MODULE"
+    ],
+    "nativeOrDeterministic": [
+      "P08_BG_PAPER_FIELD",
+      "P08_LEFT_SPINE_META",
+      "P08_PAGE_NUMBER"
+    ],
+    "rule": "Fixed visible copy may be bundled where the Visual Master treats it as one authored object. Barcode digits are always QA-checked against canonical metadata."
+  },
+  "groupedEcologyPlan": {
+    "representative": "P08_CENTER_CLOSURE_ECOLOGY",
+    "laterConditional": ["P08_LEFT_SPINE_BRAND_ECOLOGY"],
+    "scaleOutRule": "Do not generate the later ecology until the representative passes ART_QUALITY, true-alpha and CROSS_PAGE_STYLE_FAMILY QA."
+  },
+  "reverseOmissionAudit": {
+    "status": "COMPLETE",
+    "confirmed": [
+      "small pink heart in left spine meta",
+      "small pink heart in bottom-right issue meta",
+      "bottom-left page number 08",
+      "exact barcode digits 2026102400000",
+      "barcode/meta separation from center closure",
+      "warm cream paper field",
+      "large intentional sparse zones",
+      "asymmetric edge-weighting",
+      "no photo role",
+      "no hidden thank-you panel or additional repeated content module"
+    ]
+  },
+  "representativeDraftAssessment": {
+    "ledgerItem": "P08_CENTER_CLOSURE_ECOLOGY",
+    "latestDraftSha256": "00711834c78ca3b1cae4a6dba5fa0757eb5a0f70b16be2e7a85d9d22bf84e4c6",
+    "artQualityPass": "FAIL",
+    "technicalAlphaObservation": "RGBA with alpha range 0-255 exists, but technical alpha acceptance is not granted because art quality failed first.",
+    "failureReason": "Draft is too bulky, glossy and realistic versus the compact delicate Visual Master ecology; palms and flowers overpower the chapel and sparse editorial balance.",
+    "nextAction": "One targeted rework only; then art review before alpha QA."
+  },
+  "barcodeModuleRule": {
+    "exactDigits": "2026102400000",
+    "hardReject": "Any visible barcode digits other than 2026102400000.",
+    "deterministicRule": "Do not substitute an EAN-13 checksum digit. Use a deterministic barcode representation that preserves the exact visible canonical digits."
+  },
+  "systemicPreproductionGates": {
+    "styleAnchors": ["P01 3535:7", "P02 3535:9", "P03 3535:11"],
+    "crossPageStyleFamilyPass": "REQUIRED_AFTER_REPRESENTATIVE_ECOLOGY_FIGMA_PLACEMENT",
+    "alphaGates": ["ART_QUALITY_PASS", "TRUE_ALPHA_PREFLIGHT_PASS", "ALPHA_INTERIOR_OPACITY_PASS", "EDGE_ALPHA_QUALITY_PASS"],
+    "purpleDriftRule": "#7e08f9 and nearby saturated purple must not become a dominant fill/background color without owner approval"
+  },
+  "hardExecutionRejects": [
+    "primary thank-you-page role restored",
+    "new real-photo slot invented",
+    "crop from P08.png used as active production asset",
+    "generic Canva/SVG icon pack",
+    "watercolor/painterly/vintage escape",
+    "dominant #7e08f9 purple drift",
+    "center ecology enlarged enough to destroy sparse back-cover hierarchy",
+    "barcode digits invented or altered",
+    "checkerboard RGB treated as transparency",
+    "binary alpha accepted solely because outside transparency exists",
+    "duplicate ImageGen of an already GENERATED_DRAFT-or-later ledger item without REWORK_REQUIRED reason"
+  ],
+  "partGenerationGate": "ONLY_P08_CENTER_CLOSURE_ECOLOGY_REWORK_ALLOWED_UNTIL_REPRESENTATIVE_GATE_PASS",
+  "qa": {
+    "visualMasterReview": "PASS",
+    "reverseOmissionAudit": "PASS",
+    "bundledDisplayModuleClassification": "PASS",
+    "representativeSelection": "PASS",
+    "representativeArtQuality": "FAIL_REWORK_REQUIRED",
+    "crossPageStyleFamilyPass": "BLOCKED",
+    "barcodeDigitsMustEqual": "2026102400000"
+  }
 }
