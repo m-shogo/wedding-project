@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P05",
+  "role": "FRIENDS MEMORIES ONLY",
+  "status": "LIVE_FIGMA_REVIEWED_PHASE_A_HEADER_ONLY",
+  "date": "2026-09-04",
+  "inherits": [
+    "assets/rurubu-v30/manifest.json",
+    "assets/rurubu-v30/visual-polish-manifest.json",
+    "assets/rurubu-v30/ornament-art-direction-manifest.json",
+    "assets/rurubu-v30/p05/manifest.json",
+    "docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md",
+    "assets/rurubu-v30/preproduction-page-gates-manifest.json"
+  ],
+  "liveFigma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "frameId": "3535:15",
+    "observedState": "BLANK_CREAM_FRAME / NO_ACTIVE_P05_PRODUCTION_MODULES",
+    "protectedFrames": ["3535:7", "3535:9", "3535:11", "3535:13", "3535:17", "3535:19", "3535:21"]
+  },
+  "phaseA": {
+    "onlyOpenJob": "P05_HEADER_ECOLOGY_V30_ALIGNED",
+    "generationUnit": "ONE_GROUPED_DISPLAY_BLOCK",
+    "include": [
+      "るるぶ",
+      "2026",
+      "友達との思い出",
+      "最高の仲間たちと、笑顔で未来へ！",
+      "tropical hibiscus/plumeria/foliage",
+      "sparkles",
+      "airplane + heart-route",
+      "camera accent",
+      "ring/diamond accent",
+      "OUR JOURNEY / TAKE A TRIP stamp relationship"
+    ],
+    "doNotSplitInto": [
+      "isolated flower asset",
+      "isolated airplane asset",
+      "isolated camera asset",
+      "isolated ribbon asset",
+      "generic stamp icon"
+    ],
+    "targetRendering": [
+      "same V30 saturation family as P01-P04",
+      "strong dark/navy outline",
+      "bright white/yellow keyline",
+      "controlled dimensional shadow",
+      "crisp printed sticker/cutout silhouette",
+      "hot pink + vivid blue + yellow + green",
+      "cute Japanese Rurubu/travel-magazine energy"
+    ],
+    "hardRejects": [
+      "watercolor",
+      "painterly flowers",
+      "fine-art botanical",
+      "aged paper/sepia",
+      "retro travel poster",
+      "generic Canva/SVG icon pack",
+      "SaaS illustration",
+      "dominant purple",
+      "muted beige",
+      "thin flat vector-only styling"
+    ]
+  },
+  "alphaContract": {
+    "requiredBeforePlacement": [
+      "ART_QUALITY_PASS",
+      "TRUE_ALPHA_PREFLIGHT_PASS",
+      "ALPHA_INTERIOR_OPACITY_PASS",
+      "EDGE_ALPHA_QUALITY_PASS"
+    ],
+    "fallback": "If direct alpha produces checkerboard or opaque RGB, switch immediately to one separable flat extraction matte and edge-aware extraction. Do not repeat the same failed direct-alpha path.",
+    "specificRisk": "Curved lettering, hibiscus/plumeria petals, leaves, airplane, rings, camera and ribbon tails must retain clean antialiased alpha with no matte fringe."
+  },
+  "phaseAGate": {
+    "gate": "CROSS_PAGE_STYLE_FAMILY_PASS",
+    "compareAgainst": ["P01 3535:7", "P02 3535:9", "P03 3535:11", "P04 3535:13"],
+    "procedure": [
+      "generate one Header ecology only",
+      "run four alpha/art gates before Figma",
+      "place only Header into existing P05 frame 3535:15 at Visual-Master-comparable scale/position",
+      "capture fresh P01/P02/P03/P04/P05 screenshots",
+      "compare saturation, outline, keyline, shadow, sticker/cutout feel, tropical rendering, paper/print feel and cute/pop temperature",
+      "if FAIL: regenerate Header only",
+      "if PASS: record evidence and STOP"
+    ],
+    "hardStop": "Do not generate/install section-header family, photo vessels, photo proxies, captions, closing bubble or micro accents in Phase A even if the Header passes."
+  },
+  "futurePhasesBlockedUntilA": {
+    "P05_SECTION_HEADER_FAMILY": "BLOCKED",
+    "P05_POLAROID_VESSEL_SYSTEM": "BLOCKED",
+    "P05_FRIEND_PHOTO_LAYOUT_ASSEMBLY": "BLOCKED",
+    "P05_BOTTOM_CLOSING_BUBBLE": "BLOCKED",
+    "P05_MICRO_ACCENT_FAMILY": "BLOCKED"
+  },
+  "currentGateState": {
+    "VISUAL_MASTER_REVIEW": "PASS",
+    "LIVE_FIGMA_BASELINE_REVIEW": "PASS_BLANK_SAFE_START",
+    "P05_HEADER_ECOLOGY_GENERATION": "OPEN",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "PENDING",
+    "FULL_P05_PRODUCTION": "BLOCKED",
+    "FIGMA_DESIGN_COMPLETE": false,
+    "FINAL_COPY_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  }
+}
