@@ -451,6 +451,80 @@ A binary Git transport limitation must not fork naming/storage conventions and m
 
 ---
 
+## Lesson 17 — Same-file accepted Figma nodes are the cheapest reuse path
+
+**Scope:** P08 / Figma reuse / no-new-ImageGen
+
+**Observation**
+
+The P08 upper-left brand ecology did not require a new generated asset. Accepted P01 nodes for the Rurubu masthead (`3681:104`), WEDDING title (`3681:94`) and tropical cluster (`3681:95`) already provided the correct V30 rendering family.
+
+**Why it mattered**
+
+Generating a new near-duplicate would spend time, create style drift risk, require another alpha/upload path and add redundant production binaries.
+
+**Decision / recovery**
+
+Clone the accepted Figma nodes inside the same file, resize/rotate/recompose them for P08's page-specific geometry, and preserve the original P01 nodes unchanged.
+
+**Rule for future ChatGPT runs**
+
+Before ImageGen, search both Git production assets and live accepted Figma nodes. When the same authored visual vocabulary already exists in the same Figma file, prefer clone/recompose over download/re-upload or regeneration.
+
+**Common promotion candidate:** `YES`
+
+The reuse-first principle is executor-agnostic; the same-file clone mechanism is Figma execution detail.
+
+---
+
+## Lesson 18 — Figma rotation geometry must be verified visually, not inferred from pre-rotation x/y
+
+**Scope:** P08 / Figma rotation / screenshot correction
+
+**Observation**
+
+The first reused vertical WEDDING placement used sensible pre-rotation coordinates but rendered far outside the intended upper-left ecology. Metadata showed a -90° rotated 103×34 source becoming a 34×103 visual box whose left bound shifted relative to its stored x.
+
+**Why it happened**
+
+Figma node x/y and the visible axis-aligned bounds after rotation are not intuitive enough to treat as simple unrotated geometry.
+
+**Decision / recovery**
+
+Keep the accepted WEDDING art, inspect live metadata/design context, correct only transform coordinates (`rotation=-90`, `x=45`, `y=34` inside the P08 brand frame), then verify with a fresh page screenshot.
+
+**Rule for future ChatGPT runs**
+
+When a rotated reuse looks wrong, debug transform/bounds first. Do not regenerate or recut the source art to solve a rotation-placement defect.
+
+**Common promotion candidate:** `NO`
+
+This is practical Figma/ChatGPT execution knowledge.
+
+---
+
+## Lesson 19 — Fact-critical decorative modules should be deterministic even when the reference looks raster-like
+
+**Scope:** P08 / barcode / exact canonical facts
+
+**Observation**
+
+The Visual Master contains barcode-like bars with visible digits `2026102400000`. Treating this as ImageGen or forcing a standards-compliant EAN-13 encoder could alter the final visible digit through checksum logic.
+
+**Decision / recovery**
+
+Build the barcode/meta module natively in Figma: exact editable issue text, pink heart, deterministic bar pattern derived from all canonical digits, and visible digits exactly `2026102400000`. Treat the bars as editorial barcode artwork rather than silently substituting a checksum-valid EAN number.
+
+**Rule for future ChatGPT runs**
+
+When a fact-critical code must display an exact canonical string, factual fidelity outranks making it conform to an unrelated encoding standard. Use a deterministic representation and separately QA the visible canonical value.
+
+**Common promotion candidate:** `YES`
+
+The exact implementation may vary, but the factual-safety principle is executor-agnostic and already aligns with common deterministic/fact-critical classification.
+
+---
+
 # Promotion queue
 
 Potential shared/common promotions should be reviewed conservatively. Current candidates from this log:
@@ -459,6 +533,8 @@ Potential shared/common promotions should be reviewed conservatively. Current ca
 2. decomposition must classify generated/native/shared/photo/deterministic roles before generation;
 3. persistent asset-state ledger may be useful as a general production primitive;
 4. owner-accepted art must not be reopened merely because a transport/upload layer failed;
-5. canonical production master and executor-specific transport derivative should remain distinct when a derivative is necessary.
+5. canonical production master and executor-specific transport derivative should remain distinct when a derivative is necessary;
+6. accepted same-family assets should be reused before generating near-duplicates;
+7. fact-critical decorative modules should preserve canonical visible values even when a visual encoding standard would rewrite them.
 
 Do not edit common authority merely because an item appears here. Promote only when it closes a real systemic gap not already covered by current manifests/policies.
