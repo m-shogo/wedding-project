@@ -1,6 +1,6 @@
 # Rurubu WEDDING — CURRENT POINTER
 
-Status: `V30_ONLY / P01-P03_DESIGN_LOCKED / 2026-09-03`
+Status: `V30_ONLY / P01-P03_DESIGN_LOCKED / P04_PHASE_A_HEADER_PASS / 2026-09-04`
 
 V30 is the sole current production version. V20 is history/reference only. Do not create V31 unless explicitly requested.
 
@@ -266,7 +266,25 @@ P03 may relock only after direct P01/P02/P03 side-by-side review confirms:
 4. target P03 composition remains intact;
 5. photos/body copy remain independently replaceable/editable.
 
-## P04-P08 — before production
+## P04 — PHASE A HEADER CALIBRATION PASSED
+
+Frame `3535:13`.
+
+The representative `P04_HEADER_ECOLOGY_V30_ALIGNED` is installed as the only live P04 module. It passed matte-recovery alpha QA and direct P01/P02/P03 family comparison.
+
+- `ART_QUALITY_PASS = PASS`
+- `TRUE_ALPHA_PREFLIGHT_PASS = PASS`
+- `ALPHA_INTERIOR_OPACITY_PASS = PASS`
+- `EDGE_ALPHA_QUALITY_PASS = PASS`
+- `CROSS_PAGE_STYLE_FAMILY_PASS = PASS`
+- `FIGMA_DESIGN_COMPLETE = NO`
+- `PHASE_B = NOT_OPENED`
+
+Evidence: `assets/rurubu-v30/p04/production/phase-a-header-calibration/manifest.json`.
+
+Do not call P04 complete. Location labels, route, bottom closure, message panel and photo assembly remain blocked until a later owner instruction explicitly opens Phase B.
+
+## P05-P08 — before production
 
 Do not start final production until each page Visual Master is directly reviewed and current page authority is prepared.
 
