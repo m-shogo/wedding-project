@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "project": "Rurubu WEDDING V30",
   "page": "P05",
-  "role": "FRIENDS MEMORIES",
-  "status": "AWAITING_VISUAL_REVIEW",
-  "productionState": "VISUAL_MASTER_PENDING",
+  "role": "FRIENDS MEMORIES ONLY",
+  "status": "VISUAL_MASTER_REVIEWED_READY_FOR_REPRESENTATIVE_ECOLOGY_CALIBRATION",
+  "productionState": "REPRESENTATIVE_ECOLOGY_CALIBRATION_READY",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualPolishPolicy": "assets/rurubu-v30/visual-polish-manifest.json",
   "ornamentArtDirectionPolicy": "assets/rurubu-v30/ornament-art-direction-manifest.json",
@@ -12,17 +12,286 @@
   "preproductionPageGatesPolicy": "assets/rurubu-v30/preproduction-page-gates-manifest.json",
   "visualLockAuditPolicy": "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
   "executionAcceptancePolicy": "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md",
-  "visualMaster": {"path": "assets/rurubu-v30/p05/P05.png", "authority": "PRIMARY_VISUAL_AUTHORITY_PENDING_CHAT_REVIEW", "rule": "Do not infer page-specific geometry, module bundling or styling from prose. Review the actual user-provided page image and complete both visual-review passes before locking."},
-  "canonicalFacts": {"names": {"Shogo": "LOCKED", "Shiori": "LOCKED"}, "weddingDate": "2026.10.24"},
-  "hardRoleRejects": ["family/FAMILY page role", "Hawaii feature", "proposal/arrival layout", "giant page-wide hero"],
-  "constraintProfile": {"visualMasterWins": true, "defaultPositionLevel": "TARGET", "defaultSizeLevel": "TARGET", "decorativeMicroPlacementLevel": "FLEXIBLE", "locked": ["page role", "friends-only role", "canonical facts", "three-second hierarchy after review", "mustNotCover", "friend-photo masks", "hard rejects", "clean-photo-proxy rule", "fixed-display-module classification before generation"]},
-  "requiredAfterVisualReview": ["threeSecondReadOrder", "saliency weights 0-100", "quiet zones", "relational constraints", "pageSpec confirmation", "visualAuthority", "backgroundSystem", "frameSystem", "objects with normalized + Figma geometry", "constraintLevel and tolerance per major object", "layerOrder/zIndex", "overlap and mustNotCover rules", "friend-photo masks, face-safe zones and replaceability", "renderMode per object", "factClass per text object", "fixed bundled display-module classification", "native/variable-copy classification", "clean standalone friend-photo proxy roles", "grouped ecology plan", "representative ecology selection", "assetDecompositionPlan only after representative ecology gate", "asset padding/visual-bounds contract", "hardRejects", "ordered QA gates", "reference-delta comparison targets", "second-pass omission/misclassification audit"],
-  "reviewProcess": {"passA24PointReview": "REQUIRED", "passBReverseOmissionAudit": "REQUIRED", "passBChecks": ["top/middle/bottom scan", "left/center/right scan", "micro accents", "wrong object identity", "all friend photo slots and hidden frame dependencies", "intentional asymmetry", "SHOGO FRIENDS vs SHIORI FRIENDS side/role fidelity", "repeated-photo-frame non-identity", "face recognizability at A5", "quiet-space intent", "factClass safety", "which fixed heading/badge/icon groups are one display module", "whether any photo proxy contains page decoration"], "lockCondition": "Do not set VISUAL_MASTER_LOCKED until both passes are complete and all findings plus display-module/proxy classifications are corrected in this manifest."},
-  "displayModuleClassification": {"status": "REQUIRED_DURING_VISUAL_REVIEW", "rule": "Classify fixed short headings, FRIENDS labels, badges, page labels and decorative short text that visually belong with their backgrounds/icons as bundled generated display modules. Visible fixed text need not remain editable. Never bake guest/friend names or any variable personal copy unless explicitly approved and intentionally fixed."},
-  "pageSpecificPending": {"relationalConstraints": "AWAITING_VISUAL_REVIEW", "quietZones": "AWAITING_VISUAL_REVIEW", "saliency": "AWAITING_VISUAL_REVIEW", "faceSafeZones": "AWAITING_VISUAL_REVIEW", "geometryTolerances": "INHERIT_ROOT_UNTIL_REVIEW", "secondPassOmissionAudit": "REQUIRED_BEFORE_LOCK", "bundledDisplayModules": "REQUIRED_BEFORE_PART_GENERATION", "nativeOrVariableCopy": "REQUIRED_BEFORE_PART_GENERATION", "photoProxyRoles": "REQUIRED_BEFORE_PART_GENERATION", "representativeEcology": "MUST_BE_SELECTED_AFTER_ACTUAL_VISUAL_REVIEW"},
-  "photoPolicy": {"inheritRoot": true, "visualPolishOverride": true, "visualMasterCropProxy": "PROHIBITED", "expectedRole": "Friends memories only; verify Visual Master photo count before lock while preserving independently replaceable friend-photo slots.", "rule": "Every friend photo slot must be a separate clipped/masked replaceable image. Use clean standalone group/friend photos only; no P05 page title, frame, sticker, border, flower, caption or background may be baked into the proxy. Face/eye safety overrides TARGET geometry."},
-  "systemicPreproductionGates": {"styleAnchors": ["P01 3535:7", "P02 3535:9", "P03 3535:11"], "crossPageStyleFamilyPass": "REQUIRED_AFTER_REPRESENTATIVE_ECOLOGY", "alphaGates": ["TRUE_ALPHA_PREFLIGHT_PASS", "ALPHA_INTERIOR_OPACITY_PASS", "EDGE_ALPHA_QUALITY_PASS"], "purpleDriftRule": "#7e08f9 and nearby saturated purple must not become a dominant fill/route/background color without owner approval", "rule": "Inherited from preproduction-page-gates-manifest.json; page-specific details still require direct P05 Visual Master review before production."},
-  "hardExecutionRejects": ["crop from P05.png used as friend-photo fill", "page screenshot used as friend-photo proxy", "same decorated proxy duplicated across multiple friend slots", "generic equal-card componentization solely for convenience", "generic Canva/SVG icon pack", "watercolor/painterly/vintage escape from V30 graphic family", "dominant #7e08f9 purple drift", "binary alpha accepted solely because outside transparency is real", "fixed display module flattening a replaceable friend photo"],
-  "partGenerationGate": "BLOCKED_UNTIL_VISUAL_REVIEW_SECOND_PASS_DISPLAY_MODULE_PROXY_CLASSIFICATION_AND_REPRESENTATIVE_ECOLOGY_SELECTION",
-  "qa": {"gate0": "Pending direct visual review of actual page master plus second-pass reverse omission audit.", "technicalQaCannotPassBeforeVisualQa": true, "proxyContaminationMustPass": true, "bundledDisplayModuleClassificationMustPass": true, "crossPageStyleFamilyPass": "PENDING_VISUAL_REVIEW", "edgeAlphaQualityPass": "PENDING_GENERATED_ASSET"}
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p05/P05.png",
+    "authority": "PRIMARY_VISUAL_AUTHORITY_REVIEWED",
+    "reviewedInChatOn": "2026-09-04",
+    "pageRoleSummary": "Friends-only two-column collage: SHOGO FRIENDS on blue left and SHIORI FRIENDS on pink right, exactly four independently replaceable friend-photo slots per side, no giant hero.",
+    "rule": "The actual P05.png controls page-specific hierarchy/composition. P01-P04 are publication-family rendering anchors only; do not copy their layouts."
+  },
+  "liveFigmaBaseline": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "frameId": "3535:15",
+    "reviewedOn": "2026-09-04",
+    "observedState": "BLANK_CREAM_FRAME / NO_ACTIVE_P05_PRODUCTION_MODULES",
+    "meaning": "Blank safe start. Build into the existing P05 frame only. Do not create a duplicate P05 frame."
+  },
+  "canonicalFacts": {
+    "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
+    "weddingDate": "2026.10.24",
+    "pageNumber": "05",
+    "friendPhotoCount": 8,
+    "shogoFriendPhotoCount": 4,
+    "shioriFriendPhotoCount": 4
+  },
+  "hardRoleRejects": [
+    "family/FAMILY page role",
+    "Hawaii feature page",
+    "proposal/arrival layout",
+    "giant page-wide hero",
+    "photo count other than exactly 4 SHOGO + 4 SHIORI",
+    "one side visually dominating the other as a hero section"
+  ],
+  "threeSecondReadOrder": [
+    "友達との思い出 header ecology",
+    "SHOGO FRIENDS / SHIORI FRIENDS side headers",
+    "upper friend-photo memories on both sides",
+    "middle/lower friend-photo collage",
+    "bottom closing message",
+    "PAGE 05"
+  ],
+  "saliencyWeights": {
+    "headerEcology": 100,
+    "shogoSectionHeader": 78,
+    "shioriSectionHeader": 78,
+    "shogoUpperPhotos": 70,
+    "shioriUpperPhoto": 70,
+    "middleFriendPhotos": 62,
+    "lowerFriendPhotos": 56,
+    "bottomClosingBubble": 44,
+    "pageBadge": 24,
+    "microAccents": 18
+  },
+  "pageSpec": {
+    "figmaFrame": "3535:15",
+    "trimPx": {"width": 559, "height": 794},
+    "trimMm": {"width": 148, "height": 210},
+    "bleedMm": 3,
+    "informationArchitecture": [
+      "large title ecology across upper band",
+      "blue SHOGO half on left and pink SHIORI half on right",
+      "exactly four friend-photo memories per side",
+      "polaroid-like varied photo vessels; not a generic equal-card grid",
+      "captions remain local to each photo",
+      "bottom-center future-facing closing bubble",
+      "PAGE 05 remains separate shared publication component"
+    ]
+  },
+  "backgroundSystem": {
+    "base": "bright clean warm-white/cream paper",
+    "leftTint": "very light cool-blue editorial wash",
+    "rightTint": "very light blush-pink editorial wash",
+    "divider": "soft center seam / subtle editorial separation, never a hard SaaS column rule",
+    "border": "shared V30 airmail border treatment"
+  },
+  "frameSystem": {
+    "photoVessels": "white printed-photo / polaroid-like frames with controlled shadow and slight varied rotation",
+    "rule": "Vessels must feel like an authored magazine collage, not eight identical component cards. Photo pixels remain separate replaceable image fills."
+  },
+  "targetGeometryNormalized": {
+    "headerEcology": {"x": 0.03, "y": 0.02, "w": 0.94, "h": 0.28, "constraint": "TARGET"},
+    "shogoSectionHeader": {"x": 0.08, "y": 0.29, "w": 0.41, "h": 0.10, "constraint": "TARGET"},
+    "shioriSectionHeader": {"x": 0.51, "y": 0.29, "w": 0.43, "h": 0.10, "constraint": "TARGET"},
+    "shogo01": {"x": 0.02, "y": 0.40, "w": 0.29, "h": 0.18, "constraint": "TARGET"},
+    "shogo02": {"x": 0.30, "y": 0.39, "w": 0.20, "h": 0.20, "constraint": "TARGET"},
+    "shogo03": {"x": 0.03, "y": 0.58, "w": 0.43, "h": 0.19, "constraint": "TARGET"},
+    "shogo04": {"x": 0.04, "y": 0.76, "w": 0.35, "h": 0.15, "constraint": "TARGET"},
+    "shiori01": {"x": 0.52, "y": 0.39, "w": 0.45, "h": 0.19, "constraint": "TARGET"},
+    "shiori02": {"x": 0.52, "y": 0.58, "w": 0.21, "h": 0.19, "constraint": "TARGET"},
+    "shiori03": {"x": 0.73, "y": 0.59, "w": 0.24, "h": 0.18, "constraint": "TARGET"},
+    "shiori04": {"x": 0.55, "y": 0.77, "w": 0.31, "h": 0.14, "constraint": "TARGET"},
+    "closingBubble": {"x": 0.31, "y": 0.91, "w": 0.39, "h": 0.07, "constraint": "TARGET"},
+    "pageBadge": {"x": 0.11, "y": 0.91, "w": 0.13, "h": 0.08, "constraint": "TARGET"}
+  },
+  "photoRoles": {
+    "count": 8,
+    "shogo": [
+      {"id": "P05_PHOTO_SHOGO_01_UPPER_LEFT", "side": "SHOGO", "replaceable": true, "priority": 1, "faceSafe": "HARD"},
+      {"id": "P05_PHOTO_SHOGO_02_UPPER_RIGHT", "side": "SHOGO", "replaceable": true, "priority": 1, "faceSafe": "HARD"},
+      {"id": "P05_PHOTO_SHOGO_03_MIDDLE_WIDE", "side": "SHOGO", "replaceable": true, "priority": 2, "faceSafe": "HARD"},
+      {"id": "P05_PHOTO_SHOGO_04_LOWER_WIDE", "side": "SHOGO", "replaceable": true, "priority": 3, "faceSafe": "HARD"}
+    ],
+    "shiori": [
+      {"id": "P05_PHOTO_SHIORI_01_UPPER_WIDE", "side": "SHIORI", "replaceable": true, "priority": 1, "faceSafe": "HARD"},
+      {"id": "P05_PHOTO_SHIORI_02_MIDDLE_LEFT", "side": "SHIORI", "replaceable": true, "priority": 2, "faceSafe": "HARD"},
+      {"id": "P05_PHOTO_SHIORI_03_MIDDLE_RIGHT", "side": "SHIORI", "replaceable": true, "priority": 2, "faceSafe": "HARD"},
+      {"id": "P05_PHOTO_SHIORI_04_LOWER_WIDE", "side": "SHIORI", "replaceable": true, "priority": 3, "faceSafe": "HARD"}
+    ],
+    "rule": "Exactly eight independent replaceable image fills. Never crop friend photos from P05.png. Never flatten a friend photo into a generated display asset. Face/eye safety overrides target geometry."
+  },
+  "displayModuleClassification": {
+    "status": "REVIEWED",
+    "representativeEcologyFirst": "P05_HEADER_ECOLOGY_V30_ALIGNED",
+    "modules": [
+      {
+        "id": "P05_HEADER_ECOLOGY_V30_ALIGNED",
+        "renderMode": "GENERATED_DISPLAY_ASSET",
+        "bundle": ["るるぶ", "2026", "友達との思い出", "最高の仲間たちと、笑顔で未来へ！", "tropical flowers/foliage", "sparkles", "airplane + heart route", "camera accent", "ring/diamond accent", "OUR JOURNEY / TAKE A TRIP stamp relationship"],
+        "rule": "Generate as one authored upper ecology. Do not split into isolated flower/camera/airplane/stamp clipart."
+      },
+      {
+        "id": "P05_SECTION_HEADER_FAMILY",
+        "renderMode": "GENERATED_DISPLAY_ASSET_FAMILY",
+        "members": [
+          {"id": "P05_SHOGO_FRIENDS_HEADER", "palette": "blue/cyan", "fixedTitle": "SHOGO FRIENDS", "referenceSubcopy": "いつもふざけて、いつも本気！💙"},
+          {"id": "P05_SHIORI_FRIENDS_HEADER", "palette": "pink", "fixedTitle": "SHIORI FRIENDS", "referenceSubcopy": "一緒に泣いて、笑って、支え合ったね💗"}
+        ],
+        "rule": "One family, two side-specific variants. Preserve blue-left / pink-right role fidelity."
+      },
+      {
+        "id": "P05_POLAROID_VESSEL_SYSTEM",
+        "renderMode": "NATIVE_FIGMA_FRAME_SYSTEM",
+        "rule": "Build white print edges, controlled shadows and slight non-identical rotations natively. Keep all photo fills and captions separately editable/replaceable."
+      },
+      {
+        "id": "P05_BOTTOM_CLOSING_BUBBLE",
+        "renderMode": "SHARED_DECORATIVE_VESSEL_PLUS_NATIVE_TEXT",
+        "rule": "Decorative bubble may be generated/reused; closing message remains native editable text."
+      },
+      {
+        "id": "P05_MICRO_ACCENT_FAMILY",
+        "renderMode": "REUSE_FIRST_PAGE_SPECIFIC_ONLY_IF_NEEDED",
+        "rule": "Prefer existing V30 flowers, stamp, camera, sparkle, route/palm micro-assets where composition permits. Do not create a clipart pile."
+      }
+    ]
+  },
+  "fixedVisibleStrings": [
+    "るるぶ",
+    "2026",
+    "友達との思い出",
+    "最高の仲間たちと、笑顔で未来へ！",
+    "SHOGO FRIENDS",
+    "SHIORI FRIENDS",
+    "PAGE 05"
+  ],
+  "nativeOrVariableCopy": {
+    "sectionSubcopy": {
+      "classification": "NATIVE_TEXT_REFERENCE_ONLY_PENDING_FINAL_COPY_QA",
+      "references": {
+        "SHOGO": "いつもふざけて、いつも本気！💙",
+        "SHIORI": "一緒に泣いて、笑って、支え合ったね💗"
+      }
+    },
+    "photoCaptions": {
+      "classification": "NATIVE_TEXT_REFERENCE_ONLY_PENDING_FINAL_COPY_QA",
+      "count": 8,
+      "rule": "Keep each photo caption native/editable and local to its corresponding photo vessel. Do not bake caption copy into generated imagery."
+    },
+    "closingMessage": {
+      "classification": "NATIVE_TEXT_REFERENCE_ONLY_PENDING_FINAL_COPY_QA",
+      "visualMasterReference": "大切な仲間がいるから、どんな未来も楽しみ！💗",
+      "rule": "Do not bake personal closing copy into the decorative bubble."
+    }
+  },
+  "quietZones": [
+    "the invisible center seam between SHOGO and SHIORI remains readable; neither side becomes a giant hero",
+    "all friend faces remain free of captions, tape, stamps, flowers, camera and route accents",
+    "section headers remain clearly above their own side and do not merge into photo content",
+    "bottom closing bubble remains readable and is not invaded by lower photos or bottom-right flowers/camera",
+    "PAGE 05 badge keeps breathing room at bottom-left"
+  ],
+  "relationalConstraints": [
+    "header ecology stays above both friend sections and reads first",
+    "SHOGO FRIENDS remains left/blue; SHIORI FRIENDS remains right/pink",
+    "exactly four photos remain visually assigned to each side",
+    "left and right sides feel equal in editorial weight even though individual photo sizes vary",
+    "photo frames may overlap slightly but must preserve faces and captions",
+    "photo rotations/white edges vary intentionally; reject an eight-card equal grid",
+    "bottom closing message bridges both sides rather than belonging to only one person",
+    "PAGE 05 remains a separate shared publication component"
+  ],
+  "layerOrder": [
+    "background paper / side washes",
+    "airmail border",
+    "photo vessels and replaceable photo fills",
+    "header ecology",
+    "SHOGO/SHIORI section headers",
+    "native photo captions",
+    "micro accents / tapes / stamps / sparkles",
+    "closing decorative vessel + native closing copy",
+    "shared PAGE 05 component"
+  ],
+  "visualLanguage": {
+    "styleAnchors": ["P01 3535:7", "P02 3535:9", "P03 3535:11", "P04 3535:13"],
+    "inherit": [
+      "very high saturation",
+      "hot pink / vivid blue / yellow / green / cyan",
+      "strong navy/black outline",
+      "crisp silhouette",
+      "bright white/yellow keyline",
+      "controlled dimensional shadow",
+      "printed sticker/cutout feeling",
+      "clean white/cream paper",
+      "bold Japanese travel-magazine hierarchy",
+      "pop tropical/travel motifs"
+    ],
+    "avoidPaletteDrift": {
+      "forbiddenDominantPurple": "#7e08f9 and nearby saturated purple must not become a major fill/background accent without owner approval",
+      "rule": "Use blue/cyan for SHOGO and pink for SHIORI. Yellow/green/tropical accents may bridge both."
+    }
+  },
+  "hardExecutionRejects": [
+    "crop from P05.png used as friend-photo fill",
+    "page screenshot used as friend-photo proxy",
+    "same decorated proxy duplicated across multiple friend slots",
+    "generic equal-card componentization solely for convenience",
+    "family/FAMILY role",
+    "giant hero photo",
+    "Hawaii/proposal/arrival carry-over",
+    "generic Canva/SVG icon pack",
+    "watercolor/painterly/fine-art botanical/vintage escape",
+    "dominant #7e08f9 purple drift",
+    "binary alpha accepted solely because outside transparency is real",
+    "fixed display module flattening a replaceable friend photo",
+    "captions baked into generated photo assets"
+  ],
+  "reviewProcess": {
+    "passA24PointReview": "COMPLETE_FROM_ACTUAL_P05_VISUAL_MASTER",
+    "passBReverseOmissionAudit": "COMPLETE_FOR_PRODUCTION_PLANNING",
+    "passBFindings": [
+      "exact photo count is 4 SHOGO + 4 SHIORI = 8",
+      "page identity depends on two balanced friend sides, not a hero image",
+      "polaroid vessels intentionally vary in size/rotation and must not become a generic grid",
+      "section headers are one blue/pink family with side fidelity",
+      "captions and closing copy should remain native/editable",
+      "micro accents should be reuse-first to avoid clipart accumulation",
+      "bottom bubble bridges both sides and PAGE 05 stays bottom-left"
+    ],
+    "lockCondition": "Visual Master analysis is locked for production planning. Full design completion still requires representative ecology calibration, live Figma implementation and final QA."
+  },
+  "representativeEcologyCalibration": {
+    "phaseA": "Generate/install P05_HEADER_ECOLOGY_V30_ALIGNED only.",
+    "compareAgainst": ["P01 3535:7", "P02 3535:9", "P03 3535:11", "P04 3535:13"],
+    "check": ["saturation", "outline", "keyline", "shadow", "sticker/cutout feel", "tropical rendering", "paper/print feel", "cute/pop visual temperature"],
+    "gate": "CROSS_PAGE_STYLE_FAMILY_PASS",
+    "failBehavior": "Reject/regenerate Header only.",
+    "passBehavior": "Record evidence and stop Phase A. Do not continue to section headers/photo assembly in the same run."
+  },
+  "alphaPolicy": {
+    "inheritsTrueAlphaPolicy": true,
+    "requiredGates": ["ART_QUALITY_PASS", "TRUE_ALPHA_PREFLIGHT_PASS", "ALPHA_INTERIOR_OPACITY_PASS", "EDGE_ALPHA_QUALITY_PASS"],
+    "fallback": "If direct alpha yields checkerboard/opaque RGB, immediately switch to one separable flat extraction matte and edge-aware extraction; do not repeat the same failed direct-alpha path.",
+    "rule": "Flowers, leaves, airplane, camera, rings, ribbon tails and curved display lettering require clean antialiased edge alpha on light/mid/dark backgrounds."
+  },
+  "chatGeneratedDraft": {
+    "status": "REFERENCE_ONLY_NOT_PRODUCTION_AUTHORITY",
+    "reason": "A ChatGPT header draft was generated before this manifest writeback, violating the manifest-before-production sequence. It may inform visual discussion only; Codex Phase A must execute from the now-updated authority and produce its own tracked production asset/evidence."
+  },
+  "partGenerationGate": "OPEN_FOR_REPRESENTATIVE_HEADER_ECOLOGY_ONLY",
+  "qa": {
+    "gate0": "PASS_VISUAL_MASTER_REVIEWED",
+    "liveFigmaBaselineReview": "PASS_BLANK_SAFE_START",
+    "crossPageStyleFamilyPass": "PENDING_REPRESENTATIVE_HEADER_CALIBRATION",
+    "photoRolePass": "PLANNED_8_REPLACEABLE_SLOTS_PENDING_LIVE_IMPLEMENTATION",
+    "proxyContaminationMustPass": true,
+    "bundledDisplayModuleClassificationMustPass": true,
+    "trueAlphaPreflightPass": "PENDING_GENERATED_ASSET",
+    "alphaInteriorOpacityPass": "PENDING_GENERATED_ASSET",
+    "edgeAlphaQualityPass": "PENDING_GENERATED_ASSET",
+    "figmaDesignComplete": false,
+    "finalCopyQaPending": true,
+    "finalPhotoQaPending": true,
+    "printReady": false
+  }
 }
