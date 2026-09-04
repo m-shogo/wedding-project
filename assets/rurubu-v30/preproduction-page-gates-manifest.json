@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "status": "CURRENT_SYSTEMIC_PREPRODUCTION_GATE",
+  "scope": ["P04", "P05", "P06", "P07", "P08"],
+  "purpose": "Prevent recurrence of the P03 failures before any later-page production starts.",
+  "styleAnchors": {
+    "P01": "3535:7",
+    "P02": "3535:9",
+    "P03": "3535:11",
+    "rule": "These are V30 publication-family rendering anchors only, never layout templates. Later pages must keep their own Visual Master composition while inheriting high saturation, dark outline, bright keyline, controlled shadow, printed sticker/cutout feel, clean paper, and pop tropical/travel rendering."
+  },
+  "requiredBeforeAnyPartGeneration": [
+    "direct review of actual page Visual Master",
+    "pass A visual review",
+    "pass B reverse omission/misclassification audit",
+    "page role confirmation",
+    "photo role/count confirmation",
+    "fixed bundled display-module classification",
+    "native/variable copy classification",
+    "clean standalone proxy plan",
+    "grouped ecology plan"
+  ],
+  "representativeEcologyRule": {
+    "required": true,
+    "rule": "After page-specific review, choose exactly one representative ecology and generate/install only that ecology first. Compare it directly against P01/P02/P03 CURRENT before scaling out to the rest of the page.",
+    "gate": "CROSS_PAGE_STYLE_FAMILY_PASS",
+    "failBehavior": "Reject/regenerate the representative ecology only. Do not generate the rest of the page until style-family calibration passes.",
+    "passBehavior": "Scale the accepted rendering language to the remaining page-specific ecologies/modules."
+  },
+  "systemicHardRejects": [
+    "generic Canva/SVG icon pack",
+    "SaaS illustration",
+    "flowchart/roadmap/PowerPoint visual grammar unless the Visual Master explicitly requires it",
+    "watercolor/painterly tropical treatment",
+    "fine-art botanical illustration",
+    "aged parchment/sepia scrapbook",
+    "retro travel poster",
+    "muted beige wedding editorial drift",
+    "isolated micro-icon pile where one ecology should be authored",
+    "full-page flatten",
+    "Visual Master crop or page screenshot used as active photo proxy",
+    "dominant saturated purple drift including #7e08f9 unless explicitly owner-approved"
+  ],
+  "alphaPolicy": {
+    "policy": "docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md",
+    "requiredBeforeFigmaPlacement": [
+      "ART_QUALITY_PASS",
+      "TRUE_ALPHA_PREFLIGHT_PASS",
+      "ALPHA_INTERIOR_OPACITY_PASS",
+      "EDGE_ALPHA_QUALITY_PASS"
+    ],
+    "rule": "Transparent outside is not sufficient. Verify intended interior opacity and edge anti-alias/fringe quality. A binary {0,255} alpha cutout on curved/organic raster art requires EDGE_ALPHA_QUALITY_REVIEW."
+  },
+  "colorDriftRule": {
+    "forbiddenDominantPurple": "#7e08f9 and nearby saturated purple",
+    "allowedPrimaryFamily": ["hot pink", "vivid blue", "yellow", "green", "cyan", "clean white/cream", "dark navy/black outline"],
+    "rule": "Purple may not become a dominant route/fill/background color unless the owner explicitly approves it for that page."
+  },
+  "executionOrder": [
+    "Visual Master review",
+    "page manifest writeback",
+    "representative ecology only",
+    "cross-page comparison",
+    "CROSS_PAGE_STYLE_FAMILY_PASS",
+    "remaining ecology production",
+    "alpha preflight before Figma",
+    "live Figma implementation",
+    "single integrated final QA",
+    "manifest/Current/PR writeback"
+  ],
+  "hardProcessRule": "Do not write a Codex production prompt before the current page manifest has been updated from the actual Visual Master review."
+}
