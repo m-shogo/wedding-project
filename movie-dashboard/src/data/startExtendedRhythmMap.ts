@@ -52,6 +52,18 @@ export const startExtendedAuthority = {
   referenceEndSec: 129,
   referenceEndLabel: "約2:09 / Cメロ開始直前",
   endToleranceNote: "外部解析には約2:07開始の例もある。CD/配信/動画の頭出し差を吸収するため、Final ENDは正規/local音源の波形とMarkerで固定する。",
+  // 2026-09-03: feature/start-129-three-showcases branchのmergeで、権利確認済みlocal音源
+  // (motion-studio/local/audio/StaRt.m4a)と、その音源のRMS/spectrogram信号解析+Palmier Pro
+  // on-device beat detectionによるsection構造データ(motion-studio/local/structure-map.local.json)
+  // が初めて利用可能になった。ただしこのファイルの14 sectionとは区切り方が異なり(例:
+  // structure-map側のchorus-1は33.0〜63.0sの単一30秒block。このファイルのchorus-1-a/1-bへの
+  // 分割位置は含まれない)、かつstructure-map自体がverifiedByListening=falseで人間の実聴取
+  // 確認をまだ経ていない。したがってreferenceStartSec/referenceEndSecの数値はまだここでは
+  // 更新しない(誤った精度を主張しないため)。実際の14 section再分割・確定は、人間が
+  // motion-studio/local/structure-map.local.jsonとStaRt.m4aを実際に聴き比べて行う必要がある。
+  realAudioSignalAnalysisAvailable: true as const,
+  realAudioSignalAnalysisSource: "motion-studio/local/structure-map.local.json" as const,
+  realAudioSignalAnalysisVerifiedByListening: false as const,
   lyricRule: "GitにはLYRIC_###と順番・reference timingのみ保存し、歌詞本文は保存しない。",
   mediaRule: "人物・家族・友人・犬は実写真・実動画を主役にし、AIで本人性を生成・変形しない。",
   editRule: "190 BPMを全cutへ使わない。95 BPM half-timeを写真の主grid、190 BPMはmicro accentと瞬間hitへ使う。",

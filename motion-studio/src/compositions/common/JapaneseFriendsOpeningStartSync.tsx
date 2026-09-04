@@ -11,7 +11,12 @@ import {
 } from 'remotion';
 import {
   type JapaneseFriendsOpeningStartSyncProps,
+  type StartWeddingCoupleNames,
+  type StartWeddingIntroProfile,
   type StartWeddingLyricPhrase,
+  defaultBrideProfile,
+  defaultCoupleNames,
+  defaultGroomProfile,
   startWeddingEditDurationInFrames,
   startWeddingEditRange,
 } from '../../data/startWeddingEditPublic';
@@ -50,15 +55,23 @@ const sections = [
 const imagePath = (asset: (typeof assets)[number]) => staticFile(`demo-assets/japanese-opening-ai-v1/${asset}.jpg`);
 const sectionAt = (seconds: number) => sections.find((section) => seconds >= section.start && seconds < section.end) ?? sections.at(-1)!;
 
-function useBeat(seconds: number) {
+function useBeat(seconds: number, intensity = 1) {
   const beatPosition = Math.max(0, seconds - beatOriginSeconds) / beatSeconds;
   const beatIndex = Math.floor(beatPosition);
   const phase = beatPosition - beatIndex;
-  return {beatIndex, pulse: interpolate(phase, [0, 0.18, 1], [1, 0.2, 0], clamp)};
+  return {beatIndex, pulse: interpolate(phase, [0, 0.18, 1], [1, 0.2, 0], clamp) * intensity};
 }
 
-function PhotoBackdrop({seconds, sectionIndex}: {seconds: number; sectionIndex: number}) {
-  const {pulse, beatIndex} = useBeat(seconds);
+function HitFlash({seconds, hits}: {seconds: number; hits: number[] | null | undefined}) {
+  if (!hits || !hits.length) return null;
+  const nearest = Math.min(...hits.map((hit) => Math.abs(seconds - hit)));
+  const opacity = interpolate(nearest, [0, 0.045, 0.11], [0.82, 0.22, 0], clamp);
+  if (opacity <= 0) return null;
+  return <AbsoluteFill style={{background: '#fff', opacity, pointerEvents: 'none', mixBlendMode: 'screen'}} />;
+}
+
+function PhotoBackdrop({seconds, sectionIndex, intensity = 1}: {seconds: number; sectionIndex: number; intensity?: number}) {
+  const {pulse, beatIndex} = useBeat(seconds, intensity);
   const cut = Math.floor(beatIndex / 4);
   const layout = (cut + sectionIndex) % 4;
   const primary = assets[(sectionIndex + cut) % assets.length];
@@ -80,8 +93,7 @@ function PhotoBackdrop({seconds, sectionIndex}: {seconds: number; sectionIndex: 
   return <AbsoluteFill style={{overflow: 'hidden', background: '#061827'}}>{photo(primary)}<div style={{position: 'absolute', inset: 24, border: `${8 + pulse * 8}px solid #ffd33d`, transform: `scale(${1 - pulse * .008})`}} /><AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(3,14,25,.06), rgba(3,14,25,.78))'}} /></AbsoluteFill>;
 }
 
-function ChorusPanels({seconds, sectionIndex}: {seconds: number; sectionIndex: number}) {
-  const {pulse, beatIndex} = useBeat(seconds);
+function ChorusQuadGrid({seconds, sectionIndex, pulse, beatIndex}: {seconds: number; sectionIndex: number; pulse: number; beatIndex: number}) {
   return (
     <AbsoluteFill style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', gap: 10, padding: '54px 28px 74px', background: '#071b2a', overflow: 'hidden'}}>
       <div style={{position: 'absolute', left: -40, top: 250, zIndex: 2, color: 'rgba(255,211,61,.22)', fontFamily: font, fontSize: 260, lineHeight: .75, fontWeight: 1000, whiteSpace: 'nowrap', transform: `translateX(${-(beatIndex % 8) * 20}px) rotate(-4deg)`}}>GO! GO! PARTY!</div>
@@ -97,6 +109,48 @@ function ChorusPanels({seconds, sectionIndex}: {seconds: number; sectionIndex: n
       <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(4,17,28,0.02), rgba(4,17,28,0.72))'}} />
     </AbsoluteFill>
   );
+}
+
+function ChorusHeroSplit({sectionIndex, pulse, beatIndex}: {sectionIndex: number; pulse: number; beatIndex: number}) {
+  const hero = assets[(sectionIndex + Math.floor(beatIndex / 4)) % assets.length];
+  const side1 = assets[(sectionIndex + Math.floor(beatIndex / 4) + 1) % assets.length];
+  const side2 = assets[(sectionIndex + Math.floor(beatIndex / 4) + 3) % assets.length];
+  return (
+    <AbsoluteFill style={{background: '#ff6b5f', overflow: 'hidden'}}>
+      <div style={{position: 'absolute', inset: '-60px -40px', color: 'rgba(7,27,42,.18)', fontFamily: font, fontSize: 220, lineHeight: .78, fontWeight: 1000, transform: `rotate(6deg) translateX(${(beatIndex % 8) * 16}px)`}}>PARTY PARTY PARTY</div>
+      <div style={{position: 'absolute', left: 96, top: 60, width: 1220, height: 960, overflow: 'hidden', border: '14px solid #fff', boxShadow: '0 30px 60px rgba(0,0,0,.38)', transform: `scale(${1 + pulse * .02}) rotate(-1.5deg)`}}>
+        <Img src={imagePath(hero)} style={{width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${1.1 + pulse * .04})`, filter: 'saturate(1.15) contrast(1.05)'}} />
+      </div>
+      <div style={{position: 'absolute', right: 70, top: 90, width: 430, height: 330, overflow: 'hidden', border: '10px solid #ffd33d', transform: `rotate(4deg) translateY(${-pulse * 14}px)`}}><Img src={imagePath(side1)} style={{width: '100%', height: '100%', objectFit: 'cover'}} /></div>
+      <div style={{position: 'absolute', right: 70, bottom: 96, width: 430, height: 330, overflow: 'hidden', border: '10px solid #52d9ff', transform: `rotate(-3deg) translateY(${pulse * 14}px)`}}><Img src={imagePath(side2)} style={{width: '100%', height: '100%', objectFit: 'cover'}} /></div>
+      <AbsoluteFill style={{background: 'linear-gradient(180deg, transparent 45%, rgba(3,14,25,.68))'}} />
+    </AbsoluteFill>
+  );
+}
+
+function ChorusDiagonalStack({sectionIndex, pulse, beatIndex}: {sectionIndex: number; pulse: number; beatIndex: number}) {
+  const base = sectionIndex + Math.floor(beatIndex / 4);
+  return (
+    <AbsoluteFill style={{background: '#ffd33d', overflow: 'hidden'}}>
+      {[0, 1, 2].map((index) => {
+        const asset = assets[(base + index * 2) % assets.length];
+        return (
+          <div key={index} style={{position: 'absolute', left: 60 + index * 560, top: 40 + (index % 2) * 90, width: 620, height: 940, overflow: 'hidden', border: '12px solid #071b2a', transform: `rotate(${(index - 1) * 7}deg) translateY(${(index % 2 ? 1 : -1) * pulse * 16}px) scale(${1 + pulse * .02})`, boxShadow: '0 22px 46px rgba(0,0,0,.3)'}}>
+            <Img src={imagePath(asset)} style={{width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.2) contrast(1.06)'}} />
+          </div>
+        );
+      })}
+      <AbsoluteFill style={{background: 'linear-gradient(180deg, transparent 40%, rgba(3,14,25,.72))'}} />
+    </AbsoluteFill>
+  );
+}
+
+function ChorusPanels({seconds, sectionIndex, intensity = 1}: {seconds: number; sectionIndex: number; intensity?: number}) {
+  const {pulse, beatIndex} = useBeat(seconds, intensity);
+  const layout = Math.floor(beatIndex / 16) % 3;
+  if (layout === 1) return <ChorusHeroSplit sectionIndex={sectionIndex} pulse={pulse} beatIndex={beatIndex} />;
+  if (layout === 2) return <ChorusDiagonalStack sectionIndex={sectionIndex} pulse={pulse} beatIndex={beatIndex} />;
+  return <ChorusQuadGrid seconds={seconds} sectionIndex={sectionIndex} pulse={pulse} beatIndex={beatIndex} />;
 }
 
 function Confetti({seconds}: {seconds: number}) {
@@ -188,20 +242,21 @@ function LyricTypography({seconds, lyricPhrases}: {seconds: number; lyricPhrases
   );
 }
 
-function Intro({seconds}: {seconds: number}) {
+function Intro({seconds, groomProfile, brideProfile, coupleNames}: {seconds: number; groomProfile: StartWeddingIntroProfile; brideProfile: StartWeddingIntroProfile; coupleNames: StartWeddingCoupleNames}) {
   const {pulse, beatIndex} = useBeat(seconds);
   const phaseStart = seconds < 1.6 ? 0 : seconds < 4.5 ? 1.6 : seconds < 7.4 ? 4.5 : seconds < 9.4 ? 7.4 : 9.4;
   const enter = spring({frame: Math.max(0, (seconds - phaseStart) * 30), fps: 30, config: {damping: 10, stiffness: 230, mass: .55}});
-  const profile = seconds < 4.5 ? {role: 'GROOM', name: 'HARUTO', jp: '佐藤 陽翔', asset: 'groom-friends' as const, color: '#52d9ff', facts: ['1994.07.18 / TOKYO', 'COFFEE・CAMP・SURPRISE', '今日いちばん緊張しています']} : {role: 'BRIDE', name: 'AOI', jp: '高橋 葵', asset: 'bride-friends' as const, color: '#ff7eae', facts: ['1995.03.09 / YOKOHAMA', 'TRAVEL・MUSIC・SMILE', '今日いちばん楽しんでいます']};
+  const profile = seconds < 4.5 ? groomProfile : brideProfile;
   if (seconds < 1.6) {
-    return <AbsoluteFill style={{background: '#ffd33d', color: '#071b2a', fontFamily: font, overflow: 'hidden'}}><div style={{position: 'absolute', left: -40, top: -25, fontSize: 310, lineHeight: .75, fontWeight: 1000, color: '#ff6b5f', transform: `translateX(${(1 - enter) * -600}px)`}}>START!</div><div style={{position: 'absolute', right: 80, bottom: 150, textAlign: 'right', transform: `translateX(${(1 - enter) * 600}px)`}}><div style={{fontSize: 26, fontWeight: 1000, letterSpacing: '.24em'}}>WELCOME TO OUR WEDDING</div><div style={{fontSize: 105, lineHeight: .9, fontWeight: 1000}}>HARUTO & AOI</div></div></AbsoluteFill>;
+    return <AbsoluteFill style={{background: '#ffd33d', color: '#071b2a', fontFamily: font, overflow: 'hidden'}}><div style={{position: 'absolute', left: -40, top: -25, fontSize: 310, lineHeight: .75, fontWeight: 1000, color: '#ff6b5f', transform: `translateX(${(1 - enter) * -600}px)`}}>START!</div><div style={{position: 'absolute', right: 80, bottom: 150, textAlign: 'right', transform: `translateX(${(1 - enter) * 600}px)`}}><div style={{fontSize: 26, fontWeight: 1000, letterSpacing: '.24em'}}>WELCOME TO OUR WEDDING</div><div style={{fontSize: 105, lineHeight: .9, fontWeight: 1000}}>{coupleNames.display}</div></div></AbsoluteFill>;
   }
   if (seconds < 7.4) {
     const imageOnLeft = profile.role === 'GROOM';
-    return <AbsoluteFill style={{background: profile.color, color: '#071b2a', fontFamily: font, overflow: 'hidden'}}><div style={{position: 'absolute', left: imageOnLeft ? 40 : 1080, top: 55, width: 800, height: 970, overflow: 'hidden', border: '12px solid #fff', boxShadow: `${imageOnLeft ? 28 : -28}px 28px 0 #071b2a`, transform: `translateX(${(1 - enter) * (imageOnLeft ? -850 : 850)}px) rotate(${imageOnLeft ? -2 : 2}deg)`}}><Img src={imagePath(profile.asset)} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: imageOnLeft ? '65% 50%' : '35% 50%', transform: `scale(${1.08 + pulse * .025})`}} /></div><div style={{position: 'absolute', left: imageOnLeft ? 920 : 85, right: imageOnLeft ? 70 : 970, top: 150, transform: `translateX(${(1 - enter) * (imageOnLeft ? 800 : -800)}px)`}}><div style={{display: 'inline-block', padding: '7px 16px', background: '#071b2a', color: '#fff', fontSize: 24, fontWeight: 1000, letterSpacing: '.22em'}}>{profile.role} PROFILE</div><div style={{marginTop: 24, fontSize: 142, lineHeight: .82, fontWeight: 1000, color: '#fff', textShadow: '10px 10px 0 #071b2a'}}>{profile.name}</div><div style={{marginTop: 24, fontSize: 41, fontWeight: 1000}}>{profile.jp}</div><div style={{marginTop: 40, display: 'grid', gap: 15}}>{profile.facts.map((fact, index) => <div key={fact} style={{padding: '11px 16px', background: index === 2 ? '#ffd33d' : 'rgba(255,255,255,.86)', fontSize: index === 2 ? 25 : 20, fontWeight: 900, transform: `translateX(${(1 - enter) * (index + 1) * 90}px) rotate(${index % 2 ? 1 : -1}deg)`}}>{String(index + 1).padStart(2, '0')} / {fact}</div>)}</div></div></AbsoluteFill>;
+    return <AbsoluteFill style={{background: profile.color, color: '#071b2a', fontFamily: font, overflow: 'hidden'}}><div style={{position: 'absolute', left: imageOnLeft ? 40 : 1080, top: 55, width: 800, height: 970, overflow: 'hidden', border: '12px solid #fff', boxShadow: `${imageOnLeft ? 28 : -28}px 28px 0 #071b2a`, transform: `translateX(${(1 - enter) * (imageOnLeft ? -850 : 850)}px) rotate(${imageOnLeft ? -2 : 2}deg)`}}><Img src={imagePath(profile.asset as (typeof assets)[number])} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: imageOnLeft ? '65% 50%' : '35% 50%', transform: `scale(${1.08 + pulse * .025})`}} /></div><div style={{position: 'absolute', left: imageOnLeft ? 920 : 85, right: imageOnLeft ? 70 : 970, top: 150, transform: `translateX(${(1 - enter) * (imageOnLeft ? 800 : -800)}px)`}}><div style={{display: 'inline-block', padding: '7px 16px', background: '#071b2a', color: '#fff', fontSize: 24, fontWeight: 1000, letterSpacing: '.22em'}}>{profile.role} PROFILE</div><div style={{marginTop: 24, fontSize: 142, lineHeight: .82, fontWeight: 1000, color: '#fff', textShadow: '10px 10px 0 #071b2a'}}>{profile.name}</div><div style={{marginTop: 24, fontSize: 41, fontWeight: 1000}}>{profile.jp}</div><div style={{marginTop: 40, display: 'grid', gap: 15}}>{profile.facts.map((fact, index) => <div key={fact} style={{padding: '11px 16px', background: index === 2 ? '#ffd33d' : 'rgba(255,255,255,.86)', fontSize: index === 2 ? 25 : 20, fontWeight: 900, transform: `translateX(${(1 - enter) * (index + 1) * 90}px) rotate(${index % 2 ? 1 : -1}deg)`}}>{String(index + 1).padStart(2, '0')} / {fact}</div>)}</div></div></AbsoluteFill>;
   }
   if (seconds < 9.4) {
-    return <AbsoluteFill style={{background: '#071b2a', fontFamily: font, overflow: 'hidden'}}><div style={{position: 'absolute', left: 0, top: 0, width: '52%', height: '100%', overflow: 'hidden', clipPath: 'polygon(0 0,100% 0,88% 100%,0 100%)', transform: `translateX(${(1 - enter) * -1000}px)`}}><Img src={imagePath('groom-friends')} style={{width: '100%', height: '100%', objectFit: 'cover'}} /></div><div style={{position: 'absolute', right: 0, top: 0, width: '52%', height: '100%', overflow: 'hidden', clipPath: 'polygon(12% 0,100% 0,100% 100%,0 100%)', transform: `translateX(${(1 - enter) * 1000}px)`}}><Img src={imagePath('bride-friends')} style={{width: '100%', height: '100%', objectFit: 'cover'}} /></div><div style={{position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', color: '#fff', textAlign: 'center', transform: `scale(${.55 + enter * .45 + pulse * .025})`}}><div><div style={{display: 'inline-block', padding: '5px 18px', background: '#ffd33d', color: '#071b2a', fontSize: 23, fontWeight: 1000, letterSpacing: '.2em'}}>WE ARE GETTING MARRIED</div><div style={{fontSize: 150, lineHeight: .85, fontWeight: 1000, textShadow: '10px 10px 0 #ff6b5f'}}>HARUTO<br />& AOI</div></div></div></AbsoluteFill>;
+    const [firstName, secondName] = coupleNames.display.split(' & ');
+    return <AbsoluteFill style={{background: '#071b2a', fontFamily: font, overflow: 'hidden'}}><div style={{position: 'absolute', left: 0, top: 0, width: '52%', height: '100%', overflow: 'hidden', clipPath: 'polygon(0 0,100% 0,88% 100%,0 100%)', transform: `translateX(${(1 - enter) * -1000}px)`}}><Img src={imagePath(groomProfile.asset as (typeof assets)[number])} style={{width: '100%', height: '100%', objectFit: 'cover'}} /></div><div style={{position: 'absolute', right: 0, top: 0, width: '52%', height: '100%', overflow: 'hidden', clipPath: 'polygon(12% 0,100% 0,100% 100%,0 100%)', transform: `translateX(${(1 - enter) * 1000}px)`}}><Img src={imagePath(brideProfile.asset as (typeof assets)[number])} style={{width: '100%', height: '100%', objectFit: 'cover'}} /></div><div style={{position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', color: '#fff', textAlign: 'center', transform: `scale(${.55 + enter * .45 + pulse * .025})`}}><div><div style={{display: 'inline-block', padding: '5px 18px', background: '#ffd33d', color: '#071b2a', fontSize: 23, fontWeight: 1000, letterSpacing: '.2em'}}>WE ARE GETTING MARRIED</div><div style={{fontSize: 150, lineHeight: .85, fontWeight: 1000, textShadow: '10px 10px 0 #ff6b5f'}}>{firstName ?? coupleNames.display}<br />{secondName ? `& ${secondName}` : ''}</div></div></div></AbsoluteFill>;
   }
   const count = Math.max(1, 3 - Math.floor((seconds - 9.4) / ((12.5 - 9.4) / 3)));
   return (
@@ -209,13 +264,13 @@ function Intro({seconds}: {seconds: number}) {
   );
 }
 
-function BeatGraphics({seconds}: {seconds: number}) {
-  const {pulse, beatIndex} = useBeat(seconds);
+function BeatGraphics({seconds, intensity = 1}: {seconds: number; intensity?: number}) {
+  const {pulse, beatIndex} = useBeat(seconds, intensity);
   const downbeat = beatIndex % 4 === 0;
   return <AbsoluteFill style={{pointerEvents: 'none', overflow: 'hidden'}}><div style={{position: 'absolute', inset: 0, border: `${downbeat ? 10 + pulse * 16 : 0}px solid ${['#ffd33d', '#52d9ff', '#ff6b5f'][Math.floor(beatIndex / 4) % 3]}`, opacity: downbeat ? .8 : 0}} />{[0, 1, 2, 3].map((index) => <div key={index} style={{position: 'absolute', left: 85 + index * 560, top: 100 + (index % 2) * 720, color: index % 2 ? '#ffd33d' : '#fff', fontFamily: font, fontSize: 42, lineHeight: 1, fontWeight: 1000, opacity: .34 + pulse * .35, transform: `rotate(${seconds * (index % 2 ? 90 : -90)}deg) scale(${1 + pulse * .35})`}}>＋</div>)}</AbsoluteFill>;
 }
 
-function Interlude({seconds}: {seconds: number}) {
+function Interlude({seconds, coupleNames}: {seconds: number; coupleNames: StartWeddingCoupleNames}) {
   const section = sectionAt(seconds);
   const {pulse, beatIndex} = useBeat(seconds);
   if (section.id === 'interlude-montage') {
@@ -226,7 +281,7 @@ function Interlude({seconds}: {seconds: number}) {
     const dot = cubicBezierPointAtArcProgress(routePoints, routeProgress, routeLut);
     return <><PhotoBackdrop seconds={seconds} sectionIndex={10} /><svg viewBox="0 0 1920 1080" style={{position: 'absolute', inset: 0}}><path d={routePathD(routePoints)} pathLength={1} fill="none" stroke="#ffd33d" strokeWidth="11" strokeDasharray={1} strokeDashoffset={1 - routeProgress} /><circle cx={dot.x} cy={dot.y} r={25 + pulse * 10} fill="#fff" stroke="#ff6b5f" strokeWidth="9" /></svg><div style={{position: 'absolute', left: 90, bottom: 90, color: '#fff', fontFamily: font}}><div style={{fontSize: 20, color: '#ffd33d', letterSpacing: '0.2em', fontWeight: 900}}>OUR STORY CONTINUES</div><div style={{fontSize: 82, fontWeight: 1000}}>次の景色も、一緒に。</div></div></>;
   }
-  const content = section.id === 'interlude-welcome' ? ['PLEASE GET READY', 'まもなく入場です', '拍手の準備はできていますか？'] : section.id === 'interlude-names' ? ['TODAY’S HEROES', 'HARUTO & AOI', '2026.10.24 · YOKOHAMA'] : ['LET THE PARTY BEGIN', 'さあ、最高の一日を。', 'THANK YOU FOR COMING'];
+  const content = section.id === 'interlude-welcome' ? ['PLEASE GET READY', 'まもなく入場です', '拍手の準備はできていますか？'] : section.id === 'interlude-names' ? ['TODAY’S HEROES', coupleNames.display, coupleNames.dateLabel] : ['LET THE PARTY BEGIN', 'さあ、最高の一日を。', 'THANK YOU FOR COMING'];
   return <><PhotoBackdrop seconds={seconds} sectionIndex={section.id === 'interlude-welcome' ? 11 : 12} /><div style={{position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', color: '#fff', fontFamily: font, textAlign: 'center'}}><div style={{transform: `scale(${1 + pulse * 0.035}) rotate(${Math.sin(beatIndex) * 0.4}deg)`}}><div style={{fontSize: 20, color: '#ffd33d', letterSpacing: '0.28em', fontWeight: 900}}>{content[0]}</div><div style={{fontSize: content[1].length > 15 ? 82 : 118, lineHeight: 1, fontWeight: 1000}}>{content[1]}</div><div style={{marginTop: 22, fontSize: 27, fontWeight: 800}}>{content[2]}</div></div></div><Confetti seconds={seconds} /></>;
 }
 
@@ -242,18 +297,22 @@ function FrameChrome({seconds}: {seconds: number}) {
   );
 }
 
-export function JapaneseFriendsOpeningStartSync({audioPath = null, lyricPhrases = []}: JapaneseFriendsOpeningStartSyncProps) {
+export function JapaneseFriendsOpeningStartSync({audioPath = null, lyricPhrases = [], groomProfile = defaultGroomProfile, brideProfile = defaultBrideProfile, coupleNames = defaultCoupleNames}: JapaneseFriendsOpeningStartSyncProps) {
   const frame = useCurrentFrame();
   const seconds = frame / 30;
   const section = sectionAt(seconds);
   const sectionIndex = sections.findIndex((item) => item.id === section.id);
   const isChorus = section.id === 'chorus-1' || section.id === 'chorus-2';
   const isInterlude = section.id.startsWith('interlude-');
+  const activePhrase = lyricPhrases.find((item) => seconds >= item.startSec && seconds < item.endSec);
+  const isQuietMoment = activePhrase?.rhythmType === 'quiet' || activePhrase?.selectedAnimation === 'whisper-reveal';
+  const intensity = isQuietMoment ? 0.4 : 1;
   const fadeOut = interpolate(seconds, [startWeddingEditRange.fadeOutStartSec, startWeddingEditRange.sourceEndSec], [1, 0], clamp);
   return (
     <AbsoluteFill style={{background: '#061827', opacity: fadeOut}}>
-      {section.id === 'intro' ? <Intro seconds={seconds} /> : isInterlude ? <Interlude seconds={seconds} /> : <>{isChorus ? <ChorusPanels seconds={seconds} sectionIndex={sectionIndex} /> : <PhotoBackdrop seconds={seconds} sectionIndex={sectionIndex} />}{isChorus ? <Confetti seconds={seconds} /> : null}<LyricTypography seconds={seconds} lyricPhrases={lyricPhrases} /></>}
-      <BeatGraphics seconds={seconds} />
+      {section.id === 'intro' ? <Intro seconds={seconds} groomProfile={groomProfile} brideProfile={brideProfile} coupleNames={coupleNames} /> : isInterlude ? <Interlude seconds={seconds} coupleNames={coupleNames} /> : <>{isChorus ? <ChorusPanels seconds={seconds} sectionIndex={sectionIndex} /> : <PhotoBackdrop seconds={seconds} sectionIndex={sectionIndex} intensity={intensity} />}{isChorus ? <Confetti seconds={seconds} /> : null}<LyricTypography seconds={seconds} lyricPhrases={lyricPhrases} /></>}
+      <BeatGraphics seconds={seconds} intensity={intensity} />
+      <HitFlash seconds={seconds} hits={activePhrase?.threeHitFrameSecs} />
       <FrameChrome seconds={seconds} />
       {audioPath ? <Audio src={staticFile(audioPath)} endAt={startWeddingEditDurationInFrames} volume={interpolate(seconds, [0, 0.7, startWeddingEditRange.fadeOutStartSec, startWeddingEditRange.sourceEndSec], [0, 1, 1, 0], clamp)} /> : null}
     </AbsoluteFill>

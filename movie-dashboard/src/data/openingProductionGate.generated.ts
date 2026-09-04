@@ -48,9 +48,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "okinawa-02",
@@ -58,9 +72,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "okinawa-03",
@@ -68,9 +96,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "seoul-01",
@@ -78,9 +120,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "seoul-02",
@@ -88,9 +144,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "seoul-03",
@@ -98,9 +168,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "hawaii-01",
@@ -108,9 +192,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "hawaii-02",
@@ -118,9 +216,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "hawaii-03",
@@ -128,9 +240,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": true,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "cover", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "cover",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "hero-01",
@@ -138,9 +264,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     },
     {
       "key": "hero-02",
@@ -148,9 +288,23 @@ export const openingProductionGate = {
       "path": null,
       "cropQaRequired": false,
       "humanCropQaState": "NOT_RUN",
-      "scenePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain"},
+      "scenePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain"
+      },
       "assetHint": null,
-      "effectivePresentation": {"focus": {"x": 50, "y": 50}, "fit": "contain", "focusSource": "scene", "fitSource": "scene"}
+      "effectivePresentation": {
+        "focus": {
+          "x": 50,
+          "y": 50
+        },
+        "fit": "contain",
+        "focusSource": "scene",
+        "fitSource": "scene"
+      }
     }
   ],
   "bgm": {
@@ -166,10 +320,34 @@ export const openingProductionGate = {
     "ready": false
   },
   "ambience": [
-    {"assetId": "opening-okinawa-sea", "status": "missing", "playable": false, "fileExists": false, "ready": false},
-    {"assetId": "opening-seoul-street", "status": "missing", "playable": false, "fileExists": false, "ready": false},
-    {"assetId": "opening-hawaii-ocean", "status": "missing", "playable": false, "fileExists": false, "ready": false},
-    {"assetId": "opening-arrival-roomtone", "status": "missing", "playable": false, "fileExists": false, "ready": false}
+    {
+      "assetId": "opening-okinawa-sea",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    },
+    {
+      "assetId": "opening-seoul-street",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    },
+    {
+      "assetId": "opening-hawaii-ocean",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    },
+    {
+      "assetId": "opening-arrival-roomtone",
+      "status": "missing",
+      "playable": false,
+      "fileExists": false,
+      "ready": false
+    }
   ],
   "finalBlocked": true,
   "nextAction": "node --no-warnings scripts/intake-production-media.mts --project opening --source \"/ABS/PATH/TO/opening-media\"",

@@ -1,0 +1,17 @@
+# StaRt Wedding Edit 音声解析用のPython依存(バージョン固定)。
+# セットアップ:
+#   python3 -m venv local/analysis/venv
+#   source local/analysis/venv/bin/activate
+#   pip install -r scripts/analysis-requirements.txt
+#
+# venv自体はlocal/配下(Git管理外)。このrequirementsファイルだけGit管理する。
+# 既存のnpm/pnpmエコシステムとは独立したPython仮想環境であり、
+# システムPython(Homebrew管理、externally-managed-environment)を汚さない。
+
+numpy<3
+scipy
+soundfile
+librosa
+torch
+torchaudio
+demucs==4.1.0

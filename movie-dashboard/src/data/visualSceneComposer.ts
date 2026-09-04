@@ -17,11 +17,13 @@ export type ScenePrimarySubject = "IMAGE" | "TEXT" | "MULTI_IMAGE" | "TRANSITION
 export type SceneComplexity = "CALM" | "BALANCED" | "BUSY";
 export type SceneInstanceStatus = "ADOPTED" | "LOCKED" | "REVIEW";
 
+// recipeId/label/patternId are widened to string so a SceneInstance can record provenance for
+// any composable pattern (Mask Reveal, Word Punch, Small Push, ...), not only Mask Reveal.
 export interface MaskRevealSceneRecipe {
-  recipeId: "scene-recipe-mask-reveal-hero-v1";
+  recipeId: string;
   revision: 1;
-  label: "Hero Photo + Mask Reveal";
-  patternId: "type-mask-reveal";
+  label: string;
+  patternId: string;
   primarySubject: "IMAGE";
   secondarySubject: "TEXT";
   authority: "EDITABLE_DEFAULT_ONLY";
@@ -119,15 +121,23 @@ export function computeMaskRevealSceneDuration(intent: MaskRevealEditableIntent)
     value.enterDurationSeconds +
     value.holdDurationSeconds +
     value.exitDurationSeconds;
+  // Independent image layer: only counts toward the Scene when a separate image pattern is
+  // actually selected (imagePatternId !== ""). Otherwise the image is just a static backdrop for
+  // the text layer and contributes no structural end of its own.
+  const hasImageLayer = value.imagePatternId !== "";
+  const imageStructuralEnd = hasImageLayer ? value.imageMotionDurationSeconds : 0;
 
-  // IMAGE/VIDEO remains visible for the human target duration.
-  // If text timing runs longer, expose the structural difference instead of silently truncating human choices.
-  const computedDurationSeconds = Number(Math.max(value.sceneDurationSeconds, textStructuralEnd).toFixed(3));
+  // Scene duration = the longer of: human Target, text layer's structural end, image layer's
+  // motion duration. If either layer runs longer than Target, expose the difference instead of
+  // silently truncating either layer's human-set timing.
+  const computedDurationSeconds = Number(Math.max(value.sceneDurationSeconds, textStructuralEnd, imageStructuralEnd).toFixed(3));
   return {
     targetDurationSeconds: Number(value.sceneDurationSeconds.toFixed(3)),
     computedDurationSeconds,
     durationDeltaSeconds: Number((computedDurationSeconds - value.sceneDurationSeconds).toFixed(3)),
     textStructuralEndSeconds: Number(textStructuralEnd.toFixed(3)),
+    imageStructuralEndSeconds: Number(imageStructuralEnd.toFixed(3)),
+    longerLayer: (imageStructuralEnd > textStructuralEnd ? "IMAGE" : textStructuralEnd > 0 ? "TEXT" : "NONE") as "IMAGE" | "TEXT" | "NONE",
   };
 }
 
@@ -143,10 +153,23 @@ function refreshSceneDerivedState(scene: MaskRevealSceneInstance, editableIntent
   };
 }
 
+function recipeForIntent(intent: MaskRevealEditableIntent): MaskRevealSceneRecipe {
+  if (intent.patternId === maskRevealHeroSceneRecipe.patternId) return maskRevealHeroSceneRecipe;
+  return {
+    recipeId: `scene-recipe-${intent.patternId}-v1`,
+    revision: 1,
+    label: `Hero Photo + ${intent.davinciImplementation.detailLabel}`,
+    patternId: intent.patternId,
+    primarySubject: "IMAGE",
+    secondarySubject: "TEXT",
+    authority: "EDITABLE_DEFAULT_ONLY",
+  };
+}
+
 export function adoptMaskRevealScene(
   sourceIntent: MaskRevealEditableIntent,
   sceneId = createSceneId(),
-  recipe: MaskRevealSceneRecipe = maskRevealHeroSceneRecipe,
+  recipe: MaskRevealSceneRecipe = recipeForIntent(sourceIntent),
   createdAt = nowIso(),
 ): MaskRevealSceneInstance {
   const editableIntent = cloneEditableIntent(sourceIntent);
@@ -404,6 +427,31 @@ export function retargetSceneInstanceSection(
   return replaceSceneInState(state, sceneId, (scene) => retargetMaskRevealSceneSection(scene, section));
 }
 
+// Backfills fields added to MaskRevealEditableFields/MaskRevealEditableIntent after a scene was
+// already persisted to localStorage (e.g. the independent image-layer fields). Without this, an
+// older saved scene missing a newer field crashes the whole Composer on load (reading
+// `.humanSelectedValue` off `undefined`) instead of just missing that one feature.
+function migrateEditableIntent(intent: MaskRevealEditableIntent): MaskRevealEditableIntent {
+  const fields = intent.fields as Partial<MaskRevealEditableIntent["fields"]>;
+  const missingImagePatternId = fields.imagePatternId === undefined;
+  const missingImageDuration = fields.imageMotionDurationSeconds === undefined;
+  if (!missingImagePatternId && !missingImageDuration && intent.imageImplementation !== undefined) return intent as MaskRevealEditableIntent;
+  return {
+    ...intent,
+    fields: {
+      ...intent.fields,
+      imagePatternId: fields.imagePatternId ?? { defaultValue: "", aiSuggestedValue: null, aiReason: null, humanSelectedValue: null, locked: false },
+      imageMotionDurationSeconds: fields.imageMotionDurationSeconds ?? { defaultValue: 4, aiSuggestedValue: null, aiReason: null, humanSelectedValue: null, locked: false },
+    },
+    imageImplementation: intent.imageImplementation ?? null,
+  };
+}
+
+function migrateSceneInstance(scene: MaskRevealSceneInstance): MaskRevealSceneInstance {
+  const migratedIntent = migrateEditableIntent(scene.editableIntent);
+  return migratedIntent === scene.editableIntent ? scene : { ...scene, editableIntent: migratedIntent };
+}
+
 export function loadMotionZukanComposerState(): MotionZukanComposerState {
   if (typeof localStorage === "undefined") return emptyMotionZukanComposerState();
   try {
@@ -413,7 +461,7 @@ export function loadMotionZukanComposerState(): MotionZukanComposerState {
     if (parsed.schemaVersion !== "motion-zukan-composer-state/v1" || !Array.isArray(parsed.scenes) || !Array.isArray(parsed.timelines)) {
       return emptyMotionZukanComposerState();
     }
-    return rebuildTimelines(parsed);
+    return rebuildTimelines({ ...parsed, scenes: parsed.scenes.map(migrateSceneInstance) });
   } catch {
     return emptyMotionZukanComposerState();
   }

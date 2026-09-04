@@ -69,8 +69,8 @@ for (const token of [
   "DndContext",
   "SortableContext",
   "toggleSceneAssetAssignment",
-  "HUMAN_SELECTED",
-  "LOCKED",
+  "選択済み",
+  "固定中",
 ]) requireText(ui, token, `Production workspace UI contract missing: ${token}`);
 
 for (const token of [

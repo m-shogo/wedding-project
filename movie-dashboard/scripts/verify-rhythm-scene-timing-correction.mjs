@@ -20,7 +20,8 @@ requireText(timing, "旧route / Role / render / reelはstale", "stale downstream
 requireText(handoff, '<RhythmSceneTimingCorrectionCard scene={scene} />', "Handoff mount");
 requireText(composer, "return rebuildTimelines", "timeline rebuild authority");
 requireText(composer, "updatedAt", "Scene revision authority");
-requireText(focus, '"DURATION" | "PACING"', "focus axis authority");
+requireText(focus, '| "DURATION"', "focus axis authority (DURATION)");
+requireText(focus, '| "PACING"', "focus axis authority (PACING)");
 
 for (const forbidden of [
   'remotionStudioGuiActual: "PASS"',

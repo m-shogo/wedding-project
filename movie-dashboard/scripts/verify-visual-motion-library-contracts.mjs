@@ -40,11 +40,14 @@ requireAll(data, [
 
 requireAll(handoff, [
   'schemaVersion: "motion-handoff/v1"', 'expectedFormat: "NLE_XML"', 'xmlGeneratedExternally: true',
-  'companionFileName: "palmier-mask-reveal-timeline.xml"', 'markerIdFor', '`VML_MASK_REVEAL_${section}`',
+  'companionFileName: `palmier-${patternId}-timeline.xml`', 'markerIdFor', '`VML_${slug}_${section}`',
   'buildMaskRevealExecutionOutputs', 'nleXmlHandoff', 'verificationChecklist',
-  'implementationId: "impl-type-mask-reveal-davinci-text-plus"', '"opened-in-davinci"', '"render-tested"',
+  // patternId/implementationId are now taken from MaskRevealPromptInput (any registered
+  // PRODUCTION_READY pattern, not only type-mask-reveal) so this checks the fallback default
+  // used when a caller omits them, not a hardcoded literal in the manifest itself.
+  'implementationId ?? "impl-type-mask-reveal-davinci-text-plus"', '"opened-in-davinci"', '"render-tested"',
   '"visual-QA"', '"resolve-version-recorded"', 'canonicalTarget: "ACTUAL_DAVINCI_RENDER"', 'productionReady: false',
-  'schemaVersion: "motion-verification/v1"', 'sampleAssetSetId: "sample-typography-welcome-v1"',
+  'schemaVersion: "motion-verification/v1"', 'sampleAssetSetId: "sample-generic-hero-photo-v1"',
   'status: "PENDING_LOCAL_DAVINCI"', 'targetPreviewSourceType: "ACTUAL_DAVINCI_RENDER"',
   'candidatePreviewAssetPath: null', 'renderSha256: null', 'visualQa1x: false', 'visualQaHalfSpeed: false',
   'sampleAssetSetMatched: false', 'conceptPreviewKeptSeparate: false', 'false/nullの未確認項目が残る間はProduction Readyへ昇格しない',
@@ -71,7 +74,7 @@ requireAll(production, [
 ], "Human-editable production bridge missing");
 
 requireAll(workspace, [
-  'モーション図鑑 / HUMAN MASTER', 'かんたん', '詳細', 'DaVinci', 'AI Suggested:', 'Reason:', 'Human Selected:', 'LOCKED 🔒',
+  'モーション図鑑 / HUMAN MASTER', 'かんたん', '詳細', 'DaVinci', 'AI提案:', '理由:', '選択済み:', '固定中 🔒',
   'Scene Duration', 'Layer Delay', 'Motion Delay', 'Motion Duration', 'Hold', 'Stagger Delay', 'Distance', 'Scale From',
   'AI指示を作る', 'Human Brief', 'Claude Creative Instruction', 'Palmier Instruction', 'NLE XML Handoff',
   'DaVinci Finish Manifest', 'Verification Checklist', 'Editable Scene Serialization (JSON)', 'Machine JSON',
@@ -122,8 +125,8 @@ if (handoff.includes("MOTION:type-mask-reveal") || page.includes("MOTION:type-ma
 if (workspace.includes('label="Editable Source of Truth JSON"')) errors.push("JSON serialization must not be presented to the user as the Source of Truth");
 
 requireAll(page, [
-  'Native App Actual 3件を、検証根拠と一緒に公開する',
-  'Mask RevealとQuiet CaptionはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み',
+  'Native App Actual 10件を、検証根拠と一緒に公開する',
+  'Mask Reveal・Quiet Caption・Static Hero・Word Punch・Small Push・Slow Pull・Gentle Pan・Flash Soft・Char StaggerはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み',
   '人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本', 'MaskRevealEditableWorkspace',
   'CONCEPT PREVIEW / 実装確認前', 'JUST-IN-TIME LEARNING', 'この演出で学べること', 'getMotionLearningBundle(pattern.id)',
   'learning.fusionRecipes.map', 'getLatestPreviewEvidence(preview.id)', 'ACTUAL ${actualRenderLabel(previewEvidence.sourceType)} RENDER QA ✓ / IMPLEMENTATION EVIDENCE',
@@ -185,4 +188,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Visual Motion Library contracts OK (${actualMediaState.mode === "COMPLETE" ? "media verified" : "code-only; local media absent"}): 3 native-app Actuals, 2 source-media Actual TESTED renders, independent pixel-oracle evidence, and separate Concept assets are registered; Human Master Scene values remain the source of truth.`);
+console.log(`Visual Motion Library contracts OK (${actualMediaState.mode === "COMPLETE" ? "media verified" : "code-only; local media absent"}): 10 native-app Actuals (mask-reveal, quiet-caption, cut-hard-accent, photo-static-hero, type-word-punch, photo-small-push, photo-slow-pull, photo-directional-pan, flash-one-frame-soft, type-char-stagger), 2 source-media Actual TESTED renders, independent pixel-oracle evidence, and separate Concept assets are registered; Human Master Scene values remain the source of truth.`);

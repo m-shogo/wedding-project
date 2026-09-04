@@ -16,12 +16,12 @@ export const startSyncListeningReviewGate = {
   "productionReady": false,
   "manifest": {
     "path": "movie-dashboard/public/demo-renders/japanese-friends-opening-start-sync-v1.manifest.json",
-    "sha256": "2560ce2fcf2016b767ab56a126c7cc34d3fbe5437a98bd2dae0ff98a27603bde",
-    "generatedAt": "2026-08-31T13:14:58.150Z",
+    "sha256": "2ba616fa6cbf2dce5fc6879a43c13f8bcede53607e541da4d5e777b2f2308200",
+    "generatedAt": "2026-09-01T06:01:16.670Z",
     "artifact": {
       "file": "japanese-friends-opening-start-sync-v1.mp4",
-      "sha256": "d585d11c09f59f03d5216c87034b0e0c0afec7c143ea66da81fb455696d0d458",
-      "byteSize": 243627709
+      "sha256": "6c8a4d88a7e9a376c30e581fb618e3533330f1916e418eeb3bfba34dfb2f212e",
+      "byteSize": 201364403
     },
     "source": {
       "title": "StaRt",

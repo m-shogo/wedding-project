@@ -74,7 +74,7 @@ export function MaskRevealSceneHandoffCard({ scene }: { scene: MaskRevealSceneIn
         </div>
         <div className="flex flex-wrap gap-2 shrink-0">
           <button type="button" onClick={() => void copyJson()} className="border border-violet-300 dark:border-violet-800 px-2.5 py-1.5 text-[10px] font-semibold text-violet-700 dark:text-violet-300">
-            {copied ? "COPIED ✓" : "Sidecar JSONをコピー"}
+            {copied ? "コピー済み ✓" : "Sidecar JSONをコピー"}
           </button>
           <button type="button" onClick={exportJson} className="border border-sand-300 dark:border-navy-600 px-2.5 py-1.5 text-[10px] font-semibold text-navy-600 dark:text-navy-300">
             Sidecar JSONを書き出す

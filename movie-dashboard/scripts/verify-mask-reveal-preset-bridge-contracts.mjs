@@ -41,7 +41,7 @@ for (const token of [
 ]) requireText(bridge, token, `Preset/DaVinci bridge missing: ${token}`);
 
 for (const token of [
-  'Preset First → Accordion Detail → DaVinci Final Precision',
+  'まず「かんたん」で選ぶだけで成立し、必要な時だけ「詳細」「DaVinci」で数字まで降りられます。',
   '文字を出すタイミング',
   'layerDelayPresetOptions',
   'positionPresetOptions',

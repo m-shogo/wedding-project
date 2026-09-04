@@ -212,6 +212,21 @@ Later（正規音源・実写真が来てから）:
 - 実写真が来たら、Director Recipe Previewのプレースホルダー（`DemoBackdrop` / `REAL PHOTO / VIDEO
   SLOT`）をsource slotへ差し替える（現状はダミー素材のみのMEDIA_BLOCKED状態）。
 
+## StaRt Wedding Edit（feature/start-129-three-showcases、比較研究ブランチ）
+
+Extended/Shortとは別枠の研究branch。曲頭〜2番サビ後の間奏まで(実測145.6秒)を
+実音源・実歌詞・Palmier Pro on-device beat detectionで音楽主導のA/B/C 3案として
+実装している。詳細は `docs/decisions/2026-08-25-start-wedding-edit-scope-change.md`。
+
+2026-08-26時点:
+
+- 冒頭は「ようこそ」ではなく実測beatに同期した「S→StaRt」文字組み立てへ再構築済み
+- 歌詞30 phraseすべてにselectedAnimation(12種類使用、character-build 20%)を明示付与
+- Palmier Proのbeat detection(bpm=187.5実測)で3-hit等の主要点を実測beatへスナップ
+- 誰も音声付きで通し視聴による最終確認はしていない（humanReviewRequired=true）
+- render: `motion-studio/out/start-wedding-edit-final-v2/`
+- 未pushのローカルブランチ。mainへは影響しない
+
 ## Legacy / Reference
 
 以下は過去検討として残すが、現在の制作指示には使わない:
@@ -225,7 +240,8 @@ Later（正規音源・実写真が来てから）:
 ## Blocked / Human input
 
 - Opening用の実写真11枚
-- BGM候補と上映/SNSの利用条件
 - 会場の最終納品仕様
+
+**StaRt音源は解消済み(2026-09-03)**：`motion-studio/local/audio/StaRt.m4a`(権利確認済みローカル音源)が存在し、`feature/start-129-three-showcases`branchのmergeで実歌詞30 phrase・beat/word-accent解析データもこのbranchへ入った。うち11/30 phraseは人間の聴取確認(`listening-decisions.local.json`、`verifiedBy: "m-shogo"`)まで完了。残り19/30と終了位置(`verifiedByListening=false`)は`/lyric-timing`(Lyric Timing Studio)で引き続き人間が耳で確認する必要がある。BGM候補と上映/SNS利用条件はこのStaRt音源の話とは別枠(会場BGM・入場曲等)として残っている場合は改めて確認。
 
 それ以外のコード・QA・差し替え基盤は人間確認待ちにせず進める。

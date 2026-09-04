@@ -1,4 +1,5 @@
 import { startMotionPresets, type StartMotionPreset } from "./startMotionKit";
+import type { ComposablePatternInfo, MaskRevealSection } from "./humanEditableMotionIntent";
 
 export type MotionPatternCategory =
   | "TYPOGRAPHY"
@@ -158,9 +159,13 @@ export interface MotionPreviewRecord {
 export interface MaskRevealPromptInput {
   text: string;
   mediaLabel?: string;
-  section: "OPENING_INTRO" | "OPENING_CHORUS" | "PROFILE_CHAPTER" | "PROFILE_COUPLE_STORY";
+  section: MaskRevealSection;
   intensity: "S" | "M" | "L";
   durationSeconds: number;
+  // Optional so existing type-mask-reveal-only callers keep working unchanged.
+  // Any other pattern with a registered PRODUCTION_READY implementation can pass its own IDs.
+  patternId?: string;
+  implementationId?: string;
 }
 
 export interface MotionPromptOutputs {
@@ -606,6 +611,20 @@ function kitPresetToPattern(preset: StartMotionPreset): MotionPatternRecord {
           ? ["preview-cut-match-shape-source-actual", "preview-cut-match-shape-concept"]
           : preset.id === "whip-source-matched"
             ? ["preview-whip-source-matched-source-actual", "preview-whip-source-matched-concept"]
+            : preset.id === "photo-static-hero"
+              ? ["preview-photo-static-hero-davinci-actual", "preview-photo-static-hero-concept"]
+              : preset.id === "type-word-punch"
+                ? ["preview-type-word-punch-davinci-actual", "preview-type-word-punch-concept"]
+                : preset.id === "photo-small-push"
+                  ? ["preview-photo-small-push-davinci-actual", "preview-photo-small-push-concept"]
+                  : preset.id === "photo-slow-pull"
+                    ? ["preview-photo-slow-pull-davinci-actual", "preview-photo-slow-pull-concept"]
+                    : preset.id === "photo-directional-pan"
+                      ? ["preview-photo-directional-pan-davinci-actual", "preview-photo-directional-pan-concept"]
+                    : preset.id === "flash-one-frame-soft"
+                    ? ["preview-flash-one-frame-soft-davinci-actual", "preview-flash-one-frame-soft-concept"]
+                    : preset.id === "type-char-stagger"
+                      ? ["preview-type-char-stagger-davinci-actual", "preview-type-char-stagger-concept"]
         : [`preview-${preset.id}-concept`],
     reuseEvidence: {
       searchedExistingPatterns: true,
@@ -718,6 +737,108 @@ function kitPresetToImplementation(preset: StartMotionPreset): MotionImplementat
       notes: "専用Resolve projectで1280x720 / 24fps / 95framesを構築。Text+単体ではなくFusion Merge後のEXR 118framesをResolve Saverで実Renderし、その先頭95framesをH.264へ収録。ffprobe・SHA-256・frame 0/5/11/50/94 pixel oracle・通常速度目視QAを通過。位置/scale motionはなくBlendだけが0→1へ変化する。",
     };
   }
+  if (preset.id === "type-char-stagger") {
+    return {
+      id: "impl-type-char-stagger",
+      patternId: "type-char-stagger",
+      kind: "DAVINCI_TEXT_PLUS",
+      status: "PRODUCTION_READY",
+      method: "文字ごとに独立したText+ + Mergeを直列合成し、Mergeそれぞれのblendを異なる開始frameでkeyframeして時間差を作る。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve projectで1280x720 / 24fps timelineへFusion Saver(EXR)を直接render。H(frame0→4)/I(6→10)/!(12→16)の3文字を個別のText+ + MergeでBlend keyframeし、frame2/20の目視で時間差の立ち上がりを確認済み。BezierSplineは最初のkeyframe手前を接線で外挿するため、後発文字にわずかな早期フェードインが乗る(次回はEase-Inで補正余地あり)。",
+    };
+  }
+  if (preset.id === "flash-one-frame-soft") {
+    return {
+      id: "impl-flash-one-frame-soft",
+      patternId: "flash-one-frame-soft",
+      kind: "DAVINCI_FUSION",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve FusionのBackground(白)をMergeでBlend合成し、カット点付近だけBlendを0→0.85→0で素早く往復させるソフトフラッシュ。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve projectで1280x720 / 30fps timelineへFusion Saver(EXR)を直接render。Blend 0(frame24)→0.85(frame27)→0(frame30)の3frame往復。frame24/27の目視で通常画→白フラッシュの切り替わりを確認済み。",
+    };
+  }
+  if (preset.id === "photo-small-push") {
+    return {
+      id: "impl-photo-small-push",
+      patternId: "photo-small-push",
+      kind: "DAVINCI_FUSION",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Fusion Transformを写真クリップへ適用し、Sizeだけを1.00→1.05でframe 0〜119へ線形keyframe。位置・回転は固定。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve projectで1280x720 / 30fps timelineへFusion Saver(EXR)を直接render。Transform.Sizeを0(1.00)→119(1.05)でkeyframe。frame0/118のpixel差分(サンプリング平均abs diff 1.4→17.2、watermark帯の見かけ幅拡大)で寄りを確認済み。Deliverページのタイムラインrenderはこのproject構成でTransform keyframeを反映しない既知の不具合があったため、Fusion内蔵Saverでの直接renderに切り替えた。",
+    };
+  }
+  if (preset.id === "photo-directional-pan") {
+    return {
+      id: "impl-photo-directional-pan",
+      patternId: "photo-directional-pan",
+      kind: "DAVINCI_FUSION",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Fusion TransformのCenter(X)をGUI上でkeyframe(0.44→0.56、frame 0〜119)。Sizeは1.12固定でoverscanを確保し、pan中に透明な余白が出ないようにする。位置以外は固定。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve project (MotionZukan_GentlePan_Actual_20260902_Claude)で1280x720 / 30fps timelineへFusion Saver(EXR)を直接render。過去にComp Lua scriptでCenter(Point型入力)をcomp:BezierSpline()でkeyframeしようとして失敗した経緯があるため、今回はDaVinciのInspector上でCenter Xを直接右クリック→アニメートしてGUI keyframeを作成(frame0で0.44、frame119で0.56)。frame0/119のpixel差分(mean 48.41、max 255)で、水平方向の大きな移動を確認した(push/pull系の差分(mean 17前後)より大きいのはpanが画面全体を水平移動させるため妥当)。Deliverページのタイムラインrenderはこのproject構成でFusion keyframeを反映しない既知の不具合があったため、Fusion内蔵Saverでの直接renderに切り替えた。",
+    };
+  }
+  if (preset.id === "photo-slow-pull") {
+    return {
+      id: "impl-photo-slow-pull",
+      patternId: "photo-slow-pull",
+      kind: "DAVINCI_FUSION",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Fusion Transformを写真クリップへ適用し、Sizeだけを1.06→1.00でframe 0〜119へ線形keyframe(photo-small-pushと同じ機構を逆方向に使用)。位置・回転は固定。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve project (MotionZukan_SlowPull_Actual_20260902_Claude)で1280x720 / 30fps timelineへFusion Saver(EXR)を直接render。Transform.Sizeを0(1.06)→119(1.00)でkeyframe。GetInput readbackでSIZE_AT_0=1.06 / SIZE_AT_119=1を確認。frame0/119のpixel差分(mean 17.46、max 244)はphoto-small-pushの確認済み差分(mean 17.2、max 217)と同水準で、静止フレームではないことを確認した。",
+    };
+  }
+  if (preset.id === "photo-static-hero") {
+    return {
+      id: "impl-photo-static-hero",
+      patternId: "photo-static-hero",
+      kind: "DAVINCI_EDIT_NATIVE",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Edit page native timeline。写真/動画クリップをそのままappendし、pan・zoom・keyframeを一切追加しない。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve project (MotionZukan_HeroStill_Actual_20260901_Claude) で1280x720 / 30fps timelineへrepo-stock-v1.mp4を120frame(4.0秒)appendしただけの状態でDeliverから実Render。Fusion/Text+/keyframeは未使用。ffprobeでh264 1280x720 30fps 4.032秒を確認済み。デモstock素材のため本人写真での最終採用判断は別ゲート。",
+    };
+  }
   if (preset.id === "cut-match-shape" || preset.id === "whip-source-matched") {
     const isMatchShape = preset.id === "cut-match-shape";
     return {
@@ -738,6 +859,23 @@ function kitPresetToImplementation(preset: StartMotionPreset): MotionImplementat
       notes: isMatchShape
         ? "1280x720 / 30fps / 90framesのsource-media Actual renderでframe 44→45を検証。太陽中心は(646,284)→(643,300)、cut差分49.91、同一shot内差分2.10/2.80で、crossfadeなしのshape matchを確認した。"
         : "1280x720 / 30fps / 24framesのsource-media Actual renderで、cut前後の水平shiftを-164px / -112pxと測定。両shotとも背景が左へ流れ、frame 11→12は補間なしで切り替わる。アプリ固有操作ではなく素材適合性のTESTED証拠。",
+    };
+  }
+  if (preset.id === "type-word-punch") {
+    return {
+      id: "impl-type-word-punch",
+      patternId: "type-word-punch",
+      kind: "DAVINCI_TEXT_PLUS",
+      status: "PRODUCTION_READY",
+      method: "DaVinci Resolve Text+をFusion Mergeへ合成し、Blendだけを0→1→0で高速に往復させる単発パンチ。位置・scaleは固定。",
+      artifactType: "NONE",
+      artifactPath: null,
+      installed: true,
+      tested: true,
+      resolveVersion: "21.0.4.5",
+      studioRequired: false,
+      verified: true,
+      notes: "専用Resolve projectで1280x720 / 24fps timelineへFusion Saver(EXR)を直接render。Blend 0(frame0)→1(frame2)→1(frame8)→0(frame11)の単発パンチをffmpegでH.264化。frame0/2/11で無地/GO!表示/無地を目視確認済み。Deliverページのタイムラインrenderはこのproject構成でFusion効果を反映しない既知の不具合があったため、Fusion内蔵Saverでの直接renderに切り替えた。",
     };
   }
   const implementationTested = TESTED_REMOTION_IMPLEMENTATIONS.has(preset.id);
@@ -906,6 +1044,118 @@ motionPreviews.push({
   verified: true,
   notes: "異なる列車窓動画の実camera motion区間をframe 12でnative cut。前後とも背景が左へ流れることをpixel shiftで確認した。本人素材の採用承認やProduction Authorityではない。",
 });
+motionPreviews.push({
+  id: "preview-photo-static-hero-davinci-actual",
+  patternId: "photo-static-hero",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/photo-static-hero/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/photo-static-hero/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Edit page timeline (no Fusion/keyframes) / Deliver page render",
+  generatedAt: "2026-09-01T15:30:00+09:00",
+  implementationId: "impl-photo-static-hero",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "repo-stock-v1.mp4を1280x720 / 30fps timelineへ120frame(4.0秒)appendしただけの静止Hero。pan/zoom/keyframeは一切追加していない。ffprobeでh264 1280x720 30/1 4.032秒を確認済み。デモstock素材のため本人写真での最終採用判断は別ゲート。",
+});
+motionPreviews.push({
+  id: "preview-type-word-punch-davinci-actual",
+  patternId: "type-word-punch",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/type-word-punch/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/type-word-punch/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Text+ + Merge / Saver EXR render",
+  generatedAt: "2026-09-01T15:50:00+09:00",
+  implementationId: "impl-type-word-punch",
+  sampleAssetSetId: "sample-generic-typography-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "GO!をBlend 0→1(frame2)→1(frame8)→0(frame11)で単発パンチ表示。位置・サイズは固定でBlendのみ動く。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化し、frame0/2/11の目視で無地→パンチ→無地の切り替わりを確認済み。",
+});
+motionPreviews.push({
+  id: "preview-photo-small-push-davinci-actual",
+  patternId: "photo-small-push",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/photo-small-push/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/photo-small-push/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Transform / Saver EXR render",
+  generatedAt: "2026-09-01T16:05:00+09:00",
+  implementationId: "impl-photo-small-push",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "Transform.Sizeを1.00(frame0)→1.05(frame119)で線形push。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化。frame0/118のサンプリング平均pixel差分1.4→17.2(max 217)で寄りを確認済み。",
+});
+motionPreviews.push({
+  id: "preview-photo-slow-pull-davinci-actual",
+  patternId: "photo-slow-pull",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/photo-slow-pull/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/photo-slow-pull/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Transform / Saver EXR render",
+  generatedAt: "2026-09-02T00:27:00+09:00",
+  implementationId: "impl-photo-slow-pull",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "Transform.Sizeを1.06(frame0)→1.00(frame119)で線形pull(photo-small-pushの逆方向)。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化。GetInput readbackでSIZE_AT_0=1.06/SIZE_AT_119=1を確認、frame0/119のpixel差分(mean 17.46、max 244)で引きを確認済み。",
+});
+motionPreviews.push({
+  id: "preview-photo-directional-pan-davinci-actual",
+  patternId: "photo-directional-pan",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/photo-directional-pan/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/photo-directional-pan/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Transform (GUI keyframe) / Saver EXR render",
+  generatedAt: "2026-09-03T13:01:00+09:00",
+  implementationId: "impl-photo-directional-pan",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "Transform.Centerの X を0.44(frame0)→0.56(frame119)でDaVinci Inspector上のGUI keyframeとして直接設定(Point型入力はcomp:BezierSpline()での script keyframe化に失敗した実績があるため今回はGUI操作)。Sizeは1.12固定でoverscan確保、pan中も透明な余白が出ないことを目視確認。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化。frame0/119のpixel差分(mean 48.41、max 255)で水平方向の大きな移動を確認済み。",
+});
+motionPreviews.push({
+  id: "preview-flash-one-frame-soft-davinci-actual",
+  patternId: "flash-one-frame-soft",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/flash-one-frame-soft/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/flash-one-frame-soft/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native Fusion Background + Merge / Saver EXR render",
+  generatedAt: "2026-09-01T16:09:00+09:00",
+  implementationId: "impl-flash-one-frame-soft",
+  sampleAssetSetId: "sample-generic-hero-photo-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "白Backgroundとの合成をBlend 0(frame24)→0.85(frame27)→0(frame30)で往復させたソフトフラッシュ。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化し、frame24/27の目視で切り替わりを確認済み。",
+});
+motionPreviews.push({
+  id: "preview-type-char-stagger-davinci-actual",
+  patternId: "type-char-stagger",
+  sourceType: "ACTUAL_DAVINCI_RENDER",
+  status: "VERIFIED",
+  freshness: "CURRENT",
+  assetPath: "/motion-previews/type-char-stagger/davinci-actual-v1.mp4",
+  posterPath: "/motion-previews/type-char-stagger/davinci-actual-v1-poster.png",
+  generatedBy: "DaVinci Resolve Free 21.0.4.5 / native 3x Fusion Text+ + Merge chain / Saver EXR render",
+  generatedAt: "2026-09-01T16:25:00+09:00",
+  implementationId: "impl-type-char-stagger",
+  sampleAssetSetId: "sample-generic-typography-v1",
+  resolveVersion: "21.0.4.5",
+  verified: true,
+  notes: "H/I/!の3文字をそれぞれ別のText+ + Mergeで直列合成し、Blendの開始frameを0/6/12へずらして立ち上げ。Resolve Fusion Saverの直接EXR出力をffmpegでH.264化。frame2/20の目視で時間差の立ち上がりを確認済み。",
+});
 motionPreviews.push(...kitPatternsExcludingMaskSlide.map(kitPresetToPreview));
 
 export function searchMotionPatterns(query: string) {
@@ -947,28 +1197,30 @@ function clampMaskRevealInput(input: MaskRevealPromptInput): MaskRevealPromptInp
 export function buildMaskRevealPromptOutputs(rawInput: MaskRevealPromptInput): MotionPromptOutputs {
   const input = clampMaskRevealInput(rawInput);
   const media = input.mediaLabel?.trim() || "選択したHero写真";
+  const patternId = input.patternId ?? "type-mask-reveal";
+  const implementationId = input.implementationId ?? "impl-type-mask-reveal-davinci-text-plus";
   const manifest = {
-    patternId: "type-mask-reveal",
+    patternId,
     text: input.text,
     media: media,
     section: input.section,
     durationSeconds: input.durationSeconds,
     intensity: input.intensity,
     palmierCapability: "PALMIER_TIMING_ONLY",
-    davinciImplementationId: "impl-type-mask-reveal-davinci-text-plus",
+    davinciImplementationId: implementationId,
     avoid: ["bounce", "glow", "excessive-motion-blur", "covering-subject-face", "effect-for-effect"],
   } as const;
 
   return {
     humanBrief: [
       `${input.section}で ${media} を使用。`,
-      `「${input.text}」を ${input.durationSeconds.toFixed(1)}秒程度のMask Revealで表示する。`,
+      `「${input.text}」を ${input.durationSeconds.toFixed(1)}秒程度の${patternId}で表示する。`,
       `強さは${input.intensity}。写真と可読性を主役にし、文字は境界からスッと現れて静かに止める。`,
       "禁止: bounce / glow / 強すぎるmotion blur / 顔を覆う配置 / effect-for-effect。",
     ].join("\n"),
     claudeCreativeInstruction: [
       "Use exactly this registered motion pattern:",
-      "- type-mask-reveal",
+      `- ${patternId}`,
       `Text: ${input.text}`,
       `Media: ${media}`,
       `Section: ${input.section}`,
@@ -983,7 +1235,7 @@ export function buildMaskRevealPromptOutputs(rawInput: MaskRevealPromptInput): M
       `Place title: ${input.text}`,
       `Reserve approximately ${input.durationSeconds.toFixed(1)} sec for the title reveal timing.`,
       "Palmier responsibility is rough timing and placement only for this pattern.",
-      "If exact Mask Reveal cannot be reproduced natively, do not invent a substitute effect.",
+      `If exact ${patternId} cannot be reproduced natively, do not invent a substitute effect.`,
       "Leave timing/placement ready for DaVinci finishing and preserve the marker in the handoff.",
     ].join("\n"),
     davinciFinishManifest: [
@@ -1008,4 +1260,68 @@ export function getPatternImplementation(pattern: MotionPatternRecord) {
 
 export function getPatternPreview(pattern: MotionPatternRecord) {
   return motionPreviews.find((item) => pattern.previewIds.includes(item.id));
+}
+
+// Patterns the Scene Composer can actually drive end-to-end (register text/media -> generate
+// Human Brief / Palmier Instruction / DaVinci Finish Manifest -> adopt as a Scene). Limited to
+// PRODUCTION_READY implementations so the Composer never lets someone "adopt" a pattern that has
+// no real DaVinci/Palmier evidence behind it yet.
+export function composablePatterns(): ComposablePatternInfo[] {
+  const result: ComposablePatternInfo[] = [];
+  for (const pattern of motionPatterns) {
+    const implementation = getPatternImplementation(pattern);
+    if (!implementation || implementation.status !== "PRODUCTION_READY") continue;
+    const enterMotionLabel = pattern.id.replace(/^type-|^photo-|^cut-|^wipe-|^flash-|^accent-/, "").replace(/-/g, "_").toUpperCase();
+    result.push({
+      patternId: pattern.id,
+      implementationId: implementation.id,
+      easyLabel: pattern.looksLike,
+      detailLabel: `${pattern.commonName} / ${pattern.japaneseName}`,
+      tools: implementationToolList(implementation),
+      enterMotionLabel,
+      defaultText: pattern.categories.includes("TYPOGRAPHY") ? "WELCOME" : "",
+      defaultMediaLabel: "Hero Photo",
+    });
+  }
+  return result;
+}
+
+// Split by category so the Scene Composer can offer a "text motion" picker and a separate
+// "image motion" picker instead of one flat list mixing typography and photo patterns. Cut /
+// flash patterns are deliberately excluded from both: they describe a transition at the edge
+// between two Scenes, not a layer's own motion (see visual-scene-composer-design-rules.md #13).
+export function composableTextPatterns(): ComposablePatternInfo[] {
+  const textPatternIds = new Set(motionPatterns.filter((pattern) => pattern.categories.includes("TYPOGRAPHY")).map((pattern) => pattern.id));
+  return composablePatterns().filter((pattern) => textPatternIds.has(pattern.patternId));
+}
+
+export function composableImagePatterns(): ComposablePatternInfo[] {
+  // categories.includes("PHOTO") alone isn't enough: cut-hard-accent / flash-one-frame-soft are
+  // TRANSITION patterns that also happen to operate on photo/video media (source includes
+  // "photo"), so they pick up a PHOTO tag too. Require PHOTO and NOT TRANSITION so only patterns
+  // that are actually about presenting one image/video (Static Hero, Small Push, ...) show up
+  // here — transitions stay out of both layer pickers per the SceneEdge design rule.
+  const imagePatternIds = new Set(
+    motionPatterns.filter((pattern) => pattern.categories.includes("PHOTO") && !pattern.categories.includes("TRANSITION")).map((pattern) => pattern.id),
+  );
+  return composablePatterns().filter((pattern) => imagePatternIds.has(pattern.patternId));
+}
+
+export function findComposablePattern(patternId: string): ComposablePatternInfo | null {
+  return composablePatterns().find((pattern) => pattern.patternId === patternId) ?? null;
+}
+
+function implementationToolList(implementation: MotionImplementationRecord): string[] {
+  switch (implementation.kind) {
+    case "DAVINCI_TEXT_PLUS":
+      return ["Text+", "Fusion", "Merge", "Keyframe", "Spline"];
+    case "DAVINCI_FUSION":
+      return ["Fusion", "Transform", "Merge", "Keyframe", "Spline"];
+    case "DAVINCI_EDIT_NATIVE":
+      return ["Edit Page", "Timeline Clip"];
+    case "PALMIER_NATIVE_EDIT":
+      return ["Palmier Native Timeline"];
+    default:
+      return ["DaVinci Resolve"];
+  }
 }
