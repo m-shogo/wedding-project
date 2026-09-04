@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "Rurubu WEDDING V30",
   "page": "P08",
   "role": "MAGAZINE BACK COVER",
@@ -25,6 +25,7 @@
   ],
   "duplicatePrevention": {
     "hardRule": "Before any ImageGen call, read this ledger. If an item is GENERATED_DRAFT or later, do not generate the same role again unless its status is explicitly changed to REWORK_REQUIRED with a reason.",
+    "ownerAcceptedTransportRule": "A transport/upload failure must never trigger regeneration of owner-accepted artwork. Fix the transport path instead.",
     "reuseFirst": "Before generating a new module, search existing accepted V30 production assets for a reusable visual family match.",
     "acceptedAssetRule": "ACCEPTED assets are immutable for routine continuation; reopen only for an explicit visual defect or owner instruction.",
     "oneRepresentativeAtATime": true
@@ -44,22 +45,64 @@
       "productionMethod": "IMAGEGEN_GROUPED_ECOLOGY",
       "imageGenRequired": true,
       "representative": true,
-      "status": "REWORK_REQUIRED",
-      "currentDraft": {
-        "runtimeFile": "a_clean_transparent_background_png_illustration_wi_1.png",
-        "sha256": "00711834c78ca3b1cae4a6dba5fa0757eb5a0f70b16be2e7a85d9d22bf84e4c6",
+      "status": "ACCEPTED",
+      "acceptedMaster": {
+        "fileName": "V30_P08_CENTER_CLOSURE_SOURCE_RGBA.png",
+        "sha256": "5622236afbc05947709e6c5356d4989da8d334e04bb8011b5ab5d9b53913baa1",
         "dimensionsPx": {"width": 1448, "height": 1086},
         "rgba": true,
+        "ownerAccepted": true,
+        "exactFixedCopy": ["SHOGO & SHIORI", "2026.10.24"]
+      },
+      "alphaQa": {
         "alphaExtrema": [0, 255],
-        "artReview": "FAIL",
-        "reason": "Correct object identity and exact fixed copy, but too bulky, glossy and realistic relative to the Visual Master; palm/flower mass dominates and the emblem loses the master's compact delicate back-cover restraint. Do not upload to Figma/Drive as accepted production."
+        "uniqueAlphaValues": 256,
+        "pctFullyTransparent": 81.79161197765636,
+        "pctPartial": 18.15280872582237,
+        "pctFullyOpaque": 0.055579296521270215,
+        "ART_QUALITY_PASS": "PASS_OWNER_ACCEPTED",
+        "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+        "ALPHA_INTERIOR_OPACITY_PASS": "PASS",
+        "EDGE_ALPHA_QUALITY_PASS": "PASS",
+        "compositeReview": ["LIGHT_PASS", "DARK_PASS", "MID_GRAY_ANALYZED_LOCAL"]
+      },
+      "drive": {
+        "folderId": "1Z-pH0-iRmsBrz5jfRn3WXcIUxkXDE1tT",
+        "sourceFileId": "1NuIUWWw8I-yLd_hf34qid4v0TN0k_vm2",
+        "productionFileId": "1gN0ys6Y1yeMwPmmc7bjLrdu7k4PuIIIi",
+        "lightQaFileId": "1IacZzyg7xePX8rv9iGXbW28U5Jwr-Yf5",
+        "darkQaFileId": "1JZYzE2G2JvAKGUdkzB2wL-2xWheTw82_"
+      },
+      "figma": {
+        "nodeId": "3852:26",
+        "x": 196,
+        "y": 308,
+        "width": 145,
+        "height": 122,
+        "imageHash": "a8066ca887a956282ce794a640e56ef364103b91",
+        "freshScreenshotVisible": true,
+        "transportMethod": "160px RGBA derivative -> 1000-char base64 chunks persisted in hidden temporary Figma nodes -> exact reassembly/PNG signature validation -> figma.createImage -> temp cleanup",
+        "transportDerivative": {"width": 160, "height": 133, "decodedBytes": 18155, "base64Length": 24208},
+        "productionMasterRemainsHighResolution": true
+      },
+      "crossPageQa": {
+        "anchorsReviewedFresh": ["P01 3535:7", "P02 3535:9", "P03 3535:11", "P08 3535:21"],
+        "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS",
+        "reason": [
+          "cyan/blue/hot-pink/tropical-green saturation belongs to the same V30 palette family",
+          "crisp silhouette and clean digital editorial rendering avoid watercolor/vintage/Canva drift",
+          "chapel/palm/flower motif language visually relates to accepted P01/P03 destination ornaments",
+          "lighter outline/keyline weight is acceptable at this subordinate back-cover scale and does not create a competing genre",
+          "compact scale preserves P08 Visual Master's intentional negative-space hierarchy"
+        ]
       },
       "attemptHistory": [
         {"sha256": "852b9ed4efb341aa59d8a996f0c4a85b23f6b17648d1a347bfa98d04bb4d44c6", "result": "DRAFT_NOT_ACCEPTED"},
         {"sha256": "ecadae75959d4547420ac2541fee6e4152feab46108c5ac2d610be7e462a77e6", "result": "DRAFT_NOT_ACCEPTED"},
-        {"sha256": "00711834c78ca3b1cae4a6dba5fa0757eb5a0f70b16be2e7a85d9d22bf84e4c6", "result": "REWORK_REQUIRED"}
+        {"sha256": "00711834c78ca3b1cae4a6dba5fa0757eb5a0f70b16be2e7a85d9d22bf84e4c6", "result": "REWORK_REQUIRED"},
+        {"sha256": "5622236afbc05947709e6c5356d4989da8d334e04bb8011b5ab5d9b53913baa1", "result": "ACCEPTED_OWNER_AND_CROSS_PAGE_PASS"}
       ],
-      "nextAction": "Generate exactly one refined candidate only after manifest visual-review lock; target smaller palms/flowers, lower detail density, lighter authored magazine illustration character, and the same exact fixed names/date."
+      "nextAction": "DO_NOT_REGENERATE. Representative gate is closed; continue other P08 jobs only in the next production phase after the required stop/writeback."
     },
     {
       "id": "P08_LEFT_SPINE_BRAND_ECOLOGY",
@@ -67,8 +110,8 @@
       "productionMethod": "REUSE_FIRST_THEN_IMAGEGEN_IF_NEEDED",
       "imageGenRequired": "CONDITIONAL",
       "status": "PLANNED",
-      "blockedBy": "P08_CENTER_CLOSURE_ECOLOGY representative cross-page gate",
-      "nextAction": "Search P01/P02/P03 accepted production assets for reusable masthead/title/ornament family before any new generation."
+      "blockedBy": null,
+      "nextAction": "Next phase: search P01/P02/P03 accepted production assets for reusable masthead/title/ornament family before any new generation."
     },
     {
       "id": "P08_LEFT_SPINE_META",
@@ -98,7 +141,9 @@
   ],
   "currentGate": {
     "representativeItem": "P08_CENTER_CLOSURE_ECOLOGY",
-    "crossPageStyleFamilyPass": "BLOCKED_UNTIL_REWORKED_REPRESENTATIVE_IS_ALPHA_QA_PASS_AND_PLACED",
-    "scaleOutOtherImageGen": false
+    "crossPageStyleFamilyPass": "PASS",
+    "scaleOutOtherImageGen": true,
+    "requiredStopBeforeScaleOut": true,
+    "status": "REPRESENTATIVE_PHASE_COMPLETE_STOP_AND_WRITEBACK"
   }
 }
