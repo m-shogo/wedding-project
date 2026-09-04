@@ -243,12 +243,222 @@ The gate itself is common; the conversational interpretation note is ChatGPT-spe
 
 ---
 
+## Lesson 9 — Image/runtime file → Google Drive can be fully automatic
+
+**Scope:** P08 / ImageGen → Drive
+
+**Observation**
+
+The accepted ImageGen/runtime PNG was uploaded directly into the existing V30 `02_PRODUCTION_RGBA/P08` Drive hierarchy without asking the user to download/re-upload it. Fetching the uploaded Drive PNG then returned a connector-compatible `file_uri` again.
+
+**Why it mattered**
+
+Before testing, it was unclear whether an ImageGen/runtime file ID, a local path and a Drive connector file parameter would interoperate in the current ChatGPT environment.
+
+**Decision / recovery**
+
+Use the runtime-generated file reference directly with Drive's file upload action, preserve the existing production hierarchy, then store returned Drive IDs in the page ledger.
+
+**Rule for future ChatGPT runs**
+
+Try runtime file/reference → Drive upload before requesting any human file bridge. If successful, treat Drive as a stable persistence/handoff surface for accepted production assets and QA files.
+
+**Common promotion candidate:** `NO`
+
+The storage convention is common; this connector interoperability is ChatGPT-specific.
+
+---
+
+## Lesson 10 — A Figma presigned upload URL may exist but still be unreachable from the ChatGPT runtime
+
+**Scope:** P08 / Figma raster upload
+
+**Observation**
+
+Figma successfully issued presigned asset-upload URLs, but the current ChatGPT container could not resolve/reach the upload host. Repeating the same URL-upload path would not solve the problem.
+
+**Why it happened**
+
+Tool-side Figma API access and container-side outbound network/DNS access are different capabilities.
+
+**Decision / recovery**
+
+Classify the failure as a **transport-path blocker**, not an art or Figma-write blocker. Stop retrying the same presigned-host POST and switch to another Figma-supported write path.
+
+**Rule for future ChatGPT runs**
+
+One clear network/DNS failure fingerprint is enough to change transport strategy. Do not regenerate artwork and do not repeatedly request equivalent presigned URLs expecting the runtime network to change.
+
+**Common promotion candidate:** `NO`
+
+---
+
+## Lesson 11 — A returned `imageHash` does not prove the raster rendered correctly
+
+**Scope:** P08 / Figma Plugin API / verification
+
+**Observation**
+
+Early single-call base64 embedding attempts returned Figma `imageHash` values, yet fresh node/page screenshots remained blank.
+
+**Why it happened**
+
+The large payload had been truncated/corrupted before reconstruction. Figma could still receive bytes and produce a hash even though those bytes were not the intended image content.
+
+**Decision / recovery**
+
+Treat `imageHash` as source identity evidence only. Require a fresh screenshot showing the expected artwork before marking `FIGMA_PLACED` or `SCREENSHOT_QA_PASS`.
+
+**Rule for future ChatGPT runs**
+
+`imageHash != visual success`. Every raster installation requires fresh live visual proof.
+
+**Common promotion candidate:** `MAYBE`
+
+The specific truncation mechanism is ChatGPT-specific. The principle that live visual evidence outranks metadata is already represented by shared Figma acceptance and should not be duplicated unless a real gap is found.
+
+---
+
+## Lesson 12 — Separate the production master from the Figma transport derivative
+
+**Scope:** P08 / raster transport / quality preservation
+
+**Observation**
+
+The accepted production master was 1448×1086 RGBA, while the live Figma role displayed at only about 145×122 px. Sending the high-resolution PNG through a code payload was unnecessary and made the transport path brittle.
+
+**Why it happened**
+
+Canonical asset quality requirements and connector transport requirements are different concerns.
+
+**Decision / recovery**
+
+Keep the high-resolution accepted RGBA as the production master in Drive/Git convention, and create a small RGBA derivative solely for Figma transport. P08 used a 160×133 derivative while the live node remained 145×122.
+
+**Rule for future ChatGPT runs**
+
+Never downgrade/replace the canonical production master just to satisfy a connector. Create a clearly non-authoritative transport derivative near actual live display size when a payload-limited fallback requires it.
+
+**Common promotion candidate:** `MAYBE`
+
+Master-vs-derivative separation is broadly useful, but this particular use is driven by ChatGPT transport constraints.
+
+---
+
+## Lesson 13 — Chunked hidden-node persistence is a working ChatGPT → Figma raster fallback
+
+**Scope:** P08 / direct Figma placement
+
+**Observation**
+
+A compact 160×133 RGBA derivative was successfully transferred to Figma without a human bridge by splitting its base64 representation into small chunks across multiple `use_figma` calls, storing those chunks temporarily in hidden Figma node names, then reconstructing the bytes inside Figma.
+
+**Validated P08 evidence**
+
+- base64 length: `24208`
+- decoded PNG bytes: `18155`
+- expected PNG signature validated before `figma.createImage`
+- live node: `3852:26`
+- accepted imageHash: `a8066ca887a956282ce794a640e56ef364103b91`
+- temporary transport container deleted after success
+- fresh screenshot visibly showed the correct chapel ecology
+
+**Why it worked**
+
+Small tool calls avoided long-payload truncation. Persistence in hidden temporary Figma nodes let later calls reconstruct the complete data without relying on conversational/tool-call payload continuity.
+
+**Decision / recovery**
+
+Use sortable chunk IDs, verify stored lengths, reconstruct in one final call, assert exact joined/base64 and decoded byte lengths, validate file signature, create the image, then remove all temporary transport nodes.
+
+**Rule for future ChatGPT runs**
+
+Use native Figma upload first. When its upload host is inaccessible and the raster is small enough for a compact derivative, the chunked reconstruction method is the validated fallback. Always clean up transport nodes.
+
+**Common promotion candidate:** `NO`
+
+This is intentionally ChatGPT/Figma execution mechanics.
+
+---
+
+## Lesson 14 — Never regenerate owner-accepted artwork to fix transport
+
+**Scope:** P08 / art-state vs transport-state
+
+**Observation**
+
+After the user accepted the transparent chapel artwork, an unnecessary attempt was made to alter/regenerate the artwork while the real unresolved problem was file placement.
+
+**Why it happened**
+
+Conversational production can blur the boundary between `art failed` and `transport failed` unless those states are tracked independently.
+
+**Decision / recovery**
+
+Freeze the owner-accepted art. Reopen only the transport/placement state and solve Figma ingestion independently.
+
+**Rule for future ChatGPT runs**
+
+Once owner feedback or art QA marks a candidate accepted, upload/connector failures must not reopen ImageGen. Only visual/factual defects can reopen art.
+
+**Common promotion candidate:** `YES`
+
+This is executor-agnostic state-discipline and is now also reflected in the P08 ledger. Promote only if shared authority lacks an equivalent rule.
+
+---
+
+## Lesson 15 — Validate transport at chunk granularity instead of restarting the asset
+
+**Scope:** P08 / chunk transport integrity
+
+**Observation**
+
+During chunk persistence, one intended 1000-character base64 chunk was stored one character short. The length check detected this before final reconstruction.
+
+**Why it mattered**
+
+A single missing character can corrupt all subsequent decoded bytes while appearing superficially close to complete.
+
+**Decision / recovery**
+
+Delete only the damaged chunk and replace it with two smaller verified 500-character subchunks. Continue from the existing accepted art and existing good transport chunks.
+
+**Rule for future ChatGPT runs**
+
+Record/verify expected per-chunk length. If one chunk fails integrity, repair only that transport unit; do not restart ImageGen or the entire Figma build.
+
+**Common promotion candidate:** `NO`
+
+---
+
+## Lesson 16 — GitHub text writes and binary production bytes are separate capabilities
+
+**Scope:** P08 / Git evidence
+
+**Observation**
+
+The current GitHub connector can directly maintain manifests, ledgers and Markdown evidence, but its available file create/update actions are UTF-8 text-oriented rather than a general binary PNG commit path.
+
+**Decision / recovery**
+
+Keep the canonical P08 PNG persisted in Drive and live Figma, record its exact SHA-256 and intended Git production role in textual authority, and defer only the binary Git copy to a binary-capable bridge later.
+
+**Rule for future ChatGPT runs**
+
+A binary Git transport limitation must not fork naming/storage conventions and must not block Figma/Drive production. Record `binary pending` explicitly and preserve the expected canonical Git path for later completion.
+
+**Common promotion candidate:** `NO`
+
+---
+
 # Promotion queue
 
 Potential shared/common promotions should be reviewed conservatively. Current candidates from this log:
 
 1. page-role fit must be evaluated before standalone asset beauty;
 2. decomposition must classify generated/native/shared/photo/deterministic roles before generation;
-3. persistent asset-state ledger may be useful as a general production primitive.
+3. persistent asset-state ledger may be useful as a general production primitive;
+4. owner-accepted art must not be reopened merely because a transport/upload layer failed;
+5. canonical production master and executor-specific transport derivative should remain distinct when a derivative is necessary.
 
 Do not edit common authority merely because an item appears here. Promote only when it closes a real systemic gap not already covered by current manifests/policies.
