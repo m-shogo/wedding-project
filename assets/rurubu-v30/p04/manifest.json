@@ -1,22 +1,236 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "project": "Rurubu WEDDING V30",
   "page": "P04",
   "role": "ALL TRAVEL MEMORIES / OUR JOURNEY",
-  "status": "AWAITING_VISUAL_REVIEW",
-  "productionState": "VISUAL_MASTER_PENDING",
+  "status": "VISUAL_MASTER_REVIEWED_READY_FOR_REPRESENTATIVE_ECOLOGY_CALIBRATION",
+  "productionState": "REPRESENTATIVE_ECOLOGY_CALIBRATION_READY",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualPolishPolicy": "assets/rurubu-v30/visual-polish-manifest.json",
+  "ornamentArtDirectionPolicy": "assets/rurubu-v30/ornament-art-direction-manifest.json",
+  "trueAlphaPolicy": "docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md",
   "visualLockAuditPolicy": "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
-  "visualMaster": {"path": "assets/rurubu-v30/p04/P04.png", "authority": "PRIMARY_VISUAL_AUTHORITY_PENDING_CHAT_REVIEW", "rule": "Do not infer page-specific geometry, module bundling or styling from prose. Review the actual user-provided page image and complete both visual-review passes before locking."},
-  "canonicalFacts": {"names": {"Shogo": "LOCKED", "Shiori": "LOCKED"}, "weddingDate": "2026.10.24"},
-  "constraintProfile": {"visualMasterWins": true, "defaultPositionLevel": "TARGET", "defaultSizeLevel": "TARGET", "decorativeMicroPlacementLevel": "FLEXIBLE", "locked": ["page role", "canonical facts", "three-second hierarchy after review", "mustNotCover", "photo masks", "hard rejects", "clean-photo-proxy rule", "fixed-display-module classification before generation"]},
-  "requiredAfterVisualReview": ["threeSecondReadOrder", "saliency weights 0-100", "quiet zones", "relational constraints", "pageSpec confirmation", "visualAuthority", "backgroundSystem", "frameSystem", "objects with normalized + Figma geometry", "constraintLevel and tolerance per major object", "layerOrder/zIndex", "overlap and mustNotCover rules", "photo masks, face-safe zones and replaceability", "renderMode per object", "factClass per text object", "fixed bundled display-module classification", "native/variable-copy classification", "clean standalone photo-proxy roles", "assetDecompositionPlan only after part-generation gate", "asset padding/visual-bounds contract", "hardRejects", "ordered QA gates", "reference-delta comparison targets", "second-pass omission/misclassification audit"],
-  "reviewProcess": {"passA24PointReview": "REQUIRED", "passBReverseOmissionAudit": "REQUIRED", "passBChecks": ["top/middle/bottom scan", "left/center/right scan", "micro accents", "wrong object identity", "photo/frame dependency", "intentional asymmetry", "repeated-module non-identity", "quiet-space intent", "factClass safety", "which short fixed text/background/icon groups are one bundled display object", "whether any photo proxy would contain page decoration"], "lockCondition": "Do not set VISUAL_MASTER_LOCKED until both passes are complete and all findings plus display-module/proxy classifications are corrected in this manifest."},
-  "displayModuleClassification": {"status": "REQUIRED_DURING_VISUAL_REVIEW", "rule": "Identify short fixed display objects that visually move as one unit and may be generated as one complete asset including text/numbers/background/icons/accents. Visible fixed text need not remain editable. Do not bake long, personal, TBD or frequently changing copy. Do not invent the target list before reviewing P04.png."},
-  "pageSpecificPending": {"relationalConstraints": "AWAITING_VISUAL_REVIEW", "quietZones": "AWAITING_VISUAL_REVIEW", "saliency": "AWAITING_VISUAL_REVIEW", "faceSafeZones": "AWAITING_VISUAL_REVIEW", "geometryTolerances": "INHERIT_ROOT_UNTIL_REVIEW", "secondPassOmissionAudit": "REQUIRED_BEFORE_LOCK", "bundledDisplayModules": "REQUIRED_BEFORE_PART_GENERATION", "nativeOrVariableCopy": "REQUIRED_BEFORE_PART_GENERATION", "photoProxyRoles": "REQUIRED_BEFORE_PART_GENERATION"},
-  "photoPolicy": {"inheritRoot": true, "visualPolishOverride": true, "visualMasterCropProxy": "PROHIBITED", "rule": "Every real-photo slot must be a separate clipped/masked replaceable image. Use only clean standalone real/representative photos with no P04 page background, title, border, stickers, route, frames or decorations baked in. Face/eye safety overrides TARGET geometry when necessary."},
-  "hardExecutionRejects": ["crop from P04.png used as a photo fill", "page screenshot used as photo proxy", "generic editable Figma primitives replacing a visually authored fixed display module solely for editability", "fixed display module flattening a replaceable real photo"],
-  "partGenerationGate": "BLOCKED_UNTIL_VISUAL_REVIEW_SECOND_PASS_AND_DISPLAY_MODULE_PROXY_CLASSIFICATION",
-  "qa": {"gate0": "Pending direct visual review of actual page master plus second-pass reverse omission audit.", "technicalQaCannotPassBeforeVisualQa": true, "proxyContaminationMustPass": true, "bundledDisplayModuleClassificationMustPass": true}
+  "styleAnchors": {
+    "P01": "3535:7",
+    "P02": "3535:9",
+    "P03": "3535:11",
+    "rule": "Use P01/P02/P03 as V30 publication-family rendering anchors only. Do not copy their layouts. P04 must keep its own travel-memory composition while inheriting saturation, dark outline, bright keyline, controlled shadow, sticker/cutout print feel, tropical/travel rendering and clean paper treatment."
+  },
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p04/P04.png",
+    "authority": "PRIMARY_VISUAL_AUTHORITY_REVIEWED",
+    "pageRoleSummary": "Photo-led travel memories feature: one dominant Okinawa hero, three supporting travel photos, destination labels, a restrained travel-route connector, a closing message and a tropical publication closure.",
+    "rule": "The actual P04.png controls page-specific hierarchy and composition. Do not infer P04 geometry from older prose or another page."
+  },
+  "canonicalFacts": {
+    "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
+    "weddingDate": "2026.10.24",
+    "pageNumber": "04"
+  },
+  "threeSecondReadOrder": [
+    "旅の思い出 header ecology",
+    "large Okinawa hero photo",
+    "Korea + Hawaii support-photo pair",
+    "lower-center support photo",
+    "closing message",
+    "PAGE 04"
+  ],
+  "saliencyWeights": {
+    "headerEcology": 100,
+    "okinawaHeroPhoto": 96,
+    "koreaSupportPhoto": 70,
+    "hawaiiSupportPhoto": 70,
+    "lowerCenterSupportPhoto": 62,
+    "destinationLabels": 58,
+    "closingMessage": 54,
+    "bottomClosure": 46,
+    "routeConnector": 30,
+    "pageBadge": 24
+  },
+  "pageSpec": {
+    "figmaFrame": "3535:13",
+    "trimPx": {"width": 559, "height": 794},
+    "trimMm": {"width": 148, "height": 210},
+    "bleedMm": 3,
+    "informationArchitecture": [
+      "header across upper band",
+      "hero photo dominates upper-middle",
+      "three support photos form lower editorial collage",
+      "destination labels attach locally to their corresponding travel memories",
+      "closing message occupies lower-right quiet zone",
+      "bottom closure supports rather than competes with photos"
+    ]
+  },
+  "photoRoles": {
+    "count": 4,
+    "roles": [
+      {"id": "P04_PHOTO_HERO_OKINAWA", "role": "HERO", "replaceable": true, "priority": 1, "faceSafe": "HARD"},
+      {"id": "P04_PHOTO_KOREA", "role": "SUPPORT", "replaceable": true, "priority": 2, "faceSafe": "HARD"},
+      {"id": "P04_PHOTO_HAWAII", "role": "SUPPORT", "replaceable": true, "priority": 2, "faceSafe": "HARD"},
+      {"id": "P04_PHOTO_LOWER_CENTER", "role": "SUPPORT", "replaceable": true, "priority": 3, "faceSafe": "HARD"}
+    ],
+    "rule": "All four photos remain independent replaceable fills/masks. Never flatten photo pixels into generated display assets. Never crop them from P04.png for production."
+  },
+  "displayModuleClassification": {
+    "status": "REVIEWED",
+    "representativeEcologyFirst": "P04_HEADER_ECOLOGY_V30_ALIGNED",
+    "modules": [
+      {
+        "id": "P04_HEADER_ECOLOGY_V30_ALIGNED",
+        "renderMode": "GENERATED_DISPLAY_ASSET",
+        "bundle": ["旅の思い出", "top-left tropical flowers", "sparkle", "subtitle ribbon", "top-right airplane/heart-route logic", "OUR JOURNEY stamp relationship"],
+        "rule": "Generate as one authored header ecology. Preserve the bold Rurubu-like hierarchy; do not split into isolated flower/airplane/ribbon/icon assets."
+      },
+      {
+        "id": "P04_LOCATION_LABEL_FAMILY",
+        "renderMode": "GENERATED_DISPLAY_ASSET_FAMILY",
+        "bundle": ["OKINAWA / 沖縄", "KOREA / 韓国", "HAWAII / ハワイ"],
+        "rule": "One calibrated family, three locally distinct labels. They may vary in color and small floral accents but must share paper/keyline/outline/shadow grammar."
+      },
+      {
+        "id": "P04_TRAVEL_ROUTE_CONNECTOR",
+        "renderMode": "PAGE_SPECIFIC_ORNAMENT_OR_INTEGRATED_ECOLOGY",
+        "rule": "The blue dashed route and airplane are subordinate editorial movement, not a dominant diagram. Prefer integrating them with nearest ecology. Reject flowchart/roadmap/Canva connector treatment."
+      },
+      {
+        "id": "P04_BOTTOM_CLOSURE_ECOLOGY",
+        "renderMode": "GENERATED_DISPLAY_ASSET",
+        "bundle": ["MEMORIES AROUND THE WORLD stamp", "chapel", "tropical flowers", "palms", "sea/beach closure"],
+        "rule": "One bounded support ecology. Keep it bright, pop, printed and cutout-like; no watercolor chapel or vintage travel poster."
+      },
+      {
+        "id": "P04_MESSAGE_PANEL",
+        "renderMode": "SHARED_DECORATIVE_VESSEL_PLUS_NATIVE_TEXT",
+        "rule": "Keep the final message text native/editable. Decorative underline/highlight/heart treatment may be separate or bundled as a vessel, but do not flatten personal copy into the image."
+      }
+    ]
+  },
+  "fixedVisibleStrings": [
+    "旅の思い出",
+    "ふたりで見た景色、ずっと忘れない！♡",
+    "OKINAWA",
+    "沖縄",
+    "KOREA",
+    "韓国",
+    "HAWAII",
+    "ハワイ",
+    "OUR JOURNEY",
+    "TAKE A TRIP",
+    "MEMORIES",
+    "AROUND THE WORLD",
+    "PAGE 04"
+  ],
+  "nativeOrVariableCopy": {
+    "closingMessage": {
+      "classification": "NATIVE_TEXT_REFERENCE_ONLY_PENDING_FINAL_COPY_QA",
+      "visualMasterReference": "たくさんの笑顔と／最高の景色を一緒に。／これからも、いろんな景色を／ふたりで見に行こうね！♡",
+      "rule": "Use the Visual Master as layout/copy reference until owner final copy approval. Do not bake this message into generated imagery."
+    }
+  },
+  "quietZones": [
+    "lower-right message area must stay readable and not be invaded by the Hawaii photo, route or bottom closure",
+    "faces in all four photos must remain free of labels, route strokes, stamps and tropical ornaments",
+    "PAGE 04 badge needs clear breathing room at bottom-right",
+    "header subtitle ribbon must remain legible against sky/hero transition"
+  ],
+  "relationalConstraints": [
+    "header ecology stays above the hero photo and reads first",
+    "Okinawa label attaches to the hero memory without covering faces",
+    "Korea label stays local to the left support photo",
+    "Hawaii label stays local to the right support photo",
+    "route connector may travel between memories but must not become a flowchart spine",
+    "lower-center support photo remains visibly subordinate to the two side support photos",
+    "bottom closure stays behind/below the editorial photo collage and message",
+    "PAGE 04 remains a separate shared publication component"
+  ],
+  "layerOrder": [
+    "background",
+    "airmail border/frame",
+    "photo masks and photo fills",
+    "header ecology",
+    "destination labels",
+    "restrained route connector",
+    "message vessel + native copy",
+    "bottom closure ecology",
+    "shared PAGE 04 component / foreground micro accents"
+  ],
+  "visualLanguage": {
+    "inherit": [
+      "high saturation",
+      "hot pink / vivid blue / yellow / green / cyan",
+      "strong dark outline",
+      "crisp silhouette",
+      "white/yellow bright keyline",
+      "controlled dimensional shadow",
+      "printed sticker/cutout feeling",
+      "clean white/cream paper",
+      "bold travel-magazine hierarchy",
+      "pop tropical/travel motifs"
+    ],
+    "avoidPaletteDrift": {
+      "forbiddenDominantPurple": "#7e08f9 and nearby saturated purple must not become a major fill/route/background accent unless explicitly owner-approved",
+      "rule": "Use V30 blue/pink/yellow/green as primary route and ornament colors. Dark navy is allowed as outline/shadow."
+    }
+  },
+  "hardRejects": [
+    "crop from P04.png used as a photo fill",
+    "page screenshot used as photo proxy",
+    "full-page flatten",
+    "generic Canva/SVG icon pack",
+    "SaaS illustration",
+    "flowchart or roadmap route treatment",
+    "isolated airplane/flower/stamp micro-assets pasted around the page when they should belong to an ecology",
+    "watercolor or painterly tropical flowers",
+    "fine-art botanical rendering",
+    "aged parchment / sepia scrapbook",
+    "retro travel poster",
+    "watercolor chapel",
+    "muted beige wedding editorial",
+    "dominant #7e08f9 purple drift",
+    "fake white rescue rectangle behind a badly cut asset",
+    "binary alpha accepted solely because the outside is transparent"
+  ],
+  "alphaPolicy": {
+    "inheritsTrueAlphaPolicy": true,
+    "requiredGates": ["TRUE_ALPHA_PREFLIGHT_PASS", "ALPHA_INTERIOR_OPACITY_PASS", "EDGE_ALPHA_QUALITY_PASS"],
+    "rule": "Transparent background is not sufficient. Check intended interior opacity and edge anti-alias/fringe quality on light, gray and dark QA backgrounds. Flower, leaf, ribbon, airplane and curved route edges must not be accepted as hard binary cutouts solely because outside alpha is zero."
+  },
+  "representativeEcologyCalibration": {
+    "phaseA": "Generate/install P04_HEADER_ECOLOGY_V30_ALIGNED only.",
+    "compareAgainst": ["P01 3535:7", "P02 3535:9", "P03 3535:11"],
+    "check": ["saturation", "outline", "keyline", "shadow", "sticker/cutout feel", "tropical rendering", "paper/print feel", "visual temperature"],
+    "gate": "CROSS_PAGE_STYLE_FAMILY_PASS",
+    "failBehavior": "Reject/regenerate the header only. Do not generate location labels, route, bottom closure or message vessel until the representative ecology passes.",
+    "passBehavior": "Scale the accepted rendering language to location-label family, restrained route connector, bottom closure and message vessel."
+  },
+  "reviewProcess": {
+    "passA24PointReview": "COMPLETE_FROM_ACTUAL_P04_VISUAL_MASTER",
+    "passBReverseOmissionAudit": "COMPLETE_FOR_PRODUCTION_PLANNING",
+    "passBFindings": [
+      "route connector must stay subordinate and non-diagrammatic",
+      "bottom-left stamp/chapel/flowers should be one ecology rather than a clipart pile",
+      "lower-center photo needs deliberate overlap/spacing so it does not feel pasted on",
+      "message copy remains native to prevent white-box/template drift",
+      "destination labels are one family, not unrelated mini-assets"
+    ],
+    "lockCondition": "P04 Visual Master analysis is locked for production planning. Design completion still requires representative ecology calibration, live Figma implementation and final QA."
+  },
+  "partGenerationGate": "OPEN_FOR_REPRESENTATIVE_HEADER_ECOLOGY_ONLY",
+  "qa": {
+    "gate0": "PASS_VISUAL_MASTER_REVIEWED",
+    "crossPageStyleFamilyPass": "PENDING_REPRESENTATIVE_HEADER_CALIBRATION",
+    "photoRolePass": "PENDING_LIVE_IMPLEMENTATION",
+    "proxyContaminationMustPass": true,
+    "antiFlowchartPass": "PENDING_LIVE_IMPLEMENTATION",
+    "antiCanvaSvgPass": "PENDING_LIVE_IMPLEMENTATION",
+    "ornamentFamilyPass": "PENDING_LIVE_IMPLEMENTATION",
+    "trueAlphaPreflightPass": "PENDING_GENERATED_ASSET",
+    "alphaInteriorOpacityPass": "PENDING_GENERATED_ASSET",
+    "edgeAlphaQualityPass": "PENDING_GENERATED_ASSET",
+    "referenceDeltaPass": "PENDING_LIVE_IMPLEMENTATION",
+    "figmaDesignComplete": false,
+    "finalCopyQaPending": true,
+    "finalPhotoQaPending": true,
+    "printReady": false
+  }
 }
