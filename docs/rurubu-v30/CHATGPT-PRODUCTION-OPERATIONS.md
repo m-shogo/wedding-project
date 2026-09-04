@@ -92,8 +92,9 @@ Before any production write:
    - native text/layout;
    - deterministic/fact-critical asset;
 7. open/read the page production ledger;
-8. select exactly one representative generated ecology when calibration is still pending;
-9. only then call ImageGen.
+8. **search accepted Git/Figma assets for reusable same-family modules before any ImageGen call; same-file accepted Figma nodes are the cheapest reuse path because they avoid reupload/alpha/transport entirely;**
+9. select exactly one representative generated ecology when calibration is still pending;
+10. only then call ImageGen.
 
 ChatGPT must not infer `not generated yet` from conversation memory alone. The page ledger is the persistent source for production progress.
 
@@ -136,8 +137,6 @@ ChatGPT must not regenerate an asset whose ledger state is `ART_QUALITY_PASS` or
 For a `GENERATED_DRAFT`, inspect the existing candidate before generating another one.
 
 Every rejected draft should record a concise reason so later turns do not repeat the same visual mistake.
-
-**Transport failure is never an art-rework trigger.** Once the owner accepts an artwork candidate, solve file transport/upload separately; do not regenerate the artwork merely because Figma/Drive/Git ingestion failed.
 
 ---
 
@@ -233,7 +232,7 @@ ChatGPT must record whichever stable identifier is actually available.
 
 ### Human bridge fallback
 
-Request a one-time user file bridge only when the actual connector path cannot consume the generated runtime file/reference and no safe documented fallback succeeds.
+Request a one-time user file bridge only when the actual connector path cannot consume the generated runtime file/reference.
 
 If a human bridge is required:
 
@@ -252,52 +251,18 @@ When write capability exists:
 
 1. use the existing production frame;
 2. never duplicate the target page merely for convenience unless explicit authority says so;
-3. install only assets whose applicable gates passed;
-4. retain replaceable photos as independent masks/images;
-5. keep variable/TBD copy separately editable;
-6. use authored grouped ecologies where the Visual Master shows high dependency;
-7. tune scale/position/overlap/quiet-zone relationships after live placement;
-8. capture a fresh screenshot after meaningful placement changes;
-9. compare live page against Visual Master and style anchors;
-10. record node ID, imageHash/source identity and screenshot evidence.
+3. **before raster transport, check whether an accepted node in the same Figma file can simply be cloned/recomposed; clone/reuse avoids a second binary transfer and should win when the Visual Master permits it;**
+4. install only assets whose applicable gates passed;
+5. retain replaceable photos as independent masks/images;
+6. keep variable/TBD copy separately editable;
+7. use authored grouped ecologies where the Visual Master shows high dependency;
+8. tune scale/position/overlap/quiet-zone relationships after live placement;
+9. for rotated nodes, inspect post-rotation bounds/metadata and fresh screenshots rather than trusting intuitive pre-rotation x/y;
+10. capture a fresh screenshot after meaningful placement changes;
+11. compare live page against Visual Master and style anchors;
+12. record node ID, imageHash/source identity and screenshot evidence.
 
 A manifest classification alone never proves the live Figma role is correct.
-
-### 7.1 Raster transport fallback — validated on P08 2026-09-04
-
-The normal preferred path remains Figma's native upload action. However, the current ChatGPT runtime may be able to obtain a Figma presigned upload URL while its container cannot resolve/reach the upload host. That is a transport blocker, not an image-generation blocker.
-
-Validated fallback for a **small display-size raster**:
-
-1. keep the accepted high-resolution RGBA as the production master in Drive/Git convention;
-2. create a compact RGBA **transport derivative** near the actual Figma display size;
-3. base64-encode only the transport derivative;
-4. do **not** send a large base64 payload in one Figma tool call — long tool payloads may be truncated/ellipsized even when an `imageHash` is returned;
-5. split base64 into small verified chunks (P08 used 1000-character chunks; one damaged 1000-char chunk was further split to 500-char subchunks);
-6. persist those chunks temporarily inside hidden Figma nodes using sortable chunk IDs in node names;
-7. in one final Figma call, sort/reassemble the chunks, assert exact expected base64 length and decoded byte length, validate the PNG signature, then call `figma.createImage(bytes)` and apply the image fill;
-8. delete the temporary transport container immediately after successful reconstruction;
-9. capture a fresh screenshot of the actual node and page; **imageHash alone is not proof of a successful visual placement**.
-
-P08 validated values:
-
-- master: 1448×1086 RGBA, SHA-256 `5622236afbc05947709e6c5356d4989da8d334e04bb8011b5ab5d9b53913baa1`;
-- transport derivative: 160×133 RGBA;
-- base64 length: 24208 characters;
-- decoded PNG: 18155 bytes;
-- Figma node: `3852:26`;
-- accepted Figma imageHash: `a8066ca887a956282ce794a640e56ef364103b91`;
-- fresh screenshot showed the actual chapel ecology correctly.
-
-This is a ChatGPT-specific transport technique. It does not redefine the canonical production asset or common Figma quality rules.
-
-### 7.2 What not to do
-
-- do not regenerate accepted art to solve Figma upload problems;
-- do not treat an `imageHash` as success without a fresh screenshot;
-- do not embed the high-resolution production master as one giant base64 string;
-- do not leave temporary chunk nodes on the canvas after successful reconstruction;
-- do not replace the canonical master with the low-resolution transport derivative.
 
 ---
 
@@ -314,8 +279,6 @@ Accepted production should preserve the same conceptual set used elsewhere:
 - QA composites/screenshots;
 - cross-page comparison evidence;
 - production metadata/evidence.
-
-P08 proved that a ChatGPT runtime/image file reference can be uploaded directly into the existing Drive hierarchy and then fetched back as a connector file reference. Prefer that path before requesting a human bridge.
 
 ### Git
 
@@ -348,9 +311,7 @@ Examples:
 
 - direct transparent ImageGen returns baked checkerboard → use separable flat matte;
 - generated ecology is aesthetically wrong → regenerate the whole ecology, not five micro patches;
-- Figma presigned upload host is unreachable from the current runtime → stop retrying that host and use the compact chunked-raster fallback when suitable;
-- single-call base64 produces a hash but blank live render → classify as truncated/corrupt transport, not successful placement;
-- connector cannot accept runtime file ref and no alternate path succeeds → human bridge if necessary;
+- connector cannot accept runtime file ref → test documented alternative upload action, then human bridge if necessary;
 - same genuinely distinct strategy blocks twice → report blocker.
 
 Avoid repeated narration and repeated speculative calls.
@@ -434,7 +395,5 @@ Its success criteria are not only page quality but measurement of:
 - Git text evidence;
 - Git binary feasibility;
 - exact location where a human bridge is or is not required.
-
-P08 representative Phase A proved that **runtime/image file → Drive** and **ChatGPT → live Figma raster placement** can both be completed without a human file bridge in the current environment, although Figma required the compact chunked-raster fallback rather than the normal presigned-upload POST route.
 
 P08 findings must be recorded without changing the common storage/quality model solely for ChatGPT convenience.
