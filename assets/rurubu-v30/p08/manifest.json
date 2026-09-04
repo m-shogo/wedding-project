@@ -1,11 +1,11 @@
 {
-  "schemaVersion": 5,
-  "reviewRevision": 2,
+  "schemaVersion": 6,
+  "reviewRevision": 3,
   "project": "Rurubu WEDDING V30",
   "page": "P08",
   "role": "MAGAZINE BACK COVER",
-  "status": "VISUAL_MASTER_LOCKED_REPRESENTATIVE_CALIBRATED",
-  "productionState": "REPRESENTATIVE_GATE_PASS_REQUIRED_STOP",
+  "status": "P08_FIGMA_DESIGN_COMPLETE",
+  "productionState": "PAGE_ASSEMBLY_COMPLETE_BINARY_GIT_SYNC_PENDING",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualPolishPolicy": "assets/rurubu-v30/visual-polish-manifest.json",
   "ornamentArtDirectionPolicy": "assets/rurubu-v30/ornament-art-direction-manifest.json",
@@ -29,8 +29,9 @@
     "representativeEcologySelected": true,
     "representativeEcologyCalibrated": true,
     "productionScaleOutAllowed": true,
-    "requiredStopBeforeScaleOut": true,
-    "reason": "Representative center closure has passed owner art acceptance, true-alpha QA, live Figma placement and fresh P01/P02/P03/P08 style-family comparison. Stop/writeback is required before remaining P08 production."
+    "requiredStopBeforeScaleOut": false,
+    "pageAssemblyComplete": true,
+    "reason": "Representative center closure passed owner art acceptance, true-alpha QA, live Figma placement and cross-page calibration; remaining P08 modules were then assembled using accepted reuse, native text and deterministic barcode production and passed fresh full-page screenshot review."
   },
   "canonicalFacts": {
     "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
@@ -68,17 +69,21 @@
     "renderMode": "FIGMA_NATIVE",
     "fullBleed": true,
     "visualCharacter": "clean near-white warm cream paper with extremely subtle print/paper softness; no scenic full-page background",
-    "saliency": 10
+    "saliency": 10,
+    "productionState": "ACCEPTED"
   },
   "majorObjects": [
     {
       "id": "P08_LEFT_SPINE_BRAND_ECOLOGY",
       "role": "compact vertical Rurubu/WEDDING tropical logo cluster",
-      "renderMode": "REUSE_FIRST_THEN_GENERATED_GROUPED_ECOLOGY_IF_NEEDED",
+      "renderMode": "REUSED_ACCEPTED_P01_ASSETS",
       "geometry": {"normalizedApprox": {"x": 0.027, "y": 0.023, "width": 0.086, "height": 0.151}},
       "constraintLevel": "TARGET",
       "saliency": 48,
-      "zIndex": 50
+      "zIndex": 50,
+      "productionState": "ACCEPTED",
+      "figmaNode": "3884:26",
+      "reuseSources": ["3681:104", "3681:94", "3681:95"]
     },
     {
       "id": "P08_LEFT_SPINE_META",
@@ -88,7 +93,9 @@
       "constraintLevel": "TARGET",
       "saliency": 25,
       "zIndex": 42,
-      "exactVisibleFacts": ["2026 SPECIAL ISSUE", "SHOGO & SHIORI", "2026.10.24"]
+      "exactVisibleFacts": ["2026 SPECIAL ISSUE", "SHOGO & SHIORI", "2026.10.24"],
+      "productionState": "ACCEPTED",
+      "figmaNode": "3886:26"
     },
     {
       "id": "P08_CENTER_CLOSURE_ECOLOGY",
@@ -100,7 +107,8 @@
       "zIndex": 55,
       "fixedText": ["SHOGO & SHIORI", "2026.10.24"],
       "representativeEcology": true,
-      "productionState": "ACCEPTED_REPRESENTATIVE"
+      "productionState": "ACCEPTED_REPRESENTATIVE",
+      "figmaNode": "3852:26"
     },
     {
       "id": "P08_BARCODE_META_MODULE",
@@ -110,7 +118,10 @@
       "constraintLevel": "LOCKED_FACTS_TARGET_GEOMETRY",
       "saliency": 38,
       "zIndex": 46,
-      "exactBarcodeDigits": "2026102400000"
+      "exactBarcodeDigits": "2026102400000",
+      "productionState": "ACCEPTED",
+      "figmaNode": "3884:35",
+      "implementation": "deterministic editorial barcode bars from canonical digits; no EAN-13 checksum substitution"
     },
     {
       "id": "P08_PAGE_NUMBER",
@@ -120,7 +131,9 @@
       "constraintLevel": "TARGET",
       "saliency": 12,
       "zIndex": 40,
-      "exactText": "08"
+      "exactText": "08",
+      "productionState": "ACCEPTED",
+      "figmaNode": "3884:85"
     }
   ],
   "quietZones": [
@@ -173,7 +186,8 @@
     "representative": "P08_CENTER_CLOSURE_ECOLOGY",
     "laterConditional": ["P08_LEFT_SPINE_BRAND_ECOLOGY"],
     "representativeGate": "PASS",
-    "scaleOutRule": "Representative gate now permits later ecology work, but this run must stop after writeback before scale-out."
+    "laterConditionalResolution": "REUSED_ACCEPTED_P01_ASSETS_NO_NEW_IMAGEGEN",
+    "scaleOutRule": "Resolved. No additional P08 ImageGen is required."
   },
   "reverseOmissionAudit": {
     "status": "COMPLETE",
@@ -224,15 +238,23 @@
     },
     "crossPageStyleFamily": {
       "freshFrames": ["3535:7", "3535:9", "3535:11", "3535:21"],
-      "result": "PASS",
-      "reason": [
-        "bright cyan/blue/hot-pink/green palette stays inside V30 family",
-        "crisp digital editorial silhouette avoids watercolor/vintage/Canva drift",
-        "tropical chapel/flower/palm vocabulary visually relates to P01/P03 ornament language",
-        "lighter outline weight is subordinate rather than genre-breaking at back-cover scale",
-        "compact placement preserves the Visual Master's large intentional quiet zones"
-      ]
+      "result": "PASS"
     }
+  },
+  "fullPageAssembly": {
+    "figmaFrame": "3535:21",
+    "freshScreenshotReviewed": true,
+    "visualMasterDelta": "PASS",
+    "threeAnchorComposition": "PASS",
+    "intentionalSparseSpace": "PASS",
+    "leftBrandReuse": "PASS_AFTER_ROTATION_GEOMETRY_CORRECTION",
+    "leftMetaNative": "PASS",
+    "centerClosure": "PASS",
+    "barcodeMeta": "PASS",
+    "pageNumber": "PASS",
+    "inventedPhotoSlots": 0,
+    "thankYouPageRoleDrift": false,
+    "dominantPurpleDrift": false
   },
   "barcodeModuleRule": {
     "exactDigits": "2026102400000",
@@ -258,7 +280,7 @@
     "binary alpha accepted solely because outside transparency exists",
     "duplicate ImageGen of an accepted owner-approved module to solve a transport/upload failure"
   ],
-  "partGenerationGate": "REPRESENTATIVE_PASS_RECORDED_STOP_BEFORE_REMAINING_P08_SCALE_OUT",
+  "partGenerationGate": "P08_NO_MORE_IMAGEGEN_REQUIRED",
   "qa": {
     "visualMasterReview": "PASS",
     "reverseOmissionAudit": "PASS",
@@ -270,7 +292,14 @@
     "edgeAlphaQualityPass": "PASS",
     "figmaPlacementPass": "PASS_FRESH_SCREENSHOT_VISIBLE",
     "crossPageStyleFamilyPass": "PASS",
+    "reuseFirstPass": "PASS_NO_NEW_LEFT_SPINE_IMAGEGEN",
     "barcodeDigitsMustEqual": "2026102400000",
-    "nextRun": "May open remaining P08 production after this required stop/writeback."
+    "fullPageScreenshotQa": "PASS",
+    "figmaDesignComplete": "YES",
+    "printReady": "PENDING_GLOBAL_PRINT_QA",
+    "remainingExecutionDebt": [
+      "Git binary sync for P08 production PNG when a binary-capable path is available",
+      "optional stable Drive copy of full-page screenshot when a Figma screenshot file-reference bridge is available"
+    ]
   }
 }
