@@ -39,3 +39,15 @@ Required recovery order:
 6. Only report success after live Figma readback and fresh screenshot QA.
 
 Current known transport issue at time of writing: the execution container cannot resolve `mcp.figma.com` for the raw-byte POST required by the upload URL, while the connector can generate that URL. This does not permit JPEG/proxy fallback.
+
+## Transfer evidence — 2026-09-07
+
+The blocker is now narrowed further:
+
+- Google Drive authenticated raw download succeeds for the canonical owner master.
+- The exact PNG materializes into the execution container as `P06_OWNER_VISUAL_MASTER_HQ_UNCOMPRESSED_20260906.png` with MIME `image/png` and `3,682,318` bytes.
+- Live Figma metadata re-verifies production frame `3535:17`, HQ target node `4249:56`, and independent replaceable photo masks `4000:52`, `4000:55`, `4000:58`, `4000:61`.
+- Figma `upload_assets` successfully issues a single-use upload URL targeting `4249:56` with `scaleMode=FILL`.
+- The remaining failure occurs only at the final raw-byte POST from the execution container: DNS resolution of `mcp.figma.com` fails (`curl: (6) Could not resolve host`).
+
+Therefore Drive → container is proven healthy; Figma authorization/target discovery is proven healthy; the unresolved segment is container network/DNS → Figma upload endpoint only. Do not alter production quality or completion status until that segment succeeds.
