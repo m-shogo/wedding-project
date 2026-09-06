@@ -51,3 +51,15 @@ The blocker is now narrowed further:
 - The remaining failure occurs only at the final raw-byte POST from the execution container: DNS resolution of `mcp.figma.com` fails (`curl: (6) Could not resolve host`).
 
 Therefore Drive → container is proven healthy; Figma authorization/target discovery is proven healthy; the unresolved segment is container network/DNS → Figma upload endpoint only. Do not alter production quality or completion status until that segment succeeds.
+
+## Automated transfer attempt evidence — 2026-09-07 01:27 JST
+
+- Latest `main` before this attempt: `b8b3dd2457454910c1b4ea7acf00644dd62e371a`.
+- Canonical Drive file re-downloaded successfully; dimensions `1055 × 1491`, mode `RGBA`, format `PNG`, bytes `3,682,318`.
+- SHA-256 of the materialized canonical bytes: `13bed2e07d66803d67cd6a117a57bc67dbdd9677b9ba54f4b9dd634910747103`.
+- Fresh live Figma readback confirms `3535:17` is still `V30 P06 / OWNER VM HQ LOSSLESS / TRANSFER PENDING`; target `4249:56` is still pending exact bytes; all four replaceable masks remain present.
+- Official `upload_assets` generated a fresh single-use upload URL for `4249:56` with `scaleMode=FILL`.
+- Raw POST of the canonical PNG failed again before any HTTP exchange because the execution container still cannot resolve `mcp.figma.com` (`curl: (6) Could not resolve host`).
+- No Figma production mutation was claimed or simulated. No proxy/JPEG/lossy fallback was used.
+
+This confirms the blocker is persistent at the container DNS boundary, not Drive retrieval, Figma target discovery, node structure, or source integrity. Continue retrying the official lossless path on later runs and only proceed to final P02–P05 comparison QA after exact-byte placement succeeds.
