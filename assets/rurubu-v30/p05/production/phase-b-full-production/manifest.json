@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P05",
+  "phase": "PHASE_B_FULL_PRODUCTION",
+  "status": "PASS_FIGMA_DESIGN_COMPLETE",
+  "date": "2026-09-04",
+  "visualMaster": "assets/rurubu-v30/p05/P05.png",
+  "acceptedHeader": {
+    "assetId": "P05_HEADER_ECOLOGY_V30_ALIGNED",
+    "nodeId": "3959:32",
+    "imageHash": "38387f9a869f1896caa6c87c59150ed0f5775ba9",
+    "geometry": {"x": 16.5, "y": 12, "width": 526, "height": 221}
+  },
+  "matteWorkflow": {
+    "nominalColor": "#6C00A8",
+    "generatorOutput": "opaque violet extraction field; never checkerboard",
+    "normalization": "violet-only cubic field fit, edge-aware foreground recovery, exact flat-matte recomposite",
+    "productionExtraction": "continuous smoothstep alpha from the exact flat matte",
+    "edgeRgb": "inverse matte compositing plus narrow violet-spill removal on partial-alpha pixels",
+    "script": "assets/rurubu-v30/p05/production/phase-a-header-calibration/extract_flat_matte.py"
+  },
+  "transparentAssets": [
+    {
+      "id": "P05_SHOGO_FRIENDS_HEADER_PANEL",
+      "rgba": "assets/rurubu-v30/p05/production/phase-b-full-production/rgba/P05_SHOGO_FRIENDS_HEADER_PANEL/P05_SHOGO_FRIENDS_HEADER_PANEL.png",
+      "sha256": "75470b40c1ca4d124357ecfc8cd7a8a9c68c5d144b630d9f22e33f298aed464c",
+      "dimensions": [2110, 686],
+      "alphaUnique": 252,
+      "partialPixels": 6559,
+      "strictVioletPartialEdgePixels": 0,
+      "figmaNodeId": "3978:39",
+      "imageHash": "e471a4bafbe2a1261da1178d64fbf036b32bb03b",
+      "driveSourceId": "16Wo2vlgNLPvRiUzoVWbqtJVFU511LV2S",
+      "driveRgbaId": "1fqeXl7vac803ir7rwR-Jo8fGEhQkTF4x",
+      "driveQaContactId": "1vfICNdlT9tUYaNruI0HrjmK54k8Z1zxO"
+    },
+    {
+      "id": "P05_SHIORI_FRIENDS_HEADER_PANEL",
+      "rgba": "assets/rurubu-v30/p05/production/phase-b-full-production/rgba/P05_SHIORI_FRIENDS_HEADER_PANEL/P05_SHIORI_FRIENDS_HEADER_PANEL.png",
+      "sha256": "31a2fa4d6c516326257b137885f34b507547720f2729a64cd48843e80bc98821",
+      "dimensions": [2150, 700],
+      "alphaUnique": 252,
+      "partialPixels": 16526,
+      "strictVioletPartialEdgePixels": 0,
+      "figmaNodeId": "3978:40",
+      "imageHash": "aa9c9df5a06c641ccf8db7b0f16d1a3428db37aa",
+      "driveSourceId": "1wUvcjfDVI_iNTAUZu32WCPwPRUgLCe_n",
+      "driveRgbaId": "1UyoKnbcCO4fFzWrj-Fl2hVOtpWHAkqob",
+      "driveQaContactId": "1rePYdbqYMUj8yRM7vzcXZD2jb5qzqYkb"
+    },
+    {
+      "id": "P05_BOTTOM_CLOSING_ECOLOGY",
+      "rgba": "assets/rurubu-v30/p05/production/phase-b-full-production/rgba/P05_BOTTOM_CLOSING_ECOLOGY/P05_BOTTOM_CLOSING_ECOLOGY.png",
+      "sha256": "ec48749942739f959f4abe726c9a3891bdc37e6425e1549f98d0a81e9557a18a",
+      "dimensions": [1924, 764],
+      "alphaUnique": 251,
+      "partialPixels": 3941,
+      "strictVioletPartialEdgePixels": 0,
+      "figmaNodeId": "3978:37",
+      "imageHash": "9bcfc9bf63294b1057388b70d5d6275a12b69b83",
+      "driveSourceId": "1uTjqJ9u-qh3o-cZ8OTic3cC_7pczk-OP",
+      "driveRgbaId": "1zqs081N_E3VYWIL0YtrnKqB9iQAvCcSn",
+      "driveQaContactId": "19HOXy_-QV29gqqBcyKUQ9AVPvPrEmEOt"
+    }
+  ],
+  "assetGates": {
+    "scope": "all three Phase B transparent decorative assets",
+    "ART_QUALITY_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "ALPHA_INTERIOR_OPACITY_PASS": "PASS",
+    "EDGE_ALPHA_QUALITY_PASS": "PASS",
+    "strictVioletPartialEdgePixels": 0,
+    "evidence": "Every asset has alpha-diagnostics.json and light/gray/dark QA. All four corners are alpha 0; continuous partial alpha is retained; opaque artwork interiors, white/yellow keylines, navy outlines, flowers, leaves, lettering and vessel areas remain present."
+  },
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "frameId": "3535:15",
+    "frameName": "V30 P05",
+    "duplicateP05Created": false,
+    "directChildCount": 24,
+    "sectionPanels": {
+      "SHOGO": "3978:39",
+      "SHIORI": "3978:40"
+    },
+    "bottomEcologyNodeId": "3978:37",
+    "nativeClosingVesselNodeId": "3989:38",
+    "nativeClosingMessageNodeId": "3978:38",
+    "pageBadgeNodeId": "3978:83",
+    "pageBadgeMasterId": "3772:2",
+    "pageBadgeValue": "05",
+    "photoCount": 8,
+    "uniquePhotoImageHashCount": 8,
+    "photoStructure": "Eight independent IMAGE-fill rectangles inside clipped, shadowed white-print frames. SHOGO 4 + SHIORI 4 exactly.",
+    "photoNodes": {
+      "P05_PHOTO_SHOGO_01_UPPER_LEFT": {"nodeId": "3978:44", "imageHash": "44ef733caf1268c5e5ba9b64dcffafa3df4470f0", "driveProxyId": "1W1GMjrgua-g7k4lmJSCx8wNh82zo7S6s"},
+      "P05_PHOTO_SHOGO_02_UPPER_RIGHT": {"nodeId": "3978:49", "imageHash": "2f98f84e2063b38e90fe94c110cfb4b659c26217", "driveProxyId": "1JDc08JizTh1MB4_Qz4JNIvfTk0oCjdMI"},
+      "P05_PHOTO_SHOGO_03_MIDDLE_WIDE": {"nodeId": "3978:54", "imageHash": "4178e9d9b7d1a50269c199dded953adad807c088", "driveProxyId": "1cOyc0YKftw_U-LT6JP7EwYMnEqVkdiYI"},
+      "P05_PHOTO_SHOGO_04_LOWER_WIDE": {"nodeId": "3978:59", "imageHash": "fc1197d2584e00eb6353c9350191ee58068aae37", "driveProxyId": "105c_Lrjv56e5fNYWSPSmhBtY6b3ReUI9"},
+      "P05_PHOTO_SHIORI_01_UPPER_WIDE": {"nodeId": "3978:64", "imageHash": "1d1dd8069b9ff0cc9970c54c108bd38bf43bd7a3", "driveProxyId": "1xdRa2unMY7FEE3kf7SCyM1nBORj3UqbF"},
+      "P05_PHOTO_SHIORI_02_MIDDLE_LEFT": {"nodeId": "3978:69", "imageHash": "dcd2981c701205a4eae2d0a386400cd255b0435b", "driveProxyId": "1Ysmu9hw0KnoJkshW9XtgfBmRyqtpeSEN"},
+      "P05_PHOTO_SHIORI_03_MIDDLE_RIGHT": {"nodeId": "3978:74", "imageHash": "a458152df9172c65b5c046eeafb099cefa55bf9c", "driveProxyId": "1FwqFI2AfMoW0FwICyK-G28HQDnjNwtgz"},
+      "P05_PHOTO_SHIORI_04_LOWER_WIDE": {"nodeId": "3978:79", "imageHash": "f65da48b26aa59eaffbb5168514b3ce588de1677", "driveProxyId": "1KaTzExaJBZPa48588XTqU6mJtekVzP4d"}
+    },
+    "editableText": "Two section subcopies, eight photo captions and the closing message are native M PLUS 1 text; PAGE 05 is a shared badge instance."
+  },
+  "freshScreenshots": {
+    "P01": "assets/rurubu-v30/p05/production/phase-b-full-production/qa/fresh-p01.png",
+    "P02": "assets/rurubu-v30/p05/production/phase-b-full-production/qa/fresh-p02.png",
+    "P03": "assets/rurubu-v30/p05/production/phase-b-full-production/qa/fresh-p03.png",
+    "P04": "assets/rurubu-v30/p05/production/phase-b-full-production/qa/fresh-p04.png",
+    "P05": "assets/rurubu-v30/p05/production/phase-b-full-production/qa/fresh-p05.png",
+    "protectedP01P02P03P04MatchPhaseASha256": true,
+    "crossPageComparison": "assets/rurubu-v30/p05/production/phase-b-full-production/qa/cross-page-p01-p05-final.png",
+    "visualMasterComparison": "assets/rurubu-v30/p05/production/phase-b-full-production/qa/visual-master-vs-figma-final.png"
+  },
+  "finalQa": {
+    "saturation": "PASS",
+    "outline": "PASS",
+    "keyline": "PASS",
+    "shadowDepth": "PASS",
+    "stickerCutoutFeel": "PASS",
+    "tropicalRendering": "PASS",
+    "antiCanva": "PASS",
+    "antiFlowchart": "PASS",
+    "visualMasterHierarchy": "PASS",
+    "photoReplaceability": "PASS",
+    "quietZones": "PASS",
+    "alphaEdgeQuality": "PASS",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS",
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_COPY_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  },
+  "drive": {
+    "sourceFolderId": "1J2Ff7g8CZSbuyaj9rZoCQkI3Hj28Nfph",
+    "rgbaFolderId": "1FmBGk2106fj4lVb7gjh224L8X0Z1g_Om",
+    "qaFolderId": "11pNFLCrhnNKhzybM6VB6bFwnRKXY14xO",
+    "freshP05FileId": "1ppGNHVJe4CR5hbLYJLwI0D0cfRtbkjvN",
+    "crossPageComparisonFileId": "1IksalFKETrBQioquaTZYh4nTkxMsVpRM",
+    "visualMasterComparisonFileId": "1iasnb9UmM5ITYN_48IVoBdNBAg7jVXZv"
+  }
+}
