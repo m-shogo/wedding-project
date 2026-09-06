@@ -75,3 +75,20 @@ This confirms the blocker is persistent at the container DNS boundary, not Drive
 - No proxy, JPEG, lossy derivative, duplicate frame, V31, or simulated completion was used.
 
 The unresolved segment remains container DNS/network → Figma upload endpoint only. Final cross-page visual QA remains intentionally deferred until exact-byte placement succeeds.
+
+## Automated transfer investigation — 2026-09-07 05:29 JST
+
+- V30 manifest and this authority were read first from latest `main` before any write.
+- Canonical Drive owner master was authenticated and materialized again; metadata remains `image/png`, `3,682,318` bytes, `1055 × 1491` RGBA, SHA-256 `13bed2e07d66803d67cd6a117a57bc67dbdd9677b9ba54f4b9dd634910747103`.
+- Live Figma re-read confirms `3535:17` is still transfer-pending, `4249:56` still has no image fill, and all four replaceable masks remain intact.
+- Official `upload_assets` again issued a valid single-use target URL, confirming Figma authorization and target selection are healthy.
+- A local HTML/Chromium `generate_figma_design` bridge was actually executed and polled ten times; capture stayed `pending`, consistent with the same unavailable container-side network path.
+- Figma plugin-main runtime was inspected: `fetch`, `XMLHttpRequest`, Node `require`, `process`, Deno and Bun are unavailable. `figma.createImage(Uint8Array)` and `figma.getImageByHash()` are available, but no supported local-file byte reader is exposed.
+- Hidden plugin UI has outbound browser APIs but the current remote execution surface exposes no inbound `figma.ui.on` / `once` callback to main. SharedArrayBuffer mutation also does not cross the UI/main serialization boundary.
+- A temporary private Google Slides sidecar was actually created and the canonical local PNG was uploaded into it using the connector's image sidecar mechanism. Google returned a temporary image content URL, but a hidden-UI content-URL → official Figma upload bridge did not populate `4249:56`. The temporary Slides file was deleted after the test.
+- A signed exact-source staging URL returned by the Slides API was not relayed to Figma because the platform safety layer correctly blocked forwarding a credential-bearing signed URL across services.
+- The sole V30 production page was scanned for every existing raster image: 71 unique image hashes were checked with `Image.getSizeAsync()`. No existing image in Figma has the canonical `1055 × 1491` dimensions, so there is no already-uploaded exact PNG hash to reuse. The current embedded owner reference hash is only a `140 × 198` JPEG (`6,132` bytes) and remains disallowed for production.
+- Fresh P02/P03/P04/P05/P06 screenshots were requested. P06 visibly remains only the four proxy photo masks plus page badge on a blank paper field, which is expected while the owner master is absent; therefore final reference/quality QA is still blocked and no completion is claimed.
+- Direct DNS queries to the configured resolver, gateway, `1.1.1.1`, and `8.8.8.8` all time out from the execution container; external hostname resolution remains unavailable. No proxy/JPEG/lossy fallback, V31, duplicate frame, or public sharing of the private wedding image was used.
+
+The blocker is now proven to be a byte-transport boundary rather than an unknown Figma-layout problem: exact source bytes exist locally and `figma.createImage` can consume bytes, but this runtime currently provides neither container DNS egress to the official upload endpoint nor a supported local-file bridge into the remote Figma plugin main context. Keep retrying supported lossless paths on later runs; do not weaken the production-source rule.
