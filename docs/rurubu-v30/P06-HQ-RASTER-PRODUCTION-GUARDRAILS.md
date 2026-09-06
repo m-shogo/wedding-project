@@ -63,3 +63,15 @@ Therefore Drive → container is proven healthy; Figma authorization/target disc
 - No Figma production mutation was claimed or simulated. No proxy/JPEG/lossy fallback was used.
 
 This confirms the blocker is persistent at the container DNS boundary, not Drive retrieval, Figma target discovery, node structure, or source integrity. Continue retrying the official lossless path on later runs and only proceed to final P02–P05 comparison QA after exact-byte placement succeeds.
+
+## Automated transfer attempt evidence — 2026-09-07 03:27 JST
+
+- Latest `main` before this attempt: `50a59f98d9a34633a2cec80dba6504dece7905ab`.
+- V30 manifest was read first and the P06 authority re-verified before any write.
+- Canonical Drive owner master re-downloaded successfully as `image/png`, `3,682,318` bytes, and materialized as a real `1055 × 1491` RGBA PNG.
+- Fresh live Figma metadata confirms `3535:17` is still `V30 P06 / OWNER VM HQ LOSSLESS / TRANSFER PENDING`; `4249:56` remains the exact-byte target; masks `4000:52`, `4000:55`, `4000:58`, `4000:61` remain independent and replaceable.
+- Official `upload_assets` issued a fresh single-use URL targeting `4249:56` with `scaleMode=FILL`.
+- Raw multipart POST of the canonical PNG again failed before any HTTP exchange because the execution container cannot resolve `mcp.figma.com` (`curl: (6) Could not resolve host`).
+- No proxy, JPEG, lossy derivative, duplicate frame, V31, or simulated completion was used.
+
+The unresolved segment remains container DNS/network → Figma upload endpoint only. Final cross-page visual QA remains intentionally deferred until exact-byte placement succeeds.
