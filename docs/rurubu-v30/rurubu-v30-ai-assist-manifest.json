@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "rurubu-v30-ai-assist-manifest-v1",
+  "status": "CANONICAL_V30_AI_ASSIST",
+  "scope": "Rurubu WEDDING V30 only",
+  "hardRules": [
+    "V31 creation is forbidden",
+    "Before any meaningful write, read this manifest FIRST, then every linked authority",
+    "Use Figma file bfM0d4c9dCeBv5pCkJ3TNM and V30_FINAL_PRODUCTION only",
+    "P06 production frame is 3535:17 and must be updated in place",
+    "Do not substitute JPEG proxy, preview screenshot, low-resolution embedded reference, or lossy recompression for owner-supplied HQ PNG",
+    "Keep four P06 photo masks independent and replaceable",
+    "Do not claim completion until live Figma readback and fresh high-resolution visual QA pass"
+  ],
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "productionPageName": "V30_FINAL_PRODUCTION",
+    "productionFrames": {
+      "P01": "3535:7",
+      "P02": "3535:9",
+      "P03": "3535:11",
+      "P04": "3535:13",
+      "P05": "3535:15",
+      "P06": "3535:17",
+      "P07": "3535:19",
+      "P08": "3535:21"
+    }
+  },
+  "authorities": {
+    "p06HqRasterProductionGuardrails": "docs/rurubu-v30/P06-HQ-RASTER-PRODUCTION-GUARDRAILS.md",
+    "legacyDesignLearningReference": "docs/rurubu-v10/rurubu-v10-ai-assist-manifest.json"
+  },
+  "p06": {
+    "frameId": "3535:17",
+    "ownerMaster": "P06_OWNER_VISUAL_MASTER_HQ_UNCOMPRESSED_20260906.png",
+    "sourceDimensions": "1055x1491",
+    "sourceFormat": "PNG",
+    "photoMaskNodeIds": ["4000:52", "4000:55", "4000:58", "4000:61"],
+    "qaCompareFrames": ["3535:9", "3535:11", "3535:13", "3535:15"],
+    "qaChecklist": ["title", "Q5", "Q6", "icons", "photo frames", "boundaries", "raster quality"]
+  }
+}
