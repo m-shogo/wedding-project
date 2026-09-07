@@ -27,7 +27,8 @@
   },
   "authorities": {
     "p06HqRasterProductionGuardrails": "docs/rurubu-v30/P06-HQ-RASTER-PRODUCTION-GUARDRAILS.md",
-    "latestP06TransferEvidence": "docs/rurubu-v30/qa/P06-HQ-TRANSFER-2026-09-07-1931-JST.md",
+    "p06HqBase64BridgeGuardrails": "docs/rurubu-v30/P06-HQ-BASE64-BRIDGE-GUARDRAILS.md",
+    "latestP06TransferEvidence": "docs/rurubu-v30/qa/P06-HQ-TRANSFER-2026-09-07-2137-JST.md",
     "legacyDesignLearningReference": "docs/rurubu-v10/rurubu-v10-ai-assist-manifest.json"
   },
   "p06": {
