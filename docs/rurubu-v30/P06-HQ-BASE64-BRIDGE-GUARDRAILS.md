@@ -22,7 +22,7 @@ Scope: P06 `3535:17` only. This is a lossless fallback transport for the exact c
 4. Store sequential keys `b64_0000`, `b64_0001`, ... on target node `4249:56` and reconstruct by lexicographic key order.
 5. Existing historical chunk lengths are variable. Never infer offsets from the key number or assume a fixed historical chunk length. Compute the next offset from the verified cumulative stream length.
 6. Maximum safe decoded/new chunk payload remains 12,000 canonical Base64 characters per shared-plugin-data write. A 40,000-character source was truncated and must not be retried.
-7. **Validated guarded append primitive (2026-09-08):** for an 8,000-character new payload, transport an 8,001-character canonical source literal containing exactly one additional canonical guard character; inside `use_figma`, store only `source.slice(0, 8000)`. This successfully preserved an exact new `8,000`-character chunk where unguarded boundary-sized literals had previously arrived one character short.
+7. **Validated guarded append primitive (2026-09-08):** for an 8,000-character new payload, transport an 8,001-character canonical source literal containing exactly one additional canonical guard character; inside `use_figma`, store only `source.slice(0, 8000)`. This successfully preserved exact new `8,000`-character chunks where unguarded boundary-sized literals had previously arrived one character short.
 8. The guard character is transport evidence only and MUST be the immediate next canonical Base64 character. It is never written into the chunk.
 9. After every new chunk, immediately concatenate all non-empty staged `b64_*` keys and compare cumulative length + FNV-1a 32-bit against the same canonical Base64 prefix in the container.
 10. If cumulative verification fails, remove only the newly written bad key by setting its shared plugin data value to an empty string, then re-verify the previous known-good cumulative length/checksum before continuing.
@@ -31,11 +31,12 @@ Scope: P06 `3535:17` only. This is a lossless fallback transport for the exact c
 13. Visible production artwork must not change during staging. Four replaceable masks `4000:52`, `4000:55`, `4000:58`, `4000:61` remain intact.
 14. P06 remains `DESIGN_COMPLETE = NO` until exact-byte placement succeeds and fresh high-resolution P02/P03/P04/P05 comparison QA passes.
 
-## Latest known-good staging checkpoint — 2026-09-08 06:24 JST
+## Latest known-good staging checkpoint — 2026-09-08 08:32 JST
 
-- non-empty chunks: `b64_0000` through `b64_0026`
-- cumulative verified Base64 length: `157,000`
-- cumulative FNV-1a 32-bit: `51df2c42`
-- `b64_0026` was newly transported with the guarded 8,001 → 8,000 technique and passed immediate local-canonical prefix verification.
+- non-empty chunks: `b64_0000` through `b64_0029`
+- cumulative verified Base64 length: `181,000`
+- cumulative FNV-1a 32-bit: `5297de39`
+- current-run new guarded appends: `b64_0028` and `b64_0029`, each exact `8,000` characters after guarded `8,001 → 8,000` transport and immediate cumulative verification
+- evidence: `docs/rurubu-v30/qa/P06-HQ-TRANSFER-2026-09-08-0832-JST.md`
 
 Treat this checkpoint as evidence, not as an inferred starting point: every run must still live-read the target node and recompute cumulative length/checksum before appending.
