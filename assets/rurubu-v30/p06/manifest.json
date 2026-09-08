@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "project": "Rurubu WEDDING V30",
   "page": "P06",
   "role": "REAL LIFE / FAVORITES / BEST SHOTS + Q5/Q6",
-  "status": "AWAITING_VISUAL_REVIEW",
-  "productionState": "VISUAL_MASTER_PENDING",
+  "status": "VISUAL_MASTER_LOCKED",
+  "productionState": "PART_MAP_APPROVED_REBUILD_FROM_OWNER_VM",
+  "reviewRevision": "2026-09-08_FROM_OWNER_VM_P06_2",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualPolishPolicy": "assets/rurubu-v30/visual-polish-manifest.json",
   "ornamentArtDirectionPolicy": "assets/rurubu-v30/ornament-art-direction-manifest.json",
@@ -12,16 +13,246 @@
   "preproductionPageGatesPolicy": "assets/rurubu-v30/preproduction-page-gates-manifest.json",
   "visualLockAuditPolicy": "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
   "executionAcceptancePolicy": "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md",
-  "visualMaster": {"path": "assets/rurubu-v30/p06/P06.png", "authority": "PRIMARY_VISUAL_AUTHORITY_PENDING_CHAT_REVIEW", "rule": "Do not infer page-specific geometry, module bundling or styling from prose. Review the actual user-provided page image and complete both visual-review passes before locking."},
-  "canonicalFacts": {"names": {"Shogo": "LOCKED", "Shiori": "LOCKED"}, "weddingDate": "2026.10.24"},
-  "constraintProfile": {"visualMasterWins": true, "defaultPositionLevel": "TARGET", "defaultSizeLevel": "TARGET", "decorativeMicroPlacementLevel": "FLEXIBLE", "locked": ["page role", "canonical facts", "three-second hierarchy after review", "mustNotCover", "photo masks", "hard rejects", "clean-photo-proxy rule", "fixed-display-module classification before generation"]},
-  "requiredAfterVisualReview": ["threeSecondReadOrder", "saliency weights 0-100", "quiet zones", "relational constraints", "pageSpec confirmation", "visualAuthority", "backgroundSystem", "frameSystem", "objects with normalized + Figma geometry", "constraintLevel and tolerance per major object", "layerOrder/zIndex", "overlap and mustNotCover rules", "photo masks, face-safe zones and replaceability", "renderMode per object", "factClass per text object", "fixed bundled display-module classification", "native/variable-copy classification", "clean standalone photo-proxy roles", "grouped ecology plan", "representative ecology selection", "assetDecompositionPlan only after representative ecology gate", "asset padding/visual-bounds contract", "hardRejects", "ordered QA gates", "reference-delta comparison targets", "second-pass omission/misclassification audit"],
-  "reviewProcess": {"passA24PointReview": "REQUIRED", "passBReverseOmissionAudit": "REQUIRED", "passBChecks": ["top/middle/bottom scan", "left/center/right scan", "micro accents", "wrong object identity", "photo/frame dependency", "intentional asymmetry", "Q5/Q6 non-mirroring", "repeated-module non-identity", "quiet-space intent", "factClass safety", "which fixed title/badge/Q-number/icon groups are one bundled display object", "whether any photo proxy contains page decoration"], "lockCondition": "Do not set VISUAL_MASTER_LOCKED until both passes are complete and all findings plus display-module/proxy classifications are corrected in this manifest."},
-  "displayModuleClassification": {"status": "REQUIRED_DURING_VISUAL_REVIEW", "rule": "Classify short fixed REAL LIFE / FAVORITES / BEST SHOTS titles, Q5/Q6 badges/shells, page labels and other fixed decorative text with their backgrounds/icons as complete generated display modules where the Visual Master treats them as one object. Visible fixed text need not remain editable. Keep Q5/Q6 questions/answers and any personal/TBD copy separate until approved."},
-  "pageSpecificPending": {"relationalConstraints": "AWAITING_VISUAL_REVIEW", "quietZones": "AWAITING_VISUAL_REVIEW", "saliency": "AWAITING_VISUAL_REVIEW", "faceSafeZones": "AWAITING_VISUAL_REVIEW", "geometryTolerances": "INHERIT_ROOT_UNTIL_REVIEW", "secondPassOmissionAudit": "REQUIRED_BEFORE_LOCK", "bundledDisplayModules": "REQUIRED_BEFORE_PART_GENERATION", "nativeOrVariableCopy": "REQUIRED_BEFORE_PART_GENERATION", "photoProxyRoles": "REQUIRED_BEFORE_PART_GENERATION", "representativeEcology": "MUST_BE_SELECTED_AFTER_ACTUAL_VISUAL_REVIEW"},
-  "photoPolicy": {"inheritRoot": true, "visualPolishOverride": true, "visualMasterCropProxy": "PROHIBITED", "rule": "Every real-photo slot must be a separate clipped/masked replaceable image. Use only clean standalone real/representative photos with no P06 title, badge, sticker, Q module, border, frame or page decoration baked into the proxy. Face/eye safety overrides TARGET geometry."},
-  "systemicPreproductionGates": {"styleAnchors": ["P01 3535:7", "P02 3535:9", "P03 3535:11"], "crossPageStyleFamilyPass": "REQUIRED_AFTER_REPRESENTATIVE_ECOLOGY", "alphaGates": ["TRUE_ALPHA_PREFLIGHT_PASS", "ALPHA_INTERIOR_OPACITY_PASS", "EDGE_ALPHA_QUALITY_PASS"], "purpleDriftRule": "#7e08f9 and nearby saturated purple must not become a dominant fill/route/background color without owner approval", "rule": "Inherited from preproduction-page-gates-manifest.json; page-specific details still require direct P06 Visual Master review before production."},
-  "hardExecutionRejects": ["crop from P06.png used as a photo fill", "page screenshot used as photo proxy", "generic editable Figma primitives replacing a fixed authored display module solely for editability", "Q5/Q6 body copy baked before approval", "generic Canva/SVG icon pack", "watercolor/painterly/vintage escape from V30 graphic family", "dominant #7e08f9 purple drift", "binary alpha accepted solely because outside transparency is real", "fixed display module flattening a replaceable real photo"],
-  "partGenerationGate": "BLOCKED_UNTIL_VISUAL_REVIEW_SECOND_PASS_DISPLAY_MODULE_PROXY_CLASSIFICATION_AND_REPRESENTATIVE_ECOLOGY_SELECTION",
-  "qa": {"gate0": "Pending direct visual review of actual page master plus second-pass reverse omission audit.", "technicalQaCannotPassBeforeVisualQa": true, "proxyContaminationMustPass": true, "bundledDisplayModuleClassificationMustPass": true, "crossPageStyleFamilyPass": "PENDING_VISUAL_REVIEW", "edgeAlphaQualityPass": "PENDING_GENERATED_ASSET"}
+  "visualMaster": {
+    "repoPath": "assets/rurubu-v30/p06/P06.png",
+    "ownerHqCanonicalName": "P06_OWNER_VISUAL_MASTER_HQ_UNCOMPRESSED_20260906.png",
+    "ownerHqDimensions": [1055, 1491],
+    "ownerHqFormat": "PNG",
+    "ownerHqBytes": 3682318,
+    "ownerHqSha256": "13bed2e07d66803d67cd6a117a57bc67dbdd9677b9ba54f4b9dd634910747103",
+    "authority": "PRIMARY_VISUAL_AUTHORITY_LOCKED",
+    "rule": "Match the owner Visual Master composition and authored graphic character. Do not re-invent its title, Q5/Q6, caption vessels, icons or tropical/travel ecologies with generic Figma primitives. The Visual Master is not an active photo proxy source."
+  },
+  "canonicalFacts": {
+    "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
+    "weddingDate": "2026.10.24",
+    "pageNumber": "06"
+  },
+  "reviewProcess": {
+    "passAProductionReview": "PASS",
+    "passBReverseOmissionMisclassificationAudit": "PASS",
+    "secondPassFindingsResolved": true,
+    "visualMasterLocked": true,
+    "partGenerationGate": "UNLOCKED",
+    "evidence": "docs/rurubu-v30/P06-VISUAL-MASTER-LOCK-20260908.md"
+  },
+  "threeSecondReadOrder": [
+    "TITLE_ECOLOGY",
+    "MAIN_EVERYDAY_PHOTO + Q5",
+    "LOWER_FOOD_PETS_TRAVEL_TRIPTYCH",
+    "Q6_BOTTOM_CLOSURE",
+    "PAGE_06"
+  ],
+  "saliency": {
+    "TITLE_ECOLOGY": 100,
+    "MAIN_EVERYDAY_PHOTO": 90,
+    "Q5_EDITORIAL_ECOLOGY": 85,
+    "Q6_BOTTOM_ECOLOGY": 80,
+    "LOWER_PHOTO_TRIPTYCH": 74,
+    "INTRO_BUBBLE": 60,
+    "PHOTO_CAPTION_ECOLOGIES": 52,
+    "MICRO_ACCENTS": 30,
+    "PAGE_06_SHARED_BADGE": 45
+  },
+  "backgroundSystem": {
+    "paper": "clean warm cream tactile paper",
+    "outerFrame": "airmail stripe border family",
+    "hardRejects": ["aged parchment", "sepia scrapbook", "dominant purple drift"]
+  },
+  "identityAnchors": [
+    {
+      "id": "P06_HEADER_ECOLOGY",
+      "content": "Shogo & Shiori ribbon + ふたりの日常と / 好きなもの♥ + integrated hibiscus/plumeria, coffee/music/heart accents",
+      "renderMode": "OWNER_VM_DERIVED_PREPARED_DISPLAY_ECOLOGY",
+      "constraintLevel": "LOCKED_VISUAL_CHARACTER",
+      "notes": "Pink upper line, blue lower line, thick white/yellow keylines, dark outline and controlled depth are identity-defining."
+    },
+    {
+      "id": "P06_Q5_EDITORIAL_ECOLOGY",
+      "content": "Q5 badge + blue hand-drawn paper vessel + tape/underline/hearts/sparkles",
+      "renderMode": "OWNER_VM_DERIVED_PREPARED_DISPLAY_ECOLOGY",
+      "constraintLevel": "LOCKED_VISUAL_CHARACTER"
+    },
+    {
+      "id": "P06_Q6_BOTTOM_ECOLOGY",
+      "content": "Q6 yellow/pink horizontal closure + journey stamp + camera + tropical bottom cluster",
+      "renderMode": "OWNER_VM_DERIVED_PREPARED_DISPLAY_ECOLOGY",
+      "constraintLevel": "LOCKED_VISUAL_CHARACTER"
+    }
+  ],
+  "bundledDisplayModules": [
+    {
+      "id": "P06_HEADER_ECOLOGY",
+      "fixedVisibleCopy": ["Shogo & Shiori", "ふたりの日常と", "好きなもの"],
+      "includes": ["ribbon", "tropical cluster", "coffee cup", "music notes", "hearts", "sparkles"],
+      "realPhotoIncluded": false,
+      "sourceOfTruth": "this manifest + owner Visual Master"
+    },
+    {
+      "id": "P06_INTRO_BUBBLE_ECOLOGY",
+      "fixedVisibleCopy": ["笑って、食べて、たまに旅行！", "わたしたちの毎日は、小さな幸せでいっぱいです♪"],
+      "includes": ["green cloud vessel", "palm", "waves", "heart/music accents"],
+      "realPhotoIncluded": false,
+      "sourceOfTruth": "owner Visual Master; copy remains locked for current production"
+    },
+    {
+      "id": "P06_Q5_EDITORIAL_ECOLOGY",
+      "fixedVisibleCopy": ["Q5", "お互いの好きなところは？"],
+      "includes": ["paper vessel", "pink tape", "underline", "hearts", "sparkles"],
+      "realPhotoIncluded": false
+    },
+    {
+      "id": "P06_MAIN_CAPTION_ECOLOGY",
+      "fixedVisibleCopy": ["おうちでまったり コーヒータイムが大好き"],
+      "includes": ["yellow paper vessel", "tape", "coffee accent"],
+      "realPhotoIncluded": false
+    },
+    {
+      "id": "P06_FOOD_CAPTION_ECOLOGY",
+      "fixedVisibleCopy": ["休日はおいしいもの探し♪ カフェ＆ごはん巡りが趣味！"],
+      "includes": ["pink paper vessel", "fork/spoon accents"],
+      "realPhotoIncluded": false
+    },
+    {
+      "id": "P06_PETS_CAPTION_ECOLOGY",
+      "fixedVisibleCopy": ["愛犬の Cookie と Melon♡ ふたりの癒し担当です"],
+      "includes": ["yellow paper vessel", "paw accents"],
+      "realPhotoIncluded": false
+    },
+    {
+      "id": "P06_TRAVEL_CAPTION_ECOLOGY",
+      "fixedVisibleCopy": ["旅行先でははしゃぎモードに！ みんなに笑われます…笑"],
+      "includes": ["blue paper vessel", "airplane accent", "heart"],
+      "realPhotoIncluded": false
+    },
+    {
+      "id": "P06_Q6_BOTTOM_ECOLOGY",
+      "fixedVisibleCopy": ["Q6", "これからふたりでやってみたいことは？", "世界中の絶景を見に旅行する！", "クッキーとメロンと一緒にキャンプに行く！", "いつかカフェを開くのが夢です"],
+      "includes": ["yellow/pink vessel", "journey stamp", "camera", "palm island", "bottom tropical cluster"],
+      "realPhotoIncluded": false
+    }
+  ],
+  "nativeOrVariableCopy": {
+    "policy": "Do not bake future owner-revised/personal copy into a replacement asset without explicit approval. Current owner Visual Master wording is locked for this rebuild. If wording changes later, reopen only the affected module.",
+    "pageBadge": "shared PAGE_BADGE component; number 06 is controlled content"
+  },
+  "photoSlots": [
+    {
+      "id": "MAIN", "maskNodeId": "4000:52", "imageNodeId": "4000:53", "semanticRole": "relaxed at-home/everyday coffee couple", "count": 2, "orientation": "landscape", "faceSafe": true, "replaceable": true,
+      "figmaFrameTarget": {"x": 24, "y": 184, "width": 300, "height": 244, "rotationDeg": -2.0}
+    },
+    {
+      "id": "FOOD", "maskNodeId": "4000:55", "imageNodeId": "4000:56", "semanticRole": "appetizing cafe/Italian food", "orientation": "landscape", "replaceable": true,
+      "figmaFrameTarget": {"x": 17, "y": 434, "width": 185, "height": 157, "rotationDeg": -4.2}
+    },
+    {
+      "id": "PETS", "maskNodeId": "4000:58", "imageNodeId": "4000:59", "semanticRole": "Cookie and Melon / two dogs", "count": 2, "orientation": "landscape", "replaceable": true,
+      "figmaFrameTarget": {"x": 197, "y": 425, "width": 172, "height": 157, "rotationDeg": 2.7}
+    },
+    {
+      "id": "TRAVEL", "maskNodeId": "4000:61", "imageNodeId": "4000:62", "semanticRole": "joyful couple travel/beach/ice cream", "count": 2, "orientation": "landscape", "faceSafe": true, "replaceable": true,
+      "figmaFrameTarget": {"x": 370, "y": 443, "width": 170, "height": 158, "rotationDeg": -2.4}
+    }
+  ],
+  "cleanPhotoProxyPolicy": {
+    "visualMasterCropAsPhotoProxy": "PROHIBITED",
+    "allowed": ["owner real photo", "clean standalone representative photo", "clean standalone generated proxy without page decoration"],
+    "rule": "Photos stay independent clipped masks. Decorative frames/captions remain separate."
+  },
+  "quietZones": [
+    "MAIN photo faces/eyes/hands and cups",
+    "TRAVEL photo faces/eyes and ice creams",
+    "PETS faces/eyes",
+    "Q5 readable interior",
+    "INTRO bubble readable interior",
+    "Q6 list readable interior",
+    "intentional cream breathing space between major clusters"
+  ],
+  "relationalConstraints": [
+    "TITLE_ECOLOGY dominates INTRO_BUBBLE",
+    "MAIN_EVERYDAY_PHOTO and Q5 form the primary middle pair",
+    "Q5 is to the right of MAIN and must not cover MAIN faces",
+    "LOWER triptych overlaps in scrapbook rhythm but remains three distinct photo roles",
+    "caption ecologies sit in front of their photo-frame bottoms without covering faces/subjects",
+    "Q6_BOTTOM_ECOLOGY spans the lower width and remains subordinate to the title",
+    "PAGE_06 stays shared and foreground-safe at lower right"
+  ],
+  "moduleGeometry": {
+    "basis": "normalized owner source 1055x1491; Figma approximation on 559x794",
+    "HEADER_ECOLOGY": {"sourceBox": [0, 0, 720, 340], "normalized": [0.0, 0.0, 0.6825, 0.228], "figmaApprox": [0.0, 0.0, 381.5, 181.1]},
+    "INTRO_BUBBLE": {"sourceBox": [680, 20, 1055, 310], "normalized": [0.6445, 0.0134, 0.3555, 0.1945], "figmaApprox": [360.3, 10.7, 198.7, 154.4]},
+    "Q5": {"sourceBox": [600, 300, 1055, 815], "normalized": [0.5687, 0.2012, 0.4313, 0.3454], "figmaApprox": [317.9, 159.8, 241.1, 274.3]},
+    "MAIN_CAPTION": {"sourceBox": [30, 680, 370, 820], "normalized": [0.0284, 0.4561, 0.3223, 0.0939], "figmaApprox": [15.9, 362.1, 180.2, 74.6]},
+    "FOOD_CAPTION": {"sourceBox": [30, 1040, 390, 1175], "normalized": [0.0284, 0.6975, 0.3412, 0.0905], "figmaApprox": [15.9, 553.8, 190.7, 71.9]},
+    "PETS_CAPTION": {"sourceBox": [380, 1040, 720, 1175], "normalized": [0.3602, 0.6975, 0.3223, 0.0905], "figmaApprox": [201.3, 553.8, 180.2, 71.9]},
+    "TRAVEL_CAPTION": {"sourceBox": [690, 1040, 1055, 1185], "normalized": [0.654, 0.6975, 0.346, 0.0973], "figmaApprox": [365.6, 553.8, 193.4, 77.2]},
+    "Q6_BOTTOM": {"sourceBox": [0, 1140, 1055, 1491], "normalized": [0.0, 0.7646, 1.0, 0.2354], "figmaApprox": [0.0, 607.1, 559.0, 186.9]}
+  },
+  "groupedEcologyPlan": {
+    "representativeEcology": "P06_HEADER_ECOLOGY",
+    "productionStrategy": "OWNER_VM_DERIVED_MODULES_FIRST; do not re-generate already owner-approved visual character unless source extraction fails quality QA",
+    "keepSeparate": ["four replaceable photos", "shared PAGE 06 badge"],
+    "why": "The owner master already contains the correct authored magazine character. Rebuilding it from generic native pieces caused the rejected Phase B/C look."
+  },
+  "sourceQualityPolicy": {
+    "canonicalOwnerSourceDimensions": [1055, 1491],
+    "canonicalOwnerSourceBytes": 3682318,
+    "canonicalOwnerSourceSha256": "13bed2e07d66803d67cd6a117a57bc67dbdd9677b9ba54f4b9dd634910747103",
+    "lossyRecompression": "FORBIDDEN",
+    "jpegProxy": "FORBIDDEN",
+    "previewScreenshotAsProduction": "FORBIDDEN",
+    "placementScaleMax": 0.7,
+    "fullPageFigmaPlacementScaleApprox": 0.53,
+    "note": "Prepared module crops must preserve original source pixels; no resize/downsample before placement."
+  },
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "frameId": "3535:17",
+    "updateInPlace": true,
+    "duplicateP06Forbidden": true,
+    "sharedPageBadgeNodeId": "4000:44",
+    "hqFullMasterTargetNodeId": "4249:56",
+    "hqFullMasterTargetRole": "comparison/proof only until modular final assembly; do not use as a flattened final page",
+    "currentState": "VM_LOCKED_MODULE_PRODUCTION_PENDING_BINARY_TRANSFER"
+  },
+  "hardExecutionRejects": [
+    "V31 creation",
+    "duplicate P06 production frame",
+    "whole-page flatten as final architecture",
+    "Visual Master crop used as active photo fill",
+    "page screenshot used as photo proxy",
+    "generic editable Figma primitives replacing owner-authored title/Q5/Q6/caption/icon ecologies",
+    "generic Canva/SVG icon pack",
+    "watercolor/painterly/vintage escape",
+    "dominant #7e08f9 purple drift",
+    "JPEG/proxy/preview/lossy recompression of the HQ owner source",
+    "downsampled production derivative",
+    "completion claim before live Figma readback and high-resolution visual comparison"
+  ],
+  "orderedQaGates": [
+    "VISUAL_MASTER_PASS_A = PASS",
+    "VISUAL_MASTER_PASS_B = PASS",
+    "DISPLAY_ROLE_CLASSIFICATION_PASS = PASS",
+    "PHOTO_PROXY_PLAN_PASS = PASS",
+    "REPRESENTATIVE_ECOLOGY_HEADER_PREP",
+    "P02/P03/P04/P05 CROSS_PAGE_STYLE_FAMILY_PASS",
+    "remaining module preparation",
+    "source/alpha/material QA where transparency is used",
+    "live Figma module placement",
+    "4/4 replaceable photo mask QA",
+    "high-resolution fresh P06 screenshot",
+    "direct owner Visual Master delta review",
+    "P02/P03/P04/P05/P06 side-by-side family review",
+    "A5/print resolution QA"
+  ],
+  "completion": {
+    "VISUAL_MASTER_LOCKED": true,
+    "PART_MAP_APPROVED": true,
+    "FIGMA_DESIGN_COMPLETE": false,
+    "FINAL_COPY_QA_PENDING": false,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false,
+    "currentBlocker": "Exact lossless binary transport of prepared owner-VM modules into Figma is not yet proven in the current connector runtime."
+  }
 }
