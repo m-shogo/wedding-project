@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "rurubu-v30-ai-assist-manifest-v1",
+  "schemaVersion": "rurubu-v30-ai-assist-manifest-v2",
   "status": "CANONICAL_V30_AI_ASSIST",
   "scope": "Rurubu WEDDING V30 only",
   "hardRules": [
@@ -7,9 +7,12 @@
     "Before any meaningful write, read this manifest FIRST, then every linked authority",
     "Use Figma file bfM0d4c9dCeBv5pCkJ3TNM and V30_FINAL_PRODUCTION only",
     "P06 production frame is 3535:17 and must be updated in place",
-    "Do not substitute JPEG proxy, preview screenshot, low-resolution embedded reference, or lossy recompression for owner-supplied HQ PNG",
+    "Do not substitute JPEG proxy, preview screenshot, low-resolution embedded reference, or lossy recompression for owner-supplied HQ raster art",
+    "Do not rebuild P06 title, Q5/Q6 shells, caption frames, icons, stickers, decorative labels or editorial art with Figma native rectangles, vectors, emoji or display text",
+    "For P06, Figma native text is allowlisted only for the editable Q5 answer bodies and Q6 answer lines; all surrounding visual treatment is raster-owned",
     "Keep four P06 photo masks independent and replaceable",
-    "Do not claim completion until live Figma readback and fresh high-resolution visual QA pass"
+    "A visually non-empty native fallback is not completion and must never replace correct raster asset ownership",
+    "Do not claim completion until live Figma readback, native-text allowlist audit and fresh high-resolution visual QA pass"
   ],
   "figma": {
     "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
@@ -26,6 +29,7 @@
     }
   },
   "authorities": {
+    "p06AssetOwnershipGuardrails": "docs/rurubu-v30/P06-ASSET-OWNERSHIP-GUARDRAILS.md",
     "p06HqRasterProductionGuardrails": "docs/rurubu-v30/P06-HQ-RASTER-PRODUCTION-GUARDRAILS.md",
     "p06HqBase64BridgeGuardrails": "docs/rurubu-v30/P06-HQ-BASE64-BRIDGE-GUARDRAILS.md",
     "latestP06TransferEvidence": "docs/rurubu-v30/qa/P06-HQ-TRANSFER-2026-09-08-1130-JST.md",
@@ -34,10 +38,22 @@
   "p06": {
     "frameId": "3535:17",
     "ownerMaster": "P06_OWNER_VISUAL_MASTER_HQ_UNCOMPRESSED_20260906.png",
+    "ownerMasterDriveId": "1mm14Nr1RqlhERZG97Z-9Oz_y-D2lpfWU",
+    "ownerMasterSha256": "13bed2e07d66803d67cd6a117a57bc67dbdd9677b9ba54f4b9dd634910747103",
     "sourceDimensions": "1055x1491",
     "sourceFormat": "PNG",
+    "rasterShellWithNativeTextSlots": {
+      "file": "P06_FULL_PAGE_ART_SHELL_NATIVE_TEXT_SLOTS_HQ_1055x1491.png",
+      "driveId": "14nHhLhXs7KGtifSI9BuJeqCM76vCmv1J"
+    },
+    "nativeTextSemanticAllowlist": [
+      "Q5 answer body: Shogo to Shiori",
+      "Q5 answer body: Shiori to Shogo",
+      "Q6 three answer lines"
+    ],
+    "migrationNativeNodeAllowlist": ["4669:74", "4669:78", "4669:92"],
     "photoMaskNodeIds": ["4000:52", "4000:55", "4000:58", "4000:61"],
     "qaCompareFrames": ["3535:9", "3535:11", "3535:13", "3535:15"],
-    "qaChecklist": ["title", "Q5", "Q6", "icons", "photo frames", "boundaries", "raster quality"]
+    "qaChecklist": ["raster title", "raster Q5 shell", "raster Q6 shell", "raster caption frames", "icons and stickers", "native text allowlist", "photo frames", "boundaries", "raster quality"]
   }
 }
