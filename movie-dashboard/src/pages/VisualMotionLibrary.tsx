@@ -18,6 +18,17 @@ import {
   searchMotionPatterns,
 } from "../data/visualMotionLibrary";
 
+const openingSPickIds = new Set([
+  "type-mask-reveal",
+  "cut-match-shape",
+  "photo-small-push",
+  "photo-directional-pan",
+]);
+
+function isOpeningSPick(patternId: string) {
+  return openingSPickIds.has(patternId);
+}
+
 function actualRenderLabel(sourceType: string) {
   if (sourceType === "ACTUAL_PALMIER_RENDER") return "PALMIER";
   if (sourceType === "ACTUAL_DAVINCI_RENDER") return "DAVINCI";
@@ -28,12 +39,14 @@ export function VisualMotionLibrary() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"ALL" | "PRODUCTION_READY" | "TESTED" | "EXTERNAL_GATE">("ALL");
   const searchRef = useRef<HTMLInputElement>(null);
-  const patterns = useMemo(() => searchMotionPatterns(query).filter((pattern) => {
-    if (statusFilter === "ALL") return true;
-    const status = getPatternImplementation(pattern)?.status;
-    if (statusFilter === "EXTERNAL_GATE") return status !== "PRODUCTION_READY" && status !== "TESTED";
-    return status === statusFilter;
-  }), [query, statusFilter]);
+  const patterns = useMemo(() => searchMotionPatterns(query)
+    .filter((pattern) => {
+      if (statusFilter === "ALL") return true;
+      const status = getPatternImplementation(pattern)?.status;
+      if (statusFilter === "EXTERNAL_GATE") return status !== "PRODUCTION_READY" && status !== "TESTED";
+      return status === statusFilter;
+    })
+    .sort((a, b) => Number(isOpeningSPick(b.id)) - Number(isOpeningSPick(a.id))), [query, statusFilter]);
   const completion = useMemo(() => {
     const all = searchMotionPatterns("");
     const implementations = all.map((pattern) => ({ pattern, implementation: getPatternImplementation(pattern) }));
@@ -55,8 +68,17 @@ export function VisualMotionLibrary() {
     <div>
       <Header
         title="モーション図鑑"
-        description="動きを動画から探し、人間が理解・部分修正できるSceneとして採用し、Palmier Rough → DaVinci Finalへ渡す"
+        description="まず動画を見て『これ』を選ぶ。名前が分からなくても、日本語の言い方と一般名を知ってOpeningへ持ち込める図鑑"
       />
+
+      <section className="mb-8 border-l-2 border-amber-500 pl-5" aria-label="モーション図鑑の使い方">
+        <p className="text-[10px] tracking-[0.2em] font-semibold text-amber-700 dark:text-amber-300">FIRST STEP / 見てこれ</p>
+        <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">名前を知らなくても、見た目から選べばいい</h2>
+        <p className="mt-2 text-sm leading-6 text-navy-600 dark:text-navy-300">
+          今は2026-10-24の結婚式Openingを最優先。まずPreviewを見て『これやりたい』を見つけ、図鑑が日本語名・一般名・検索語へ橋渡しする。
+          <span className="ml-1 font-semibold text-amber-700 dark:text-amber-300">S</span> は今回のOpeningに特に合うと判断した少数の推し。一般人気の順位ではない。
+        </p>
+      </section>
 
       <section className="mb-8 border-l-2 border-emerald-600 pl-5">
         <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">VERTICAL SLICE / HUMAN MASTER</p>
@@ -104,12 +126,12 @@ export function VisualMotionLibrary() {
       <DemoStockMediaShelf />
 
       <label className="block mb-7">
-        <span className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">何をしたい？</span>
+        <span className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">何をしたい？ 名前が分からなくてOK</span>
         <input
           ref={searchRef}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="例: 文字 下からシュッ / 映画っぽい タイトル / 文字を静かに出す"
+          placeholder="例: 写真にゆっくり寄る / 人物の後ろに文字 / 写真同士を似た形でつなぐ / 文字 下からシュッ"
           className="mt-2 w-full border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 px-4 py-3 text-sm text-navy-900 dark:text-sand-100"
         />
       </label>
@@ -133,7 +155,7 @@ export function VisualMotionLibrary() {
             </button>
           ))}
         </div>
-        <p className="mt-2 text-[11px] text-navy-500 dark:text-navy-300">表示中 {patterns.length}件 · Previewの検証とImplementationの検証は別判定</p>
+        <p className="mt-2 text-[11px] text-navy-500 dark:text-navy-300">表示中 {patterns.length}件 · Sは今回のOpening向け推し · Previewの検証とImplementationの検証は別判定</p>
       </section>
 
       <section className="space-y-6">
@@ -143,9 +165,10 @@ export function VisualMotionLibrary() {
           const implementation = getPatternImplementation(pattern);
           const learning = getMotionLearningBundle(pattern.id);
           const remotionElement = getRemotionElementCandidate(pattern.id);
+          const openingSPick = isOpeningSPick(pattern.id);
 
           return (
-            <article key={pattern.id} className="border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800">
+            <article key={pattern.id} className={`border bg-white dark:bg-navy-800 ${openingSPick ? "border-amber-400 dark:border-amber-500" : "border-sand-300 dark:border-navy-600"}`}>
               <div className="grid grid-cols-1 xl:grid-cols-[1.15fr_1fr]">
                 <div className="min-h-[260px] bg-navy-950 text-white flex items-center justify-center p-8 relative overflow-hidden">
                   {preview?.assetPath ? (
@@ -165,6 +188,11 @@ export function VisualMotionLibrary() {
                   <span className="absolute top-3 left-3 px-2 py-1 text-[9px] font-mono border border-white/30 bg-black/30">
                     {preview?.sourceType ?? "MISSING"} / {preview?.status ?? "MISSING"}
                   </span>
+                  {openingSPick && (
+                    <span className="absolute top-3 right-3 rounded-full bg-amber-400 px-3 py-1 text-xs font-black text-navy-950 shadow-sm" title="今回の結婚式Openingに特に合うと判断した推し">
+                      S · OP推し
+                    </span>
+                  )}
                   {previewEvidence && (
                     <div className="absolute bottom-3 left-3 right-3 border border-emerald-300/30 bg-black/55 px-3 py-2 text-left">
                       <p className="text-[10px] font-semibold text-emerald-300">
@@ -195,9 +223,13 @@ export function VisualMotionLibrary() {
                 </div>
 
                 <div className="p-6">
-                  <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">{pattern.categories.join(" / ")}</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">{pattern.categories.join(" / ")}</p>
+                    {openingSPick && <span className="rounded-full border border-amber-400 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-300">S · 今回のOP候補</span>}
+                  </div>
                   <h2 className="mt-1 text-2xl font-bold text-navy-900 dark:text-sand-100">{pattern.japaneseName}</h2>
-                  <p className="mt-1 text-sm font-mono text-navy-400">{pattern.commonName} · {pattern.id}</p>
+                  <p className="mt-1 text-sm font-mono text-navy-400">一般名: {pattern.commonName} · {pattern.id}</p>
+                  <p className="mt-3 border-l-2 border-sand-300 pl-3 text-sm leading-6 text-navy-700 dark:border-navy-500 dark:text-navy-200">見た目: {pattern.looksLike}</p>
                   <p className="mt-4 text-sm leading-7 text-navy-600 dark:text-navy-300">{pattern.naturalDescription}</p>
 
                   <div className="mt-5 flex flex-wrap gap-2">
