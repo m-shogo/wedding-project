@@ -35,18 +35,29 @@ function actualRenderLabel(sourceType: string) {
   return "SOURCE MEDIA";
 }
 
+function davinciPathLabel(kind?: string) {
+  if (!kind) return "未確認";
+  const normalized = kind.toUpperCase();
+  if (normalized.includes("FUSION")) return "Fusion向き";
+  if (normalized.includes("EDIT")) return "Editで作りやすい";
+  if (normalized.includes("PALMIER")) return "Palmier中心";
+  return kind;
+}
+
 export function VisualMotionLibrary() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"ALL" | "PRODUCTION_READY" | "TESTED" | "EXTERNAL_GATE">("ALL");
+  const [focusFilter, setFocusFilter] = useState<"ALL" | "S">("ALL");
   const searchRef = useRef<HTMLInputElement>(null);
   const patterns = useMemo(() => searchMotionPatterns(query)
+    .filter((pattern) => focusFilter === "ALL" || isOpeningSPick(pattern.id))
     .filter((pattern) => {
       if (statusFilter === "ALL") return true;
       const status = getPatternImplementation(pattern)?.status;
       if (statusFilter === "EXTERNAL_GATE") return status !== "PRODUCTION_READY" && status !== "TESTED";
       return status === statusFilter;
     })
-    .sort((a, b) => Number(isOpeningSPick(b.id)) - Number(isOpeningSPick(a.id))), [query, statusFilter]);
+    .sort((a, b) => Number(isOpeningSPick(b.id)) - Number(isOpeningSPick(a.id))), [query, statusFilter, focusFilter]);
   const completion = useMemo(() => {
     const all = searchMotionPatterns("");
     const implementations = all.map((pattern) => ({ pattern, implementation: getPatternImplementation(pattern) }));
@@ -55,13 +66,26 @@ export function VisualMotionLibrary() {
       productionReady: implementations.filter(({ implementation }) => implementation?.status === "PRODUCTION_READY").length,
       tested: implementations.filter(({ implementation }) => implementation?.status === "TESTED").length,
       remaining: implementations.filter(({ implementation }) => implementation?.status !== "PRODUCTION_READY" && implementation?.status !== "TESTED").map(({ pattern }) => pattern.id),
+      sPicks: all.filter((pattern) => isOpeningSPick(pattern.id)).length,
     };
   }, []);
 
+  function scrollToCatalog() {
+    requestAnimationFrame(() => searchRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
+  function showSPicks() {
+    setQuery("");
+    setStatusFilter("ALL");
+    setFocusFilter("S");
+    scrollToCatalog();
+  }
+
   function showPattern(patternId: string) {
     setQuery(patternId);
+    setFocusFilter("ALL");
     setStatusFilter("EXTERNAL_GATE");
-    requestAnimationFrame(() => searchRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    scrollToCatalog();
   }
 
   return (
@@ -78,6 +102,14 @@ export function VisualMotionLibrary() {
           今は2026-10-24の結婚式Openingを最優先。まずPreviewを見て『これやりたい』を見つけ、図鑑が日本語名・一般名・検索語へ橋渡しする。
           <span className="ml-1 font-semibold text-amber-700 dark:text-amber-300">S</span> は今回のOpeningに特に合うと判断した少数の推し。一般人気の順位ではない。
         </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button type="button" onClick={showSPicks} className="min-h-11 rounded-full bg-amber-400 px-4 py-2 text-sm font-bold text-navy-950">
+            Sだけ見る · {completion.sPicks}件
+          </button>
+          <button type="button" onClick={scrollToCatalog} className="min-h-11 rounded-full border border-sand-300 px-4 py-2 text-sm font-semibold text-navy-700 dark:border-navy-600 dark:text-sand-100">
+            全演出から探す
+          </button>
+        </div>
       </section>
 
       <section className="mb-8 border-l-2 border-emerald-600 pl-5">
@@ -125,7 +157,7 @@ export function VisualMotionLibrary() {
 
       <DemoStockMediaShelf />
 
-      <label className="block mb-7">
+      <label className="block mb-5">
         <span className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">何をしたい？ 名前が分からなくてOK</span>
         <input
           ref={searchRef}
@@ -136,7 +168,15 @@ export function VisualMotionLibrary() {
         />
       </label>
 
-      <section className="mb-7" aria-label="実装状態で絞り込み">
+      <section className="mb-7" aria-label="演出を絞り込み">
+        <div className="mb-3 flex flex-wrap gap-2">
+          <button type="button" aria-pressed={focusFilter === "ALL"} onClick={() => setFocusFilter("ALL")} className={`min-h-11 rounded-full border px-4 py-2 text-xs font-bold ${focusFilter === "ALL" ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-900" : "border-sand-300 text-navy-600 dark:border-navy-600 dark:text-navy-300"}`}>
+            全演出
+          </button>
+          <button type="button" aria-pressed={focusFilter === "S"} onClick={() => setFocusFilter("S")} className={`min-h-11 rounded-full border px-4 py-2 text-xs font-bold ${focusFilter === "S" ? "border-amber-400 bg-amber-400 text-navy-950" : "border-amber-300 text-amber-700 dark:border-amber-700 dark:text-amber-300"}`}>
+            S · OP推しだけ {completion.sPicks}
+          </button>
+        </div>
         <div className="flex flex-wrap gap-2">
           {([
             ["ALL", `すべて ${completion.total}`],
@@ -149,7 +189,7 @@ export function VisualMotionLibrary() {
               type="button"
               aria-pressed={statusFilter === value}
               onClick={() => setStatusFilter(value)}
-              className={`border px-3 py-2 text-xs font-semibold ${statusFilter === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-900" : "border-sand-300 text-navy-600 dark:border-navy-600 dark:text-navy-300"}`}
+              className={`min-h-11 border px-3 py-2 text-xs font-semibold ${statusFilter === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-900" : "border-sand-300 text-navy-600 dark:border-navy-600 dark:text-navy-300"}`}
             >
               {label}
             </button>
@@ -170,7 +210,7 @@ export function VisualMotionLibrary() {
           return (
             <article key={pattern.id} className={`border bg-white dark:bg-navy-800 ${openingSPick ? "border-amber-400 dark:border-amber-500" : "border-sand-300 dark:border-navy-600"}`}>
               <div className="grid grid-cols-1 xl:grid-cols-[1.15fr_1fr]">
-                <div className="min-h-[260px] bg-navy-950 text-white flex items-center justify-center p-8 relative overflow-hidden">
+                <div className="min-h-[260px] bg-navy-950 text-white flex items-center justify-center p-4 sm:p-8 relative overflow-hidden">
                   {preview?.assetPath ? (
                     <video src={preview.assetPath} poster={preview.posterPath ?? undefined} controls loop muted playsInline className="w-full max-h-[420px] object-contain" />
                   ) : (
@@ -222,7 +262,7 @@ export function VisualMotionLibrary() {
                   )}
                 </div>
 
-                <div className="p-6">
+                <div className="p-5 sm:p-6">
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">{pattern.categories.join(" / ")}</p>
                     {openingSPick && <span className="rounded-full border border-amber-400 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-300">S · 今回のOP候補</span>}
@@ -242,7 +282,7 @@ export function VisualMotionLibrary() {
                     <div><dt className="font-semibold">Opening</dt><dd>{pattern.openingFit}</dd></div>
                     <div><dt className="font-semibold">Profile</dt><dd>{pattern.profileFit}</dd></div>
                     <div><dt className="font-semibold">Palmier</dt><dd>{pattern.palmierCapability}</dd></div>
-                    <div><dt className="font-semibold">DaVinci</dt><dd>{implementation?.kind ?? "UNVERIFIED"}</dd></div>
+                    <div><dt className="font-semibold">DaVinciで作るなら</dt><dd>{davinciPathLabel(implementation?.kind)}</dd></div>
                     <div><dt className="font-semibold">Implementation</dt><dd>{implementation?.status ?? "DISCOVERED"}</dd></div>
                     <div><dt className="font-semibold">Verified</dt><dd>{implementation?.verified ? "YES" : "NO"}</dd></div>
                   </dl>
