@@ -12,48 +12,16 @@ import { WeddingDavinciTransitionActualReadinessCard } from "../components/Weddi
 import { getMotionLearningBundle } from "../data/motionLearningLinks";
 import { getLatestPreviewEvidence } from "../data/motionPreviewEvidence";
 import { getRemotionElementCandidate } from "../data/remotionElementCandidates";
+import { getMotionZukanHumanCuration } from "../data/motionZukanHumanCuration";
 import {
   getPatternImplementation,
   getPatternPreview,
   searchMotionPatterns,
 } from "../data/visualMotionLibrary";
 
-type OpeningSPickMeta = {
-  score: 4 | 5;
-  difficulty: "かんたん" | "ふつう" | "少し難しい";
-  bestFor: string;
-  why: string;
-};
-
-const openingSPicks: Record<string, OpeningSPickMeta> = {
-  "type-mask-reveal": {
-    score: 5,
-    difficulty: "ふつう",
-    bestFor: "冒頭タイトル・名前・地名",
-    why: "実写真を主役のまま残しつつ、旅行映画っぽいタイトル感だけを足せる。StaRtの文字アクセントにも合わせやすい。",
-  },
-  "cut-match-shape": {
-    score: 5,
-    difficulty: "少し難しい",
-    bestFor: "旅行先の切替・写真→動画",
-    why: "似た形や位置をつないで場面転換でき、旅の記録が一本につながって見える。テンプレ感を出さずに印象を残せる。",
-  },
-  "photo-small-push": {
-    score: 5,
-    difficulty: "かんたん",
-    bestFor: "思い出写真・余韻・人物写真",
-    why: "写真そのものを見せたい今回のOpeningと最も相性がいい基本動作。派手さを足さず、静止画を自然に映像へできる。",
-  },
-  "photo-directional-pan": {
-    score: 4,
-    difficulty: "かんたん",
-    bestFor: "視線誘導・横長写真・移動感",
-    why: "写真の中の視線や移動方向を利用でき、旅行テーマの『次へ進む感じ』を自然に出せる。使いすぎない前提で強い。",
-  },
-};
-
 function getOpeningSPick(patternId: string) {
-  return openingSPicks[patternId] ?? null;
+  const curation = getMotionZukanHumanCuration(patternId);
+  return curation?.sRank ? curation : null;
 }
 
 function isOpeningSPick(patternId: string) {
@@ -130,7 +98,7 @@ export function VisualMotionLibrary() {
   function showPattern(patternId: string) {
     setQuery(patternId);
     setFocusFilter("ALL");
-    setStatusFilter("EXTERNAL_GATE");
+    setStatusFilter("ALL");
     scrollToCatalog();
   }
 
@@ -157,51 +125,6 @@ export function VisualMotionLibrary() {
           </button>
         </div>
       </section>
-
-      <section className="mb-8 border-l-2 border-emerald-600 pl-5">
-        <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">VERTICAL SLICE / HUMAN MASTER</p>
-        <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">Native App Actual 10件を、検証根拠と一緒に公開する</h2>
-        <p className="mt-2 text-sm leading-6 text-navy-600 dark:text-navy-300">
-          人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本として編集できるのはMask Revealのみ。
-          他のMotion Kit presetは、31件の永続Remotion TESTEDと2件のsource-media Actual TESTEDを証拠種別ごとに分けている。Mask Reveal・Quiet Caption・Static Hero・Word Punch・Small Push・Slow Pull・Gentle Pan・Flash Soft・Char StaggerはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み。
-        </p>
-      </section>
-
-      <section className="mb-8 border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 p-5" aria-label="モーション図鑑の完成度">
-        <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">COMPLETION / HONEST GATES</p>
-        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
-          <div className="border border-emerald-200 dark:border-emerald-900 p-3"><p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{completion.productionReady}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">Native App Actual</p></div>
-          <div className="border border-sky-200 dark:border-sky-900 p-3"><p className="text-2xl font-bold text-sky-700 dark:text-sky-300">{completion.tested}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">Implementation TESTED</p></div>
-          <div className="border border-amber-200 dark:border-amber-900 p-3"><p className="text-2xl font-bold text-amber-700 dark:text-amber-300">{completion.remaining.length}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">外部確認待ち</p></div>
-          <div className="border border-sand-200 dark:border-navy-600 p-3"><p className="text-2xl font-bold text-navy-800 dark:text-sand-100">{completion.total}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">全パターン</p></div>
-        </div>
-        <div className="mt-4 grid gap-2 text-xs md:grid-cols-2">
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">type-quiet-caption</span> — DaVinci Fusionで静かなopacity fadeを実機確認済み</p>
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">cut-hard-accent</span> — Palmier native hard cutをframe 63 / BGM downbeatで確認済み</p>
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">photo-static-hero</span> — DaVinci Edit page nativeでpan/zoom無しの静止Heroを実機確認済み</p>
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">type-word-punch</span> — DaVinci Fusion Saverで単発Blendパンチ(GO!)を実機確認済み</p>
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">photo-small-push</span> — DaVinci Fusion TransformのSize keyframe(1.00→1.05)を実機確認済み</p>
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">photo-slow-pull</span> — DaVinci Fusion TransformのSize keyframe(1.06→1.00)を実機確認済み</p>
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">photo-directional-pan</span> — DaVinci Fusion TransformのCenter keyframe(0.44→0.56)を実機確認済み</p>
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">flash-one-frame-soft</span> — DaVinci Fusion Background+Mergeのソフトフラッシュを実機確認済み</p>
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">type-char-stagger</span> — DaVinci Fusion 3x Text+の時間差Blendを実機確認済み</p>
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">cut-match-shape</span> — Pexels実動画2本の太陽中心を合わせてTESTED</p>
-          <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">whip-source-matched</span> — Pexels列車窓2本の同方向camera motionでTESTED</p>
-        </div>
-        <p className="mt-3 text-[11px] text-navy-500 dark:text-navy-300">未検証ID: {completion.remaining.length ? completion.remaining.join(" / ") : "なし"}</p>
-      </section>
-
-      <MotionActualVerificationWorkspace onShowPattern={showPattern} />
-
-      <MotionZukanProductionWorkspace />
-      <WeddingDavinciDeliveryReadinessCard />
-      <WeddingDavinciTransitionActualReadinessCard />
-      <WeddingDavinciGuiActualStartGateCard />
-      <div className="mb-10">
-        <ProfileRealMediaQaAuditCard />
-      </div>
-
-      <DemoStockMediaShelf />
 
       <label className="block mb-5">
         <span className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">何をしたい？ 名前が分からなくてOK</span>
@@ -243,6 +166,56 @@ export function VisualMotionLibrary() {
         </div>
         <p className="mt-2 text-[11px] text-navy-500 dark:text-navy-300">表示中 {patterns.length}件 · Sは今回のOpening向け推し · Previewの検証とImplementationの検証は別判定</p>
       </section>
+
+      <details className="mb-8 border border-sand-300 bg-sand-50 dark:border-navy-600 dark:bg-navy-800/60">
+        <summary className="min-h-11 cursor-pointer px-4 py-3 text-sm font-bold text-navy-800 dark:text-sand-100">制作・検証情報を見る（必要なときだけ）</summary>
+        <div className="border-t border-sand-200 p-4 dark:border-navy-600 sm:p-5">
+          <p className="mb-5 text-xs leading-5 text-navy-500 dark:text-navy-300">演出を探すだけならここは開かなくてOK。Actual / readiness / Human Masterなど、制作段階で必要になる確認情報をまとめている。</p>
+
+          <section className="mb-8 border-l-2 border-emerald-600 pl-5">
+            <p className="text-[10px] tracking-[0.2em] font-semibold text-emerald-700 dark:text-emerald-300">VERTICAL SLICE / HUMAN MASTER</p>
+            <h2 className="mt-1 text-xl font-bold text-navy-900 dark:text-sand-100">Native App Actual 10件を、検証根拠と一緒に公開する</h2>
+            <p className="mt-2 text-sm leading-6 text-navy-600 dark:text-navy-300">
+              人間が理解できるScene Duration / Delay / Hold / Position / Direction等を正本として編集できるのはMask Revealのみ。
+              他のMotion Kit presetは、31件の永続Remotion TESTEDと2件のsource-media Actual TESTEDを証拠種別ごとに分けている。Mask Reveal・Quiet Caption・Static Hero・Word Punch・Small Push・Slow Pull・Gentle Pan・Flash Soft・Char StaggerはDaVinci Actual、Hard Cut AccentはPalmier Actualまで到達済み。
+            </p>
+          </section>
+
+          <section className="mb-8 border border-sand-300 dark:border-navy-600 bg-white dark:bg-navy-800 p-5" aria-label="モーション図鑑の完成度">
+            <p className="text-[10px] tracking-[0.2em] font-semibold text-navy-400">COMPLETION / HONEST GATES</p>
+            <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
+              <div className="border border-emerald-200 dark:border-emerald-900 p-3"><p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{completion.productionReady}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">Native App Actual</p></div>
+              <div className="border border-sky-200 dark:border-sky-900 p-3"><p className="text-2xl font-bold text-sky-700 dark:text-sky-300">{completion.tested}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">Implementation TESTED</p></div>
+              <div className="border border-amber-200 dark:border-amber-900 p-3"><p className="text-2xl font-bold text-amber-700 dark:text-amber-300">{completion.remaining.length}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">外部確認待ち</p></div>
+              <div className="border border-sand-200 dark:border-navy-600 p-3"><p className="text-2xl font-bold text-navy-800 dark:text-sand-100">{completion.total}</p><p className="text-[11px] text-navy-500 dark:text-navy-300">全パターン</p></div>
+            </div>
+            <div className="mt-4 grid gap-2 text-xs md:grid-cols-2">
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">type-quiet-caption</span> — DaVinci Fusionで静かなopacity fadeを実機確認済み</p>
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">cut-hard-accent</span> — Palmier native hard cutをframe 63 / BGM downbeatで確認済み</p>
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">photo-static-hero</span> — DaVinci Edit page nativeでpan/zoom無しの静止Heroを実機確認済み</p>
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">type-word-punch</span> — DaVinci Fusion Saverで単発Blendパンチ(GO!)を実機確認済み</p>
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">photo-small-push</span> — DaVinci Fusion TransformのSize keyframe(1.00→1.05)を実機確認済み</p>
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">photo-slow-pull</span> — DaVinci Fusion TransformのSize keyframe(1.06→1.00)を実機確認済み</p>
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">photo-directional-pan</span> — DaVinci Fusion TransformのCenter keyframe(0.44→0.56)を実機確認済み</p>
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">flash-one-frame-soft</span> — DaVinci Fusion Background+Mergeのソフトフラッシュを実機確認済み</p>
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">type-char-stagger</span> — DaVinci Fusion 3x Text+の時間差Blendを実機確認済み</p>
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">cut-match-shape</span> — Pexels実動画2本の太陽中心を合わせてTESTED</p>
+              <p className="border-l-2 border-emerald-500 pl-3"><span className="font-mono">whip-source-matched</span> — Pexels列車窓2本の同方向camera motionでTESTED</p>
+            </div>
+            <p className="mt-3 text-[11px] text-navy-500 dark:text-navy-300">未検証ID: {completion.remaining.length ? completion.remaining.join(" / ") : "なし"}</p>
+          </section>
+
+          <MotionActualVerificationWorkspace onShowPattern={showPattern} />
+          <MotionZukanProductionWorkspace />
+          <WeddingDavinciDeliveryReadinessCard />
+          <WeddingDavinciTransitionActualReadinessCard />
+          <WeddingDavinciGuiActualStartGateCard />
+          <div className="mb-10">
+            <ProfileRealMediaQaAuditCard />
+          </div>
+          <DemoStockMediaShelf />
+        </div>
+      </details>
 
       <section className="space-y-6">
         {patterns.map((pattern) => {
@@ -337,7 +310,7 @@ export function VisualMotionLibrary() {
                   {sPick && (
                     <div className="mt-3 border-l-4 border-amber-400 bg-amber-50 px-4 py-3 dark:bg-amber-950/20">
                       <p className="text-[10px] font-black tracking-[0.16em] text-amber-700 dark:text-amber-300">WHY S / 今回これを推す理由</p>
-                      <p className="mt-1 text-sm leading-6 text-navy-700 dark:text-navy-200">{sPick.why}</p>
+                      <p className="mt-1 text-sm leading-6 text-navy-700 dark:text-navy-200">{sPick.whyForWeddingOpening}</p>
                     </div>
                   )}
 
@@ -353,10 +326,24 @@ export function VisualMotionLibrary() {
                       <div><dt className="font-semibold">Opening</dt><dd>{pattern.openingFit}</dd></div>
                       <div><dt className="font-semibold">Profile</dt><dd>{pattern.profileFit}</dd></div>
                       <div><dt className="font-semibold">Palmier</dt><dd>{pattern.palmierCapability}</dd></div>
-                      <div><dt className="font-semibold">DaVinciで作るなら</dt><dd>{davinciPathLabel(implementation?.kind)}</dd></div>
+                      <div><dt className="font-semibold">DaVinciで作るなら</dt><dd>{sPick?.davinciHumanLabel ?? davinciPathLabel(implementation?.kind)}</dd></div>
                       <div><dt className="font-semibold">Implementation</dt><dd>{implementation?.status ?? "DISCOVERED"}</dd></div>
                       <div><dt className="font-semibold">Verified</dt><dd>{implementation?.verified ? "YES" : "NO"}</dd></div>
                     </dl>
+
+                    {sPick && sPick.externalReferences.length > 0 && (
+                      <div className="mt-5 border-t border-sand-200 pt-4 dark:border-navy-600">
+                        <p className="text-[10px] font-semibold tracking-[0.16em] text-navy-400">実物・公式の参考</p>
+                        <div className="mt-2 space-y-2">
+                          {sPick.externalReferences.map((reference) => (
+                            <a key={reference.url} href={reference.url} target="_blank" rel="noreferrer" className="block min-h-11 border border-sand-200 px-3 py-2 text-xs text-sky-700 hover:underline dark:border-navy-600 dark:text-sky-300">
+                              <span className="font-semibold">{reference.title}</span>
+                              <span className="mt-1 block text-[11px] leading-5 text-navy-500 dark:text-navy-300">{reference.note}</span>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {remotionElement && <RemotionElementReadinessPanel candidate={remotionElement} />}
 
