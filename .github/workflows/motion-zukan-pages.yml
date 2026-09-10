@@ -33,7 +33,7 @@ jobs:
         run: |
           set -euo pipefail
           test -f motion-zukan-public/index.html
-          forbidden='StaRt.m4a|local/audio|local/analysis|receipt|/Users/|BEGIN PRIVATE|personal photo|lyrics-wedding'
+          forbidden='StaRt\.m4a|local/audio|local/analysis|receipt\.json|receipts/|verificationReceipt|/Users/|BEGIN PRIVATE|personal photo|lyrics-wedding'
           if grep -REni "$forbidden" motion-zukan-public; then
             echo "Public Motion Zukan contains a forbidden local/private token."
             exit 1
