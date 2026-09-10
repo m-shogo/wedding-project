@@ -18,15 +18,46 @@ import {
   searchMotionPatterns,
 } from "../data/visualMotionLibrary";
 
-const openingSPickIds = new Set([
-  "type-mask-reveal",
-  "cut-match-shape",
-  "photo-small-push",
-  "photo-directional-pan",
-]);
+type OpeningSPickMeta = {
+  score: 4 | 5;
+  difficulty: "かんたん" | "ふつう" | "少し難しい";
+  bestFor: string;
+  why: string;
+};
+
+const openingSPicks: Record<string, OpeningSPickMeta> = {
+  "type-mask-reveal": {
+    score: 5,
+    difficulty: "ふつう",
+    bestFor: "冒頭タイトル・名前・地名",
+    why: "実写真を主役のまま残しつつ、旅行映画っぽいタイトル感だけを足せる。StaRtの文字アクセントにも合わせやすい。",
+  },
+  "cut-match-shape": {
+    score: 5,
+    difficulty: "少し難しい",
+    bestFor: "旅行先の切替・写真→動画",
+    why: "似た形や位置をつないで場面転換でき、旅の記録が一本につながって見える。テンプレ感を出さずに印象を残せる。",
+  },
+  "photo-small-push": {
+    score: 5,
+    difficulty: "かんたん",
+    bestFor: "思い出写真・余韻・人物写真",
+    why: "写真そのものを見せたい今回のOpeningと最も相性がいい基本動作。派手さを足さず、静止画を自然に映像へできる。",
+  },
+  "photo-directional-pan": {
+    score: 4,
+    difficulty: "かんたん",
+    bestFor: "視線誘導・横長写真・移動感",
+    why: "写真の中の視線や移動方向を利用でき、旅行テーマの『次へ進む感じ』を自然に出せる。使いすぎない前提で強い。",
+  },
+};
+
+function getOpeningSPick(patternId: string) {
+  return openingSPicks[patternId] ?? null;
+}
 
 function isOpeningSPick(patternId: string) {
-  return openingSPickIds.has(patternId);
+  return Boolean(getOpeningSPick(patternId));
 }
 
 function actualRenderLabel(sourceType: string) {
@@ -39,9 +70,19 @@ function davinciPathLabel(kind?: string) {
   if (!kind) return "未確認";
   const normalized = kind.toUpperCase();
   if (normalized.includes("FUSION")) return "Fusion向き";
+  if (normalized.includes("TEXT_PLUS")) return "Text+ / Fusion";
   if (normalized.includes("EDIT")) return "Editで作りやすい";
   if (normalized.includes("PALMIER")) return "Palmier中心";
   return kind;
+}
+
+function selfBuildDifficulty(kind?: string) {
+  if (!kind) return "未確認";
+  const normalized = kind.toUpperCase();
+  if (normalized.includes("PALMIER") || normalized.includes("EDIT_NATIVE") || normalized === "DAVINCI_EDIT") return "★☆☆ かんたん";
+  if (normalized.includes("TEXT_PLUS") || normalized.includes("DAVINCI_BUILTIN")) return "★★☆ ふつう";
+  if (normalized.includes("FUSION") || normalized.includes("MIXED") || normalized.includes("REMOTION")) return "★★★ むずかしめ";
+  return "★★☆ ふつう";
 }
 
 export function VisualMotionLibrary() {
@@ -57,7 +98,12 @@ export function VisualMotionLibrary() {
       if (statusFilter === "EXTERNAL_GATE") return status !== "PRODUCTION_READY" && status !== "TESTED";
       return status === statusFilter;
     })
-    .sort((a, b) => Number(isOpeningSPick(b.id)) - Number(isOpeningSPick(a.id))), [query, statusFilter, focusFilter]);
+    .sort((a, b) => {
+      const aPick = getOpeningSPick(a.id);
+      const bPick = getOpeningSPick(b.id);
+      if (aPick && bPick) return bPick.score - aPick.score;
+      return Number(Boolean(bPick)) - Number(Boolean(aPick));
+    }), [query, statusFilter, focusFilter]);
   const completion = useMemo(() => {
     const all = searchMotionPatterns("");
     const implementations = all.map((pattern) => ({ pattern, implementation: getPatternImplementation(pattern) }));
@@ -205,7 +251,8 @@ export function VisualMotionLibrary() {
           const implementation = getPatternImplementation(pattern);
           const learning = getMotionLearningBundle(pattern.id);
           const remotionElement = getRemotionElementCandidate(pattern.id);
-          const openingSPick = isOpeningSPick(pattern.id);
+          const sPick = getOpeningSPick(pattern.id);
+          const openingSPick = Boolean(sPick);
 
           return (
             <article key={pattern.id} className={`border bg-white dark:bg-navy-800 ${openingSPick ? "border-amber-400 dark:border-amber-500" : "border-sand-300 dark:border-navy-600"}`}>
@@ -272,48 +319,73 @@ export function VisualMotionLibrary() {
                   <p className="mt-3 border-l-2 border-sand-300 pl-3 text-sm leading-6 text-navy-700 dark:border-navy-500 dark:text-navy-200">見た目: {pattern.looksLike}</p>
                   <p className="mt-4 text-sm leading-7 text-navy-600 dark:text-navy-300">{pattern.naturalDescription}</p>
 
+                  <div className="mt-5 grid gap-2 sm:grid-cols-3" aria-label="3秒で判断">
+                    <div className="border border-sand-200 dark:border-navy-600 p-3">
+                      <p className="text-[10px] font-semibold text-navy-400">OPおすすめ</p>
+                      <p className="mt-1 text-sm font-bold text-navy-900 dark:text-sand-100">{sPick ? `${"★".repeat(sPick.score)}${"☆".repeat(5 - sPick.score)}` : pattern.openingFit}</p>
+                    </div>
+                    <div className="border border-sand-200 dark:border-navy-600 p-3">
+                      <p className="text-[10px] font-semibold text-navy-400">自作難易度</p>
+                      <p className="mt-1 text-sm font-bold text-navy-900 dark:text-sand-100">{sPick?.difficulty ?? selfBuildDifficulty(implementation?.kind)}</p>
+                    </div>
+                    <div className="border border-sand-200 dark:border-navy-600 p-3 sm:col-span-1">
+                      <p className="text-[10px] font-semibold text-navy-400">向いてる場面</p>
+                      <p className="mt-1 text-sm font-bold text-navy-900 dark:text-sand-100">{sPick?.bestFor ?? pattern.goodFor[0] ?? "用途を確認"}</p>
+                    </div>
+                  </div>
+
+                  {sPick && (
+                    <div className="mt-3 border-l-4 border-amber-400 bg-amber-50 px-4 py-3 dark:bg-amber-950/20">
+                      <p className="text-[10px] font-black tracking-[0.16em] text-amber-700 dark:text-amber-300">WHY S / 今回これを推す理由</p>
+                      <p className="mt-1 text-sm leading-6 text-navy-700 dark:text-navy-200">{sPick.why}</p>
+                    </div>
+                  )}
+
                   <div className="mt-5 flex flex-wrap gap-2">
                     {pattern.aliases.slice(0, 6).map((alias) => (
                       <span key={alias} className="px-2 py-1 text-[10px] border border-sand-300 dark:border-navy-600 text-navy-500 dark:text-navy-300">{alias}</span>
                     ))}
                   </div>
 
-                  <dl className="mt-6 grid grid-cols-2 gap-x-5 gap-y-3 text-xs text-navy-600 dark:text-navy-300">
-                    <div><dt className="font-semibold">Opening</dt><dd>{pattern.openingFit}</dd></div>
-                    <div><dt className="font-semibold">Profile</dt><dd>{pattern.profileFit}</dd></div>
-                    <div><dt className="font-semibold">Palmier</dt><dd>{pattern.palmierCapability}</dd></div>
-                    <div><dt className="font-semibold">DaVinciで作るなら</dt><dd>{davinciPathLabel(implementation?.kind)}</dd></div>
-                    <div><dt className="font-semibold">Implementation</dt><dd>{implementation?.status ?? "DISCOVERED"}</dd></div>
-                    <div><dt className="font-semibold">Verified</dt><dd>{implementation?.verified ? "YES" : "NO"}</dd></div>
-                  </dl>
+                  <details className="mt-6 border-t border-sand-200 pt-4 dark:border-navy-600">
+                    <summary className="min-h-11 cursor-pointer py-2 text-sm font-bold text-navy-800 dark:text-sand-100">作り方・DaVinci情報を見る</summary>
+                    <dl className="mt-3 grid grid-cols-2 gap-x-5 gap-y-3 text-xs text-navy-600 dark:text-navy-300">
+                      <div><dt className="font-semibold">Opening</dt><dd>{pattern.openingFit}</dd></div>
+                      <div><dt className="font-semibold">Profile</dt><dd>{pattern.profileFit}</dd></div>
+                      <div><dt className="font-semibold">Palmier</dt><dd>{pattern.palmierCapability}</dd></div>
+                      <div><dt className="font-semibold">DaVinciで作るなら</dt><dd>{davinciPathLabel(implementation?.kind)}</dd></div>
+                      <div><dt className="font-semibold">Implementation</dt><dd>{implementation?.status ?? "DISCOVERED"}</dd></div>
+                      <div><dt className="font-semibold">Verified</dt><dd>{implementation?.verified ? "YES" : "NO"}</dd></div>
+                    </dl>
 
-                  {remotionElement && <RemotionElementReadinessPanel candidate={remotionElement} />}
+                    {remotionElement && <RemotionElementReadinessPanel candidate={remotionElement} />}
 
-                  {learning && (
-                    <section className="mt-6 border-t border-sand-200 dark:border-navy-600 pt-5">
-                      <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">JUST-IN-TIME LEARNING</p>
-                      <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">この演出で学べること</h3>
-                      <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">{learning.whyNow}</p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {learning.learningTopics.map((topic) => (
-                          <span key={topic} className="px-2 py-1 text-[10px] border border-sky-200 dark:border-sky-900 text-sky-700 dark:text-sky-300">{topic}</span>
-                        ))}
-                      </div>
-                      <div className="mt-4 space-y-3">
-                        {learning.fusionRecipes.map((recipe) => (
-                          <div key={recipe.recipeId} className="border border-sand-200 dark:border-navy-600 p-3">
-                            <p className="text-xs font-semibold text-navy-800 dark:text-sand-100">{recipe.title}</p>
-                            <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">{recipe.goal}</p>
-                            <ol className="mt-2 space-y-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">
-                              {recipe.steps.map((step, index) => (
-                                <li key={`${recipe.recipeId}-${step.nodeId}-${index}`}>{index + 1}. {step.note}</li>
-                              ))}
-                            </ol>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-                  )}
+                    {learning && (
+                      <section className="mt-6 border-t border-sand-200 dark:border-navy-600 pt-5">
+                        <p className="text-[10px] tracking-[0.2em] font-semibold text-sky-700 dark:text-sky-300">JUST-IN-TIME LEARNING</p>
+                        <h3 className="mt-1 text-base font-bold text-navy-900 dark:text-sand-100">この演出で学べること</h3>
+                        <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">{learning.whyNow}</p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {learning.learningTopics.map((topic) => (
+                            <span key={topic} className="px-2 py-1 text-[10px] border border-sky-200 dark:border-sky-900 text-sky-700 dark:text-sky-300">{topic}</span>
+                          ))}
+                        </div>
+                        <div className="mt-4 space-y-3">
+                          {learning.fusionRecipes.map((recipe) => (
+                            <div key={recipe.recipeId} className="border border-sand-200 dark:border-navy-600 p-3">
+                              <p className="text-xs font-semibold text-navy-800 dark:text-sand-100">{recipe.title}</p>
+                              <p className="mt-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">{recipe.goal}</p>
+                              <ol className="mt-2 space-y-1 text-[11px] leading-5 text-navy-500 dark:text-navy-300">
+                                {recipe.steps.map((step, index) => (
+                                  <li key={`${recipe.recipeId}-${step.nodeId}-${index}`}>{index + 1}. {step.note}</li>
+                                ))}
+                              </ol>
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+                  </details>
                 </div>
               </div>
 
