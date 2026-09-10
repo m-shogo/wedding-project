@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="description" content="結婚式オープニングムービー向け。名前を知らなくても、見た目と言葉から選べるモーション図鑑。" />
+  <title>モーション図鑑 — Wedding Opening S Picks</title>
+  <style>
+    :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111827;background:#f7f7f5;line-height:1.55}*{box-sizing:border-box}body{margin:0}.wrap{width:min(1080px,100%);margin:auto;padding:24px 16px 72px}.hero{padding:28px 0 18px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.14em;color:#6b7280}.hero h1{font-size:clamp(30px,8vw,56px);line-height:1.05;margin:8px 0 12px;letter-spacing:-.04em}.hero p{max-width:680px;margin:0;color:#4b5563;font-size:16px}.first{margin-top:20px;padding:16px;border:1px solid #e5e7eb;border-radius:18px;background:white}.first strong{display:block;margin-bottom:4px}.toolbar{position:sticky;top:0;z-index:5;margin:18px -16px 24px;padding:10px 16px;background:rgba(247,247,245,.94);backdrop-filter:blur(14px);border-block:1px solid #e5e7eb}.search{width:100%;min-height:48px;border:1px solid #d1d5db;border-radius:14px;background:white;padding:0 14px;font-size:16px}.chips{display:flex;gap:8px;overflow:auto;padding-top:10px;scrollbar-width:none}.chip{flex:none;min-height:44px;border:1px solid #d1d5db;border-radius:999px;background:white;padding:0 16px;font-weight:700;cursor:pointer}.chip[aria-pressed="true"]{background:#111827;color:white;border-color:#111827}.count{margin:0 0 12px;color:#6b7280;font-size:14px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{background:white;border:1px solid #e5e7eb;border-radius:22px;overflow:hidden}.preview{aspect-ratio:16/9;background:#111827;display:grid;place-items:center;color:white;padding:24px;text-align:center}.preview b{font-size:20px}.body{padding:18px}.topline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.badge{font-size:12px;font-weight:900;border-radius:999px;padding:5px 9px;background:#111827;color:white}.family{font-size:12px;font-weight:800;color:#6b7280}.card h2{margin:10px 0 2px;font-size:23px;letter-spacing:-.02em}.common{margin:0 0 12px;color:#6b7280;font-size:14px}.looks{font-size:16px;margin:0 0 14px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.meta div{background:#f3f4f6;border-radius:12px;padding:10px;font-size:13px}.meta strong{display:block;font-size:11px;color:#6b7280;margin-bottom:2px}.why{border-left:3px solid #111827;padding-left:12px;margin:14px 0}.terms{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.term{font-size:12px;background:#f3f4f6;border-radius:999px;padding:5px 8px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;border-radius:12px;text-decoration:none;font-weight:800;font-size:14px;background:#111827;color:white}.action.secondary{background:white;color:#111827;border:1px solid #d1d5db}.empty{display:none;padding:28px;text-align:center;color:#6b7280}.footer{margin-top:36px;padding-top:20px;border-top:1px solid #d1d5db;color:#6b7280;font-size:13px}@media(max-width:720px){.wrap{padding-top:14px}.grid{grid-template-columns:1fr}.hero{padding-top:18px}.body{padding:16px}.card h2{font-size:21px}.preview{aspect-ratio:1.7}.toolbar{margin-top:12px}.meta{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <div class="eyebrow">MOTION ZUKAN / WEDDING OPENING</div>
+    <h1>見て「これ」が<br>最初の一歩。</h1>
+    <p>演出名を知らなくてOK。まず見た目で選び、あとから日本語名・一般名・DaVinciでの作り方を知るための図鑑です。</p>
+    <div class="first"><strong>いまは S · OP推しを厳選表示</strong>旅行テーマ、実写真・実動画中心、documentary / travel film / editorial film、StaRtとの相性で選んだ少数候補です。</div>
+  </header>
+
+  <section class="toolbar" aria-label="図鑑を絞り込む">
+    <input id="search" class="search" type="search" placeholder="例：写真にゆっくり寄る / 場所を自然につなぐ" aria-label="演出を自然語で検索" />
+    <div class="chips" aria-label="ジャンル">
+      <button class="chip" data-family="ALL" aria-pressed="true">S · すべて</button>
+      <button class="chip" data-family="TYPE" aria-pressed="false">文字</button>
+      <button class="chip" data-family="PHOTO" aria-pressed="false">写真</button>
+      <button class="chip" data-family="CAMERA" aria-pressed="false">カメラ</button>
+      <button class="chip" data-family="TRANSITION" aria-pressed="false">つなぎ</button>
+    </div>
+  </section>
+
+  <p class="count" id="count">4件のS候補</p>
+  <section class="grid" id="grid">
+    <article class="card" data-family="TYPE" data-search="マスクから文字がスッと現れる mask reveal text reveal 文字 下から シュッ タイトル 名前 地名">
+      <div class="preview"><div><b>文字が“面”からスッと現れる</b><br><small>まず実例リンクで動きを確認 →</small></div></div>
+      <div class="body"><div class="topline"><span class="badge">S · OP推し</span><span class="family">TYPE</span></div><h2>マスクから文字がスッと現れる</h2><p class="common">一般名：Mask Reveal / Text Reveal</p><p class="looks">隠れていた文字が、線や面の動きに合わせて自然に現れる。タイトルを“置く”より映像になじませやすい。</p><div class="meta"><div><strong>おすすめ度</strong>★★★★★</div><div><strong>自作難易度</strong>ふつう</div><div><strong>向いている場面</strong>冒頭タイトル・名前・地名</div><div><strong>DaVinci</strong>Text+ / Fusion向き</div></div><p class="why"><strong>今回なぜS？</strong><br>実写真を主役のまま残しつつ、旅行映画っぽいタイトル感だけを足せる。StaRtの文字アクセントにも合わせやすい。</p><div class="terms"><span class="term">文字 下からシュッ</span><span class="term">文字を自然に出す</span><span class="term">旅タイトル</span></div><div class="actions"><a class="action" href="https://benonistudio.com/easy-text-reveal-in-davinci-resolve-color-page-or-fusion/" target="_blank" rel="noreferrer">実例を見る ↗</a><a class="action secondary" href="https://www.blackmagicdesign.com/jp/products/davinciresolve/fusion" target="_blank" rel="noreferrer">公式 Fusion ↗</a></div></div>
+    </article>
+
+    <article class="card" data-family="TRANSITION" data-search="形を合わせて場面をつなぐ match cut match shape 写真 動画 旅行先 場所 ジャンプ つなぎ">
+      <div class="preview"><div><b>同じ形・位置を使って次の場所へ</b><br><small>旅のカットを“つながって見せる”</small></div></div>
+      <div class="body"><div class="topline"><span class="badge">S · OP推し</span><span class="family">TRANSITION</span></div><h2>形を合わせて場面をつなぐ</h2><p class="common">一般名：Match Cut / Match Shape Cut</p><p class="looks">前の写真と次の写真で似た形・位置をそろえ、切った瞬間に同じものが別の場所へ変わったように見せる。</p><div class="meta"><div><strong>おすすめ度</strong>★★★★★</div><div><strong>自作難易度</strong>少し難しい</div><div><strong>向いている場面</strong>旅行先の切替・写真→動画</div><div><strong>DaVinci</strong>素材選び＋Edit中心</div></div><p class="why"><strong>今回なぜS？</strong><br>旅の記録が一本につながって見える。テンプレ感を出さずに印象を残せるので、旅行テーマと特に相性がいい。</p><div class="terms"><span class="term">同じ形でつなぐ</span><span class="term">場所ジャンプ</span><span class="term">写真→動画</span></div><div class="actions"><a class="action" href="https://www.youtube.com/watch?v=vIJpyi7YB3o" target="_blank" rel="noreferrer">実例動画を見る ↗</a><a class="action secondary" href="https://clipizo.com/matchizo" target="_blank" rel="noreferrer">Fusion例 ↗</a></div></div>
+    </article>
+
+    <article class="card" data-family="PHOTO" data-search="写真にゆっくり寄る small push push in dynamic zoom zoom 写真 思い出 人物 余韻">
+      <div class="preview"><div><b>写真にほんの少しだけ寄る</b><br><small>静止画を“動画っぽくしすぎず”動かす</small></div></div>
+      <div class="body"><div class="topline"><span class="badge">S · OP推し</span><span class="family">PHOTO</span></div><h2>写真にゆっくり寄る</h2><p class="common">一般名：Subtle Push / Slow Push-in</p><p class="looks">写真全体を数秒かけて少しだけ拡大する。派手なズームではなく、写真をちゃんと見せるための基本動作。</p><div class="meta"><div><strong>おすすめ度</strong>★★★★★</div><div><strong>自作難易度</strong>かんたん</div><div><strong>向いている場面</strong>思い出写真・人物写真・余韻</div><div><strong>DaVinci</strong>Editで作りやすい</div></div><p class="why"><strong>今回なぜS？</strong><br>実写真を主役にしたいOpeningと最も相性がいい基本動作。派手さを足さず、写真を自然に映像へできる。</p><div class="terms"><span class="term">写真を少しズーム</span><span class="term">ゆっくり寄る</span><span class="term">Ken Burns系</span></div><div class="actions"><a class="action" href="https://www.jasonyadlovski.com/blog/2026/2/24/davinci-resolve-20-quick-tip-instant-motion-with-dynamic-zoom-" target="_blank" rel="noreferrer">実例を見る ↗</a><a class="action secondary" href="https://www.blackmagicdesign.com/jp/products/davinciresolve/training" target="_blank" rel="noreferrer">公式 Training ↗</a></div></div>
+    </article>
+
+    <article class="card" data-family="CAMERA" data-search="写真を横にゆっくり動かす directional pan pan camera 横長写真 視線 誘導 移動 旅行 次へ">
+      <div class="preview"><div><b>写真の中をゆっくり横移動</b><br><small>視線を次の場所へ運ぶ</small></div></div>
+      <div class="body"><div class="topline"><span class="badge">S · OP推し</span><span class="family">CAMERA</span></div><h2>写真をゆっくり横に流す</h2><p class="common">一般名：Directional Pan / Photo Pan</p><p class="looks">横長写真の中を少しだけ移動し、人物や景色へ視線を誘導する。次のカットへ進む方向も作れる。</p><div class="meta"><div><strong>おすすめ度</strong>★★★★☆</div><div><strong>自作難易度</strong>かんたん</div><div><strong>向いている場面</strong>横長写真・視線誘導・移動感</div><div><strong>DaVinci</strong>Editで作りやすい</div></div><p class="why"><strong>今回なぜS？</strong><br>写真の中の視線や移動方向を利用でき、旅行テーマの「次へ進む感じ」を自然に出せる。使いすぎない前提で強い。</p><div class="terms"><span class="term">写真 横に動く</span><span class="term">視線誘導</span><span class="term">旅行 移動感</span></div><div class="actions"><a class="action" href="https://sharingyourpassion.com/dynamic-zoom-and-pan-davinci-resolve-tutorial/" target="_blank" rel="noreferrer">実例を見る ↗</a><a class="action secondary" href="https://www.blackmagicdesign.com/jp/products/davinciresolve/fusion" target="_blank" rel="noreferrer">公式 Fusion ↗</a></div></div>
+    </article>
+  </section>
+  <p class="empty" id="empty">その言葉では見つかりませんでした。別の言い方でも試せます。</p>
+  <footer class="footer">この公開ページは演出選び専用です。StaRt音源・歌詞、本人写真、ローカルファイル、制作状態、検証receiptは公開しません。Sは一般人気ではなく、今回のWedding Openingへの編集的推奨です。</footer>
+</main>
+<script>
+const cards=[...document.querySelectorAll('.card')], search=document.querySelector('#search'), count=document.querySelector('#count'), empty=document.querySelector('#empty'), chips=[...document.querySelectorAll('.chip')];let family='ALL';
+function render(){const q=search.value.trim().toLowerCase();let visible=0;cards.forEach(card=>{const okFamily=family==='ALL'||card.dataset.family===family;const okSearch=!q||card.dataset.search.toLowerCase().includes(q)||card.textContent.toLowerCase().includes(q);const show=okFamily&&okSearch;card.hidden=!show;if(show)visible++;});count.textContent=`${visible}件のS候補`;empty.style.display=visible?'none':'block'}
+search.addEventListener('input',render);chips.forEach(chip=>chip.addEventListener('click',()=>{family=chip.dataset.family;chips.forEach(c=>c.setAttribute('aria-pressed',String(c===chip)));render()}));
+</script>
+</body>
+</html>
