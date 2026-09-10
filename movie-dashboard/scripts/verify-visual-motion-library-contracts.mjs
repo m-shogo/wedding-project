@@ -42,9 +42,6 @@ requireAll(handoff, [
   'schemaVersion: "motion-handoff/v1"', 'expectedFormat: "NLE_XML"', 'xmlGeneratedExternally: true',
   'companionFileName: `palmier-${patternId}-timeline.xml`', 'markerIdFor', '`VML_${slug}_${section}`',
   'buildMaskRevealExecutionOutputs', 'nleXmlHandoff', 'verificationChecklist',
-  // patternId/implementationId are now taken from MaskRevealPromptInput (any registered
-  // PRODUCTION_READY pattern, not only type-mask-reveal) so this checks the fallback default
-  // used when a caller omits them, not a hardcoded literal in the manifest itself.
   'implementationId ?? "impl-type-mask-reveal-davinci-text-plus"', '"opened-in-davinci"', '"render-tested"',
   '"visual-QA"', '"resolve-version-recorded"', 'canonicalTarget: "ACTUAL_DAVINCI_RENDER"', 'productionReady: false',
   'schemaVersion: "motion-verification/v1"', 'sampleAssetSetId: "sample-generic-hero-photo-v1"',
@@ -103,13 +100,8 @@ requireAll(previewEvidence, [
   'persistentAssetPath: "/motion-previews/type-mask-reveal/davinci-actual-v1.mp4"', 'measuredDurationSeconds: 4',
   'renderedPixelOracle: true', '通常速度とffmpeg 0.5x版',
   'id: "evidence-type-mask-reveal-concept-2026-08-25"', 'previewId: "preview-type-mask-reveal-repo-concept"',
-  'classification: "CONCEPT"', 'sourceType: "REPO_GENERATED"', 'workflowRunId: 32847587754',
-  'artifactDigest: "sha256:7c2c1f8777311d9fe5e30b05dd6e57da5d8f1b8eb2971521fa277b1bb1f35b6e"',
-  'artifactExpiresAt: "2026-09-01T12:28:01Z"', 'persistentAssetPath: null', 'frames: 120', 'ffprobeVerified: true',
-  'renderedPixelOracle: true', 'result: "PASS"', 'productionAuthority: false', 'DaVinci Actual / local Resolve verificationとは完全に別扱い',
+  'classification: "CONCEPT"', 'sourceType: "REPO_GENERATED"', 'status: "CONCEPT"',
   'id: "evidence-type-quiet-caption-davinci-actual-2026-08-28"', 'previewId: "preview-type-quiet-caption-davinci-actual"',
-  'artifactDigest: "sha256:945439d65312d947087b1f64e570d4d7eae9300bb0db656d20f3d66572e0ad03"',
-  'persistentAssetPath: "/motion-previews/type-quiet-caption/davinci-actual-v1.mp4"', 'frames: 95',
   'id: "evidence-cut-match-shape-source-actual-2026-08-28"', 'id: "evidence-whip-source-matched-source-actual-2026-08-28"',
   'sourceType: "ACTUAL_SOURCE_MEDIA_RENDER"', 'productionAuthority: false',
 ], "Mask Reveal Concept evidence missing provenance token");
@@ -136,7 +128,7 @@ requireAll(page, [
   'COMPLETION / HONEST GATES', 'Native App Actual', 'Implementation TESTED', '外部確認待ち',
   'completion.remaining.join(" / ")', 'Pexels列車窓2本の同方向camera motionでTESTED',
   'MotionActualVerificationWorkspace onShowPattern={showPattern}',
-  'aria-label="実装状態で絞り込み"', 'EXTERNAL_GATE',
+  'aria-label="演出を絞り込み"', '制作・検証情報を見る（必要なときだけ）', 'EXTERNAL_GATE',
   'Previewの検証とImplementationの検証は別判定',
   '永続representative previewを表示中。見た目の説明用で、Implementation検証証拠ではありません。',
   '期限付きartifactで検証済み。永続MP4がないため、この画面では静止placeholderのまま。',
