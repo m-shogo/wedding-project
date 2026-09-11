@@ -1,203 +1,145 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import {
-  getPatternPreview,
-  searchMotionPatterns,
-  type MotionPatternRecord,
-} from "../data/visualMotionLibrary";
-import { directorRecipeCatalog, type DirectorRecipe } from "../data/directorRecipeCatalog";
+  externalMotionAtlas,
+  type ExternalMotionAtlasItem,
+  type ExternalMotionGenre,
+  type ExternalMotionMediaType,
+} from "../data/externalMotionAtlas";
 
-type Genre = "ALL" | "IMAGE" | "TEXT" | "EFFECT" | "IMAGE_TEXT";
-type Item =
-  | { kind: "pattern"; key: string; genre: Exclude<Genre, "ALL">; pattern: MotionPatternRecord }
-  | { kind: "recipe"; key: string; genre: "IMAGE_TEXT"; recipe: DirectorRecipe };
+type GenreFilter = "ALL" | ExternalMotionGenre;
+type MediaFilter = "ALL" | ExternalMotionMediaType;
 
-const genreMeta: Array<[Genre, string, string]> = [
-  ["ALL", "全部", "4ジャンルをまとめて見る"],
-  ["IMAGE", "画像", "写真・動画の動きと配置"],
-  ["TEXT", "テキスト", "文字そのものの動き"],
-  ["EFFECT", "エフェクト", "光・切替・線・スタンプなど"],
-  ["IMAGE_TEXT", "画像＋テキスト", "写真・動画と文字を一体で見せる"],
+const genreMeta: Array<[GenreFilter, string, string]> = [
+  ["ALL", "全部", "外部実例をまとめて見る"],
+  ["IMAGE", "画像", "写真・動画そのものの動き"],
+  ["TEXT", "テキスト", "文字だけで成立する演出"],
+  ["EFFECT", "エフェクト", "光・ノイズ・切替など"],
+  ["IMAGE_TEXT", "画像＋テキスト", "写真/動画と文字を一体で見せる"],
 ];
 
-const openingSPicks = new Set([
-  "type-mask-reveal",
-  "photo-small-push",
-  "photo-directional-pan",
-  "cut-match-shape",
-  "whip-source-matched",
-  "type-char-stagger",
-]);
+const mediaMeta: Array<[MediaFilter, string]> = [
+  ["ALL", "すべての形式"],
+  ["GIF", "GIF"],
+  ["YOUTUBE", "YouTube"],
+  ["VIDEO_PAGE", "動画ページ"],
+  ["IMAGE", "画像"],
+];
 
-function openingRank(value: string) {
-  return ({ "◎": 4, "○": 3, "△": 2, "×": 1 } as Record<string, number>)[value] ?? 0;
+function genreLabel(genre: ExternalMotionGenre) {
+  if (genre === "IMAGE") return "画像";
+  if (genre === "TEXT") return "テキスト";
+  if (genre === "EFFECT") return "エフェクト";
+  return "画像＋テキスト";
 }
 
-function stars(value: string) {
-  if (value === "◎") return "★★★★★";
-  if (value === "○") return "★★★★☆";
-  if (value === "△") return "★★★☆☆";
-  return "★☆☆☆☆";
+function mediaLabel(mediaType: ExternalMotionMediaType) {
+  if (mediaType === "YOUTUBE") return "YouTube";
+  if (mediaType === "GIF") return "GIF";
+  if (mediaType === "IMAGE") return "画像";
+  return "動画ページ";
 }
 
-function patternGenre(pattern: MotionPatternRecord): "IMAGE" | "TEXT" | "EFFECT" {
-  if (pattern.id.startsWith("type-")) return "TEXT";
-  if (pattern.id.startsWith("photo-")) return "IMAGE";
-  return "EFFECT";
+function difficultyStars(level: 1 | 2 | 3) {
+  return `${"★".repeat(level)}${"☆".repeat(3 - level)}`;
 }
 
-function isCompositeRecipe(recipe: DirectorRecipe) {
-  const hasText = recipe.motionPresetIds.some((id) => id.startsWith("type-"));
-  const hasImageOrEffect = recipe.motionPresetIds.some((id) =>
-    id.startsWith("photo-") ||
-    id.startsWith("cut-") ||
-    id.startsWith("wipe-") ||
-    id.startsWith("flash-") ||
-    id.startsWith("whip-") ||
-    id.startsWith("color-field-") ||
-    id.startsWith("accent-"),
-  );
-  return hasText && hasImageOrEffect;
-}
-
-function normalizePresetId(id: string) {
-  return id === "type-mask-slide" ? "type-mask-reveal" : id;
-}
-
-function safePreview(pattern: MotionPatternRecord) {
-  try {
-    return getPatternPreview(pattern);
-  } catch {
-    return null;
+function Preview({ item, large = false }: { item: ExternalMotionAtlasItem; large?: boolean }) {
+  if (item.mediaType === "YOUTUBE" && item.youtubeId) {
+    return (
+      <iframe
+        src={`https://www.youtube.com/embed/${item.youtubeId}?rel=0&modestbranding=1`}
+        title={item.titleOriginal}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+        loading="lazy"
+        className="h-full w-full border-0"
+      />
+    );
   }
-}
 
-function PatternPreview({ pattern, hover = true }: { pattern: MotionPatternRecord; hover?: boolean }) {
-  const preview = safePreview(pattern);
-  if (!preview?.assetPath) {
-    return <div className="flex h-full items-center justify-center px-3 text-center text-[10px] text-navy-300">実物プレビューなし</div>;
-  }
-  return (
-    <video
-      src={preview.assetPath}
-      poster={preview.posterPath ?? undefined}
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      onMouseEnter={hover ? (event) => void event.currentTarget.play().catch(() => undefined) : undefined}
-      onMouseLeave={hover ? (event) => {
-        event.currentTarget.pause();
-        event.currentTarget.currentTime = 0;
-      } : undefined}
-      className="h-full w-full object-cover"
-    />
-  );
-}
-
-function RecipePreview({ recipe, patterns }: { recipe: DirectorRecipe; patterns: MotionPatternRecord[] }) {
-  const representative = recipe.motionPresetIds
-    .map(normalizePresetId)
-    .map((id) => patterns.find((pattern) => pattern.id === id))
-    .find((pattern): pattern is MotionPatternRecord => Boolean(pattern && safePreview(pattern)?.assetPath));
-
-  if (!representative) {
-    return <div className="flex h-full items-center justify-center px-3 text-center text-[10px] leading-4 text-navy-300">画像＋テキスト<br />実render未配置</div>;
+  if ((item.mediaType === "GIF" || item.mediaType === "IMAGE") && item.previewUrl) {
+    return (
+      <img
+        src={item.previewUrl}
+        alt={item.titleJa}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+        className={`h-full w-full ${large ? "object-contain" : "object-cover"}`}
+      />
+    );
   }
 
   return (
-    <div className="relative h-full w-full">
-      <PatternPreview pattern={representative} />
-      <div className="absolute inset-x-0 bottom-0 bg-black/75 px-2 py-1 text-[8px] font-semibold leading-3 text-white">
-        構成要素プレビュー<br />複合完成画ではありません
-      </div>
-    </div>
+    <a
+      href={item.sourceUrl}
+      target="_blank"
+      rel="noreferrer"
+      className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-navy-900 to-navy-700 px-4 text-center text-white transition hover:from-navy-800 hover:to-navy-600"
+    >
+      <span className="text-[10px] font-bold tracking-[0.16em] text-sand-300">{item.sourceName}</span>
+      <span className="mt-2 text-sm font-black">実動画を見る ↗</span>
+      <span className="mt-1 text-[9px] text-white/70">外部の実在する動画ページ</span>
+    </a>
   );
-}
-
-function itemSearchText(item: Item) {
-  if (item.kind === "pattern") {
-    return [item.pattern.japaneseName, item.pattern.commonName, item.pattern.looksLike, ...item.pattern.aliases].join(" ").toLowerCase();
-  }
-  return [item.recipe.label, item.recipe.subCategory, item.recipe.purpose, item.recipe.whyItWorks, ...item.recipe.motionPresetIds].join(" ").toLowerCase();
 }
 
 export function MotionPinterest() {
-  const [genre, setGenre] = useState<Genre>("ALL");
+  const [genre, setGenre] = useState<GenreFilter>("ALL");
+  const [media, setMedia] = useState<MediaFilter>("ALL");
   const [query, setQuery] = useState("");
-  const [sOnly, setSOnly] = useState(false);
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
-
-  const patterns = useMemo(() => {
-    try {
-      return searchMotionPatterns("");
-    } catch {
-      return [];
-    }
-  }, []);
-
-  const items = useMemo<Item[]>(() => {
-    const basics: Item[] = patterns.map((pattern) => ({
-      kind: "pattern",
-      key: pattern.id,
-      genre: patternGenre(pattern),
-      pattern,
-    }));
-    const composites: Item[] = directorRecipeCatalog
-      .filter(isCompositeRecipe)
-      .map((recipe) => ({ kind: "recipe", key: `recipe:${recipe.id}`, genre: "IMAGE_TEXT", recipe }));
-    return [...basics, ...composites];
-  }, [patterns]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const counts = useMemo(() => {
-    const result = { IMAGE: 0, TEXT: 0, EFFECT: 0, IMAGE_TEXT: 0 };
-    for (const item of items) result[item.genre] += 1;
+    const result: Record<ExternalMotionGenre, number> = {
+      IMAGE: 0,
+      TEXT: 0,
+      EFFECT: 0,
+      IMAGE_TEXT: 0,
+    };
+    externalMotionAtlas.forEach((item) => { result[item.genre] += 1; });
     return result;
-  }, [items]);
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return items
-      .filter((item) => genre === "ALL" || item.genre === genre)
-      .filter((item) => !sOnly || (item.kind === "pattern" && openingSPicks.has(item.pattern.id)))
-      .filter((item) => !q || itemSearchText(item).includes(q))
-      .sort((a, b) => {
-        const aS = a.kind === "pattern" && openingSPicks.has(a.pattern.id) ? 1 : 0;
-        const bS = b.kind === "pattern" && openingSPicks.has(b.pattern.id) ? 1 : 0;
-        if (aS !== bS) return bS - aS;
-        const genreRank = { IMAGE_TEXT: 4, IMAGE: 3, TEXT: 2, EFFECT: 1 };
-        if (a.genre !== b.genre) return genreRank[b.genre] - genreRank[a.genre];
-        if (a.kind === "pattern" && b.kind === "pattern") return openingRank(b.pattern.openingFit) - openingRank(a.pattern.openingFit);
-        return 0;
-      });
-  }, [items, genre, query, sOnly]);
+    return externalMotionAtlas.filter((item) => {
+      if (genre !== "ALL" && item.genre !== genre) return false;
+      if (media !== "ALL" && item.mediaType !== media) return false;
+      if (!q) return true;
+      const haystack = [
+        item.titleJa,
+        item.titleOriginal,
+        item.sourceName,
+        item.descriptionJa,
+        ...item.tags,
+      ].join(" ").toLowerCase();
+      return haystack.includes(q);
+    });
+  }, [genre, media, query]);
 
-  const selected = selectedKey ? items.find((item) => item.key === selectedKey) ?? null : null;
+  const selected = selectedId ? externalMotionAtlas.find((item) => item.id === selectedId) ?? null : null;
 
   return (
     <div>
       <Header
-        title="映像Pinterest"
-        description="画像 / テキスト / エフェクト / 画像＋テキスト。説明より先に、実例を見て選ぶ。"
+        title="映像のPinterest / 外部実例図鑑"
+        description="この世に実在する GIF・YouTube・動画・画像だけを、画像 / テキスト / エフェクト / 画像＋テキストで集める。自作サンプルは入れない。"
       />
 
-      <section className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+      <section className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5" aria-label="4大ジャンル">
         {genreMeta.map(([value, label, description]) => {
-          const count = value === "ALL" ? items.length : counts[value];
+          const count = value === "ALL" ? externalMotionAtlas.length : counts[value];
           return (
             <button
               key={value}
               type="button"
-              onClick={() => {
-                setGenre(value);
-                if (value === "IMAGE_TEXT") setSOnly(false);
-              }}
-              className={`rounded-xl border p-3 text-left ${genre === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-950" : "border-sand-200 bg-white text-navy-800 dark:border-navy-700 dark:bg-navy-800 dark:text-sand-100"} ${value === "IMAGE_TEXT" ? "col-span-2 sm:col-span-1" : ""}`}
+              onClick={() => setGenre(value)}
+              className={`rounded-xl border p-3 text-left transition ${genre === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-950" : "border-sand-200 bg-white text-navy-800 hover:border-navy-400 dark:border-navy-700 dark:bg-navy-800 dark:text-sand-100"} ${value === "IMAGE_TEXT" ? "col-span-2 sm:col-span-1" : ""}`}
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm font-black">{label}</span>
-                <span className="text-[10px] opacity-60">{count}</span>
+                <span className="rounded-full bg-black/5 px-2 py-0.5 text-[10px] font-bold dark:bg-white/10">{count}</span>
               </div>
               <p className="mt-1 text-[9px] leading-4 opacity-65">{description}</p>
             </button>
@@ -205,99 +147,96 @@ export function MotionPinterest() {
         })}
       </section>
 
-      <section className="sticky top-0 z-20 -mx-4 mb-4 border-y border-sand-200 bg-sand-50/95 px-4 py-3 backdrop-blur dark:border-navy-700 dark:bg-navy-950/95 md:mx-0 md:border">
-        <div className="flex items-center gap-2">
+      <section className="sticky top-0 z-20 -mx-4 mb-5 border-y border-sand-200 bg-sand-50/95 px-4 py-3 backdrop-blur dark:border-navy-700 dark:bg-navy-950/95 md:mx-0 md:rounded-xl md:border">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="例：ズーム / 文字 / スタンプ / 地名"
-            className="min-w-0 flex-1 rounded-full border border-sand-300 bg-white px-4 py-2.5 text-sm text-navy-900 outline-none dark:border-navy-600 dark:bg-navy-800 dark:text-sand-100"
+            placeholder="例：パララックス / コラージュ / 地名 / グリッチ / 紙"
+            className="min-w-0 flex-1 rounded-full border border-sand-300 bg-white px-4 py-2.5 text-sm text-navy-900 outline-none focus:border-navy-500 dark:border-navy-600 dark:bg-navy-800 dark:text-sand-100"
           />
-          <button
-            type="button"
-            disabled={genre === "IMAGE_TEXT"}
-            onClick={() => setSOnly((value) => !value)}
-            className={`shrink-0 rounded-full border px-3 py-2.5 text-xs font-black ${sOnly ? "border-amber-400 bg-amber-400 text-navy-950" : "border-amber-300 bg-white text-amber-700 dark:border-amber-700 dark:bg-navy-900 dark:text-amber-300"} disabled:opacity-35`}
-          >
-            Sのみ
-          </button>
-          <Link to="/movie-coach/motion-library" className="hidden shrink-0 rounded-full border border-sand-300 bg-white px-3 py-2.5 text-xs font-semibold text-navy-600 dark:border-navy-600 dark:bg-navy-900 dark:text-navy-200 sm:inline-flex">
-            選定一覧
-          </Link>
-        </div>
-        <p className="mt-2 text-[10px] text-navy-400">表示 {filtered.length} / 全{items.length}</p>
-      </section>
-
-      {items.length === 0 && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm leading-6 text-red-800 dark:border-red-900 dark:bg-red-950/20 dark:text-red-200">
-          図鑑データを読み込めませんでした。ページ全体を白画面にはせず、このエラーを表示する設計に変更済みです。
-        </div>
-      )}
-
-      <section className="grid grid-cols-2 gap-x-2.5 gap-y-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 min-[1900px]:grid-cols-6">
-        {filtered.map((item) => {
-          const isS = item.kind === "pattern" && openingSPicks.has(item.pattern.id);
-          return (
-            <article key={item.key} className="min-w-0">
+          <div className="flex gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+            {mediaMeta.map(([value, label]) => (
               <button
+                key={value}
                 type="button"
-                onClick={() => setSelectedKey(item.key)}
-                className="group block w-full overflow-hidden rounded-xl bg-white text-left shadow-sm ring-1 ring-sand-200 transition hover:-translate-y-0.5 hover:shadow-md dark:bg-navy-800 dark:ring-navy-700"
+                onClick={() => setMedia(value)}
+                className={`shrink-0 rounded-full border px-3 py-2 text-[10px] font-bold ${media === value ? "border-sky-700 bg-sky-700 text-white" : "border-sand-300 bg-white text-navy-600 dark:border-navy-600 dark:bg-navy-900 dark:text-navy-200"}`}
               >
-                <div className="relative aspect-video overflow-hidden bg-navy-950">
-                  {item.kind === "pattern" ? <PatternPreview pattern={item.pattern} /> : <RecipePreview recipe={item.recipe} patterns={patterns} />}
-                  <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-1 text-[9px] font-black text-navy-950">
-                    {item.genre === "IMAGE" ? "画像" : item.genre === "TEXT" ? "テキスト" : item.genre === "EFFECT" ? "エフェクト" : "画像＋テキスト"}
-                  </span>
-                  {isS && <span className="absolute left-2 top-8 rounded-full bg-amber-400 px-2 py-1 text-[10px] font-black text-navy-950">S</span>}
-                </div>
-                <div className="px-2.5 pb-3 pt-2.5 sm:px-3">
-                  <h2 className="line-clamp-2 text-[12px] font-bold leading-[1.45] text-navy-900 dark:text-sand-100 sm:text-[13px]">
-                    {item.kind === "pattern" ? item.pattern.japaneseName : item.recipe.purpose}
-                  </h2>
-                  {item.kind === "pattern" ? (
-                    <p className="mt-1 text-[10px] font-semibold text-amber-600 dark:text-amber-300">{stars(item.pattern.openingFit)}</p>
-                  ) : (
-                    <p className="mt-1 line-clamp-1 text-[9px] font-semibold text-sky-700 dark:text-sky-300">{item.recipe.label}</p>
-                  )}
-                </div>
+                {label}
               </button>
-            </article>
-          );
-        })}
+            ))}
+          </div>
+        </div>
+        <p className="mt-2 text-[10px] text-navy-400">表示 {filtered.length} / 外部実例 {externalMotionAtlas.length}件 · 自作モーション 0件</p>
       </section>
 
-      {filtered.length === 0 && items.length > 0 && (
-        <div className="py-16 text-center text-sm text-navy-400">条件に合う演出がありません。検索またはジャンルを戻してください。</div>
+      <section className="grid grid-cols-2 gap-x-2.5 gap-y-5 sm:grid-cols-3 sm:gap-x-3 lg:grid-cols-4 2xl:grid-cols-5 min-[1900px]:grid-cols-6" aria-label="外部演出図鑑">
+        {filtered.map((item) => (
+          <article key={item.id} className="min-w-0 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-sand-200 dark:bg-navy-800 dark:ring-navy-700">
+            <div className="relative aspect-video overflow-hidden bg-navy-950">
+              <Preview item={item} />
+              <div className="pointer-events-none absolute left-2 top-2 flex flex-wrap gap-1">
+                <span className="rounded-full bg-white/95 px-2 py-1 text-[9px] font-black text-navy-950 shadow-sm">{genreLabel(item.genre)}</span>
+                <span className="rounded-full bg-black/70 px-2 py-1 text-[9px] font-bold text-white backdrop-blur">{mediaLabel(item.mediaType)}</span>
+              </div>
+            </div>
+
+            <div className="p-3">
+              <button type="button" onClick={() => setSelectedId(item.id)} className="block w-full text-left">
+                <h2 className="line-clamp-2 text-[12px] font-black leading-[1.5] text-navy-900 hover:underline dark:text-sand-100 sm:text-[13px]">{item.titleJa}</h2>
+                <p className="mt-1 line-clamp-1 text-[9px] text-navy-400">{item.titleOriginal}</p>
+                <p className="mt-2 line-clamp-3 text-[10px] leading-4 text-navy-600 dark:text-navy-300">{item.descriptionJa}</p>
+              </button>
+
+              <div className="mt-3 flex items-center justify-between gap-2 border-t border-sand-100 pt-2 dark:border-navy-700">
+                <div>
+                  <p className="text-[9px] text-navy-400">難易度</p>
+                  <p className="text-[11px] font-bold tracking-tight text-amber-600 dark:text-amber-300">{difficultyStars(item.difficulty)}</p>
+                </div>
+                <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="rounded-full border border-sand-300 px-2.5 py-1.5 text-[9px] font-bold text-navy-700 hover:bg-sand-50 dark:border-navy-600 dark:text-navy-200 dark:hover:bg-navy-700">
+                  元URL ↗
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </section>
+
+      {filtered.length === 0 && (
+        <div className="py-16 text-center text-sm text-navy-400">条件に合う外部実例がありません。検索か絞り込みを戻してください。</div>
       )}
 
       {selected && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 md:items-center md:p-6" onClick={() => setSelectedKey(null)}>
-          <div className="max-h-[92vh] w-full overflow-y-auto rounded-t-2xl bg-white shadow-2xl dark:bg-navy-900 md:max-w-4xl md:rounded-2xl" onClick={(event) => event.stopPropagation()}>
-            <div className="flex items-center justify-between border-b border-sand-200 px-4 py-3 dark:border-navy-700">
-              <p className="text-sm font-bold text-navy-900 dark:text-sand-100">
-                {selected.kind === "pattern" ? selected.pattern.japaneseName : selected.recipe.label}
-              </p>
-              <button type="button" onClick={() => setSelectedKey(null)} className="rounded-full border border-sand-300 px-3 py-1.5 text-xs font-bold text-navy-600 dark:border-navy-600 dark:text-navy-200">閉じる</button>
-            </div>
-            <div className="grid md:grid-cols-[1.35fr_0.85fr]">
-              <div className="aspect-video bg-black">
-                {selected.kind === "pattern" ? <PatternPreview pattern={selected.pattern} hover={false} /> : <RecipePreview recipe={selected.recipe} patterns={patterns} />}
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm md:items-center md:p-6" onClick={() => setSelectedId(null)}>
+          <div className="max-h-[94vh] w-full overflow-y-auto rounded-t-2xl bg-white shadow-2xl dark:bg-navy-900 md:max-w-5xl md:rounded-2xl" onClick={(event) => event.stopPropagation()}>
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-sand-200 bg-white/95 px-4 py-3 backdrop-blur dark:border-navy-700 dark:bg-navy-900/95">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-black text-navy-900 dark:text-sand-100">{selected.titleJa}</p>
+                <p className="truncate text-[10px] text-navy-400">{selected.sourceName} · {mediaLabel(selected.mediaType)}</p>
               </div>
+              <button type="button" onClick={() => setSelectedId(null)} className="ml-3 rounded-full border border-sand-300 px-3 py-1.5 text-xs font-bold text-navy-600 dark:border-navy-600 dark:text-navy-200">閉じる</button>
+            </div>
+
+            <div className="grid md:grid-cols-[minmax(0,1.45fr)_minmax(300px,0.75fr)]">
+              <div className="aspect-video bg-black"><Preview item={selected} large /></div>
               <div className="p-4 md:p-5">
-                {selected.kind === "pattern" ? (
-                  <>
-                    <p className="text-sm leading-6 text-navy-700 dark:text-navy-200">{selected.pattern.naturalDescription}</p>
-                    <p className="mt-3 text-xs text-navy-500 dark:text-navy-300">検索名: {[selected.pattern.commonName, ...selected.pattern.aliases].slice(0, 7).join(" / ")}</p>
-                  </>
-                ) : (
-                  <>
-                    <span className="rounded-full bg-sky-100 px-2.5 py-1 text-[10px] font-black text-sky-900 dark:bg-sky-950 dark:text-sky-100">画像＋テキスト</span>
-                    <p className="mt-3 text-sm leading-6 text-navy-700 dark:text-navy-200">{selected.recipe.purpose}</p>
-                    <p className="mt-3 text-xs leading-5 text-navy-500 dark:text-navy-300">{selected.recipe.whyItWorks}</p>
-                    <p className="mt-4 text-[10px] text-navy-400">構成: {selected.recipe.motionPresetIds.map(normalizePresetId).join(" / ")}</p>
-                  </>
-                )}
+                <div className="flex flex-wrap gap-1.5">
+                  <span className="rounded-full bg-navy-900 px-2.5 py-1 text-[10px] font-black text-white dark:bg-sand-100 dark:text-navy-950">{genreLabel(selected.genre)}</span>
+                  <span className="rounded-full border border-sand-300 px-2.5 py-1 text-[10px] font-bold text-navy-600 dark:border-navy-600 dark:text-navy-300">{mediaLabel(selected.mediaType)}</span>
+                </div>
+                <p className="mt-4 text-sm leading-6 text-navy-700 dark:text-navy-200">{selected.descriptionJa}</p>
+                <div className="mt-4 rounded-xl bg-sand-50 p-3 dark:bg-navy-800">
+                  <p className="text-[10px] font-bold text-navy-400">難易度</p>
+                  <p className="mt-1 text-sm font-black text-amber-600 dark:text-amber-300">{difficultyStars(selected.difficulty)}</p>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {selected.tags.map((tag) => <span key={tag} className="rounded-full border border-sand-200 px-2 py-1 text-[10px] text-navy-500 dark:border-navy-700 dark:text-navy-300">#{tag}</span>)}
+                </div>
+                <a href={selected.sourceUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-sky-700 px-4 py-3 text-sm font-black text-white hover:bg-sky-600">
+                  元の実例を開く ↗
+                </a>
+                <p className="mt-2 break-all text-[9px] leading-4 text-navy-400">{selected.sourceUrl}</p>
               </div>
             </div>
           </div>
