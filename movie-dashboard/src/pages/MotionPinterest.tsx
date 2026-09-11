@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import {
@@ -110,18 +110,44 @@ function similarPatterns(pattern: MotionPatternRecord, all: MotionPatternRecord[
 
 function PreviewMedia({pattern, compact = false}: {pattern: MotionPatternRecord; compact?: boolean}) {
   const preview = getPatternPreview(pattern);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !compact || typeof window === "undefined") return;
+
+    const coarsePointer = window.matchMedia("(hover: none) and (pointer: coarse)");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!coarsePointer.matches || reduceMotion.matches) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.75) {
+        void video.play().catch(() => undefined);
+      } else {
+        video.pause();
+      }
+    }, { threshold: [0, 0.75, 1] });
+
+    observer.observe(video);
+    return () => {
+      observer.disconnect();
+      video.pause();
+    };
+  }, [compact, preview?.assetPath]);
+
   if (!preview?.assetPath) {
     return <div className="flex h-full items-center justify-center px-3 text-center text-[10px] text-navy-300">実物プレビューなし</div>;
   }
   return (
     <video
+      ref={videoRef}
       src={preview.assetPath}
       poster={preview.posterPath ?? undefined}
       muted
       loop
       playsInline
       preload="metadata"
-      onMouseEnter={compact ? (event) => void event.currentTarget.play() : undefined}
+      onMouseEnter={compact ? (event) => void event.currentTarget.play().catch(() => undefined) : undefined}
       onMouseLeave={compact ? (event) => {
         event.currentTarget.pause();
         event.currentTarget.currentTime = 0;
