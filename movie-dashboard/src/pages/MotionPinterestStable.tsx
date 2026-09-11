@@ -171,7 +171,7 @@ export function MotionPinterest() {
         <p className="mt-2 text-[10px] text-navy-400">表示 {filtered.length} / 外部実例 {externalMotionAtlas.length}件 · 自作モーション 0件</p>
       </section>
 
-      <section className="grid grid-cols-2 gap-x-2.5 gap-y-5 sm:grid-cols-3 sm:gap-x-3 lg:grid-cols-4 2xl:grid-cols-5 min-[1900px]:grid-cols-6" aria-label="外部演出図鑑">
+      <section className="grid grid-cols-2 gap-x-2.5 gap-y-4 sm:grid-cols-3 sm:gap-x-3 lg:grid-cols-4 2xl:grid-cols-5 min-[1900px]:grid-cols-6" aria-label="外部演出図鑑">
         {filtered.map((item) => (
           <article key={item.id} className="min-w-0 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-sand-200 dark:bg-navy-800 dark:ring-navy-700">
             <div className="relative aspect-video overflow-hidden bg-navy-950">
@@ -182,19 +182,20 @@ export function MotionPinterest() {
               </div>
             </div>
 
-            <div className="p-3">
-              <button type="button" onClick={() => setSelectedId(item.id)} className="block w-full text-left">
-                <h2 className="line-clamp-2 text-[12px] font-black leading-[1.5] text-navy-900 hover:underline dark:text-sand-100 sm:text-[13px]">{item.titleJa}</h2>
+            <div className="p-2.5 sm:p-3">
+              <button type="button" onClick={() => setSelectedId(item.id)} className="block w-full rounded-lg text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500">
+                <h2 className="line-clamp-2 text-[12px] font-black leading-[1.45] text-navy-900 hover:underline dark:text-sand-100 sm:text-[13px]">{item.titleJa}</h2>
                 <p className="mt-1 line-clamp-1 text-[9px] text-navy-400">{item.titleOriginal}</p>
-                <p className="mt-2 line-clamp-3 text-[10px] leading-4 text-navy-600 dark:text-navy-300">{item.descriptionJa}</p>
+                <div className="mt-2 flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-bold tracking-tight text-amber-600 dark:text-amber-300" aria-label={`難易度 ${item.difficulty} / 3`}>
+                    {difficultyStars(item.difficulty)}
+                  </span>
+                  <span className="rounded-full bg-sand-100 px-2 py-1 text-[9px] font-black text-navy-700 dark:bg-navy-700 dark:text-navy-100">詳しく見る</span>
+                </div>
               </button>
 
-              <div className="mt-3 flex items-center justify-between gap-2 border-t border-sand-100 pt-2 dark:border-navy-700">
-                <div>
-                  <p className="text-[9px] text-navy-400">難易度</p>
-                  <p className="text-[11px] font-bold tracking-tight text-amber-600 dark:text-amber-300">{difficultyStars(item.difficulty)}</p>
-                </div>
-                <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="rounded-full border border-sand-300 px-2.5 py-1.5 text-[9px] font-bold text-navy-700 hover:bg-sand-50 dark:border-navy-600 dark:text-navy-200 dark:hover:bg-navy-700">
+              <div className="mt-2 border-t border-sand-100 pt-2 dark:border-navy-700">
+                <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-8 w-full items-center justify-center rounded-full border border-sand-300 px-2.5 py-1.5 text-[9px] font-bold text-navy-700 hover:bg-sand-50 dark:border-navy-600 dark:text-navy-200 dark:hover:bg-navy-700">
                   元URL ↗
                 </a>
               </div>
