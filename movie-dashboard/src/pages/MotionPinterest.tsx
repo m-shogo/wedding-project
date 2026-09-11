@@ -100,6 +100,46 @@ function YouTubePreview({ id, title, large }: { id: string; title: string; large
   );
 }
 
+function VimeoPreview({ id, title, large }: { id: string; title: string; large: boolean }) {
+  const [hovered, setHovered] = useState(false);
+
+  if (large) {
+    return (
+      <iframe
+        title={title}
+        src={`https://player.vimeo.com/video/${id}?autoplay=0&muted=0&loop=0`}
+        loading="lazy"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowFullScreen
+        className="h-full w-full border-0"
+      />
+    );
+  }
+
+  return (
+    <div
+      className="relative h-full w-full bg-[#101820]"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {hovered ? (
+        <iframe
+          key="playing"
+          title={`${title} preview`}
+          src={`https://player.vimeo.com/video/${id}?autoplay=1&muted=1&loop=1&background=1`}
+          allow="autoplay; fullscreen; picture-in-picture"
+          className="pointer-events-none h-full w-full border-0"
+        />
+      ) : (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#1ab7ea]/25 via-navy-900 to-navy-950 px-3 text-center text-white">
+          <span className="rounded-full bg-[#1ab7ea] px-3 py-2 text-[10px] font-black shadow-lg">▶ hoverでVimeo再生</span>
+          <span className="mt-2 line-clamp-2 text-[9px] text-white/70">{title}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DirectVideoPreview({ url, title, large }: { url: string; title: string; large: boolean }) {
   return (
     <video
@@ -129,16 +169,7 @@ function Preview({ item, large = false }: { item: ExternalMotionAtlasItem; large
 
   const vimeoId = extractVimeoId(item.sourceUrl);
   if (vimeoId) {
-    return (
-      <iframe
-        title={item.titleOriginal}
-        src={`https://player.vimeo.com/video/${vimeoId}?autoplay=${large ? 0 : 1}&muted=${large ? 0 : 1}&loop=${large ? 0 : 1}`}
-        loading="lazy"
-        allow="autoplay; fullscreen; picture-in-picture"
-        allowFullScreen
-        className={`h-full w-full border-0 ${large ? "" : "pointer-events-none"}`}
-      />
-    );
+    return <VimeoPreview id={vimeoId} title={item.titleOriginal} large={large} />;
   }
 
   if (isDirectVideo(item.previewUrl) && item.previewUrl) {
@@ -263,7 +294,7 @@ export function MotionPinterest() {
         </div>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[10px] text-navy-400">
           <span>表示 {filtered.length} / 外部実例 {externalMotionAtlas.length}件 · 自作モーション 0件</span>
-          <span>GIF優先表示 · YouTubeはhoverで無音再生</span>
+          <span>GIF優先表示 · YouTube/Vimeoはhoverで無音再生</span>
         </div>
       </section>
 
