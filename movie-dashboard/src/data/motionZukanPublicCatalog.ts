@@ -18,6 +18,8 @@ export interface MotionZukanPublicCard {
   score: 4 | 5;
   difficulty: MotionZukanHumanCuration["difficulty"];
   bestFor: string;
+  selectionCue: string;
+  avoidWhen: string;
   whyForWeddingOpening: string;
   davinciHumanLabel: string;
   referenceUrls: readonly string[];
@@ -52,6 +54,8 @@ export function getMotionZukanPublicSPicks(): MotionZukanPublicCard[] {
       score: curation.score,
       difficulty: curation.difficulty,
       bestFor: curation.bestFor,
+      selectionCue: curation.selectionCue,
+      avoidWhen: curation.avoidWhen,
       whyForWeddingOpening: curation.whyForWeddingOpening,
       davinciHumanLabel: curation.davinciHumanLabel,
       referenceUrls: curation.externalReferences.map((reference) => reference.url),
