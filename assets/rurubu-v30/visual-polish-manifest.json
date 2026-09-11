@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 8,
+  "project": "Rurubu WEDDING V30",
+  "status": "CURRENT_REQUIRED_POLISH_EXTENSION",
+  "scope": "P01-P08 systemic visual-polish, asset-role classification, shared-component, ornament-originality, display-module, photo-proxy, alpha-integrity, copy-sync, border-depth, carry-over and execution-ownership rules",
+  "inherits": "assets/rurubu-v30/manifest.json",
+  "reason": "P01 exposed generic-native design, stale carry-over, contaminated photo proxies, workflow-order failures, inside-opacity failures, stale owner-copy propagation, and border/frame z-order problems. P02 exposed a second systemic failure: fixed display text, shared common components and page-specific ornaments were not classified strongly enough, allowing review language to treat native/common elements as image candidates and allowing visually weak reused clipart/carry-over ornaments to pass.",
+  "workflowOwnership": {
+    "status": "USER_LOCKED_2026_09_02",
+    "manifestAndReviewOwner": "ChatGPT",
+    "figmaAndProductionImageGenerationOwner": "Codex",
+    "chatgptResponsibilities": ["analyze user feedback", "inspect actual Visual Masters and current screenshots", "improve root/shared/page manifests and acceptance rules", "detect contradictions and stale rules", "prepare Codex execution instructions", "review Codex result against Visual Master and current authority"],
+    "codexResponsibilities": ["production ImageGen", "alpha/cutout preparation", "Figma creation/editing/cleanup", "clean proxy installation", "Figma screenshot/export QA", "Drive/Git production evidence"],
+    "hardRule": "ChatGPT must not jump ahead into direct Figma modification or production ImageGen while manifest/feedback work is open unless the user explicitly reassigns that work."
+  },
+  "assetRoleClassificationPolicy": {
+    "status": "HARD / REQUIRED_BEFORE_PRODUCTION_AND_REVIEW",
+    "principle": "Every visible element must be classified by role before deciding whether it should be generated, native, shared, photographic or decorative. Fixed text is not automatically an image asset, and visual richness is not a reason to rasterize text or shared UI-like page furniture.",
+    "roles": {
+      "NATIVE_TEXT": "Editable text that should remain native because wording, consistency, cross-page reuse, accessibility, or later copy replacement matters. Native text may still use authored outlines, shadows, bubbles, ribbons or surrounding generated art without baking the text itself into raster art.",
+      "SHARED_COMMON_COMPONENT": "A cross-page recurring system element whose visual language must stay consistent across P01-P08, such as PAGE number badges or other explicitly shared publication furniture. Keep one common design family and vary only the page-specific value/content unless the Visual Master requires a documented page-specific exception.",
+      "GENERATED_DISPLAY_ASSET": "A truly authored one-off visual object whose text/shape/illustration materially behave as one inseparable editorial graphic and whose wording is already locked. Use only when raster/vector art gives a clear fidelity advantage over native composition.",
+      "PAGE_SPECIFIC_ORNAMENT": "Decorative travel/tropical/icon/route/sticker art created for a specific page location and narrative role. It must be context-fit and visually authored, not generic clipart or careless carry-over.",
+      "PHOTO": "Replaceable real or clean standalone proxy photography; never page-master crops/screenshots."
+    },
+    "decisionOrder": ["Is this a cross-page recurring publication part? -> SHARED_COMMON_COMPONENT", "Is it editable/variable copy or text that should stay consistent and separately controllable? -> NATIVE_TEXT", "Is it a page-specific decoration/icon/route/cluster? -> PAGE_SPECIFIC_ORNAMENT", "Is it a replaceable photo? -> PHOTO", "Only then consider GENERATED_DISPLAY_ASSET for a truly inseparable authored object"],
+    "hardRejects": ["calling a native title an image asset merely because it is stylized", "baking shared PAGE badges independently on each page when they are meant to be one common family", "rasterizing SHOGO/SHIORI or similar labels when the current page system expects native reusable text", "treating fixed copy as sufficient reason for generation", "using GENERATED_DISPLAY_ASSET as a default bucket when role classification is ambiguous"]
+  },
+  "bundledFixedDisplayModulePolicy": {
+    "principle": "When a short fixed display element is visually authored as one inseparable editorial object, it may be generated/prepared as one asset, but only after asset-role classification confirms that it is not better represented as NATIVE_TEXT, SHARED_COMMON_COMPONENT, PAGE_SPECIFIC_ORNAMENT or PHOTO.",
+    "oneAssetMayInclude": ["short locked text", "numbers", "background/vessel", "badge shape", "icons", "doodles/routes", "flowers/hearts/sparkles", "printed outlines/shadows", "local fixed accents"],
+    "visibleTextMustRemainEditable": false,
+    "sourceOfTruthRule": "Approved exact strings/numbers must remain in page authority or asset metadata and visible generated spelling/numbers must be QA-checked.",
+    "keepSeparate": ["replaceable real photos", "long body copy", "unapproved/TBD/personal copy", "frequently changing text", "cross-page shared common components", "native labels/titles whose consistency or later editing matters", "independently movable decorations when separate overlap is required"],
+    "hardRejects": ["generic native UI primitives replacing an authored fixed module only for editability", "flattening replaceable photos into fixed display art", "baking unapproved long/personal copy into generated art", "bundling unrelated decorations only to reduce layer count", "using this policy to override an explicit NATIVE_TEXT or SHARED_COMMON_COMPONENT classification"]
+  },
+  "sharedCommonComponentPolicy": {
+    "status": "HARD / CROSS_PAGE_CONSISTENCY",
+    "principle": "Elements intentionally shared across the 8-page publication are one design system, not eight unrelated generated assets.",
+    "defaultExamples": ["PAGE 01/02/... badge family when the owner expects TOP-to-inside consistency", "recurring page furniture explicitly identified as common by page authority"],
+    "qa": ["compare shared component against P01/current common authority", "verify page-specific number/content is the intended variable", "verify scale, stroke, typography, backing and edge relationship remain one family", "allow a page-specific exception only when Visual Master or owner feedback explicitly requires it"],
+    "hardRejects": ["independently generating a shared common component per page and accepting style drift", "calling a common component a page-specific image asset", "requalifying visibly inconsistent common furniture as acceptable carry-over"]
+  },
+  "ornamentOriginalityPolicy": {
+    "status": "HARD / REQUIRED_FOR_PAGE_SPECIFIC_ORNAMENTS",
+    "principle": "Travel/tropical/icon/route ornaments must feel authored for the exact page role. Reuse is allowed only when it is an intentional publication motif, not because an old icon already exists.",
+    "qualityQuestions": ["Does this ornament look like a designed magazine accent rather than generic clipart?", "Is it distinct enough from other ornaments on the same page to avoid obvious copy-paste repetition?", "Does its silhouette, line weight, color, detail level and overlap match the current page quality bar?", "Does it support the local narrative role instead of filling empty space?", "Would keeping it still make sense if the old asset name/status were hidden?"],
+    "intentionalReuseAllowed": ["airmail border family", "explicit shared common component", "small recurring motif family whose repetition is visibly deliberate and varied in composition"],
+    "requalifyRule": "KEEP_REQUALIFIED / REQUALIFIED_CARRYOVER may be used only after explicit current-build review of visual quality, context fit, duplication/reuse feel, and stock/clipart feel. Technical cleanliness, prior PRODUCTION status, or merely matching color is insufficient.",
+    "samePageDuplicationRule": "Do not use the same or near-identical airplane, route, suitcase, flower cluster or sticker geometry in multiple prominent positions on one page unless the Visual Master clearly uses repetition as a motif. Prefer distinct role-specific compositions within one coherent family.",
+    "hardRejects": ["generic stock/clipart airplane or suitcase", "reusing the same prominent icon/cluster in top and lower modules", "slightly moving/resizing an old carry-over and calling it requalified", "ornament quality materially below title/photo/paper-module quality", "carry-over accepted without a fresh full-page visual judgment"]
+  },
+  "photoProxyContaminationPolicy": {
+    "status": "HARD_OVERRIDE",
+    "principle": "A photo proxy must read as standalone photo content only.",
+    "visualMasterCropAsPhotoProxy": "PROHIBITED",
+    "allowedProxySources": ["user-provided real photo suitable for the slot", "clean semantically representative standalone photo", "clean generated standalone photo proxy with no page-layout decoration"],
+    "hardRejects": ["crop from P01.png/P02.png/etc used as active photo fill", "page screenshot used as photo fill", "proxy containing page border/title/badge/ticket/stamp/Q shell/flower/route/frame/background decoration", "proxy whose baked decoration duplicates a separate page asset"],
+    "qa": ["inspect proxy alone", "verify role/count/orientation/focal mass", "verify no page-layout decoration is baked in", "verify photo replacement does not remove page decoration"]
+  },
+  "alphaIntegrityPolicy": {
+    "status": "HARD / REQUIRED_FOR_ALL_RGBA_DISPLAY_MODULES",
+    "principle": "TRUE ALPHA is not enough. Transparency outside a module and opacity inside the authored object are separate QA responsibilities.",
+    "twoIndependentChecks": {
+      "outsideTransparency": "Outer canvas/background intended for cutout must be transparent with no checkerboard pixels, key-color halo, opaque rectangle or fringe.",
+      "insideOpacity": "Paper/vessel/badge/ribbon/card areas intended to be printed opaque must remain visually and numerically opaque. Do not accidentally erase or weaken white/cream interiors during key-background removal."
+    },
+    "defaultOpacityExpectation": {
+      "opaquePaperVessel": "Interior alpha should normally be >= 0.95, preferably 1.00, except deliberately anti-aliased edges, intentional holes, or explicitly approved translucent material.",
+      "antiAliasedEdge": "Partial alpha is allowed only in a narrow edge transition where required for clean antialiasing.",
+      "intentionalTransparency": "Any large translucent interior region must be explicitly justified by the Visual Master/page authority; never assume transparency because the PNG has alpha."
+    },
+    "mandatoryQa": ["inspect alpha channel, not only RGB preview", "view asset over white, mid-gray, dark and high-contrast temporary backgrounds", "inspect the module by itself and inside the current page", "confirm intended paper/vessel interiors do not reveal page background or Hero pixels", "sample representative interior alpha values or generate an opacity-mask diagnostic when practical", "check text/icon readability after compositing", "compare against Visual Master material character at A5 size"],
+    "siblingSweepRule": {
+      "trigger": "Any same-page opaque paper/ticket/label/vessel module fails inside-opacity QA",
+      "action": "Run one quick sibling sweep across the page's other same-family modules before closing ALPHA_INTEGRITY_PASS.",
+      "reason": "A shared generation/cutout method can create the same hidden interior-alpha defect in multiple modules even when only one is initially noticed."
+    },
+    "hardRejects": ["checkerboard preview treated as proof of correct alpha", "outer transparency pass while intended paper/vessel interior is semi-transparent", "white/cream paper deleted by key-color cutout", "large unexplained alpha holes inside tickets/cards/labels", "Figma opacity used to hide incorrect source alpha", "placing a white rectangle behind a broken module merely to fake the intended vessel when it changes silhouette or overlap"],
+    "repairRule": "If interior opacity is wrong, fix/regenerate the source/cutout alpha for the affected module. Do not normalize the whole page or add generic Figma rescue shapes."
+  },
+  "fastFailRegenerationPolicy": {
+    "status": "HARD / DEFAULT_EXECUTION_BEHAVIOR",
+    "principle": "When a visible defect is likely asset-side, do not spend prolonged time diagnosing a cheap-to-regenerate module. Run one quick discriminator and regenerate/re-cut immediately when asset-side failure is likely or confirmed.",
+    "decisionRule": "If diagnosis cost or context cost is likely to exceed regeneration/cutout cost, prefer regeneration/cutout.",
+    "workflow": ["run one quick asset-vs-Figma discriminator", "if source/RGBA/cutout is visibly or numerically wrong, regenerate or redo cutout immediately", "if one same-family paper module fails, run one sibling sweep before closing page alpha integrity", "inspect Figma opacity/blend/mask only when the asset itself passes the quick check", "replace only the affected module and delete the superseded LIVE node", "after replacement run one integrated final QA pass; repeat only if that pass fails"],
+    "quickDiscriminatorExamples": ["inspect one representative interior alpha sample or alpha mask", "check source asset over one dark/high-contrast background", "confirm Figma node opacity/blend is normal when source passes"],
+    "immediateRegenerationExamples": ["paper/ticket/label interior translucency", "broken or contaminated cutout alpha", "key-color halo or lost white/cream material", "clearly weak or corrupted generated display rendering", "wrong bundled module treatment that is cheaper to regenerate than patch", "generic/weak page-specific ornament that fails the current page quality bar"],
+    "doNotWasteTimeOn": ["repeated midpoint screenshots for the same known defect", "multiple rounds of identical alpha diagnosis", "long back-and-forth status reports before fixing a cheap asset", "manual micro-patching of a broken generated module when regeneration is faster", "context-heavy reporting of every intermediate check"],
+    "reportingRule": "Prefer one concise final report with cause, replacement, QA result and remaining debt. Report mid-process only for a real blocker, destructive-risk decision, or repeated regeneration failure.",
+    "safetyBoundary": "Do not skip canonical copy/fact checks, destructive Figma safety, sibling sweep after a shared alpha failure, role classification, ornament originality review, or final integrated QA merely to be fast."
+  },
+  "copyPropagationPolicy": {
+    "status": "HARD / OWNER_FEEDBACK_OVERRIDES_STALE_GENERATED_COPY",
+    "principle": "When the owner changes visible wording, page-role terminology, or teaser meaning, update all dependent generated/native modules on that page instead of leaving stale text because an older asset already exists.",
+    "qa": ["compare visible copy against newest page authority", "check related teaser/index/cover modules for stale wording", "mark previous generated wording SUPERSEDED", "verify final screenshot uses one coherent terminology set"],
+    "hardRejects": ["old page-role wording surviving in a teaser after owner correction", "mixed old/new terminology on one page", "keeping stale copy because regeneration would be inconvenient"]
+  },
+  "borderDepthPolicy": {
+    "status": "HARD / DEFAULT_BACKGROUND_ADJACENT",
+    "principle": "Page border/frame assets are support framing, not foreground editorial content, unless the Visual Master clearly shows intentional foreground overlap.",
+    "defaultZOrder": ["background field", "border/frame", "Hero/photos", "authored display modules", "major stickers/badges/foreground accents"],
+    "qa": ["inspect whether border slices across text/cards/photos", "confirm frame supports page edge rather than dominating it", "compare intentional overlap directly with Visual Master"],
+    "hardRejects": ["border placed above major editorial modules by default", "frame reading as a foreground overlay that cuts through content", "flattening unrelated content to solve a z-order problem"]
+  },
+  "editorialIrregularityPolicy": {
+    "principle": "Preserve authored local irregularity; do not normalize the page into UI components and do not manufacture random messiness.",
+    "check": ["module width/height differences", "photo-slot size differences", "local x/y offsets", "icon positions", "overlap depth", "edge activation", "padding/negative-space differences"],
+    "hardRejects": ["equal-card normalization", "mechanical mirroring", "formulaic/random scrapbook rotation", "component convenience overriding page silhouette"]
+  },
+  "edgeSafetyPolicy": {
+    "status": "HARD_FOR_A5",
+    "principle": "Energetic edge activation is allowed, but important badges, labels, text and intended object silhouettes must not look accidentally clipped by trim/border.",
+    "qa": ["inspect left/right/top/bottom edge at full page and A5 size", "distinguish intentional bleed/crop from accidental collision", "keep critical text, number badges and module identity safely legible", "compare edge relationship directly to Visual Master"],
+    "hardRejects": ["number badge visibly cut by border with no reference basis", "important heading touching trim/border so tightly that it reads as accidental", "same edge offset reused mechanically across unrelated modules"]
+  },
+  "tactilePrintFinishPolicy": {
+    "principle": "Use restrained tactile print character where the Visual Master supports it; never solve flat design with indiscriminate global grain.",
+    "preferredTargets": ["paper vessels", "tickets/postcards", "ribbons/tapes", "stamps/postmarks", "expressive display-title art", "irregular printed frames/backings"],
+    "hardRejects": ["heavy fake vintage grain", "global dirty-paper overlay", "texture on faces", "texture reducing A5 readability", "noise hiding weak generation"]
+  },
+  "visualCarryOverPolicy": {
+    "status": "MANDATORY_AFTER_ANY_TARGETED_REWORK_OR_PROMOTION",
+    "principle": "A clean Figma layer tree can still contain stale visual language.",
+    "statuses": ["UNREVIEWED_CARRYOVER", "KEEP_REQUALIFIED", "REWORK_REQUIRED", "REPLACE_REQUIRED", "SUPERSEDED"],
+    "grandfatheringForbidden": true,
+    "adjacencyRequalificationRule": "After a high-saliency anchor/Hero/module improves, reopen nearby support assets because the raised quality bar can expose stale neighboring design.",
+    "maintainedDefinition": "MAINTAINED requires explicit current-build requalification. Unchanged, ADOPTED, PRODUCTION_RGBA or prior PASS are not enough.",
+    "requalificationMinimum": ["visual quality at current page bar", "context fit", "stock/clipart feel", "same-page duplication/reuse feel", "coherence with current neighboring modules"],
+    "coherenceQuestion": "Does the page look like one authored magazine page, or like newer high-quality anchors layered over an older draft or reused sticker library?"
+  },
+  "pageApplicationRequirement": {
+    "rule": "Before P01-P08 production, page authority must classify every major visible element as NATIVE_TEXT, SHARED_COMMON_COMPONENT, GENERATED_DISPLAY_ASSET, PAGE_SPECIFIC_ORNAMENT or PHOTO; then separately define clean photo-proxy roles, independently movable exceptions, alpha/material expectations, copy dependencies, border/frame depth expectations, critical edge-safety zones, and ornament originality/reuse constraints.",
+    "pendingPageRule": "For pages awaiting actual Visual Master review, do not invent exact module lists from prose."
+  },
+  "feedbackDebtPolicy": {
+    "rule": "A newly discovered repeatable failure reopens FEEDBACK_DEBT even if an earlier cycle was closed.",
+    "newP01Lesson": "P01 showed that alpha QA must verify intended opaque interiors, one failed paper module should trigger a sibling sweep, owner copy changes must propagate to dependent generated modules, border/frame z-order can fail after other visual gates pass, and cheap asset-side defects should fast-fail into targeted regeneration rather than prolonged diagnosis.",
+    "newP02Lesson": "P02 showed that role classification must precede generation/review: stylized native text is not automatically image art, PAGE badges can be shared common components, and REQUALIFIED_CARRYOVER cannot pass weak repeated airplane/route/suitcase/tropical clipart merely because it is technically clean or previously used.",
+    "blockScalingRule": "Do not scale a newly discovered failure mode to later pages before it is modeled and the current affected page is rechecked or explicitly deferred by the user."
+  },
+  "acceptanceRule": "Structural QA, stale-layer scans, prior ADOPTED status, editable-text preference, an alpha-channel existence check, or prolonged diagnostic effort cannot waive correct asset-role classification, shared-component consistency, ornament originality/context fit, visual fidelity, clean-proxy, intended-interior-opacity, copy-sync, border-depth, edge-safety, carry-over or coherence review. Cheap asset-side failures should be regenerated promptly under the fast-fail policy."
+}

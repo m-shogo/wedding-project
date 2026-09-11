@@ -1,0 +1,62 @@
+{
+  "asset_id": "P04_BOTTOM_CLOSURE_ECOLOGY",
+  "input": "assets/rurubu-v30/p04/production/phase-b-full-production/sources/raw-generated/P04_BOTTOM_CLOSURE_ECOLOGY_RAW.png",
+  "input_sha256": "d01b718b444e90b5226b8af1792d1e1e59fcf132cce033ab26b52deac422959f",
+  "normalized_flat_matte": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_BOTTOM_CLOSURE_ECOLOGY/P04_BOTTOM_CLOSURE_ECOLOGY_SOURCE_MATTE.png",
+  "normalized_flat_matte_sha256": "26a1bea4f8b301aada2c220564e94a9804f66f6f9df77fcaa1ed1e09358ab1b0",
+  "matte_nominal_hex": "#6C00A8",
+  "normalization": {
+    "method": "violet-only cubic field fit, edge-aware foreground recovery, exact flat matte recomposite",
+    "generated_field_fit": {
+      "violet_pixels": 733114,
+      "fit_residual_p50": 1.28,
+      "fit_residual_p95": 3.368,
+      "fit_residual_p99": 10.949
+    },
+    "first_distance_low": 13.949,
+    "first_distance_high": 105.0
+  },
+  "production_extraction": {
+    "input": "normalized exact flat matte",
+    "distance_low": 7.0,
+    "distance_high": 105.0,
+    "edge_rgb_treatment": "inverse flat-matte compositing plus narrow violet-spill suppression on partial-alpha pixels",
+    "violet_spill_pixels_suppressed": 736357,
+    "violet_partial_pixels_removed": 736224,
+    "opaque_violet_shadow_pixels_recolored_navy": 163,
+    "final_violet_edge_pixels_removed": 736271,
+    "final_violet_opaque_pixels_recolored_navy": 86,
+    "crop_box": [
+      0,
+      67,
+      1536,
+      983
+    ]
+  },
+  "output": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_BOTTOM_CLOSURE_ECOLOGY/P04_BOTTOM_CLOSURE_ECOLOGY.png",
+  "output_sha256": "f78aae378aef886a85e065d433c02c1d9a888111f940c9192c508af215bc293c",
+  "output_mode": "RGBA",
+  "output_dimensions": [
+    1536,
+    916
+  ],
+  "alpha": {
+    "min": 0,
+    "max": 255,
+    "unique_count": 252,
+    "transparent_pixels": 570383,
+    "partial_pixels": 4044,
+    "opaque_pixels": 832549,
+    "opaque_or_near_opaque_pixels": 834287,
+    "corner_values": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "qa": {
+    "light_gray_dark_contact": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_BOTTOM_CLOSURE_ECOLOGY/qa/composite-contact-sheet.jpg",
+    "alpha_mask": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_BOTTOM_CLOSURE_ECOLOGY/qa/alpha-mask.png"
+  }
+}

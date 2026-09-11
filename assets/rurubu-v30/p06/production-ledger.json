@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P06",
+  "date": "2026-09-08",
+  "status": "ACTIVE_REBUILD_FROM_OWNER_VM",
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "frameId": "3535:17",
+    "updateInPlace": true
+  },
+  "canonicalOwnerSource": {
+    "name": "P06_OWNER_VISUAL_MASTER_HQ_UNCOMPRESSED_20260906.png",
+    "dimensions": [1055,1491],
+    "format": "PNG",
+    "bytes": 3682318,
+    "sha256": "13bed2e07d66803d67cd6a117a57bc67dbdd9677b9ba54f4b9dd634910747103"
+  },
+  "stateModel": ["PLANNED","REUSE_CHECKED","PREPARED_FROM_OWNER_VM","ART_QUALITY_PASS","ALPHA_MATERIAL_PASS","DRIVE_SAVED","FIGMA_PLACED","SCREENSHOT_QA_PASS","ACCEPTED"],
+  "jobs": [
+    {"id":"P06_HEADER_ECOLOGY","role":"representative ecology / identity anchor","state":"PLANNED","sourceMode":"OWNER_VM_ORIGINAL_PIXEL_CROP","sourceBox":[0,0,720,340],"expectedPath":"assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_HEADER_ECOLOGY_OWNER_VM.png","figmaNodeId":null,"gate":"MUST PASS FIRST"},
+    {"id":"P06_INTRO_BUBBLE_ECOLOGY","role":"top-right intro ecology","state":"PLANNED","sourceMode":"OWNER_VM_ORIGINAL_PIXEL_CROP","sourceBox":[680,20,1055,310],"expectedPath":"assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_INTRO_BUBBLE_ECOLOGY_OWNER_VM.png","figmaNodeId":null},
+    {"id":"P06_Q5_EDITORIAL_ECOLOGY","role":"Q5 authored vessel","state":"PLANNED","sourceMode":"OWNER_VM_ORIGINAL_PIXEL_CROP","sourceBox":[600,300,1055,815],"expectedPath":"assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_Q5_EDITORIAL_ECOLOGY_OWNER_VM.png","figmaNodeId":null},
+    {"id":"P06_MAIN_CAPTION_ECOLOGY","role":"main photo caption","state":"PLANNED","sourceMode":"OWNER_VM_ORIGINAL_PIXEL_CROP","sourceBox":[30,680,370,820],"expectedPath":"assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_MAIN_CAPTION_ECOLOGY_OWNER_VM.png","figmaNodeId":null},
+    {"id":"P06_FOOD_CAPTION_ECOLOGY","role":"food caption","state":"PLANNED","sourceMode":"OWNER_VM_ORIGINAL_PIXEL_CROP","sourceBox":[30,1040,390,1175],"expectedPath":"assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_FOOD_CAPTION_ECOLOGY_OWNER_VM.png","figmaNodeId":null},
+    {"id":"P06_PETS_CAPTION_ECOLOGY","role":"pets caption","state":"PLANNED","sourceMode":"OWNER_VM_ORIGINAL_PIXEL_CROP","sourceBox":[380,1040,720,1175],"expectedPath":"assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_PETS_CAPTION_ECOLOGY_OWNER_VM.png","figmaNodeId":null},
+    {"id":"P06_TRAVEL_CAPTION_ECOLOGY","role":"travel caption","state":"PLANNED","sourceMode":"OWNER_VM_ORIGINAL_PIXEL_CROP","sourceBox":[690,1040,1055,1185],"expectedPath":"assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_TRAVEL_CAPTION_ECOLOGY_OWNER_VM.png","figmaNodeId":null},
+    {"id":"P06_Q6_BOTTOM_ECOLOGY","role":"bottom closure / Q6","state":"PLANNED","sourceMode":"OWNER_VM_ORIGINAL_PIXEL_CROP","sourceBox":[0,1140,1055,1491],"expectedPath":"assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_Q6_BOTTOM_ECOLOGY_OWNER_VM.png","figmaNodeId":null},
+    {"id":"P06_PHOTO_MAIN","role":"replaceable photo","state":"REUSE_CHECKED","maskNodeId":"4000:52","imageNodeId":"4000:53","preserve":true},
+    {"id":"P06_PHOTO_FOOD","role":"replaceable photo","state":"REUSE_CHECKED","maskNodeId":"4000:55","imageNodeId":"4000:56","preserve":true},
+    {"id":"P06_PHOTO_PETS","role":"replaceable photo","state":"REUSE_CHECKED","maskNodeId":"4000:58","imageNodeId":"4000:59","preserve":true},
+    {"id":"P06_PHOTO_TRAVEL","role":"replaceable photo","state":"REUSE_CHECKED","maskNodeId":"4000:61","imageNodeId":"4000:62","preserve":true},
+    {"id":"P06_PAGE_BADGE","role":"shared publication component","state":"REUSE_CHECKED","nodeId":"4000:44","preserve":true}
+  ],
+  "transport": {
+    "officialFigmaUpload": "BLOCKED_CONTAINER_EGRESS",
+    "exactLosslessSourceRequired": true,
+    "proxyFallbackForbidden": true,
+    "fullPageTargetNode": "4249:56",
+    "note": "Do not mark module jobs FIGMA_PLACED until exact lossless bytes are actually present in live Figma."
+  },
+  "completion": {
+    "FIGMA_DESIGN_COMPLETE": false,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  }
+}

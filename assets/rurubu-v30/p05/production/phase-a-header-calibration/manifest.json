@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P05",
+  "phase": "PHASE_A_HEADER_CALIBRATION_ONLY",
+  "status": "PASS_STOPPED_BEFORE_PHASE_B",
+  "assetId": "P05_HEADER_ECOLOGY_V30_ALIGNED",
+  "source": {
+    "path": "assets/rurubu-v30/p05/production/phase-a-header-calibration/sources/raw-generated/P05_HEADER_ECOLOGY_V30_ALIGNED_RAW.png",
+    "sha256": "65af13ac869b39ff7091c38806191f586cb4daf2f2bbe0bc4af3b17e1e6acb6c"
+  },
+  "matte": {
+    "nominalColor": "#6C00A8",
+    "reason": "Extraction-only violet is absent from the approved hot-pink, blue, yellow, green, cyan, white and navy artwork palette.",
+    "sourcePath": "assets/rurubu-v30/p05/production/phase-a-header-calibration/assets/P05_HEADER_ECOLOGY_V30_ALIGNED/P05_HEADER_ECOLOGY_V30_ALIGNED_SOURCE_MATTE.png",
+    "sourceSha256": "462a6907b89399b7629f358bbf0aab3afd03b3bb35f3b3ee8fbceacbc4f693c3",
+    "flatBorderExactRatio": 1.0
+  },
+  "productionRgba": {
+    "path": "assets/rurubu-v30/p05/production/phase-a-header-calibration/assets/P05_HEADER_ECOLOGY_V30_ALIGNED/P05_HEADER_ECOLOGY_V30_ALIGNED.png",
+    "sha256": "979edf0f075b4dbf8dc8c1f53006e2b02729214735a1da4c7680d30c51b1b8d5",
+    "dimensions": [1876, 789],
+    "mode": "RGBA",
+    "alpha": {
+      "min": 0,
+      "max": 255,
+      "uniqueCount": 252,
+      "transparentPixels": 446642,
+      "partialPixels": 10904,
+      "opaquePixels": 1022618,
+      "opaqueOrNearOpaqueForegroundRatio": 0.990527,
+      "cornerValues": [0, 0, 0, 0],
+      "strictVioletEdgePixels": 0
+    },
+    "edgeTreatment": "Violet-only cubic field fit, exact flat-matte normalization, continuous edge-aware alpha, inverse matte-compositing RGB recovery and narrow violet-spill suppression."
+  },
+  "gates": {
+    "ART_QUALITY_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "ALPHA_INTERIOR_OPACITY_PASS": "PASS",
+    "EDGE_ALPHA_QUALITY_PASS": "PASS",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS"
+  },
+  "qa": {
+    "lightGrayDarkComposite": "assets/rurubu-v30/p05/production/phase-a-header-calibration/assets/P05_HEADER_ECOLOGY_V30_ALIGNED/qa/composite-contact-sheet.jpg",
+    "alphaMask": "assets/rurubu-v30/p05/production/phase-a-header-calibration/assets/P05_HEADER_ECOLOGY_V30_ALIGNED/qa/alpha-mask.png",
+    "visualMasterComparison": "assets/rurubu-v30/p05/production/phase-a-header-calibration/qa/visual-master-vs-figma-phase-a.png",
+    "freshScreenshots": {
+      "P01": {"path": "assets/rurubu-v30/p05/production/phase-a-header-calibration/qa/fresh-pages/fresh-p01.png", "sha256": "13fadabd2e8cc099951a1b16f83a443ecb71863e702b742e13bc9326c242c6f3"},
+      "P02": {"path": "assets/rurubu-v30/p05/production/phase-a-header-calibration/qa/fresh-pages/fresh-p02.png", "sha256": "563831f690388dbc6cd2dd1e991645e91acf4a1a95c80fc81598e50e1e768c05"},
+      "P03": {"path": "assets/rurubu-v30/p05/production/phase-a-header-calibration/qa/fresh-pages/fresh-p03.png", "sha256": "4efdcb3525c88e3bc2dfce0e31e151c9beb0e68a2cd39e3612fbd45919f6a0c8"},
+      "P04": {"path": "assets/rurubu-v30/p05/production/phase-a-header-calibration/qa/fresh-pages/fresh-p04.png", "sha256": "3304099c59dd68166ce356fb77cb37c02151a4633147cf5a28f4fda969791676"},
+      "P05": {"path": "assets/rurubu-v30/p05/production/phase-a-header-calibration/qa/fresh-pages/fresh-p05.png", "sha256": "1b26566176f219308ea53880aece86b5fb53bacf5089168139b391de922c72e5"}
+    },
+    "crossPageComparison": "assets/rurubu-v30/p05/production/phase-a-header-calibration/qa/cross-page-comparison.png",
+    "comparisonReasons": [
+      "Hot pink, vivid blue, yellow, green and cyan match the live V30 saturation family.",
+      "Dark navy outlines plus white/yellow keylines match the P01-P04 high-saliency display grammar.",
+      "Controlled depth and crisp sticker silhouette remain clean at A5 placement size.",
+      "Tropical motifs form one authored title ecology rather than watercolor, vintage or generic clipart.",
+      "The friends-page-specific title, ribbon, airplane route, camera, rings and stamp preserve the P05 Visual Master hierarchy without copying another page layout."
+    ]
+  },
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "targetFrameId": "3535:15",
+    "nodeId": "3959:32",
+    "imageHash": "38387f9a869f1896caa6c87c59150ed0f5775ba9",
+    "placement": {"x": 16.5, "y": 12, "width": 526, "height": 221},
+    "frameChildCountAfterPlacement": 1,
+    "protectedFramesUntouched": ["3535:7", "3535:9", "3535:11", "3535:13", "3535:17", "3535:19", "3535:21"]
+  },
+  "drive": {
+    "status": "SYNCED_AND_READBACK_VERIFIED",
+    "sourceFolderId": "1BNgCFK04uG5Wki7zAzD8zt0cN0TP52Ua",
+    "productionRgbaFolderId": "1h0dkrPKzgHEM_K5M8qoGRIJSthbRchZP",
+    "qaFolderId": "1c90CkO0PdTO2gI_CAFDXPe86Gydqc_lp",
+    "rawSourceFileId": "1e2q74_C_2Sc0r4cOBe2jZ-cCSuzSsnYF",
+    "normalizedMatteFileId": "11tlMZ5K6ODE9bUpyFMJb2RIgpFYl77Y2",
+    "productionRgbaFileId": "1jdILFga0ih7_Ysyh0xIukhF5meVVRPTj",
+    "alphaDiagnosticsFileId": "1haJ1baFsgDCIN5RC7mO7Yda3Iu-KeD2g",
+    "qaCompositeFileId": "14SBlwX971zmLHJezU2q_HbtAksb8luTO",
+    "crossPageComparisonFileId": "1BDWtoo_AwkIw6OBJ5g8MIrHJ_S9o_zlR",
+    "visualMasterComparisonFileId": "1R5YO9w6dVYUj6xk0UkcDf2o7WTHa8iju",
+    "freshP05FileId": "1j_byLTywac1xflwCGAxBDtqzyUDzvWBw",
+    "completionRecordFileId": "1cg06zoQuS64Rsr8SDsDM8bEeUnswbVcX",
+    "manifestFileId": "1FN29NVGBLK0fJK_cWXjtdilPX8x9zBbG"
+  },
+  "phaseB": "NOT_OPENED_REQUIRES_LATER_OWNER_INSTRUCTION"
+}

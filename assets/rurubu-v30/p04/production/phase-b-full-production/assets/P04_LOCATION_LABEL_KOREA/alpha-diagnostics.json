@@ -1,0 +1,62 @@
+{
+  "asset_id": "P04_LOCATION_LABEL_KOREA",
+  "input": "assets/rurubu-v30/p04/production/phase-b-full-production/sources/raw-generated/P04_LOCATION_LABEL_KOREA_RAW.png",
+  "input_sha256": "2f4649d550bef80ff8014c9b6ec669ac998b9a39d72059648900d97cae751a5d",
+  "normalized_flat_matte": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_KOREA/P04_LOCATION_LABEL_KOREA_SOURCE_MATTE.png",
+  "normalized_flat_matte_sha256": "38765bda65ab778391360ac03e436cc9213200c1fa81142c60b879605c8077ec",
+  "matte_nominal_hex": "#6C00A8",
+  "normalization": {
+    "method": "violet-only cubic field fit, edge-aware foreground recovery, exact flat matte recomposite",
+    "generated_field_fit": {
+      "violet_pixels": 917396,
+      "fit_residual_p50": 2.917,
+      "fit_residual_p95": 13.269,
+      "fit_residual_p99": 62.877
+    },
+    "first_distance_low": 65.877,
+    "first_distance_high": 105.0
+  },
+  "production_extraction": {
+    "input": "normalized exact flat matte",
+    "distance_low": 7.0,
+    "distance_high": 105.0,
+    "edge_rgb_treatment": "inverse flat-matte compositing plus narrow violet-spill suppression on partial-alpha pixels",
+    "violet_spill_pixels_suppressed": 915471,
+    "violet_partial_pixels_removed": 915466,
+    "opaque_violet_shadow_pixels_recolored_navy": 5,
+    "final_violet_edge_pixels_removed": 915481,
+    "final_violet_opaque_pixels_recolored_navy": 9,
+    "crop_box": [
+      154,
+      165,
+      1417,
+      869
+    ]
+  },
+  "output": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_KOREA/P04_LOCATION_LABEL_KOREA.png",
+  "output_sha256": "567c6b14efc081c8ff7a985b042b11ef4e1115693d6b55e17937721ed2124d42",
+  "output_mode": "RGBA",
+  "output_dimensions": [
+    1263,
+    704
+  ],
+  "alpha": {
+    "min": 0,
+    "max": 255,
+    "unique_count": 198,
+    "transparent_pixels": 231769,
+    "partial_pixels": 2615,
+    "opaque_pixels": 654768,
+    "opaque_or_near_opaque_pixels": 655101,
+    "corner_values": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "qa": {
+    "light_gray_dark_contact": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_KOREA/qa/composite-contact-sheet.jpg",
+    "alpha_mask": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_KOREA/qa/alpha-mask.png"
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 11,
+  "project": "Rurubu WEDDING V30",
+  "page": "P03",
+  "role": "OUR STORY + Q3/Q4",
+  "status": "DESIGN_LOCKED_TIMELINE_VIOLET_REMOVED_OTHER_EDGE_ALPHA_CLEANUP_PENDING",
+  "date": "2026-09-03",
+  "authorityPrecedence": "Newest explicit owner feedback and direct live-Figma/source-asset review override earlier run-level PASS declarations and older P03 main-manifest execution details.",
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p03/P03.png",
+    "status": "LOCKED_PRIMARY_LOCAL_COMPOSITION_AUTHORITY",
+    "rule": "Use P03 Visual Master for local composition, hierarchy, photo count and information relationships. It does not license a different dominant illustration genre from the active V30 publication family."
+  },
+  "liveFigma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "frameId": "3535:11",
+    "reviewedOn": "2026-09-03",
+    "rule": "CURRENT 3535:11 remains design-locked. Do not create a duplicate P03 and do not modify P01/P02/P04-P08. Edge-alpha cleanup may replace only the affected raster sources while preserving node job, geometry and approved visual design."
+  },
+  "crossPageStyleAnchors": {
+    "status": "HARD / REQUIRED",
+    "anchorPages": [
+      {"page": "P01", "figmaNode": "3535:7", "role": "GLOBAL_V30_STYLE_ANCHOR_NOT_LAYOUT_TEMPLATE"},
+      {"page": "P02", "figmaNode": "3535:9", "role": "GLOBAL_V30_STYLE_ANCHOR_NOT_LAYOUT_TEMPLATE"}
+    ],
+    "principle": "P03 keeps its own story-page composition, but major display art, editorial papers, travel/tropical ornament treatment and story navigation must look art-directed by the same V30 publication team as P01/P02.",
+    "v30StyleDNA": [
+      "bright high-saturation travel-magazine energy",
+      "crisp printed/sticker-like silhouettes rather than painterly illustration plates",
+      "strong dark outlines or equivalent high-contrast edge definition on high-saliency display art",
+      "white/yellow/bright keylines and controlled dimensional shadows where useful",
+      "clean cream/white paper surfaces with clear colored framing rather than aged parchment",
+      "bold pink/blue/yellow/green/cyan palette relationships",
+      "tropical/travel motifs rendered as lively editorial cutouts/stickers, not watercolor botanical studies",
+      "tactile print character is restrained and graphic, not sepia/vintage",
+      "mixed media stays inside one bounded realism/texture range"
+    ],
+    "hardRejects": [
+      "watercolor or painterly botanical illustration as a dominant high-saliency P03 language",
+      "aged parchment / sepia scrapbook treatment",
+      "retro travel-poster illustration genre drift",
+      "fine-art church/tropical rendering that reads like an illustration plate",
+      "generic Canva/SVG icon language",
+      "one page mixing painterly vintage blocks with flat SVG flowchart elements",
+      "passing attractive individual objects when the overall publication family is inconsistent"
+    ],
+    "gate": "CROSS_PAGE_STYLE_FAMILY_PASS"
+  },
+  "ownerRejectedCurrentTargets": {
+    "status": "HISTORICAL_REWORK_COMPLETED",
+    "targets": [
+      "P03_HEADER_ECOLOGY / GROUPED_REGENERATION / COPY_LOCKED",
+      "P03_Q3_EDITORIAL_FAMILY / GROUPED_REGENERATION / Q3_ONLY",
+      "P03_Q4_EDITORIAL_FAMILY / GROUPED_REGENERATION / Q4_ONLY",
+      "P03_BOTTOM_CLOSURE_ECOLOGY / GROUPED_REGENERATION / P03_SPECIFIC",
+      "P03_STEP3_CAMERA / P03_SPECIFIC",
+      "P03_HERO_LOWER_PLUMERIA / P03_SPECIFIC",
+      "P03_CONTINUOUS_TIMELINE_ROUTE / ONE_ROUTE",
+      "P03_STEP2_PALM / P03_SPECIFIC",
+      "P03_TIMELINE_STEP_1_LABEL / GENERATED_DISPLAY_ASSET",
+      "P03_TIMELINE_STEP_2_LABEL / GENERATED_DISPLAY_ASSET",
+      "P03_TIMELINE_STEP_3_LABEL / GENERATED_DISPLAY_ASSET",
+      "P03_TIMELINE_STEP_4_LABEL / GENERATED_DISPLAY_ASSET",
+      "P03_TIMELINE_STEP_5_LABEL / GENERATED_DISPLAY_ASSET",
+      "P03_WEDDING_DAY_CARD / GENERATED_DISPLAY_ASSET / 2026.10.24"
+    ],
+    "reason": "These older implementations were superseded by the accepted V30-aligned grouped realignment. Do not restore them."
+  },
+  "newGroupedProductionModel": {
+    "principle": "Use fewer, larger editorial ecologies. Do not solve P03 with isolated clipart/SVG parts and do not flatten the whole page.",
+    "blocks": [
+      {
+        "id": "P03_HEADER_ECOLOGY_V30_ALIGNED",
+        "generationUnit": "ONE_GROUPED_DISPLAY_BLOCK",
+        "include": ["OUR STORY", "ふたりのこれまで♡", "ribbon logic", "airplane/heart-route logic", "necessary tropical accents"],
+        "styleRule": "Match P01/P02 V30 graphic/sticker/print energy. No watercolor, vintage parchment, painterly botanical or retro-poster treatment."
+      },
+      {
+        "id": "P03_Q3_Q4_EDITORIAL_FAMILY_V30_ALIGNED",
+        "generationUnit": "ONE_FAMILY_CALIBRATION_THEN_TWO_NON_MIRRORED_BLOCKS",
+        "include": ["Q3 paper vessel", "Q4 paper vessel", "Q badge language", "rules/lines", "only necessary integrated floral/travel accents"],
+        "keepSeparate": ["Q3 question/answer copy until approved", "Q4 question/answer copy until approved"],
+        "styleRule": "Use clean bright V30 editorial paper comparable to P02, not aged parchment/scrapbook paper. Q3/Q4 stay non-identical but one family."
+      },
+      {
+        "id": "P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED",
+        "generationUnit": "ONE_GROUPED_EDITORIAL_BLOCK",
+        "include": [
+          "1 出会い",
+          "2 デート",
+          "3 旅",
+          "4 プロポーズ",
+          "5 今日",
+          "continuous story movement/route logic",
+          "step-number and heading family",
+          "camera/palm and only necessary fixed local accents",
+          "Wedding Day",
+          "2026.10.24 as the terminal story endpoint"
+        ],
+        "keepSeparate": [
+          "timeline step 1 body copy",
+          "timeline step 2 body copy",
+          "timeline step 3 body copy",
+          "timeline step 4 body copy",
+          "timeline step 5 body copy",
+          "P03_PHOTO_ENCOUNTER",
+          "P03_PHOTO_DATE",
+          "P03_PHOTO_TRAVEL",
+          "P03_PHOTO_PROPOSAL"
+        ],
+        "photoRule": "Step1-4 support photos remain independently replaceable; Step5 remains no-photo.",
+        "styleRule": "Read as one irregular magazine story composition. Route is editorial movement, not connector-diagram grammar.",
+        "hardRejects": ["flowchart", "roadmap", "presentation timeline", "school poster", "five separate heart badges next to an independent dotted connector", "equal step rhythm", "isolated generic camera/palm icons", "separate generic Wedding Day card"]
+      },
+      {
+        "id": "P03_BOTTOM_CLOSURE_V30_ALIGNED",
+        "generationUnit": "ONE_GROUPED_SUPPORT_BLOCK",
+        "include": ["chapel/travel closure", "tropical support", "lower-page edge activation"],
+        "styleRule": "Same bold editorial cutout/sticker family as P01/P02. No watercolor church, realistic botanical plate, painterly tide or vintage travel-poster treatment.",
+        "keepSeparate": ["PAGE03 shared instance", "native body copy", "replaceable photos"]
+      }
+    ]
+  },
+  "microOrnamentRule": {
+    "principle": "P03_STEP3_CAMERA, P03_STEP2_PALM, P03_HERO_LOWER_PLUMERIA and similar accents do not survive as isolated assets by default. Integrate into the nearest grouped ecology when genuinely needed, otherwise remove them.",
+    "hardReject": "Do not regenerate a new isolated icon simply because the old isolated icon was rejected."
+  },
+  "preserve": {
+    "heroPhotoRole": true,
+    "heroPrimaryGeometry": true,
+    "fivePhotoRoles": true,
+    "step5NoPhoto": true,
+    "nativePendingPersonalCopy": true,
+    "pageBadgeInstance": "3782:16 / master 3772:2 / value 03",
+    "airmailBorder": true,
+    "overallP03InformationArchitecture": true,
+    "acceptedRgbDesignDuringEdgeAlphaCleanup": true
+  },
+  "edgeAlphaReview": {
+    "status": "REOPENED_SOURCE_ALPHA_ONLY",
+    "trigger": "Owner noticed remaining background-transparency weakness after design lock. Direct source inspection confirmed all five accepted grouped raster PNGs use binary alpha only.",
+    "inspectedAssets": [
+      "V30_P03_HEADER_ECOLOGY_V30_ALIGNED.png",
+      "V30_P03_Q3_EDITORIAL_FAMILY_V30_ALIGNED.png",
+      "V30_P03_Q4_EDITORIAL_FAMILY_V30_ALIGNED.png",
+      "V30_P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED_V2.png",
+      "V30_P03_BOTTOM_CLOSURE_V30_ALIGNED.png"
+    ],
+    "finding": "Each inspected source contains only alpha 0 and 255, with zero partial-alpha edge pixels. Outside transparency exists and intended paper interiors remain opaque, but curved/organic raster boundaries require a separate edge-quality pass because hard thresholding can create jaggies or matte-like fringe.",
+    "designImpact": "NONE. Cross-page style, composition, RGB artwork, copy architecture and photo roles remain locked.",
+    "requiredRepair": [
+      "preserve accepted RGB/design source exactly",
+      "perform edge-aware alpha refinement/re-cut at source resolution",
+      "restore controlled antialiasing on the true external cutout boundary where appropriate",
+      "preserve intentional white/yellow keylines as opaque artwork",
+      "remove matte contamination from edge RGB if present",
+      "do not blur the full artwork or soften interior typography/outlines",
+      "replace only the affected PNG sources/nodes after light/mid/dark compositing passes"
+    ],
+    "gate": "EDGE_ALPHA_QUALITY_PASS",
+    "timelineVioletCorrection": {
+      "status": "PASS_APPLIED_TO_FIGMA_3797_20",
+      "finding": "The old edge-connected extraction left six enclosed violet matte islands inside closed route contours. Those islands and adjacent violet fringe are now transparent.",
+      "newImageHash": "2a39d3633049098680ecdcb7494e4049e8309fad",
+      "rgbDesignChanged": false,
+      "geometryChanged": false,
+      "otherGroupedAssetsChanged": false
+    }
+  },
+  "acceptanceState": {
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS",
+    "ECOLOGY_FIT_PASS": "PASS",
+    "ANTI_FLOWCHART_PASS": "PASS",
+    "ANTI_CANVA_SVG_PASS": "PASS",
+    "ANTI_CLIPART_PASS": "PASS",
+    "ORNAMENT_FAMILY_PASS": "PASS",
+    "REFERENCE_DELTA_PASS": "PASS",
+    "PHOTO_ROLE_PASS": "PASS",
+    "COPY_SAFETY_PASS": "PASS_PENDING_FINAL_COPY",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "ALPHA_INTERIOR_OPACITY_PASS": "PASS",
+    "EDGE_ALPHA_QUALITY_PASS": "REOPENED_BINARY_EDGE_REVIEW",
+    "TIMELINE_VIOLET_MATTE_PASS": "PASS",
+    "ALPHA_MATERIAL_PASS": "PARTIAL_PASS_INTERIOR_OK_EDGE_REOPENED",
+    "FINGERPRINT_COLLISION_PASS": "PASS",
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_ASSET_ALPHA_QA_PENDING": true,
+    "FINAL_COPY_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  },
+  "executionOrder": [
+    "do not redesign P03; retain the locked V30-aligned RGB artwork and layout",
+    "for the five accepted grouped PNGs, inspect/rebuild only the source alpha edge using the current TRUE-ALPHA policy",
+    "compare source on light, mid-gray and dark backgrounds and inspect outer contour at source resolution and A5 use size",
+    "preserve intentional white/yellow keylines and fully opaque paper interiors",
+    "replace only source assets whose edge-quality improves; delete superseded binary-edge LIVE source after replacement",
+    "run one final full-page visual check to verify no design regression",
+    "sync Drive/Git/PR once and stop"
+  ],
+  "productionEvidence": "assets/rurubu-v30/p03/production/v30-style-realignment/manifest.json",
+  "completionCondition": "DESIGN_SATISFIED / EDGE_ALPHA_PENDING: P03 remains FIGMA_DESIGN_COMPLETE=YES. Final asset-alpha closure requires EDGE_ALPHA_QUALITY_PASS on the accepted grouped raster assets without changing the approved V30 design."
+}

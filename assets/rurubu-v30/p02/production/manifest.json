@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 4,
+  "project": "Rurubu WEDDING V30",
+  "page": "P02",
+  "status": "FIGMA_DESIGN_COMPLETE_FINAL_PHOTO_QA_PENDING",
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "currentNode": "3535:9",
+    "frameName": "V30 P02 / PROFILE / CURRENT",
+    "firstProductionChildCount": 76,
+    "finalDisplayReworkChildCount": 67
+  },
+  "cleanStandaloneProxies": [
+    {
+      "role": "SHOGO portrait",
+      "path": "assets/rurubu-v30/p02/production/proxies/V30_P02_SHOGO_CLEAN_STANDALONE_PROXY.png",
+      "sha256": "515d903cf615be2b28d1873d166ecc7a39c2ddfd8eb5d4961dbe99b721ccad53",
+      "figmaNodeId": "3753:44",
+      "figmaImageHash": "fe7112ecb180ec8fcf8d8c7e58ff8d71be3f7ec2"
+    },
+    {
+      "role": "SHIORI portrait",
+      "path": "assets/rurubu-v30/p02/production/proxies/V30_P02_SHIORI_CLEAN_STANDALONE_PROXY.png",
+      "sha256": "c3e98ead1e61ef2cb6685e3c9d02ea40d913ebc999140ae7d3894c7a4d229e26",
+      "figmaNodeId": "3753:48",
+      "figmaImageHash": "25b9d2440b7bc4b199652b721104729c3028600b"
+    },
+    {
+      "role": "Q1 couple inset",
+      "path": "assets/rurubu-v30/p02/production/proxies/V30_P02_Q1_COUPLE_CLEAN_STANDALONE_PROXY.png",
+      "sha256": "63e143353862972d1e98748255fd591225c83867644d83a5eaa91d45e361ba57",
+      "figmaNodeId": "3753:110",
+      "figmaImageHash": "9bb700e0a39e65f53790fc320d39855665b4a082"
+    }
+  ],
+  "assetRoleClassification": {
+    "GENERATED_DISPLAY_ASSET": ["ふたりのプロフィール", "私たちのこと、少しだけ紹介します♪", "SHOGO", "SHIORI"],
+    "NATIVE_TEXT": ["profile labels and values", "Q1/Q2 question and answer copy"],
+    "SHARED_PUBLICATION_COMPONENT": ["PAGE 02 / instance 3773:9 / master 3772:2"],
+    "PAGE_SPECIFIC_ORNAMENT": ["travel/tropical/route/icon art"],
+    "PHOTO": ["SHOGO portrait", "SHIORI portrait", "Q1 couple inset"],
+    "rule": "Fixed or stylized text is not automatically an image asset. Cross-page publication furniture is not page-specific generated art."
+  },
+  "copySafety": {
+    "lockedVisibleCopy": ["ふたりの", "プロフィール", "SHOGO", "SHIORI", "Q1", "Q2", "PAGE", "02"],
+    "japaneseNameReadingsFactized": false,
+    "personalProfileValuesFactized": false,
+    "qaAnswersFactized": false,
+    "profileValues": "TBD em-dash placeholders, native and separately controllable",
+    "qaQuestions": "REFERENCE_ONLY native text, separately controllable",
+    "qaAnswers": "TBD native text, separately controllable"
+  },
+  "resolvedOrnamentDebt": {
+    "reason": "Owner review found generic/stock icon feel and obvious carry-over/reuse quality that the first structural QA did not catch.",
+    "status": "CLOSED_AFTER_CALIBRATED_FAMILY_REBUILD_2026_09_03",
+    "targets": [
+      "P02_Q2_PLANE_AND_ROUTE",
+      "P02_TOP_AIRPLANE_ROUTE",
+      "P02_Q2_SUITCASE",
+      "P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER",
+      "P02_TOP_LEFT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER"
+    ],
+    "note": "For the top-left target, match the live Figma node name if it is `P02_TOP_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER`; the role is the same. Moving/resizing/recoloring the old art alone is not a repair.",
+    "carryoverPassRequires": ["current visual quality", "local page-context fit", "no generic stock/clipart feel", "no obvious same-page duplication/reuse feel"]
+  },
+  "acceptance": {
+    "FIGMA_STRUCTURE_READY": "PASS_PRESERVED",
+    "CLEAN_PROXY_PASS": "PASS_PRESERVED",
+    "BUNDLED_DISPLAY_MODULE_PASS": "SUPERSEDED_BY_ASSET_ROLE_CLASSIFICATION",
+    "ALPHA_INTEGRITY_PASS": "PASS_PRESERVED",
+    "COPY_SAFETY_PASS": "PASS_PRESERVED",
+    "EDGE_SAFETY_PASS": "PASS_PRESERVED",
+    "BORDER_Z_ORDER_PASS": "PASS_PRESERVED",
+    "ASSET_ROLE_CLASSIFICATION_PASS": "PASS_AFTER_OWNER_CORRECTION",
+    "DISPLAY_ROLE_CLASSIFICATION_PASS": "PASS",
+    "LIVE_ROLE_IMPLEMENTATION_PASS": "PASS",
+    "DISPLAY_ART_QUALITY_PASS": "PASS",
+    "SHARED_PUBLICATION_COMPONENT_PASS": "PASS_MASTER_3772_2",
+    "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS": "PASS",
+    "RURUBU_EDITORIAL_DNA_PASS": "PASS",
+    "V30_ART_DIRECTION_PASS": "PASS",
+    "PAGE_ROLE_FIT_PASS": "PASS",
+    "ORNAMENT_FAMILY_COHERENCE_PASS": "PASS",
+    "ORNAMENT_OBJECT_QUALITY_PASS": "PASS",
+    "ORNAMENT_ORIGINALITY_PASS": "PASS",
+    "REUSE_INTENT_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "VISUAL_CARRYOVER_PASS": "PASS_AFTER_P02_SPECIFIC_BOTTOM_LEFT_REPLACEMENT",
+    "REFERENCE_DELTA_PASS": "PASS_AFTER_FINAL_INTEGRATED_REVIEW",
+    "A5_GRAYSCALE_PASS": "PASS_BASELINE_PRESERVED",
+    "HIDDEN_OBSOLETE_COUNT": 0,
+    "DUPLICATE_SAME_JOB_LIVE_COUNT": 0,
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  },
+  "safety": {
+    "q1InsetPhotoSlotCount": 1,
+    "q2PhotoSlotCount": 0,
+    "borderTopLevelIndex": 1,
+    "officialP02FrameOnly": true,
+    "p01OnlySharedPageBadgeMigrated": true,
+    "p03ToP08Untouched": true
+  },
+  "firstProductionEvidence": {
+    "finalScreenshotSha256": "514f14b17650ecabbd60e2c570303117f0361479bea2d5563bdd5b7514050689",
+    "a5ColorSha256": "728fbbe784668f42edea464bd92f389b608734569fbf3a336b7e239e07140532",
+    "a5GrayscaleSha256": "4b716ae30310c17dadfe63de0457acede2899f39da28e4182ec1c147fdc0fced",
+    "visualMasterComparisonSha256": "b3cf7131dab506d1415860b2389117f66fe2cda0afcc2853c3b791edc3367871",
+    "driveProductionFolderId": "10TnlGlA7OEUVzv3lKGRLMGyXZ21jnpaU",
+    "driveQaFolderId": "1fvDQl2Rpe6H1JufWxtbnWc9zng8437MN",
+    "note": "These hashes document the first production baseline."
+  },
+  "ornamentArtDirectionPatch": {
+    "date": "2026-09-03",
+    "status": "COMPLETE",
+    "manifest": "assets/rurubu-v30/p02/production/ornaments/manifest.json",
+    "finalScreenshotSha256": "93317041c31e01e80b69b3bc3eb1ba876d8b488845bffa67ed8a3a8dc2b55e50",
+    "figmaChildCount": 76,
+    "acceptedStructurePreserved": true,
+    "p01AndP03ToP08Untouched": true
+  },
+  "finalDisplayAndSharedBadgePatch": {
+    "date": "2026-09-03",
+    "status": "COMPLETE",
+    "manifest": "assets/rurubu-v30/p02/production/display/manifest.json",
+    "pageBadgeMasterId": "3772:2",
+    "p01PageBadgeInstanceId": "3773:2",
+    "p02PageBadgeInstanceId": "3773:9",
+    "p02FinalScreenshotSha256": "188c7165ed1a4221e7e8bb87abebc7c0fafb9c2ca03d7dc14c78d03ce7bbc2f4",
+    "p01BadgeMigrationScreenshotSha256": "13fadabd2e8cc099951a1b16f83a443ecb71863e702b742e13bc9326c242c6f3",
+    "p03ToP08Untouched": true
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P04",
+  "role": "ALL TRAVEL MEMORIES / OUR JOURNEY",
+  "status": "PHASE_B_FULL_ASSEMBLY_PASS_FIGMA_DESIGN_COMPLETE",
+  "date": "2026-09-04",
+  "inherits": [
+    "assets/rurubu-v30/manifest.json",
+    "assets/rurubu-v30/visual-polish-manifest.json",
+    "assets/rurubu-v30/ornament-art-direction-manifest.json",
+    "assets/rurubu-v30/p04/manifest.json",
+    "docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md",
+    "assets/rurubu-v30/preproduction-page-gates-manifest.json"
+  ],
+  "authorityPrecedence": "Newest explicit owner feedback + direct P04 Visual Master review + direct live-Figma review in this file override stale execution assumptions. Page composition remains governed by assets/rurubu-v30/p04/P04.png and assets/rurubu-v30/p04/manifest.json.",
+  "liveFigma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "frameId": "3535:13",
+    "reviewedOn": "2026-09-04",
+    "observedState": "FULL_P04_ASSEMBLY / 16 TOP_LEVEL CHILDREN / NO_DUPLICATE_FRAME",
+    "meaning": "Owner-opened Phase B completed in the existing P04 frame. Four photos remain independent replaceable fills; message copy remains native/editable; PAGE 04 remains a shared-master instance.",
+    "protectedFrames": ["3535:7", "3535:9", "3535:11", "3535:15", "3535:17", "3535:19", "3535:21"]
+  },
+  "styleAnchorsVerifiedLive": {
+    "P01": {
+      "frameId": "3535:7",
+      "observedDNA": ["very high saturation", "giant hot-pink display lettering", "strong navy/black outline", "white/yellow keylines", "bright blue/pink/yellow/green", "tropical sticker/cutout clusters", "dense Japanese travel-magazine energy"]
+    },
+    "P02": {
+      "frameId": "3535:9",
+      "observedDNA": ["bold pink/black outlined title", "bright blue ribbon", "SHOGO blue / SHIORI pink", "clean white paper panels", "crisp pop travel accents", "not watercolor"]
+    },
+    "P03": {
+      "frameId": "3535:11",
+      "observedDNA": ["OUR STORY blue/pink title ecology", "bright grouped story route", "clean Q3/Q4 paper family", "pop tropical closure", "single publication family with P01/P02"]
+    },
+    "rule": "P01/P02/P03 are rendering-family anchors, never layout templates. P04 keeps its own photo-led travel-memory composition."
+  },
+  "visualMasterTarget": {
+    "path": "assets/rurubu-v30/p04/P04.png",
+    "pageIdentity": "旅の思い出 / photo-led travel memories feature",
+    "preserve": [
+      "large Okinawa hero in upper-middle",
+      "three lower support-photo roles",
+      "destination labels local to memories",
+      "subordinate travel-route movement",
+      "right-lower closing-message quiet zone",
+      "bottom tropical publication closure",
+      "PAGE 04 as separate shared publication component"
+    ]
+  },
+  "phaseA": {
+    "onlyOpenJob": "P04_HEADER_ECOLOGY_V30_ALIGNED",
+    "generationUnit": "ONE_GROUPED_DISPLAY_BLOCK",
+    "include": [
+      "旅の思い出",
+      "ふたりで見た景色、ずっと忘れない！♡",
+      "top-left hibiscus/plumeria/foliage cluster",
+      "small sparkle",
+      "subtitle ribbon",
+      "top-right airplane + heart-route logic",
+      "OUR JOURNEY / TAKE A TRIP stamp relationship"
+    ],
+    "doNotSplitInto": ["isolated flower asset", "isolated airplane asset", "isolated ribbon asset", "isolated heart-route asset", "generic stamp icon"],
+    "targetRendering": [
+      "same saturation family as current P01/P02/P03",
+      "strong dark/navy outline where needed",
+      "bright white/yellow keyline",
+      "controlled dimensional shadow",
+      "crisp printed sticker/cutout silhouette",
+      "bright pink + vivid blue + yellow + green",
+      "cute Japanese Rurubu/travel-magazine energy",
+      "not luxury wedding minimalism"
+    ],
+    "hardRejects": [
+      "watercolor",
+      "painterly tropical art",
+      "fine-art botanical flowers",
+      "aged paper / sepia",
+      "retro travel poster",
+      "generic Canva/SVG icon pack",
+      "SaaS illustration",
+      "dominant #7e08f9 purple",
+      "muted beige",
+      "thin flat vector-only styling"
+    ]
+  },
+  "phaseAGate": {
+    "gate": "CROSS_PAGE_STYLE_FAMILY_PASS",
+    "procedure": [
+      "generate one Header ecology only",
+      "run ART_QUALITY_PASS + TRUE_ALPHA_PREFLIGHT_PASS + ALPHA_INTERIOR_OPACITY_PASS + EDGE_ALPHA_QUALITY_PASS before Figma",
+      "place only the Header ecology into existing P04 frame 3535:13 at Visual-Master-comparable scale/position",
+      "capture fresh P01/P02/P03/P04 screenshots",
+      "compare saturation, outline, keyline, shadow, sticker/cutout feel, tropical rendering, print/paper feel and cute/pop temperature",
+      "if FAIL: reject/regenerate Header only",
+      "if PASS: record evidence and stop Phase A"
+    ],
+    "hardStop": "DO NOT generate/install location labels, route, bottom closure, message vessel or photo-frame production until CROSS_PAGE_STYLE_FAMILY_PASS has been explicitly proven from live screenshots."
+  },
+  "phaseB": {
+    "ownerInstruction": "OPEN",
+    "status": "PASS_FULL_ASSEMBLY",
+    "completedModules": [
+      "P04_LOCATION_LABEL_FAMILY",
+      "P04_TRAVEL_ROUTE_CONNECTOR",
+      "P04_BOTTOM_CLOSURE_ECOLOGY",
+      "P04_MESSAGE_PANEL_DECORATIVE_VESSEL_PLUS_NATIVE_TEXT",
+      "P04_PHOTO_HERO_OKINAWA",
+      "P04_PHOTO_KOREA",
+      "P04_PHOTO_HAWAII",
+      "P04_PHOTO_LOWER_CENTER",
+      "PAGE 04",
+      "FULL P04 ASSEMBLY"
+    ],
+    "evidence": "assets/rurubu-v30/p04/production/phase-b-full-production/manifest.json"
+  },
+  "alphaContract": {
+    "requiredBeforePlacement": ["ART_QUALITY_PASS", "TRUE_ALPHA_PREFLIGHT_PASS", "ALPHA_INTERIOR_OPACITY_PASS", "EDGE_ALPHA_QUALITY_PASS"],
+    "specificRisk": "Flowers, leaves, ribbon tails, airplane, heart route and display lettering have curved/organic contours. Outside transparency alone is not enough; binary 0/255 edges require review and must composite cleanly on light/mid/dark backgrounds at A5 use size.",
+    "noRescue": "No fake white rectangles or Figma opacity hacks behind a poor cutout."
+  },
+  "futurePhasesBlockedUntilA": {
+    "P04_LOCATION_LABEL_FAMILY": "COMPLETED",
+    "P04_TRAVEL_ROUTE_CONNECTOR": "COMPLETED",
+    "P04_BOTTOM_CLOSURE_ECOLOGY": "COMPLETED",
+    "P04_MESSAGE_PANEL": "COMPLETED_DECORATIVE_VESSEL_PLUS_NATIVE_TEXT",
+    "P04_PHOTO_MASKS_AND_PROXIES": "COMPLETED_FOUR_REPLACEABLE_FILLS"
+  },
+  "reporting": {
+    "returnOnlyAfterPhaseA": [
+      "generated Header asset path + SHA256",
+      "alpha diagnostic summary",
+      "Figma node id / imageHash",
+      "fresh P01/P02/P03/P04 comparison screenshots",
+      "CROSS_PAGE_STYLE_FAMILY_PASS result with concise evidence",
+      "whether Phase B is safe to open"
+    ],
+    "noMidpointSpam": true,
+    "blockerRule": "If Figma upload/write, Drive sync, image generation or Git write blocks twice, report immediately instead of silently retrying."
+  },
+  "currentGateState": {
+    "VISUAL_MASTER_REVIEW": "PASS",
+    "LIVE_FIGMA_BASELINE_REVIEW": "PASS_BLANK_SAFE_START",
+    "P04_HEADER_ECOLOGY_GENERATION": "PASS",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS",
+    "FULL_P04_PRODUCTION": "PASS",
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_COPY_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  }
+}

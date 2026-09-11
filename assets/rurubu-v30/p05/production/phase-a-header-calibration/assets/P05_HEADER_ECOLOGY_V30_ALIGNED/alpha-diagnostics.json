@@ -1,0 +1,62 @@
+{
+  "asset_id": "P05_HEADER_ECOLOGY_V30_ALIGNED",
+  "input": "assets/rurubu-v30/p05/production/phase-a-header-calibration/sources/raw-generated/P05_HEADER_ECOLOGY_V30_ALIGNED_RAW.png",
+  "input_sha256": "65af13ac869b39ff7091c38806191f586cb4daf2f2bbe0bc4af3b17e1e6acb6c",
+  "normalized_flat_matte": "assets/rurubu-v30/p05/production/phase-a-header-calibration/assets/P05_HEADER_ECOLOGY_V30_ALIGNED/P05_HEADER_ECOLOGY_V30_ALIGNED_SOURCE_MATTE.png",
+  "normalized_flat_matte_sha256": "462a6907b89399b7629f358bbf0aab3afd03b3bb35f3b3ee8fbceacbc4f693c3",
+  "matte_nominal_hex": "#6C00A8",
+  "normalization": {
+    "method": "violet-only cubic field fit, edge-aware foreground recovery, exact flat matte recomposite",
+    "generated_field_fit": {
+      "violet_pixels": 519960,
+      "fit_residual_p50": 3.208,
+      "fit_residual_p95": 17.815,
+      "fit_residual_p99": 60.374
+    },
+    "first_distance_low": 63.374,
+    "first_distance_high": 105.0
+  },
+  "production_extraction": {
+    "input": "normalized exact flat matte",
+    "distance_low": 7.0,
+    "distance_high": 105.0,
+    "edge_rgb_treatment": "inverse flat-matte compositing plus narrow violet-spill suppression on partial-alpha pixels",
+    "violet_spill_pixels_suppressed": 538904,
+    "violet_partial_pixels_removed": 538894,
+    "opaque_violet_shadow_pixels_recolored_navy": 11,
+    "final_violet_edge_pixels_removed": 538994,
+    "final_violet_opaque_pixels_recolored_navy": 18,
+    "crop_box": [
+      5,
+      38,
+      1881,
+      827
+    ]
+  },
+  "output": "assets/rurubu-v30/p05/production/phase-a-header-calibration/assets/P05_HEADER_ECOLOGY_V30_ALIGNED/P05_HEADER_ECOLOGY_V30_ALIGNED.png",
+  "output_sha256": "979edf0f075b4dbf8dc8c1f53006e2b02729214735a1da4c7680d30c51b1b8d5",
+  "output_mode": "RGBA",
+  "output_dimensions": [
+    1876,
+    789
+  ],
+  "alpha": {
+    "min": 0,
+    "max": 255,
+    "unique_count": 252,
+    "transparent_pixels": 446642,
+    "partial_pixels": 10904,
+    "opaque_pixels": 1022618,
+    "opaque_or_near_opaque_pixels": 1023731,
+    "corner_values": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "qa": {
+    "light_gray_dark_contact": "assets/rurubu-v30/p05/production/phase-a-header-calibration/assets/P05_HEADER_ECOLOGY_V30_ALIGNED/qa/composite-contact-sheet.jpg",
+    "alpha_mask": "assets/rurubu-v30/p05/production/phase-a-header-calibration/assets/P05_HEADER_ECOLOGY_V30_ALIGNED/qa/alpha-mask.png"
+  }
+}

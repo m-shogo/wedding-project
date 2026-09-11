@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P04",
+  "phase": "PHASE_B_FULL_PRODUCTION",
+  "status": "PASS_FIGMA_DESIGN_COMPLETE",
+  "date": "2026-09-04",
+  "visualMaster": "assets/rurubu-v30/p04/P04.png",
+  "acceptedHeader": {
+    "assetId": "P04_HEADER_ECOLOGY_V30_ALIGNED",
+    "nodeId": "3831:20",
+    "imageHash": "a2808765642b9333e2bcf7b7aa0874ddf4ca4568"
+  },
+  "matteWorkflow": {
+    "nominalColor": "#6C00A8",
+    "generatorOutput": "opaque violet extraction field; never checkerboard",
+    "normalization": "violet-only cubic field fit, edge-aware recovery, recomposite onto exact single flat #6C00A8 matte",
+    "productionExtraction": "continuous smoothstep alpha from the exact flat matte",
+    "edgeRgb": "inverse matte compositing, partial-alpha violet spill removal, opaque violet shadow conversion to approved dark navy",
+    "script": "assets/rurubu-v30/p04/production/phase-b-full-production/extract_flat_matte.py",
+    "flatMatteOuterBorderExactRatio": 1.0
+  },
+  "assets": [
+    {
+      "id": "P04_LOCATION_LABEL_OKINAWA",
+      "rgba": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_OKINAWA/P04_LOCATION_LABEL_OKINAWA.png",
+      "sha256": "705caf608bcc323d15dd67447aa1482073f17179aa1e21028aff9a216491adcc",
+      "dimensions": [1278, 786],
+      "alphaUnique": 252,
+      "partialPixels": 5346,
+      "figmaNodeId": "3843:22",
+      "imageHash": "6b83ece4fb5c771e82a9b302cf498b8aa2efa3f2",
+      "driveSourceId": "1S_cushJL4H5BLP3TGWHQc_pBe4l90CZ4",
+      "driveRgbaId": "1gghRrvv2_CGNGFdfyZNgcPd5eN1aAzZw",
+      "driveQaContactId": "1AV25-6mHTgvzmn4yDXTwOKIx_92bCTB8"
+    },
+    {
+      "id": "P04_LOCATION_LABEL_KOREA",
+      "rgba": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_KOREA/P04_LOCATION_LABEL_KOREA.png",
+      "sha256": "567c6b14efc081c8ff7a985b042b11ef4e1115693d6b55e17937721ed2124d42",
+      "dimensions": [1263, 704],
+      "alphaUnique": 198,
+      "partialPixels": 2615,
+      "figmaNodeId": "3843:23",
+      "imageHash": "a7622b5bb2fd3d9c3c34cb810f78ca5e202f1c1d",
+      "driveSourceId": "1RLKv_fyFHnxvTt0dXl_vcq068pnj7rIE",
+      "driveRgbaId": "1W8sWMP2FOSDqGNHDrmKMyEMMuWgf3Mhe",
+      "driveQaContactId": "1IGLpXHzumwNfcRPsXYTEpLcs23cI-P4M"
+    },
+    {
+      "id": "P04_LOCATION_LABEL_HAWAII",
+      "rgba": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_LOCATION_LABEL_HAWAII/P04_LOCATION_LABEL_HAWAII.png",
+      "sha256": "b61c5d024dbca7f12106861347ab753160f2de4fa7d0a62da9e2b1903acbf4c6",
+      "dimensions": [1370, 830],
+      "alphaUnique": 238,
+      "partialPixels": 3013,
+      "figmaNodeId": "3843:24",
+      "imageHash": "8fa4449ffb11f1d345427b321ac4872f5f85dd8c",
+      "driveSourceId": "1Hg0mcjRA-sFd-5F3FnHaiUIVVtTdQ_Ws",
+      "driveRgbaId": "1IjNfBeJUlBm0VOSlL_iL2SIl0zNI5Boj",
+      "driveQaContactId": "1jj43-WXgoUaMhApy5tjstM7yoxelZnTc"
+    },
+    {
+      "id": "P04_TRAVEL_ROUTE_CONNECTOR",
+      "rgba": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_TRAVEL_ROUTE_CONNECTOR/P04_TRAVEL_ROUTE_CONNECTOR.png",
+      "sha256": "e3bed00efa2e33733be3d411ea3b4448c7dfb88cf3882648d31e1e050c1aaf9c",
+      "dimensions": [1605, 399],
+      "alphaUnique": 252,
+      "partialPixels": 6148,
+      "figmaNodeId": "3843:21",
+      "imageHash": "f7d404b68d912e9a4b5d24eb36e29219f7409fb6",
+      "driveSourceId": "14xsiNT8N1-cAfmE2WTcETKkHYIluggin",
+      "driveRgbaId": "18bNNb5TFXRMOmjFVyrCr_lnOPl3xgd2O",
+      "driveQaContactId": "1bwE_xCJsFMAXkdMrn66F-wo8fvApN1kP"
+    },
+    {
+      "id": "P04_BOTTOM_CLOSURE_ECOLOGY",
+      "rgba": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_BOTTOM_CLOSURE_ECOLOGY/P04_BOTTOM_CLOSURE_ECOLOGY.png",
+      "sha256": "f78aae378aef886a85e065d433c02c1d9a888111f940c9192c508af215bc293c",
+      "dimensions": [1536, 916],
+      "alphaUnique": 252,
+      "partialPixels": 4044,
+      "figmaNodeId": "3843:20",
+      "imageHash": "c0ffd085388f942d16bd26ce6304487601887b03",
+      "driveSourceId": "1E3_YqxrbOxa0yo2NfRVZVk33MH6YOGun",
+      "driveRgbaId": "1ffdMox0jZmJdd2oK_S4Jah1XARyiVoE1",
+      "driveQaContactId": "1UVG5O7Xxr3Fpsi2L2u8pD3mZDiz4ptVH"
+    },
+    {
+      "id": "P04_MESSAGE_PANEL",
+      "rgba": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_MESSAGE_PANEL/P04_MESSAGE_PANEL.png",
+      "sha256": "4ab97a35d950276a4a77a6a94d6fdc7502e3b1c400384ae09aafd9700eccefaa",
+      "dimensions": [1395, 766],
+      "alphaUnique": 252,
+      "partialPixels": 4256,
+      "figmaNodeId": "3843:25",
+      "imageHash": "04595a0082bf6cc0514d68ca35c7501c2b2487da",
+      "driveSourceId": "19rxz2a1T2fyHQk9M-mzxMfpB15YufZcy",
+      "driveRgbaId": "1V2iYxFfRqmcYT01hVzRc3f6bkonjYSQ5",
+      "driveQaContactId": "1V4C14S8n8dZSRcTX3txYRIv0d9rqrAQm"
+    }
+  ],
+  "assetGates": {
+    "scope": "all six Phase B transparent assets",
+    "ART_QUALITY_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "ALPHA_INTERIOR_OPACITY_PASS": "PASS",
+    "EDGE_ALPHA_QUALITY_PASS": "PASS",
+    "strictVioletEdgePixels": 0,
+    "evidence": "Each asset has alpha-diagnostics.json plus light/gray/dark composite-contact-sheet.jpg. All corners are alpha 0, every asset retains continuous partial alpha, and strict final-RGB inspection reports zero violet-matte partial-edge pixels. Intended paper, keylines, outlines, flowers, leaves, text, route and vessel interiors remain opaque."
+  },
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "frameId": "3535:13",
+    "frameName": "V30 P04 / TRAVEL MEMORIES / PHASE B FULL ASSEMBLY",
+    "photoNodes": {
+      "P04_PHOTO_HERO_OKINAWA": "3840:24",
+      "P04_PHOTO_KOREA": "3840:26",
+      "P04_PHOTO_HAWAII": "3840:28",
+      "P04_PHOTO_LOWER_CENTER": "3840:30"
+    },
+    "photoStructure": "Four independent IMAGE-fill rectangles inside clipped white-print frames; all named REPLACEABLE.",
+    "nativeMessageNodeId": "3843:26",
+    "nativeMessageFont": "M PLUS 1 Regular",
+    "pageBadgeNodeId": "3843:27",
+    "pageBadgeMasterId": "3772:2",
+    "pageBadgeValue": "04",
+    "duplicateP04Created": false
+  },
+  "freshScreenshots": {
+    "P01": "assets/rurubu-v30/p04/production/phase-b-full-production/qa/fresh-pages/fresh-p01.png",
+    "P02": "assets/rurubu-v30/p04/production/phase-b-full-production/qa/fresh-pages/fresh-p02.png",
+    "P03": "assets/rurubu-v30/p04/production/phase-b-full-production/qa/fresh-pages/fresh-p03.png",
+    "P04": "assets/rurubu-v30/p04/production/phase-b-full-production/qa/fresh-pages/P04-FRESH-EDGE-CLEAN-V2.png",
+    "P01P02P03MatchPhaseASha256": true,
+    "crossPageComparison": "assets/rurubu-v30/p04/production/phase-b-full-production/qa/cross-page-comparison-edge-clean-v2.png",
+    "visualMasterComparison": "assets/rurubu-v30/p04/production/phase-b-full-production/qa/visual-master-vs-figma-edge-clean-v2.png"
+  },
+  "finalQa": {
+    "saturation": "PASS",
+    "outline": "PASS",
+    "keyline": "PASS",
+    "shadowDepth": "PASS",
+    "stickerCutoutFeel": "PASS",
+    "tropicalRendering": "PASS",
+    "antiCanva": "PASS",
+    "antiFlowchart": "PASS",
+    "visualMasterHierarchy": "PASS",
+    "photoReplaceability": "PASS",
+    "quietZones": "PASS",
+    "alphaEdgeQuality": "PASS",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS",
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_COPY_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  },
+  "drive": {
+    "sourceFolderId": "1uv1m0_pdXoTbEE6vbJDp_dIZJEWO0f3z",
+    "rgbaFolderId": "1APWjbUmx0GE2omX9VOnFbVer3RNxBGb0",
+    "qaFolderId": "1hXf3AZZOwQG5FwSUN3R8YP5O8Ie0mb1H",
+    "crossPageComparisonFileId": "1N8OSLFYQzGqO2tYmOl0IkaRv8apLPWS-",
+    "visualMasterComparisonFileId": "1pcz8LRsobGhfw8dritBVq5bMz_DGDQEI",
+    "freshP04FileId": "1mA89czt-WBEQ5UGoTYwLmKa3bC6BtMdJ"
+  }
+}

@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 6,
+  "reviewRevision": 3,
+  "project": "Rurubu WEDDING V30",
+  "page": "P08",
+  "role": "MAGAZINE BACK COVER",
+  "status": "P08_FIGMA_DESIGN_COMPLETE",
+  "productionState": "PAGE_ASSEMBLY_COMPLETE_BINARY_GIT_SYNC_PENDING",
+  "inherits": "assets/rurubu-v30/manifest.json",
+  "visualPolishPolicy": "assets/rurubu-v30/visual-polish-manifest.json",
+  "ornamentArtDirectionPolicy": "assets/rurubu-v30/ornament-art-direction-manifest.json",
+  "trueAlphaPolicy": "docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md",
+  "preproductionPageGatesPolicy": "assets/rurubu-v30/preproduction-page-gates-manifest.json",
+  "visualLockAuditPolicy": "docs/rurubu-v30/VISUAL-MASTER-LOCK-AUDIT.md",
+  "executionAcceptancePolicy": "docs/rurubu-v30/FIGMA-EXECUTION-ACCEPTANCE.md",
+  "productionLedger": "assets/rurubu-v30/p08/production-ledger.json",
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p08/P08.png",
+    "authority": "PRIMARY_VISUAL_AUTHORITY",
+    "reviewedDimensionsPx": {"width": 1055, "height": 1491},
+    "sha256": "3757fee202dd5a3e7d05292a78b0020ab62c1d5ce9b5fa2300e3d43af9bad3a5",
+    "reviewMode": "direct full-page visual review + reverse omission audit",
+    "rule": "The actual user-provided P08 page image is the page-specific authority. P01/P02/P03 are rendering-family anchors only, not layout templates."
+  },
+  "reviewCompleteness": {
+    "passA": "COMPLETE",
+    "passBReverseOmissionAudit": "COMPLETE",
+    "visualMasterUnderstanding": "LOCKED",
+    "representativeEcologySelected": true,
+    "representativeEcologyCalibrated": true,
+    "productionScaleOutAllowed": true,
+    "requiredStopBeforeScaleOut": false,
+    "pageAssemblyComplete": true,
+    "reason": "Representative center closure passed owner art acceptance, true-alpha QA, live Figma placement and cross-page calibration; remaining P08 modules were then assembled using accepted reuse, native text and deterministic barcode production and passed fresh full-page screenshot review."
+  },
+  "canonicalFacts": {
+    "names": {"Shogo": "LOCKED", "Shiori": "LOCKED"},
+    "weddingDate": "2026.10.24",
+    "barcodeDigits": "2026102400000",
+    "pageNumber": "08"
+  },
+  "hardRoleRejects": [
+    "primary thank-you-page role",
+    "barcode digits other than 2026102400000"
+  ],
+  "threeSecondReadOrder": [
+    "centered tropical chapel closure ecology with SHOGO & SHIORI / 2026.10.24",
+    "upper-left vertical Rurubu/WEDDING tropical brand ecology",
+    "bottom-right issue meta + barcode module",
+    "bottom-left page number 08"
+  ],
+  "visualAuthority": {
+    "firstImpression": "A deliberately sparse premium magazine back cover on warm cream paper. Small authored destination/wedding ecologies punctuate a very large quiet field; it is not a dense thank-you page or a second cover.",
+    "signatureMove": "Massive intentional negative space separates three small editorial anchors: upper-left vertical brand spine, compact central tropical chapel closure, and bottom-right barcode/meta block.",
+    "colorBehavior": {
+      "dominant": ["warm cream paper", "white"],
+      "accent": ["hot pink", "vivid blue", "tropical green", "cyan/aqua", "sun yellow"],
+      "ink": ["warm dark brown", "black barcode"],
+      "reject": ["dominant #7e08f9 purple", "muted beige wedding editorial", "watercolor wash", "aged parchment"]
+    }
+  },
+  "pageSpec": {
+    "visualMasterPx": {"width": 1055, "height": 1491},
+    "figmaTrimPx": {"width": 559, "height": 794},
+    "geometryRule": "Preserve relationships and sparse-space ratios from the Visual Master. Minor micro-placement is flexible, but moving modules into the quiet field or enlarging them enough to destroy the sparse back-cover read is a failure."
+  },
+  "backgroundSystem": {
+    "id": "P08_BG_PAPER_FIELD",
+    "renderMode": "FIGMA_NATIVE",
+    "fullBleed": true,
+    "visualCharacter": "clean near-white warm cream paper with extremely subtle print/paper softness; no scenic full-page background",
+    "saliency": 10,
+    "productionState": "ACCEPTED"
+  },
+  "majorObjects": [
+    {
+      "id": "P08_LEFT_SPINE_BRAND_ECOLOGY",
+      "role": "compact vertical Rurubu/WEDDING tropical logo cluster",
+      "renderMode": "REUSED_ACCEPTED_P01_ASSETS",
+      "geometry": {"normalizedApprox": {"x": 0.027, "y": 0.023, "width": 0.086, "height": 0.151}},
+      "constraintLevel": "TARGET",
+      "saliency": 48,
+      "zIndex": 50,
+      "productionState": "ACCEPTED",
+      "figmaNode": "3884:26",
+      "reuseSources": ["3681:104", "3681:94", "3681:95"]
+    },
+    {
+      "id": "P08_LEFT_SPINE_META",
+      "role": "vertical issue/names/date metadata",
+      "renderMode": "FIGMA_NATIVE_TEXT_GROUP",
+      "geometry": {"normalizedApprox": {"x": 0.051, "y": 0.185, "width": 0.026, "height": 0.313}},
+      "constraintLevel": "TARGET",
+      "saliency": 25,
+      "zIndex": 42,
+      "exactVisibleFacts": ["2026 SPECIAL ISSUE", "SHOGO & SHIORI", "2026.10.24"],
+      "productionState": "ACCEPTED",
+      "figmaNode": "3886:26"
+    },
+    {
+      "id": "P08_CENTER_CLOSURE_ECOLOGY",
+      "role": "small seaside chapel + aqua shore + palms + tropical floral/ribbon ecology with fixed names/date",
+      "renderMode": "IMAGEGEN_GROUPED_ECOLOGY",
+      "geometry": {"normalizedApprox": {"x": 0.35, "y": 0.39, "width": 0.24, "height": 0.16}},
+      "constraintLevel": "TARGET",
+      "saliency": 68,
+      "zIndex": 55,
+      "fixedText": ["SHOGO & SHIORI", "2026.10.24"],
+      "representativeEcology": true,
+      "productionState": "ACCEPTED_REPRESENTATIVE",
+      "figmaNode": "3852:26"
+    },
+    {
+      "id": "P08_BARCODE_META_MODULE",
+      "role": "bottom-right issue line, pink heart, barcode bars and exact digits",
+      "renderMode": "DETERMINISTIC_GROUPED_MODULE",
+      "geometry": {"normalizedApprox": {"x": 0.68, "y": 0.848, "width": 0.25, "height": 0.116}},
+      "constraintLevel": "LOCKED_FACTS_TARGET_GEOMETRY",
+      "saliency": 38,
+      "zIndex": 46,
+      "exactBarcodeDigits": "2026102400000",
+      "productionState": "ACCEPTED",
+      "figmaNode": "3884:35",
+      "implementation": "deterministic editorial barcode bars from canonical digits; no EAN-13 checksum substitution"
+    },
+    {
+      "id": "P08_PAGE_NUMBER",
+      "role": "bottom-left page number",
+      "renderMode": "FIGMA_NATIVE_TEXT",
+      "geometry": {"normalizedApprox": {"x": 0.048, "y": 0.929, "width": 0.03, "height": 0.022}},
+      "constraintLevel": "TARGET",
+      "saliency": 12,
+      "zIndex": 40,
+      "exactText": "08",
+      "productionState": "ACCEPTED",
+      "figmaNode": "3884:85"
+    }
+  ],
+  "quietZones": [
+    {
+      "id": "P08_QUIET_UPPER_MAIN",
+      "normalizedApprox": {"x": 0.16, "y": 0.03, "width": 0.78, "height": 0.34},
+      "rule": "Keep visually empty; do not add headings, photos, stickers, maps or filler decoration."
+    },
+    {
+      "id": "P08_QUIET_MIDDLE_LOWER",
+      "normalizedApprox": {"x": 0.14, "y": 0.56, "width": 0.76, "height": 0.27},
+      "rule": "Preserve as deliberate back-cover breathing room."
+    }
+  ],
+  "relationalConstraints": [
+    "Center closure remains compact and isolated; it must not grow into a hero occupying the page.",
+    "Upper-left brand/meta stays edge-oriented and vertically composed.",
+    "Barcode/meta stays clearly separated at bottom-right with ample cream margin.",
+    "Page number 08 stays isolated at bottom-left.",
+    "No decorative connector lines or flowchart relationships between the three anchors.",
+    "The negative space itself is a primary composition element and must not be filled."
+  ],
+  "layerOrder": [
+    "P08_BG_PAPER_FIELD",
+    "P08_LEFT_SPINE_META",
+    "P08_PAGE_NUMBER",
+    "P08_BARCODE_META_MODULE",
+    "P08_LEFT_SPINE_BRAND_ECOLOGY",
+    "P08_CENTER_CLOSURE_ECOLOGY"
+  ],
+  "overlapRules": {
+    "allowed": [
+      "Within P08_CENTER_CLOSURE_ECOLOGY, chapel/palms/flowers/ribbon overlap as one authored group.",
+      "Within P08_LEFT_SPINE_BRAND_ECOLOGY, logo/title/tropical accents may overlap as one authored group."
+    ],
+    "mustNotCover": ["barcode digits", "barcode bars", "SHOGO & SHIORI", "2026.10.24", "page number 08"]
+  },
+  "photoPolicy": {
+    "photoSlotsPresent": false,
+    "visualMasterCropProxy": "PROHIBITED",
+    "rule": "P08 contains no real-photo slot. Do not invent one and do not use a page crop as a decorative proxy."
+  },
+  "displayModuleClassification": {
+    "status": "COMPLETE",
+    "bundledFixedModules": ["P08_CENTER_CLOSURE_ECOLOGY", "P08_LEFT_SPINE_BRAND_ECOLOGY", "P08_BARCODE_META_MODULE"],
+    "nativeOrDeterministic": ["P08_BG_PAPER_FIELD", "P08_LEFT_SPINE_META", "P08_PAGE_NUMBER"],
+    "rule": "Fixed visible copy may be bundled where the Visual Master treats it as one authored object. Barcode digits are always QA-checked against canonical metadata."
+  },
+  "groupedEcologyPlan": {
+    "representative": "P08_CENTER_CLOSURE_ECOLOGY",
+    "laterConditional": ["P08_LEFT_SPINE_BRAND_ECOLOGY"],
+    "representativeGate": "PASS",
+    "laterConditionalResolution": "REUSED_ACCEPTED_P01_ASSETS_NO_NEW_IMAGEGEN",
+    "scaleOutRule": "Resolved. No additional P08 ImageGen is required."
+  },
+  "reverseOmissionAudit": {
+    "status": "COMPLETE",
+    "confirmed": [
+      "small pink heart in left spine meta",
+      "small pink heart in bottom-right issue meta",
+      "bottom-left page number 08",
+      "exact barcode digits 2026102400000",
+      "barcode/meta separation from center closure",
+      "warm cream paper field",
+      "large intentional sparse zones",
+      "asymmetric edge-weighting",
+      "no photo role",
+      "no hidden thank-you panel or additional repeated content module"
+    ]
+  },
+  "representativeCalibration": {
+    "ledgerItem": "P08_CENTER_CLOSURE_ECOLOGY",
+    "acceptedMaster": {
+      "fileName": "V30_P08_CENTER_CLOSURE_SOURCE_RGBA.png",
+      "sha256": "5622236afbc05947709e6c5356d4989da8d334e04bb8011b5ab5d9b53913baa1",
+      "dimensionsPx": {"width": 1448, "height": 1086},
+      "ownerAccepted": true
+    },
+    "alphaDiagnostics": {
+      "alphaExtrema": [0, 255],
+      "uniqueAlphaValues": 256,
+      "pctFullyTransparent": 81.79161197765636,
+      "pctPartial": 18.15280872582237,
+      "pctFullyOpaque": 0.055579296521270215
+    },
+    "figma": {
+      "nodeId": "3852:26",
+      "imageHash": "a8066ca887a956282ce794a640e56ef364103b91",
+      "geometryPx": {"x": 196, "y": 308, "width": 145, "height": 122},
+      "freshScreenshotVisible": true
+    },
+    "drive": {
+      "folderId": "1Z-pH0-iRmsBrz5jfRn3WXcIUxkXDE1tT",
+      "sourceFileId": "1NuIUWWw8I-yLd_hf34qid4v0TN0k_vm2",
+      "productionFileId": "1gN0ys6Y1yeMwPmmc7bjLrdu7k4PuIIIi",
+      "lightQaFileId": "1IacZzyg7xePX8rv9iGXbW28U5Jwr-Yf5",
+      "darkQaFileId": "1JZYzE2G2JvAKGUdkzB2wL-2xWheTw82_"
+    },
+    "transportEvidence": {
+      "method": "compact 160x133 RGBA transport derivative, 1000-character chunk persistence in temporary hidden Figma nodes, exact 24208-character reassembly, 18155-byte decode, PNG signature check, figma.createImage, temporary-node cleanup",
+      "productionMasterUnchanged": true
+    },
+    "crossPageStyleFamily": {
+      "freshFrames": ["3535:7", "3535:9", "3535:11", "3535:21"],
+      "result": "PASS"
+    }
+  },
+  "fullPageAssembly": {
+    "figmaFrame": "3535:21",
+    "freshScreenshotReviewed": true,
+    "visualMasterDelta": "PASS",
+    "threeAnchorComposition": "PASS",
+    "intentionalSparseSpace": "PASS",
+    "leftBrandReuse": "PASS_AFTER_ROTATION_GEOMETRY_CORRECTION",
+    "leftMetaNative": "PASS",
+    "centerClosure": "PASS",
+    "barcodeMeta": "PASS",
+    "pageNumber": "PASS",
+    "inventedPhotoSlots": 0,
+    "thankYouPageRoleDrift": false,
+    "dominantPurpleDrift": false
+  },
+  "barcodeModuleRule": {
+    "exactDigits": "2026102400000",
+    "hardReject": "Any visible barcode digits other than 2026102400000.",
+    "deterministicRule": "Do not substitute an EAN-13 checksum digit. Use a deterministic barcode representation that preserves the exact visible canonical digits."
+  },
+  "systemicPreproductionGates": {
+    "styleAnchors": ["P01 3535:7", "P02 3535:9", "P03 3535:11"],
+    "crossPageStyleFamilyPass": "PASS",
+    "alphaGates": ["ART_QUALITY_PASS", "TRUE_ALPHA_PREFLIGHT_PASS", "ALPHA_INTERIOR_OPACITY_PASS", "EDGE_ALPHA_QUALITY_PASS"],
+    "purpleDriftRule": "#7e08f9 and nearby saturated purple must not become a dominant fill/background color without owner approval"
+  },
+  "hardExecutionRejects": [
+    "primary thank-you-page role restored",
+    "new real-photo slot invented",
+    "crop from P08.png used as active production asset",
+    "generic Canva/SVG icon pack",
+    "watercolor/painterly/vintage escape",
+    "dominant #7e08f9 purple drift",
+    "center ecology enlarged enough to destroy sparse back-cover hierarchy",
+    "barcode digits invented or altered",
+    "checkerboard RGB treated as transparency",
+    "binary alpha accepted solely because outside transparency exists",
+    "duplicate ImageGen of an accepted owner-approved module to solve a transport/upload failure"
+  ],
+  "partGenerationGate": "P08_NO_MORE_IMAGEGEN_REQUIRED",
+  "qa": {
+    "visualMasterReview": "PASS",
+    "reverseOmissionAudit": "PASS",
+    "bundledDisplayModuleClassification": "PASS",
+    "representativeSelection": "PASS",
+    "representativeArtQuality": "PASS_OWNER_ACCEPTED",
+    "trueAlphaPreflightPass": "PASS",
+    "alphaInteriorOpacityPass": "PASS",
+    "edgeAlphaQualityPass": "PASS",
+    "figmaPlacementPass": "PASS_FRESH_SCREENSHOT_VISIBLE",
+    "crossPageStyleFamilyPass": "PASS",
+    "reuseFirstPass": "PASS_NO_NEW_LEFT_SPINE_IMAGEGEN",
+    "barcodeDigitsMustEqual": "2026102400000",
+    "fullPageScreenshotQa": "PASS",
+    "figmaDesignComplete": "YES",
+    "printReady": "PENDING_GLOBAL_PRINT_QA",
+    "remainingExecutionDebt": [
+      "Git binary sync for P08 production PNG when a binary-capable path is available",
+      "optional stable Drive copy of full-page screenshot when a Figma screenshot file-reference bridge is available"
+    ]
+  }
+}

@@ -1,0 +1,282 @@
+[
+  {
+    "production": "V30_P01_AIRMAIL_BORDER_PRODUCTION_RGBA.png",
+    "size": [
+      1054,
+      1492
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.9072,
+    "opaqueFraction": 0.0682,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "137ba68ad8356b960f4f9fd77d3b695a8da41ef6de07dd48a85ca2f95d3b6f3d"
+  },
+  {
+    "production": "V30_P01_BG_RESORT_SKY_FIELD_PRODUCTION_RGBA.png",
+    "size": [
+      1054,
+      1492
+    ],
+    "alphaExtrema": [
+      255,
+      255
+    ],
+    "transparentFraction": 0.0,
+    "opaqueFraction": 1.0,
+    "cornerAlpha": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "sha256": "49981e892743aff463ecdd99a6e428e0571367961afe4253867d2ba44bc993df"
+  },
+  {
+    "production": "V30_P01_BOTTOM_FLORAL_CLUSTER_PRODUCTION_RGBA.png",
+    "size": [
+      1536,
+      556
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.3001,
+    "opaqueFraction": 0.6809,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "67249b58c7a8586e5dee6a916124e2f590360a1e3a4dc2b4e9f49443b9794e7f"
+  },
+  {
+    "production": "V30_P01_BOTTOM_STORY_VESSEL_PRODUCTION_RGBA.png",
+    "size": [
+      1685,
+      647
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.2469,
+    "opaqueFraction": 0.7389,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "dbdd63884fbf1f345fad2501a637e9e023422e84fd9f6c539765b5adbd2aab55"
+  },
+  {
+    "production": "V30_P01_DATE_TICKET_PRODUCTION_RGBA.png",
+    "size": [
+      1437,
+      807
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.3291,
+    "opaqueFraction": 0.6485,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "3234a5b7226d7d4435903e9356343639afd303ce49ca5d816476d312eb8f2b04"
+  },
+  {
+    "production": "V30_P01_FEATURE_1_VESSEL_PRODUCTION_RGBA.png",
+    "size": [
+      1719,
+      556
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.2871,
+    "opaqueFraction": 0.6963,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "fed3e3c48251f2efb409adbf8f98132f3dfc88ae24ceeb642016d6b00b3dd926"
+  },
+  {
+    "production": "V30_P01_FEATURE_2_VESSEL_PRODUCTION_RGBA.png",
+    "size": [
+      1668,
+      653
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.3748,
+    "opaqueFraction": 0.6078,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "1ef0c6e69744254cf1688a3693ec345e7e09d52216eb7d491b218a2e27269e31"
+  },
+  {
+    "production": "V30_P01_FEATURE_3_VESSEL_PRODUCTION_RGBA.png",
+    "size": [
+      1713,
+      598
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.2795,
+    "opaqueFraction": 0.7051,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "2ffc983b28b0ae0c995f7b08d0258e503f025a8c13096dd364b374d5958b3439"
+  },
+  {
+    "production": "V30_P01_JOURNEY_STAMP_PRODUCTION_RGBA.png",
+    "size": [
+      1310,
+      892
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.4164,
+    "opaqueFraction": 0.563,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "4cbea07d08b2ace1f37aec29507230ab65ac306bdb4703f6916b8d882d0933a6"
+  },
+  {
+    "production": "V30_P01_LEFT_TROPICAL_CLUSTER_PRODUCTION_RGBA.png",
+    "size": [
+      1399,
+      781
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.3007,
+    "opaqueFraction": 0.6832,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "2737323dead87555314f293b4048cabc29a4f62702fe86602cc5e2ab19273296"
+  },
+  {
+    "production": "V30_P01_NAMES_RIBBON_PRODUCTION_RGBA.png",
+    "size": [
+      1675,
+      576
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.3757,
+    "opaqueFraction": 0.6071,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "a487414a8c3dcae3187288ec7b046b8ae584b00424a3d1fd2de65a7d00ab7160"
+  },
+  {
+    "production": "V30_P01_PAGE_BADGE_PRODUCTION_RGBA.png",
+    "size": [
+      1114,
+      1126
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.264,
+    "opaqueFraction": 0.7253,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "93ca53e14d6423a1e0e19940d160a53f164db39334de63b2f4ffd943f2dfde1b"
+  },
+  {
+    "production": "V30_P01_RIGHT_DESTINATION_CLUSTER_PRODUCTION_RGBA.png",
+    "size": [
+      1345,
+      861
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.4379,
+    "opaqueFraction": 0.547,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "0ee6ab46755f66169cd0a86e6d78cbbafd4468a06e34e9f8b2dc9b2728888f65"
+  },
+  {
+    "production": "V30_P01_WEDDING_TITLE_PRODUCTION_RGBA.png",
+    "size": [
+      1764,
+      597
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "transparentFraction": 0.2527,
+    "opaqueFraction": 0.7286,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sha256": "697c27178b0fc558366759739ca1c12e75520a8892304f341dbf6ac154fb3d5f"
+  }
+]
