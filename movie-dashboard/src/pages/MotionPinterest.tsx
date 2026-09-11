@@ -42,7 +42,6 @@ const intentOptions = [
 
 type IntentFilter = (typeof intentOptions)[number][0];
 type DecisionValue = "NONE" | "FAVORITE" | "MAYBE" | "REJECT";
-
 const decisionStorageKey = "motion-zukan-opening-decisions-v1";
 
 function openingRank(openingFit: string) {
@@ -109,6 +108,29 @@ function similarPatterns(pattern: MotionPatternRecord, all: MotionPatternRecord[
     .map(({ candidate }) => candidate);
 }
 
+function PreviewMedia({pattern, compact = false}: {pattern: MotionPatternRecord; compact?: boolean}) {
+  const preview = getPatternPreview(pattern);
+  if (!preview?.assetPath) {
+    return <div className="flex h-full items-center justify-center px-3 text-center text-[10px] text-navy-300">実物プレビューなし</div>;
+  }
+  return (
+    <video
+      src={preview.assetPath}
+      poster={preview.posterPath ?? undefined}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      onMouseEnter={compact ? (event) => void event.currentTarget.play() : undefined}
+      onMouseLeave={compact ? (event) => {
+        event.currentTarget.pause();
+        event.currentTarget.currentTime = 0;
+      } : undefined}
+      className="h-full w-full object-cover"
+    />
+  );
+}
+
 export function MotionPinterest() {
   const [query, setQuery] = useState("");
   const [intent, setIntent] = useState<IntentFilter>("ALL");
@@ -132,9 +154,7 @@ export function MotionPinterest() {
     if (!selectedId) return;
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSelectedId(null);
-    };
+    const onKeyDown = (event: KeyboardEvent) => event.key === "Escape" && setSelectedId(null);
     window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previous;
@@ -149,20 +169,14 @@ export function MotionPinterest() {
     return Array.from(values);
   }, [all]);
 
-  const patterns = useMemo(() => {
-    return searchMotionPatterns(query)
-      .filter((pattern) => {
-        if (!matchesIntent(pattern.categories, intent)) return false;
-        if (category !== "ALL" && !pattern.categories.includes(category)) return false;
-        if (sOnly && !openingSPicks.has(pattern.id)) return false;
-        return true;
-      })
-      .sort((a, b) => {
-        const sDiff = Number(openingSPicks.has(b.id)) - Number(openingSPicks.has(a.id));
-        if (sDiff !== 0) return sDiff;
-        return openingRank(b.openingFit) - openingRank(a.openingFit);
-      });
-  }, [query, intent, category, sOnly]);
+  const patterns = useMemo(() => searchMotionPatterns(query)
+    .filter((pattern) => matchesIntent(pattern.categories, intent))
+    .filter((pattern) => category === "ALL" || pattern.categories.includes(category))
+    .filter((pattern) => !sOnly || openingSPicks.has(pattern.id))
+    .sort((a, b) => {
+      const sDiff = Number(openingSPicks.has(b.id)) - Number(openingSPicks.has(a.id));
+      return sDiff || openingRank(b.openingFit) - openingRank(a.openingFit);
+    }), [query, intent, category, sOnly]);
 
   const selected = selectedId ? all.find((pattern) => pattern.id === selectedId) ?? null : null;
   const selectedPreview = selected ? getPatternPreview(selected) : null;
@@ -177,49 +191,22 @@ export function MotionPinterest() {
 
   return (
     <div>
-      <Header
-        title="映像Pinterest"
-        description="説明より先に、動きを見る。気になった演出だけ開いて選ぶ。"
-      />
+      <Header title="映像Pinterest" description="説明より先に、動きを見る。気になった演出だけ開いて選ぶ。" />
 
       <section className="sticky top-0 z-20 -mx-4 mb-4 border-y border-sand-200 bg-sand-50/95 px-4 py-3 backdrop-blur dark:border-navy-700 dark:bg-navy-950/95 md:mx-0 md:border">
         <div className="flex items-center gap-2">
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="写真 / 文字 / ズーム / 地図 / パッ…"
-            className="min-w-0 flex-1 rounded-full border border-sand-300 bg-white px-4 py-2.5 text-sm text-navy-900 outline-none focus:border-navy-500 dark:border-navy-600 dark:bg-navy-800 dark:text-sand-100"
-          />
-          <button
-            type="button"
-            onClick={() => setSOnly((value) => !value)}
-            className={`shrink-0 rounded-full border px-3 py-2.5 text-xs font-black ${sOnly ? "border-amber-400 bg-amber-400 text-navy-950" : "border-amber-300 bg-white text-amber-700 dark:border-amber-700 dark:bg-navy-900 dark:text-amber-300"}`}
-          >
-            Sのみ
-          </button>
-          <Link to="/movie-coach/motion-library" className="hidden shrink-0 rounded-full border border-sand-300 bg-white px-3 py-2.5 text-xs font-semibold text-navy-600 dark:border-navy-600 dark:bg-navy-900 dark:text-navy-200 sm:inline-flex">
-            一覧版
-          </Link>
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="写真 / 文字 / ズーム / 地図 / パッ…" className="min-w-0 flex-1 rounded-full border border-sand-300 bg-white px-4 py-2.5 text-sm text-navy-900 outline-none focus:border-navy-500 dark:border-navy-600 dark:bg-navy-800 dark:text-sand-100" />
+          <button type="button" onClick={() => setSOnly((value) => !value)} className={`shrink-0 rounded-full border px-3 py-2.5 text-xs font-black ${sOnly ? "border-amber-400 bg-amber-400 text-navy-950" : "border-amber-300 bg-white text-amber-700 dark:border-amber-700 dark:bg-navy-900 dark:text-amber-300"}`}>Sのみ</button>
+          <Link to="/movie-coach/motion-library" className="hidden shrink-0 rounded-full border border-sand-300 bg-white px-3 py-2.5 text-xs font-semibold text-navy-600 dark:border-navy-600 dark:bg-navy-900 dark:text-navy-200 sm:inline-flex">一覧版</Link>
         </div>
 
         <div className="mt-2 flex gap-2 overflow-x-auto pb-1" aria-label="やりたいことから探す">
-          {intentOptions.map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              onClick={() => setIntent(value)}
-              className={`shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-semibold ${intent === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-950" : "border-sand-300 bg-white text-navy-600 dark:border-navy-600 dark:bg-navy-900 dark:text-navy-200"}`}
-            >
-              {label}
-            </button>
-          ))}
+          {intentOptions.map(([value, label]) => <button key={value} type="button" onClick={() => setIntent(value)} className={`shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-semibold ${intent === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-950" : "border-sand-300 bg-white text-navy-600 dark:border-navy-600 dark:bg-navy-900 dark:text-navy-200"}`}>{label}</button>)}
         </div>
 
         <div className="mt-2 flex items-center gap-2 overflow-x-auto pb-1">
           <button type="button" onClick={() => setCategory("ALL")} className={`shrink-0 text-[10px] font-semibold ${category === "ALL" ? "text-navy-900 underline underline-offset-4 dark:text-sand-100" : "text-navy-400"}`}>すべて</button>
-          {categories.map((value) => (
-            <button key={value} type="button" onClick={() => setCategory(value)} className={`shrink-0 text-[10px] font-semibold ${category === value ? "text-navy-900 underline underline-offset-4 dark:text-sand-100" : "text-navy-400"}`}>{categoryLabels[value]}</button>
-          ))}
+          {categories.map((value) => <button key={value} type="button" onClick={() => setCategory(value)} className={`shrink-0 text-[10px] font-semibold ${category === value ? "text-navy-900 underline underline-offset-4 dark:text-sand-100" : "text-navy-400"}`}>{categoryLabels[value]}</button>)}
           <span className="ml-auto shrink-0 text-[10px] text-navy-400">{patterns.length}件</span>
         </div>
       </section>
@@ -231,40 +218,16 @@ export function MotionPinterest() {
 
       <section className="grid grid-cols-2 gap-x-2.5 gap-y-4 sm:grid-cols-3 sm:gap-x-3 lg:grid-cols-4 2xl:grid-cols-5 min-[1900px]:grid-cols-6" aria-label="映像演出グリッド">
         {patterns.map((pattern) => {
-          const preview = getPatternPreview(pattern);
           const isS = openingSPicks.has(pattern.id);
           const currentDecision = decisions[pattern.id] ?? pattern.humanDecision;
           return (
             <article key={pattern.id} className="min-w-0">
-              <button
-                type="button"
-                onClick={() => setSelectedId(pattern.id)}
-                className="group block w-full overflow-hidden rounded-xl bg-white text-left shadow-sm ring-1 ring-sand-200 transition hover:-translate-y-0.5 hover:shadow-md dark:bg-navy-800 dark:ring-navy-700"
-              >
+              <button type="button" onClick={() => setSelectedId(pattern.id)} className="group block w-full overflow-hidden rounded-xl bg-white text-left shadow-sm ring-1 ring-sand-200 transition hover:-translate-y-0.5 hover:shadow-md dark:bg-navy-800 dark:ring-navy-700">
                 <div className="relative aspect-video overflow-hidden bg-navy-950">
-                  {preview?.assetPath ? (
-                    <video
-                      src={preview.assetPath}
-                      poster={preview.posterPath ?? undefined}
-                      muted
-                      loop
-                      playsInline
-                      preload="metadata"
-                      onMouseEnter={(event) => void event.currentTarget.play()}
-                      onMouseLeave={(event) => {
-                        event.currentTarget.pause();
-                        event.currentTarget.currentTime = 0;
-                      }}
-                      className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center px-3 text-center text-[10px] text-navy-300">実物プレビューなし</div>
-                  )}
+                  <div className="h-full w-full transition duration-300 group-hover:scale-[1.02]"><PreviewMedia pattern={pattern} compact /></div>
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/5 opacity-80" />
                   {isS && <span className="absolute left-2 top-2 rounded-full bg-amber-400 px-2 py-1 text-[10px] font-black text-navy-950 shadow-sm">S</span>}
-                  {currentDecision !== "NONE" && (
-                    <span className="absolute right-2 top-2 rounded-full bg-black/70 px-2 py-1 text-[9px] font-bold text-white backdrop-blur">{decisionLabel(currentDecision)}</span>
-                  )}
+                  {currentDecision !== "NONE" && <span className="absolute right-2 top-2 rounded-full bg-black/70 px-2 py-1 text-[9px] font-bold text-white backdrop-blur">{decisionLabel(currentDecision)}</span>}
                   <span className="absolute bottom-2 right-2 rounded-full bg-black/65 px-2 py-1 text-[9px] font-semibold text-white backdrop-blur">▶ 見る</span>
                 </div>
                 <div className="px-2.5 pb-3 pt-2.5 sm:px-3">
@@ -278,28 +241,19 @@ export function MotionPinterest() {
         })}
       </section>
 
-      {patterns.length === 0 && (
-        <div className="py-16 text-center text-sm text-navy-400">条件に合う演出がありません。フィルタを戻してください。</div>
-      )}
+      {patterns.length === 0 && <div className="py-16 text-center text-sm text-navy-400">条件に合う演出がありません。フィルタを戻してください。</div>}
 
       {selected && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm md:items-center md:p-6" onClick={() => setSelectedId(null)}>
           <div className="max-h-[94vh] w-full overflow-y-auto rounded-t-2xl bg-white shadow-2xl dark:bg-navy-900 md:max-w-5xl md:rounded-2xl" onClick={(event) => event.stopPropagation()}>
             <div className="sticky top-0 z-10 flex items-center justify-between border-b border-sand-200 bg-white/95 px-4 py-3 backdrop-blur dark:border-navy-700 dark:bg-navy-900/95">
-              <div className="min-w-0">
-                <p className="truncate text-sm font-bold text-navy-900 dark:text-sand-100">{selected.japaneseName}</p>
-                <p className="text-[10px] text-navy-400">{selected.commonName}</p>
-              </div>
+              <div className="min-w-0"><p className="truncate text-sm font-bold text-navy-900 dark:text-sand-100">{selected.japaneseName}</p><p className="text-[10px] text-navy-400">{selected.commonName}</p></div>
               <button type="button" onClick={() => setSelectedId(null)} className="ml-3 rounded-full border border-sand-300 px-3 py-1.5 text-xs font-bold text-navy-600 dark:border-navy-600 dark:text-navy-200">閉じる</button>
             </div>
 
             <div className="grid md:grid-cols-[minmax(0,1.45fr)_minmax(300px,0.8fr)]">
               <div className="bg-black">
-                {selectedPreview?.assetPath ? (
-                  <video src={selectedPreview.assetPath} poster={selectedPreview.posterPath ?? undefined} controls autoPlay loop muted playsInline className="aspect-video h-full max-h-[66vh] w-full object-contain" />
-                ) : (
-                  <div className="flex aspect-video items-center justify-center text-sm text-navy-300">実物プレビューはまだありません</div>
-                )}
+                {selectedPreview?.assetPath ? <video src={selectedPreview.assetPath} poster={selectedPreview.posterPath ?? undefined} controls autoPlay loop muted playsInline className="aspect-video h-full max-h-[66vh] w-full object-contain" /> : <div className="flex aspect-video items-center justify-center text-sm text-navy-300">実物プレビューはまだありません</div>}
               </div>
 
               <div className="p-4 md:p-5">
@@ -308,34 +262,18 @@ export function MotionPinterest() {
                   <span className="text-xs font-semibold text-amber-600 dark:text-amber-300">{recommendationStars(selected.openingFit)}</span>
                 </div>
 
-                {openingSPicks.has(selected.id) && (
-                  <div className="mt-3 rounded-xl bg-amber-50 p-3 text-xs leading-5 text-amber-900 dark:bg-amber-950/30 dark:text-amber-100">
-                    <span className="font-bold">Sの理由：</span>{sReason(selected.id, selected.categories)}
-                  </div>
-                )}
-
+                {openingSPicks.has(selected.id) && <div className="mt-3 rounded-xl bg-amber-50 p-3 text-xs leading-5 text-amber-900 dark:bg-amber-950/30 dark:text-amber-100"><span className="font-bold">Sの理由：</span>{sReason(selected.id, selected.categories)}</div>}
                 <p className="mt-4 text-sm leading-6 text-navy-700 dark:text-navy-200">{selected.naturalDescription}</p>
 
                 <div className="mt-4">
                   <p className="text-[10px] font-bold tracking-[0.14em] text-navy-400">今回のOPならここ</p>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {sectionLabels(selected.openingSections).map((label) => <span key={label} className="rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-[10px] font-semibold text-sky-800 dark:border-sky-900 dark:bg-sky-950/20 dark:text-sky-200">{label}</span>)}
-                  </div>
+                  <div className="mt-2 flex flex-wrap gap-1.5">{sectionLabels(selected.openingSections).map((label) => <span key={label} className="rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-[10px] font-semibold text-sky-800 dark:border-sky-900 dark:bg-sky-950/20 dark:text-sky-200">{label}</span>)}</div>
                 </div>
 
                 <div className="mt-5">
                   <p className="text-[10px] font-bold tracking-[0.14em] text-navy-400">これどうする？</p>
                   <div className="mt-2 grid grid-cols-3 gap-2">
-                    {(["FAVORITE", "MAYBE", "REJECT"] as const).map((value) => (
-                      <button
-                        key={value}
-                        type="button"
-                        onClick={() => selectDecision(selected.id, value)}
-                        className={`rounded-lg border px-2 py-2.5 text-[11px] font-bold ${selectedDecision === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-950" : "border-sand-300 text-navy-600 dark:border-navy-600 dark:text-navy-300"}`}
-                      >
-                        {value === "FAVORITE" ? "✅ 採用候補" : value === "MAYBE" ? "🤔 保留" : "× 使わない"}
-                      </button>
-                    ))}
+                    {(["FAVORITE", "MAYBE", "REJECT"] as const).map((value) => <button key={value} type="button" onClick={() => selectDecision(selected.id, value)} className={`rounded-lg border px-2 py-2.5 text-[11px] font-bold ${selectedDecision === value ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-950" : "border-sand-300 text-navy-600 dark:border-navy-600 dark:text-navy-300"}`}>{value === "FAVORITE" ? "✅ 採用候補" : value === "MAYBE" ? "🤔 保留" : "× 使わない"}</button>)}
                   </div>
                 </div>
 
@@ -343,17 +281,7 @@ export function MotionPinterest() {
                   <div className="mt-5 border-t border-sand-200 pt-4 dark:border-navy-700">
                     <p className="text-[10px] font-bold tracking-[0.14em] text-navy-400">似ている演出</p>
                     <div className="mt-2 grid grid-cols-3 gap-2">
-                      {related.map((pattern) => {
-                        const preview = getPatternPreview(pattern);
-                        return (
-                          <button key={pattern.id} type="button" onClick={() => setSelectedId(pattern.id)} className="overflow-hidden rounded-lg border border-sand-200 bg-white text-left dark:border-navy-700 dark:bg-navy-800">
-                            <div className="aspect-video bg-navy-950">
-                              {preview?.posterPath || preview?.assetPath ? <img src={preview.posterPath ?? preview.assetPath ?? ""} alt="" className="h-full w-full object-cover" /> : null}
-                            </div>
-                            <p className="line-clamp-2 px-2 py-1.5 text-[9px] font-semibold leading-3.5 text-navy-700 dark:text-navy-200">{pattern.japaneseName}</p>
-                          </button>
-                        );
-                      })}
+                      {related.map((pattern) => <button key={pattern.id} type="button" onClick={() => setSelectedId(pattern.id)} className="overflow-hidden rounded-lg border border-sand-200 bg-white text-left dark:border-navy-700 dark:bg-navy-800"><div className="aspect-video bg-navy-950"><PreviewMedia pattern={pattern} /></div><p className="line-clamp-2 px-2 py-1.5 text-[9px] font-semibold leading-3.5 text-navy-700 dark:text-navy-200">{pattern.japaneseName}</p></button>)}
                     </div>
                   </div>
                 )}
