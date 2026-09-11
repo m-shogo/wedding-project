@@ -124,10 +124,10 @@ export const motionZukanHumanCuration: readonly MotionZukanHumanCuration[] = [
     davinciHumanLabel: "Editで作りやすい。Positionを少量だけ動かし、写真の主役を追う。",
     externalReferences: [
       {
-        title: "Dynamic Zoom and Pan — DaVinci Resolve Tutorial",
-        url: "https://sharingyourpassion.com/dynamic-zoom-and-pan-davinci-resolve-tutorial/",
+        title: "How to do PAN Effect on Still Image with Dynamic Zoom in DaVinci Resolve",
+        url: "https://www.youtube.com/watch?v=zLVS5v2jZug",
         sourceKind: "TUTORIAL",
-        note: "写真のDynamic ZoomとPanの見た目・操作例。",
+        note: "静止画を横方向へパンする見た目を冒頭から確認できる短い実例。Dynamic ZoomとPosition keyframeの両方を扱うため、Slow Push-inとの差を比較しやすい。",
       },
       {
         title: "Blackmagic Design — Fusion",
