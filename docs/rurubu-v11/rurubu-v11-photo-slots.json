@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "rurubu-v11-photo-slots-v1",
+  "states": ["PROXY", "REAL_CANDIDATE", "FINAL_VERIFIED"],
+  "rules": [
+    "each slot remains independently replaceable",
+    "frame artwork remains separate from photo source",
+    "caption and factual text never become part of the photo bitmap",
+    "proxy state is explicit and is not promoted by implication",
+    "crop/focal point is rechecked after every source replacement"
+  ],
+  "pages": {
+    "P01": [
+      {"id":"P01_HERO_COUPLE","role":"hero couple","state":"PROXY","priority":"hero","frame":"hero/cutout or edgeless","replaceable":true},
+      {"id":"P01_SUPPORT_VENUE","role":"venue support","state":"PROXY","priority":"support","frame":"mixed","replaceable":true},
+      {"id":"P01_SUPPORT_MEMORY_01","role":"memory support","state":"PROXY","priority":"micro","frame":"polaroid","replaceable":true},
+      {"id":"P01_SUPPORT_MEMORY_02","role":"memory support","state":"PROXY","priority":"micro","frame":"white-border/tilt","replaceable":true},
+      {"id":"P01_SUPPORT_MEMORY_03","role":"memory support optional","state":"PROXY","priority":"micro","frame":"small mixed","replaceable":true}
+    ],
+    "P02": [
+      {"id":"P02_MEMORY_01","role":"journey memory","state":"PROXY","priority":"support","frame":"polaroid","replaceable":true},
+      {"id":"P02_MEMORY_02","role":"journey memory","state":"PROXY","priority":"support","frame":"polaroid/landscape","replaceable":true},
+      {"id":"P02_MEMORY_03","role":"journey memory","state":"PROXY","priority":"support","frame":"mixed","replaceable":true},
+      {"id":"P02_MEMORY_04","role":"journey memory optional","state":"PROXY","priority":"micro","frame":"mixed","replaceable":true}
+    ],
+    "P03": [
+      {"id":"P03_PROFILE_SHOGO","role":"Shogo profile portrait","state":"PROXY","priority":"dual-hero","frame":"portrait print","replaceable":true},
+      {"id":"P03_PROFILE_SHIORI","role":"Shiori profile portrait","state":"PROXY","priority":"dual-hero","frame":"portrait print variant","replaceable":true},
+      {"id":"P03_FAVORITE_01","role":"favorite item optional","state":"PROXY","priority":"micro","frame":"small","replaceable":true},
+      {"id":"P03_FAVORITE_02","role":"favorite item optional","state":"PROXY","priority":"micro","frame":"small","replaceable":true},
+      {"id":"P03_FAVORITE_03","role":"favorite item optional","state":"PROXY","priority":"micro","frame":"small","replaceable":true}
+    ],
+    "P04": [
+      {"id":"P04_MEMORY_HERO","role":"memory destination hero","state":"PROXY","priority":"hero","frame":"edgeless/large","replaceable":true},
+      {"id":"P04_MEMORY_02","role":"memory support","state":"PROXY","priority":"support","frame":"polaroid","replaceable":true},
+      {"id":"P04_MEMORY_03","role":"memory support","state":"PROXY","priority":"support","frame":"white-border/tilt","replaceable":true},
+      {"id":"P04_MEMORY_04","role":"memory support","state":"PROXY","priority":"support","frame":"portrait/square","replaceable":true},
+      {"id":"P04_MEMORY_05","role":"memory support optional","state":"PROXY","priority":"micro","frame":"mixed","replaceable":true},
+      {"id":"P04_MEMORY_06","role":"memory support optional","state":"PROXY","priority":"micro","frame":"mixed","replaceable":true}
+    ],
+    "P05": [
+      {"id":"P05_VENUE_HERO","role":"venue hero","state":"PROXY","priority":"hero","frame":"large","replaceable":true},
+      {"id":"P05_VENUE_DETAIL_01","role":"venue detail","state":"PROXY","priority":"support","frame":"portrait","replaceable":true},
+      {"id":"P05_VENUE_DETAIL_02","role":"venue detail","state":"PROXY","priority":"support","frame":"landscape","replaceable":true},
+      {"id":"P05_VENUE_DETAIL_03","role":"venue detail optional","state":"PROXY","priority":"micro","frame":"square","replaceable":true},
+      {"id":"P05_VENUE_DETAIL_04","role":"venue detail optional","state":"PROXY","priority":"micro","frame":"mixed","replaceable":true}
+    ],
+    "P06": [
+      {"id":"P06_VISUAL_HERO","role":"wedding-day visual reward","state":"PROXY","priority":"support-hero","frame":"mixed","replaceable":true},
+      {"id":"P06_SUPPORT_01","role":"schedule support visual","state":"PROXY","priority":"support","frame":"mixed","replaceable":true},
+      {"id":"P06_SUPPORT_02","role":"schedule support visual optional","state":"PROXY","priority":"micro","frame":"mixed","replaceable":true}
+    ],
+    "P07": [
+      {"id":"P07_QA_SUPPORT_01","role":"Q&A supporting photo","state":"PROXY","priority":"support","frame":"mixed","replaceable":true},
+      {"id":"P07_QA_SUPPORT_02","role":"Q&A supporting photo optional","state":"PROXY","priority":"micro","frame":"organic/mixed","replaceable":true}
+    ],
+    "P08": [
+      {"id":"P08_CLOSING_PHOTO","role":"closing support photo optional","state":"PROXY","priority":"support","frame":"postcard/polaroid","replaceable":true}
+    ]
+  }
+}

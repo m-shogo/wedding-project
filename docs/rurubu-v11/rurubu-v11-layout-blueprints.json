@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "rurubu-v11-layout-blueprints-v1",
+  "coordinateSystem": "percent of A5 trim frame; x/y from top-left; decoration may exceed trim only when edgeBleed=true",
+  "rules": [
+    "zones are visual territories, not rigid UI columns",
+    "overlap between named zones is intentional where specified",
+    "critical factual text remains inside safe area",
+    "photo slots remain independently replaceable",
+    "hero/support scale contrast is more important than exact numeric adherence"
+  ],
+  "pages": {
+    "P01": {
+      "role": "COVER",
+      "zones": {
+        "identity": {"x":3,"y":3,"w":19,"h":14},
+        "heroTitle": {"x":16,"y":7,"w":80,"h":29},
+        "heroCouple": {"x":23,"y":28,"w":72,"h":58},
+        "coverlines": {"x":3,"y":32,"w":31,"h":42},
+        "lowerPhotoCluster": {"x":2,"y":74,"w":55,"h":25},
+        "lowerUtility": {"x":55,"y":76,"w":42,"h":21}
+      },
+      "overlaps": ["heroCouple into heroTitle lower edge","lowerPhotoCluster internal overlap","badge/ribbon across one photo edge"],
+      "edgeBleed": ["upper-right tropical cluster","lower-left tropical/photo cluster"]
+    },
+    "P02": {
+      "role": "WEDDING_JOURNEY",
+      "zones": {
+        "title": {"x":16,"y":3,"w":72,"h":16},
+        "mapHero": {"x":10,"y":15,"w":78,"h":56},
+        "photoClusterLeft": {"x":2,"y":48,"w":38,"h":35},
+        "photoClusterRight": {"x":66,"y":45,"w":32,"h":33},
+        "travelStillLife": {"x":60,"y":72,"w":38,"h":23},
+        "dateVenueUtility": {"x":3,"y":84,"w":46,"h":14}
+      },
+      "overlaps": ["one polaroid crosses map edge","airplane crosses map/route","travel still-life overlaps one support-photo corner"],
+      "edgeBleed": ["one lower travel cluster","optional upper floral accent"]
+    },
+    "P03": {
+      "role": "PROFILE",
+      "zones": {
+        "title": {"x":14,"y":3,"w":76,"h":14},
+        "shogoPortrait": {"x":5,"y":18,"w":40,"h":36},
+        "shioriPortrait": {"x":48,"y":16,"w":42,"h":37},
+        "miniStory": {"x":82,"y":19,"w":16,"h":52},
+        "profileFacts": {"x":6,"y":55,"w":73,"h":22},
+        "favoritesFeature": {"x":5,"y":77,"w":91,"h":21}
+      },
+      "overlaps": ["name labels cross portrait lower frames","small floral cluster bridges portrait/fact zone","favorites label may cross upper edge of lower feature"],
+      "edgeBleed": ["small lower-right decorative cluster only"]
+    },
+    "P04": {
+      "role": "MEMORIES",
+      "zones": {
+        "title": {"x":17,"y":3,"w":70,"h":14},
+        "intro": {"x":6,"y":15,"w":55,"h":12},
+        "heroPhoto": {"x":8,"y":27,"w":60,"h":39},
+        "satelliteUpperRight": {"x":66,"y":24,"w":32,"h":29},
+        "satelliteMiddle": {"x":50,"y":52,"w":45,"h":24},
+        "lowerHeroSupport": {"x":8,"y":64,"w":54,"h":32},
+        "lowerTravelCluster": {"x":67,"y":76,"w":31,"h":22}
+      },
+      "overlaps": ["2–3 support frames lightly overlap","photo-junction flowers bridge two frames","lower travel object overlaps a support frame"],
+      "edgeBleed": ["right/lower tropical cluster","small top-edge title support"]
+    },
+    "P05": {
+      "role": "VENUE_GUIDE",
+      "zones": {
+        "title": {"x":20,"y":3,"w":66,"h":13},
+        "venueName": {"x":5,"y":15,"w":55,"h":10},
+        "heroPhoto": {"x":5,"y":24,"w":61,"h":39},
+        "detailCluster": {"x":66,"y":22,"w":32,"h":43},
+        "guideCopy": {"x":6,"y":64,"w":90,"h":15},
+        "mapUtility": {"x":5,"y":79,"w":91,"h":19}
+      },
+      "overlaps": ["one detail frame overlaps hero edge","floral cluster bridges hero/detail junction","title-support decoration may cross upper photo boundary"],
+      "edgeBleed": ["lower/side floral location accent"]
+    },
+    "P06": {
+      "role": "ONE_DAY",
+      "zones": {
+        "title": {"x":19,"y":3,"w":66,"h":14},
+        "itinerary": {"x":6,"y":18,"w":56,"h":78},
+        "sideVisualFeature": {"x":63,"y":22,"w":34,"h":45},
+        "sideNote": {"x":65,"y":66,"w":32,"h":28}
+      },
+      "overlaps": ["one support visual intrudes into itinerary boundary","selected icon sits on route node","title decoration bridges upper zones"],
+      "edgeBleed": ["small floral/title edge accent only"]
+    },
+    "P07": {
+      "role": "QA",
+      "zones": {
+        "title": {"x":17,"y":3,"w":70,"h":14},
+        "q1": {"x":5,"y":18,"w":43,"h":24},
+        "q2": {"x":52,"y":17,"w":44,"h":26},
+        "q3": {"x":7,"y":43,"w":46,"h":24},
+        "q4": {"x":55,"y":44,"w":40,"h":23},
+        "q5": {"x":5,"y":68,"w":42,"h":27},
+        "q6": {"x":49,"y":69,"w":47,"h":26}
+      },
+      "overlaps": ["Q labels cross answer-field edges","small motifs cross selected question boundaries","one support object/photo interrupts lower-right repeated rhythm"],
+      "edgeBleed": ["lower-right tropical/object anchor"]
+    },
+    "P08": {
+      "role": "MESSAGE_BACK",
+      "zones": {
+        "title": {"x":18,"y":4,"w":69,"h":13},
+        "messageField": {"x":6,"y":18,"w":88,"h":48},
+        "postmark": {"x":70,"y":16,"w":24,"h":16},
+        "photoCTA": {"x":7,"y":68,"w":55,"h":24},
+        "travelClosingCluster": {"x":60,"y":73,"w":38,"h":26}
+      },
+      "overlaps": ["postmark crosses message-field edge","travel objects overlap each other","CTA label may overlap camera/photo edge"],
+      "edgeBleed": ["lower-right travel/floral cluster","optional lower-left foliage"]
+    }
+  }
+}
