@@ -72,8 +72,6 @@ function recommendationStars(openingFit: string) {
 }
 
 function primaryGenreForPattern(pattern: MotionPatternRecord): Exclude<PrimaryGenre, "ALL"> {
-  // Motion Kitの36件は「基礎動作」。ID familyを正本にして4大分類へ落とす。
-  // type-mask-revealは背景写真slotを持てるが、基礎動作の主役は文字なのでTEXT扱い。
   if (pattern.id.startsWith("type-")) return "TEXT";
   if (pattern.id.startsWith("photo-")) return "IMAGE";
   if (
@@ -94,7 +92,6 @@ function primaryGenreForPattern(pattern: MotionPatternRecord): Exclude<PrimaryGe
 }
 
 function isImageTextRecipe(recipe: DirectorRecipe) {
-  // 97件のDirector Recipeから、単なるTYPO単体ではなく、実写真/実動画＋文字の構成を持つものだけを複合ジャンルへ出す。
   const hasTypographyPreset = recipe.motionPresetIds.some((id) => id.startsWith("type-"));
   if (!hasTypographyPreset) return false;
   if (recipe.category === "TYPOGRAPHY") return false;
@@ -117,6 +114,19 @@ function matchesIntentForRecipe(recipe: DirectorRecipe, intent: IntentFilter) {
   if (intent === "TRAVEL") return recipe.category === "TRAVEL" || /旅|travel/i.test(`${recipe.purpose} ${recipe.whyItWorks}`);
   if (intent === "TEMPO") return ["CUT_TRANSITION", "RHYTHM_MUSIC_HIT", "START_SPECIFIC"].includes(recipe.category);
   return recipe.category === "WEDDING_EMOTION" || /感情|余韻|emotion/i.test(`${recipe.purpose} ${recipe.whyItWorks}`);
+}
+
+function recipeMatchesSubCategory(recipe: DirectorRecipe, category: MotionPatternCategory) {
+  if (category === "TYPOGRAPHY") return recipe.motionPresetIds.some((id) => id.startsWith("type-"));
+  if (category === "PHOTO") return recipe.sourceType === "photo-safe" || recipe.sourceType === "both";
+  if (category === "CAMERA") return recipe.category === "CINEMATIC_CAMERA";
+  if (category === "LAYOUT") return recipe.category === "PHOTO_PRESENTATION" || recipe.category === "EDITORIAL_CM";
+  if (category === "TRANSITION") return recipe.category === "CUT_TRANSITION";
+  if (category === "RHYTHM") return recipe.category === "RHYTHM_MUSIC_HIT" || recipe.category === "START_SPECIFIC";
+  if (category === "GRAPHIC") return recipe.category === "ANIME_OP_GRAMMAR";
+  if (category === "EDITORIAL") return recipe.category === "EDITORIAL_CM";
+  if (category === "TRAVEL") return recipe.category === "TRAVEL";
+  return recipe.category === "WEDDING_EMOTION";
 }
 
 function sReason(patternId: string, categories: MotionPatternCategory[]) {
@@ -165,6 +175,41 @@ function recipePatternNames(recipe: DirectorRecipe, patterns: MotionPatternRecor
   return recipe.motionPresetIds.map(normalizePresetId).map((id) => patterns.find((pattern) => pattern.id === id)?.japaneseName ?? id);
 }
 
+function itemSearchText(item: PinterestItem) {
+  if (item.kind === "pattern") {
+    return [item.pattern.japaneseName, item.pattern.commonName, item.pattern.looksLike, ...item.pattern.aliases].join(" ").toLowerCase();
+  }
+  return [item.recipe.label, item.recipe.subCategory, item.recipe.purpose, item.recipe.whyItWorks, ...item.recipe.motionPresetIds].join(" ").toLowerCase();
+}
+
+function relatedItemsFor(selected: PinterestItem, allItems: PinterestItem[]) {
+  if (selected.kind === "pattern") {
+    return allItems
+      .filter((item) => item.key !== selected.key && item.genre === selected.genre)
+      .map((item) => {
+        const shared = item.kind === "pattern"
+          ? item.pattern.categories.filter((category) => selected.pattern.categories.includes(category)).length
+          : 0;
+        return { item, score: shared + (item.kind === "pattern" ? openingRank(item.pattern.openingFit) / 10 : 0) };
+      })
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map(({ item }) => item);
+  }
+
+  return allItems
+    .filter((item) => item.key !== selected.key && item.kind === "recipe")
+    .map((item) => ({
+      item,
+      score:
+        (item.kind === "recipe" && item.recipe.category === selected.recipe.category ? 3 : 0) +
+        (item.kind === "recipe" ? item.recipe.motionPresetIds.filter((id) => selected.recipe.motionPresetIds.includes(id)).length : 0),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(({ item }) => item);
+}
+
 function PreviewMedia({ pattern, compact = false }: { pattern: MotionPatternRecord; compact?: boolean }) {
   const preview = getPatternPreview(pattern);
   if (!preview?.assetPath) {
@@ -204,6 +249,10 @@ function RecipeElementPreview({ recipe, patterns }: { recipe: DirectorRecipe; pa
       <div className="absolute inset-x-0 bottom-0 bg-black/70 px-2 py-1 text-[8px] font-semibold text-white">構成要素プレビュー（複合完成画ではありません）</div>
     </div>
   );
+}
+
+function RelatedPreview({ item, patterns }: { item: PinterestItem; patterns: MotionPatternRecord[] }) {
+  return item.kind === "pattern" ? <PreviewMedia pattern={item.pattern} /> : <RecipeElementPreview recipe={item.recipe} patterns={patterns} />;
 }
 
 export function MotionPinterest() {
@@ -262,27 +311,13 @@ export function MotionPinterest() {
     const q = query.trim().toLowerCase();
     return allItems
       .filter((item) => genre === "ALL" || item.genre === genre)
-      .filter((item) => {
-        if (item.kind === "pattern") return matchesIntentForPattern(item.pattern, intent);
-        return matchesIntentForRecipe(item.recipe, intent);
-      })
+      .filter((item) => item.kind === "pattern" ? matchesIntentForPattern(item.pattern, intent) : matchesIntentForRecipe(item.recipe, intent))
       .filter((item) => {
         if (subCategory === "ALL") return true;
-        if (item.kind === "pattern") return item.pattern.categories.includes(subCategory);
-        if (subCategory === "TYPOGRAPHY") return item.recipe.motionPresetIds.some((id) => id.startsWith("type-"));
-        if (subCategory === "TRAVEL") return item.recipe.category === "TRAVEL";
-        if (subCategory === "EDITORIAL") return item.recipe.category === "EDITORIAL_CM";
-        if (subCategory === "EMOTIONAL") return item.recipe.category === "WEDDING_EMOTION";
-        return true;
+        return item.kind === "pattern" ? item.pattern.categories.includes(subCategory) : recipeMatchesSubCategory(item.recipe, subCategory);
       })
       .filter((item) => !sOnly || (item.kind === "pattern" && openingSPicks.has(item.pattern.id)))
-      .filter((item) => {
-        if (!q) return true;
-        if (item.kind === "pattern") {
-          return [item.pattern.japaneseName, item.pattern.commonName, item.pattern.looksLike, ...item.pattern.aliases].join(" ").toLowerCase().includes(q);
-        }
-        return [item.recipe.label, item.recipe.subCategory, item.recipe.purpose, item.recipe.whyItWorks, ...item.recipe.motionPresetIds].join(" ").toLowerCase().includes(q);
-      })
+      .filter((item) => !q || itemSearchText(item).includes(q))
       .sort((a, b) => {
         const aS = a.kind === "pattern" && openingSPicks.has(a.pattern.id) ? 1 : 0;
         const bS = b.kind === "pattern" && openingSPicks.has(b.pattern.id) ? 1 : 0;
@@ -299,6 +334,7 @@ export function MotionPinterest() {
   const selected = selectedKey ? allItems.find((item) => item.key === selectedKey) ?? null : null;
   const selectedDecision = selected ? decisions[selected.key] ?? (selected.kind === "pattern" ? selected.pattern.humanDecision : "NONE") : "NONE";
   const adoptedCount = allItems.filter((item) => (decisions[item.key] ?? (item.kind === "pattern" ? item.pattern.humanDecision : "NONE")) === "FAVORITE").length;
+  const related = selected ? relatedItemsFor(selected, allItems) : [];
 
   function selectDecision(key: string, value: DecisionValue) {
     setDecisions((current) => ({ ...current, [key]: value }));
@@ -332,7 +368,7 @@ export function MotionPinterest() {
       <section className="sticky top-0 z-20 -mx-4 mb-4 border-y border-sand-200 bg-sand-50/95 px-4 py-3 backdrop-blur dark:border-navy-700 dark:bg-navy-950/95 md:mx-0 md:border">
         <div className="flex items-center gap-2">
           <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="例：写真 ズーム / 文字 シュッ / スタンプ / 地名" className="min-w-0 flex-1 rounded-full border border-sand-300 bg-white px-4 py-2.5 text-sm text-navy-900 outline-none focus:border-navy-500 dark:border-navy-600 dark:bg-navy-800 dark:text-sand-100" />
-          <button type="button" onClick={() => setSOnly((value) => !value)} className={`shrink-0 rounded-full border px-3 py-2.5 text-xs font-black ${sOnly ? "border-amber-400 bg-amber-400 text-navy-950" : "border-amber-300 bg-white text-amber-700 dark:border-amber-700 dark:bg-navy-900 dark:text-amber-300"}`}>Sのみ</button>
+          <button type="button" disabled={genre === "IMAGE_TEXT"} onClick={() => setSOnly((value) => !value)} className={`shrink-0 rounded-full border px-3 py-2.5 text-xs font-black ${sOnly ? "border-amber-400 bg-amber-400 text-navy-950" : "border-amber-300 bg-white text-amber-700 dark:border-amber-700 dark:bg-navy-900 dark:text-amber-300"} disabled:cursor-not-allowed disabled:opacity-35`}>Sのみ</button>
           <Link to="/movie-coach/motion-library" className="hidden shrink-0 rounded-full border border-sand-300 bg-white px-3 py-2.5 text-xs font-semibold text-navy-600 dark:border-navy-600 dark:bg-navy-900 dark:text-navy-200 sm:inline-flex">選定一覧</Link>
         </div>
 
@@ -348,7 +384,7 @@ export function MotionPinterest() {
           </div>
         </details>
 
-        <p className="mt-2 text-[10px] text-navy-400">表示 {filteredItems.length} / 全{allItems.length} · 複合レシピは97件の既存Director Recipeから実在する組み合わせだけを抽出</p>
+        <p className="mt-2 text-[10px] text-navy-400">表示 {filteredItems.length} / 全{allItems.length} · 画像＋テキストは97件の既存Director Recipeから実在する組み合わせだけを抽出</p>
       </section>
 
       <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 dark:border-amber-900 dark:bg-amber-950/20">
@@ -405,6 +441,7 @@ export function MotionPinterest() {
                   <p className="mt-4 text-sm leading-6 text-navy-700 dark:text-navy-200">{selected.pattern.naturalDescription}</p>
                   <div className="mt-4"><p className="text-[10px] font-bold tracking-[0.14em] text-navy-400">今回のOPならここ</p><div className="mt-2 flex flex-wrap gap-1.5">{sectionLabels(selected.pattern.openingSections).map((label) => <span key={label} className="rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-[10px] font-semibold text-sky-800 dark:border-sky-900 dark:bg-sky-950/20 dark:text-sky-200">{label}</span>)}</div></div>
                   <DecisionButtons value={selectedDecision} onSelect={(value) => selectDecision(selected.key, value)} />
+                  <RelatedItems items={related} patterns={allPatterns} onSelect={setSelectedKey} />
                   <details className="mt-5 border-t border-sand-200 pt-4 dark:border-navy-700"><summary className="cursor-pointer text-xs font-bold text-navy-700 dark:text-navy-200">名前・検索語・DaVinci情報を見る</summary><div className="mt-3 space-y-3 text-xs leading-5 text-navy-600 dark:text-navy-300"><p><span className="font-bold">検索：</span>{[selected.pattern.commonName, ...selected.pattern.aliases].slice(0, 8).join(" / ")}</p><p><span className="font-bold">用途：</span>{selected.pattern.goodFor.join(" / ")}</p><p><span className="font-bold">DaVinci：</span>{(() => { const implementation = getPatternImplementation(selected.pattern); return implementation ? `${implementation.kind} · ${implementation.status} · ${implementation.method}` : "未整理"; })()}</p></div></details>
                 </div>
               </div>
@@ -418,6 +455,7 @@ export function MotionPinterest() {
                   <div className="mt-4 rounded-xl bg-sand-50 p-3 text-xs leading-5 text-navy-700 dark:bg-navy-800 dark:text-navy-200"><span className="font-bold">なぜ効く？</span><br />{selected.recipe.whyItWorks}</div>
                   <div className="mt-4"><p className="text-[10px] font-bold tracking-[0.14em] text-navy-400">組み合わせている演出</p><div className="mt-2 flex flex-wrap gap-1.5">{recipePatternNames(selected.recipe, allPatterns).map((name) => <span key={name} className="rounded-full border border-sand-200 px-2 py-1 text-[10px] text-navy-600 dark:border-navy-700 dark:text-navy-300">{name}</span>)}</div></div>
                   <DecisionButtons value={selectedDecision} onSelect={(value) => selectDecision(selected.key, value)} />
+                  <RelatedItems items={related} patterns={allPatterns} onSelect={setSelectedKey} />
                   <details className="mt-5 border-t border-sand-200 pt-4 dark:border-navy-700"><summary className="cursor-pointer text-xs font-bold text-navy-700 dark:text-navy-200">制作情報を見る</summary><div className="mt-3 space-y-3 text-xs leading-5 text-navy-600 dark:text-navy-300"><p><span className="font-bold">避ける時：</span>{selected.recipe.avoidWhen}</p><p><span className="font-bold">DaVinci：</span>{selected.recipe.davinciSkills.join(" / ")}</p><p><span className="font-bold">render：</span><code>pnpm render:director-recipe {selected.recipe.id}</code></p><Link to="/movie-coach/director-recipes" className="inline-block font-semibold text-sky-700 underline dark:text-sky-300">97件の演出レシピ詳細を開く</Link></div></details>
                 </div>
               </div>
@@ -435,6 +473,23 @@ function DecisionButtons({ value, onSelect }: { value: DecisionValue; onSelect: 
       <p className="text-[10px] font-bold tracking-[0.14em] text-navy-400">これどうする？</p>
       <div className="mt-2 grid grid-cols-3 gap-2">
         {(["FAVORITE", "MAYBE", "REJECT"] as const).map((option) => <button key={option} type="button" onClick={() => onSelect(option)} className={`rounded-lg border px-2 py-2.5 text-[11px] font-bold ${value === option ? "border-navy-900 bg-navy-900 text-white dark:border-sand-100 dark:bg-sand-100 dark:text-navy-950" : "border-sand-300 text-navy-600 dark:border-navy-600 dark:text-navy-300"}`}>{option === "FAVORITE" ? "✅ 採用候補" : option === "MAYBE" ? "🤔 保留" : "× 使わない"}</button>)}
+      </div>
+    </div>
+  );
+}
+
+function RelatedItems({ items, patterns, onSelect }: { items: PinterestItem[]; patterns: MotionPatternRecord[]; onSelect: (key: string) => void }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="mt-5 border-t border-sand-200 pt-4 dark:border-navy-700">
+      <p className="text-[10px] font-bold tracking-[0.14em] text-navy-400">似ている演出</p>
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        {items.map((item) => (
+          <button key={item.key} type="button" onClick={() => onSelect(item.key)} className="overflow-hidden rounded-lg border border-sand-200 bg-white text-left dark:border-navy-700 dark:bg-navy-800">
+            <div className="aspect-video bg-navy-950"><RelatedPreview item={item} patterns={patterns} /></div>
+            <p className="line-clamp-2 px-2 py-1.5 text-[9px] font-semibold leading-3.5 text-navy-700 dark:text-navy-200">{item.kind === "pattern" ? item.pattern.japaneseName : item.recipe.purpose}</p>
+          </button>
+        ))}
       </div>
     </div>
   );
