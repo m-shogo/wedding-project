@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">New Project操作図</title>
+  <desc id="desc">DaVinci Resolve起動画面を簡略化し、New Projectボタンを強調した図</desc>
+  <rect width="1280" height="720" fill="#1f2328"/>
+  <rect x="55" y="50" width="1170" height="620" rx="20" fill="#2d333b" stroke="#505862" stroke-width="2"/>
+  <text x="95" y="105" fill="#ffffff" font-family="sans-serif" font-size="28" font-weight="700">Project Manager</text>
+  <rect x="95" y="145" width="250" height="170" rx="12" fill="#404853"/>
+  <rect x="370" y="145" width="250" height="170" rx="12" fill="#404853"/>
+  <rect x="645" y="145" width="250" height="170" rx="12" fill="#404853"/>
+  <text x="120" y="285" fill="#aeb7c2" font-family="sans-serif" font-size="18">Existing Project</text>
+  <text x="395" y="285" fill="#aeb7c2" font-family="sans-serif" font-size="18">Existing Project</text>
+  <text x="670" y="285" fill="#aeb7c2" font-family="sans-serif" font-size="18">Existing Project</text>
+  <rect x="905" y="560" width="245" height="62" rx="12" fill="#d94b3d"/>
+  <text x="1028" y="599" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="23" font-weight="700">New Project</text>
+  <path d="M805 490 C865 505 910 525 965 555" fill="none" stroke="#ffd966" stroke-width="7" stroke-linecap="round"/>
+  <polygon points="954,540 985,562 949,568" fill="#ffd966"/>
+  <rect x="625" y="400" width="270" height="88" rx="14" fill="#fff7d6"/>
+  <text x="760" y="435" text-anchor="middle" fill="#1f2328" font-family="sans-serif" font-size="19" font-weight="700">ここを押す</text>
+  <text x="760" y="465" text-anchor="middle" fill="#4d5258" font-family="sans-serif" font-size="16">画面右下の New Project</text>
+  <text x="74" y="695" fill="#b6bdc6" font-family="sans-serif" font-size="14">※ 実画面を理解しやすくするための簡略操作図です。</text>
+</svg>
