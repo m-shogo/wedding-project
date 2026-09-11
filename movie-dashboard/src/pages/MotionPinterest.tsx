@@ -38,18 +38,111 @@ function difficulty(value: 1 | 2 | 3) {
   return `${"★".repeat(value)}${"☆".repeat(3 - value)}`;
 }
 
-function Preview({ item, large = false }: { item: ExternalMotionAtlasItem; large?: boolean }) {
-  if (item.mediaType === "YOUTUBE" && item.youtubeId) {
+function extractYouTubeId(item: ExternalMotionAtlasItem) {
+  if (item.youtubeId) return item.youtubeId;
+  const match = item.sourceUrl.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+  return match?.[1] ?? null;
+}
+
+function extractVimeoId(url: string) {
+  const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  return match?.[1] ?? null;
+}
+
+function isDirectVideo(url?: string) {
+  return Boolean(url && /\.(?:mp4|webm)(?:\?|$)/i.test(url));
+}
+
+function YouTubePreview({ id, title, large }: { id: string; title: string; large: boolean }) {
+  const [hovered, setHovered] = useState(false);
+
+  if (large) {
     return (
       <iframe
-        title={item.titleOriginal}
-        src={`https://www.youtube.com/embed/${item.youtubeId}?rel=0&modestbranding=1`}
+        title={title}
+        src={`https://www.youtube-nocookie.com/embed/${id}?rel=0&playsinline=1`}
         loading="lazy"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
         className="h-full w-full border-0"
       />
     );
+  }
+
+  return (
+    <div
+      className="relative h-full w-full"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {hovered ? (
+        <iframe
+          key="playing"
+          title={`${title} preview`}
+          src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}&rel=0&playsinline=1`}
+          allow="autoplay; encrypted-media; picture-in-picture"
+          className="pointer-events-none h-full w-full border-0"
+        />
+      ) : (
+        <>
+          <img
+            src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+            alt={title}
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
+          <div className="pointer-events-none absolute inset-0 grid place-items-center bg-black/10">
+            <span className="rounded-full bg-red-600/95 px-3 py-2 text-[10px] font-black text-white shadow-lg">▶ hoverで再生</span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function DirectVideoPreview({ url, title, large }: { url: string; title: string; large: boolean }) {
+  return (
+    <video
+      src={url}
+      title={title}
+      muted={!large}
+      loop={!large}
+      playsInline
+      controls={large}
+      autoPlay={large}
+      preload="metadata"
+      onMouseEnter={large ? undefined : (event) => void event.currentTarget.play().catch(() => undefined)}
+      onMouseLeave={large ? undefined : (event) => {
+        event.currentTarget.pause();
+        event.currentTarget.currentTime = 0;
+      }}
+      className={`h-full w-full ${large ? "object-contain" : "object-cover"}`}
+    />
+  );
+}
+
+function Preview({ item, large = false }: { item: ExternalMotionAtlasItem; large?: boolean }) {
+  const youtubeId = extractYouTubeId(item);
+  if (youtubeId) {
+    return <YouTubePreview id={youtubeId} title={item.titleOriginal} large={large} />;
+  }
+
+  const vimeoId = extractVimeoId(item.sourceUrl);
+  if (vimeoId) {
+    return (
+      <iframe
+        title={item.titleOriginal}
+        src={`https://player.vimeo.com/video/${vimeoId}?autoplay=${large ? 0 : 1}&muted=${large ? 0 : 1}&loop=${large ? 0 : 1}`}
+        loading="lazy"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowFullScreen
+        className={`h-full w-full border-0 ${large ? "" : "pointer-events-none"}`}
+      />
+    );
+  }
+
+  if (isDirectVideo(item.previewUrl) && item.previewUrl) {
+    return <DirectVideoPreview url={item.previewUrl} title={item.titleOriginal} large={large} />;
   }
 
   if ((item.mediaType === "GIF" || item.mediaType === "IMAGE") && item.previewUrl) {
@@ -73,10 +166,17 @@ function Preview({ item, large = false }: { item: ExternalMotionAtlasItem; large
     >
       <span className="text-[10px] font-bold tracking-[0.12em] text-sand-300">{item.sourceName}</span>
       <span className="mt-2 text-sm font-black">実動画を見る ↗</span>
-      <span className="mt-1 text-[9px] text-white/60">外部の実在ページ</span>
+      <span className="mt-1 text-[9px] text-white/60">埋め込み不可 / 元ページで再生</span>
     </a>
   );
 }
+
+const mediaPriority: Record<ExternalMotionMediaType, number> = {
+  GIF: 0,
+  YOUTUBE: 1,
+  VIDEO_PAGE: 2,
+  IMAGE: 3,
+};
 
 export function MotionPinterest() {
   const [genre, setGenre] = useState<Genre>("ALL");
@@ -90,17 +190,25 @@ export function MotionPinterest() {
     return result;
   }, []);
 
+  const mediaCounts = useMemo(() => {
+    const result: Record<ExternalMotionMediaType, number> = { GIF: 0, YOUTUBE: 0, VIDEO_PAGE: 0, IMAGE: 0 };
+    for (const item of externalMotionAtlas) result[item.mediaType] += 1;
+    return result;
+  }, []);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return externalMotionAtlas.filter((item) => {
-      if (genre !== "ALL" && item.genre !== genre) return false;
-      if (media !== "ALL" && item.mediaType !== media) return false;
-      if (!q) return true;
-      return [item.titleJa, item.titleOriginal, item.sourceName, item.descriptionJa, ...item.tags]
-        .join(" ")
-        .toLowerCase()
-        .includes(q);
-    });
+    return externalMotionAtlas
+      .filter((item) => {
+        if (genre !== "ALL" && item.genre !== genre) return false;
+        if (media !== "ALL" && item.mediaType !== media) return false;
+        if (!q) return true;
+        return [item.titleJa, item.titleOriginal, item.sourceName, item.descriptionJa, ...item.tags]
+          .join(" ")
+          .toLowerCase()
+          .includes(q);
+      })
+      .sort((a, b) => mediaPriority[a.mediaType] - mediaPriority[b.mediaType]);
   }, [genre, media, query]);
 
   const selected = selectedId ? externalMotionAtlas.find((item) => item.id === selectedId) ?? null : null;
@@ -139,18 +247,24 @@ export function MotionPinterest() {
           className="w-full rounded-full border border-sand-300 bg-white px-4 py-2.5 text-sm text-navy-900 outline-none dark:border-navy-600 dark:bg-navy-800 dark:text-sand-100"
         />
         <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
-          {mediaFilters.map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              onClick={() => setMedia(value)}
-              className={`shrink-0 rounded-full border px-3 py-1.5 text-[10px] font-bold ${media === value ? "border-sky-700 bg-sky-700 text-white" : "border-sand-300 bg-white text-navy-600 dark:border-navy-600 dark:bg-navy-900 dark:text-navy-200"}`}
-            >
-              {label}
-            </button>
-          ))}
+          {mediaFilters.map(([value, label]) => {
+            const count = value === "ALL" ? externalMotionAtlas.length : mediaCounts[value];
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setMedia(value)}
+                className={`shrink-0 rounded-full border px-3 py-1.5 text-[10px] font-bold ${media === value ? "border-sky-700 bg-sky-700 text-white" : "border-sand-300 bg-white text-navy-600 dark:border-navy-600 dark:bg-navy-900 dark:text-navy-200"}`}
+              >
+                {label} {count}
+              </button>
+            );
+          })}
         </div>
-        <p className="mt-2 text-[10px] text-navy-400">表示 {filtered.length} / 外部実例 {externalMotionAtlas.length}件 · 自作モーション 0件</p>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[10px] text-navy-400">
+          <span>表示 {filtered.length} / 外部実例 {externalMotionAtlas.length}件 · 自作モーション 0件</span>
+          <span>GIF優先表示 · YouTubeはhoverで無音再生</span>
+        </div>
       </section>
 
       <section className="grid grid-cols-2 gap-x-2.5 gap-y-5 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 min-[1900px]:grid-cols-6">
@@ -200,6 +314,7 @@ export function MotionPinterest() {
                   {selected.tags.map((tag) => <span key={tag} className="rounded-full border border-sand-200 px-2 py-1 text-[10px] text-navy-500 dark:border-navy-700 dark:text-navy-300">#{tag}</span>)}
                 </div>
                 <a href={selected.sourceUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-sky-700 px-4 py-3 text-sm font-black text-white">元の実例を開く ↗</a>
+                <p className="mt-2 text-[9px] leading-4 text-navy-400">YouTube / Vimeo / 直接MP4は図鑑内で再生。埋め込みを禁止している外部サイトは元ページで再生します。</p>
               </div>
             </div>
           </div>
