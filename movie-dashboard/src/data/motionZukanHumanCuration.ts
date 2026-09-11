@@ -14,6 +14,8 @@ export interface MotionZukanHumanCuration {
   score: 4 | 5;
   difficulty: MotionZukanDifficulty;
   bestFor: string;
+  selectionCue: string;
+  avoidWhen: string;
   whyForWeddingOpening: string;
   davinciRoute: MotionZukanDavinciRoute;
   davinciHumanLabel: string;
@@ -37,6 +39,8 @@ export const motionZukanHumanCuration: readonly MotionZukanHumanCuration[] = [
     score: 5,
     difficulty: "ふつう",
     bestFor: "冒頭タイトル・名前・地名",
+    selectionCue: "写真を主役にしたまま、文字だけ少し映像的に見せたい時。",
+    avoidWhen: "長文を読ませたい場面や、文字を静かに置くだけで十分な場面。",
     whyForWeddingOpening: "実写真を主役のまま残しつつ、旅行映画っぽいタイトル感だけを足せる。StaRtの文字アクセントにも合わせやすい。",
     davinciRoute: "TEXT_PLUS_FUSION",
     davinciHumanLabel: "Text+ / Fusion向き。マスクを動かして文字や写真を見せる演出。",
@@ -61,6 +65,8 @@ export const motionZukanHumanCuration: readonly MotionZukanHumanCuration[] = [
     score: 5,
     difficulty: "少し難しい",
     bestFor: "旅行先の切替・写真→動画・場所ジャンプ",
+    selectionCue: "沖縄→韓国→ハワイのように、別の場所を“つながって見える旅”として見せたい時。",
+    avoidWhen: "似た形・構図の素材が無い時。無理に合わせると素材選びが演出に負ける。",
     whyForWeddingOpening: "似た形や位置をつないで場面転換でき、旅の記録が一本につながって見える。テンプレ感を出さずに印象を残せる。",
     davinciRoute: "SOURCE_AWARE",
     davinciHumanLabel: "素材選びが主役。Editで位置・Scaleを合わせ、必要な時だけFusionで補助。",
@@ -85,6 +91,8 @@ export const motionZukanHumanCuration: readonly MotionZukanHumanCuration[] = [
     score: 5,
     difficulty: "かんたん",
     bestFor: "思い出写真・人物写真・余韻",
+    selectionCue: "写真そのものをちゃんと見せたいが、完全な静止画にはしたくない時。迷ったら最初に試す基本候補。",
+    avoidWhen: "短いカットを高速で畳みかける場面や、すでに被写体の動きが強い動画。",
     whyForWeddingOpening: "写真そのものを見せたい今回のOpeningと最も相性がいい基本動作。派手さを足さず、静止画を自然に映像へできる。",
     davinciRoute: "EDIT",
     davinciHumanLabel: "Editで作りやすい。InspectorのZoom/PositionまたはDynamic Zoomで十分。",
@@ -109,6 +117,8 @@ export const motionZukanHumanCuration: readonly MotionZukanHumanCuration[] = [
     score: 4,
     difficulty: "かんたん",
     bestFor: "横長写真・視線誘導・移動感",
+    selectionCue: "横長写真の中を見せたい順番がある時や、次の場所へ進む感覚を少し足したい時。",
+    avoidWhen: "顔のアップや主役が中央に固定されている写真。動かす理由が無い写真には使わない。",
     whyForWeddingOpening: "写真の中の視線や移動方向を利用でき、旅行テーマの『次へ進む感じ』を自然に出せる。使いすぎない前提で強い。",
     davinciRoute: "EDIT",
     davinciHumanLabel: "Editで作りやすい。Positionを少量だけ動かし、写真の主役を追う。",
