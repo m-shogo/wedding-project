@@ -50,6 +50,7 @@ import { StartSelectionMode } from "./pages/StartSelectionMode";
 import { StartProductionWorkspace } from "./pages/StartProductionWorkspace";
 import { VisualMotionLibrary } from "./pages/VisualMotionLibrary";
 import { VisualMotionLibraryList } from "./pages/VisualMotionLibraryList";
+import { MotionPinterest } from "./pages/MotionPinterest";
 import { WeddingVenueDeliveryGate } from "./pages/WeddingVenueDeliveryGate";
 import { MotionZukanWorkspaceHandoff } from "./pages/MotionZukanWorkspaceHandoff";
 import { LyricTimingStudio } from "./pages/LyricTimingStudio";
@@ -66,6 +67,7 @@ export default function App() {
             <Route element={<Layout />}>
               <Route index element={<Dashboard />} />
               <Route path="movie-coach" element={<MovieCoach />} />
+              <Route path="movie-coach/motion-pinterest" element={<MotionPinterest />} />
               <Route path="movie-coach/motion-library" element={<VisualMotionLibraryList />} />
               <Route path="movie-coach/motion-library/advanced" element={<VisualMotionLibrary />} />
               <Route path="movie-coach/motion-library/venue-delivery" element={<WeddingVenueDeliveryGate />} />
