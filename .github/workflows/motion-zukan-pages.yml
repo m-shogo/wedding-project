@@ -1,0 +1,61 @@
+name: Motion Zukan Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "motion-zukan-public/**"
+      - ".github/workflows/motion-zukan-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "motion-zukan-pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Validate public-only boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f motion-zukan-public/index.html
+          forbidden='StaRt\.m4a|local/audio|local/analysis|receipt\.json|receipts/|verificationReceipt|/Users/|BEGIN PRIVATE|personal photo|lyrics-wedding'
+          if grep -REni "$forbidden" motion-zukan-public; then
+            echo "Public Motion Zukan contains a forbidden local/private token."
+            exit 1
+          fi
+          for id in type-mask-reveal cut-match-shape photo-small-push photo-directional-pan; do
+            case "$id" in
+              type-mask-reveal) label='マスクから文字がスッと現れる' ;;
+              cut-match-shape) label='形を合わせて場面をつなぐ' ;;
+              photo-small-push) label='写真にゆっくり寄る' ;;
+              photo-directional-pan) label='写真をゆっくり横に流す' ;;
+            esac
+            grep -Fq "$label" motion-zukan-public/index.html
+          done
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: motion-zukan-public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
