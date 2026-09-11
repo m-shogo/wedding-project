@@ -16,15 +16,16 @@ const combinedSources = [
 ];
 
 const ids = new Set<string>();
-const urls = new Set<string>();
+const sourceKeys = new Set<string>();
 const combined: ExternalMotionAtlasItem[] = [];
 
 for (const source of combinedSources) {
   for (const item of source) {
     const normalizedUrl = item.sourceUrl.trim().replace(/\/$/, "");
-    if (ids.has(item.id) || urls.has(normalizedUrl)) continue;
+    const sourceKey = `${normalizedUrl}::${item.titleOriginal.trim().toLowerCase()}`;
+    if (ids.has(item.id) || sourceKeys.has(sourceKey)) continue;
     ids.add(item.id);
-    urls.add(normalizedUrl);
+    sourceKeys.add(sourceKey);
     combined.push(item);
   }
 }
