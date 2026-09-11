@@ -104,6 +104,11 @@ export function MotionPinterest() {
   }, [genre, media, query]);
 
   const selected = selectedId ? externalMotionAtlas.find((item) => item.id === selectedId) ?? null : null;
+  const resetFilters = () => {
+    setGenre("ALL");
+    setMedia("ALL");
+    setQuery("");
+  };
 
   return (
     <div>
@@ -150,36 +155,57 @@ export function MotionPinterest() {
             </button>
           ))}
         </div>
-        <p className="mt-2 text-[10px] text-navy-400">表示 {filtered.length} / 外部実例 {externalMotionAtlas.length}件 · 自作モーション 0件</p>
+        <div className="mt-2 flex items-center justify-between gap-3">
+          <p className="text-[10px] text-navy-400">表示 {filtered.length} / 外部実例 {externalMotionAtlas.length}件 · 自作モーション 0件</p>
+          {(genre !== "ALL" || media !== "ALL" || query) && (
+            <button type="button" onClick={resetFilters} className="shrink-0 text-[10px] font-bold text-sky-700 dark:text-sky-300">絞り込み解除</button>
+          )}
+        </div>
       </section>
 
-      <section className="grid grid-cols-2 gap-x-2.5 gap-y-5 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 min-[1900px]:grid-cols-6">
-        {filtered.map((item) => (
-          <article key={item.id} className="min-w-0 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-sand-200 dark:bg-navy-800 dark:ring-navy-700">
-            <div className="relative aspect-video overflow-hidden bg-navy-950">
-              <Preview item={item} />
-              <div className="pointer-events-none absolute left-2 top-2 flex gap-1">
-                <span className="rounded-full bg-white/95 px-2 py-1 text-[9px] font-black text-navy-950">{genreLabel(item.genre)}</span>
-                <span className="rounded-full bg-black/70 px-2 py-1 text-[9px] font-bold text-white">{mediaLabel(item.mediaType)}</span>
-              </div>
-            </div>
-            <div className="p-3">
-              <button type="button" onClick={() => setSelectedId(item.id)} className="block w-full text-left">
-                <h2 className="line-clamp-2 text-[12px] font-black leading-[1.5] text-navy-900 dark:text-sand-100 sm:text-[13px]">{item.titleJa}</h2>
-                <p className="mt-1 line-clamp-1 text-[9px] text-navy-400">{item.titleOriginal}</p>
-                <p className="mt-2 line-clamp-3 text-[10px] leading-4 text-navy-600 dark:text-navy-300">{item.descriptionJa}</p>
-              </button>
-              <div className="mt-3 flex items-end justify-between gap-2 border-t border-sand-100 pt-2 dark:border-navy-700">
-                <div>
-                  <p className="text-[9px] text-navy-400">難易度</p>
-                  <p className="text-[11px] font-bold text-amber-600 dark:text-amber-300">{difficulty(item.difficulty)}</p>
+      {filtered.length === 0 ? (
+        <section className="rounded-2xl border border-dashed border-sand-300 bg-white px-5 py-10 text-center dark:border-navy-700 dark:bg-navy-900">
+          <p className="text-sm font-black text-navy-900 dark:text-sand-100">この条件では実例が見つかりません</p>
+          <p className="mt-2 text-xs leading-5 text-navy-500 dark:text-navy-300">検索語を短くするか、分類・媒体の絞り込みを外すと候補を広げられます。</p>
+          <button type="button" onClick={resetFilters} className="mt-4 rounded-full bg-sky-700 px-4 py-2 text-xs font-black text-white">全部の実例へ戻す</button>
+        </section>
+      ) : (
+        <section className="grid grid-cols-2 gap-x-2.5 gap-y-5 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 min-[1900px]:grid-cols-6">
+          {filtered.map((item) => (
+            <article key={item.id} className="min-w-0 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-sand-200 dark:bg-navy-800 dark:ring-navy-700">
+              <div className="relative aspect-video overflow-hidden bg-navy-950">
+                <Preview item={item} />
+                <div className="pointer-events-none absolute left-2 top-2 flex gap-1">
+                  <span className="rounded-full bg-white/95 px-2 py-1 text-[9px] font-black text-navy-950">{genreLabel(item.genre)}</span>
+                  <span className="rounded-full bg-black/70 px-2 py-1 text-[9px] font-bold text-white">{mediaLabel(item.mediaType)}</span>
                 </div>
-                <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="rounded-full border border-sand-300 px-2.5 py-1.5 text-[9px] font-bold text-navy-700 dark:border-navy-600 dark:text-navy-200">元URL ↗</a>
+                <button
+                  type="button"
+                  onClick={() => setSelectedId(item.id)}
+                  className="absolute bottom-2 right-2 rounded-full bg-white/95 px-2.5 py-1.5 text-[9px] font-black text-navy-950 shadow-sm backdrop-blur hover:bg-white"
+                  aria-label={`${item.titleJa}の詳細を見る`}
+                >
+                  詳しく
+                </button>
               </div>
-            </div>
-          </article>
-        ))}
-      </section>
+              <div className="p-3">
+                <button type="button" onClick={() => setSelectedId(item.id)} className="block w-full text-left">
+                  <h2 className="line-clamp-2 text-[12px] font-black leading-[1.5] text-navy-900 dark:text-sand-100 sm:text-[13px]">{item.titleJa}</h2>
+                  <p className="mt-1 line-clamp-1 text-[9px] text-navy-400">{item.titleOriginal}</p>
+                  <p className="mt-2 line-clamp-2 text-[10px] leading-4 text-navy-600 dark:text-navy-300">{item.descriptionJa}</p>
+                </button>
+                <div className="mt-3 flex items-end justify-between gap-2 border-t border-sand-100 pt-2 dark:border-navy-700">
+                  <div>
+                    <p className="text-[9px] text-navy-400">難易度</p>
+                    <p className="text-[11px] font-bold text-amber-600 dark:text-amber-300">{difficulty(item.difficulty)}</p>
+                  </div>
+                  <a href={item.sourceUrl} target="_blank" rel="noreferrer" className="rounded-full border border-sand-300 px-2.5 py-1.5 text-[9px] font-bold text-navy-700 dark:border-navy-600 dark:text-navy-200">元URL ↗</a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </section>
+      )}
 
       {selected && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/75 md:items-center md:p-6" onClick={() => setSelectedId(null)}>
