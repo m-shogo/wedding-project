@@ -11,6 +11,7 @@ import { externalMotionAtlasAdditions6 } from "./externalMotionAtlasAdditions6";
 import { externalMotionAtlasAdditions7 } from "./externalMotionAtlasAdditions7";
 import { externalMotionAtlasAdditions8 } from "./externalMotionAtlasAdditions8";
 import { externalMotionAtlasAdditions9 } from "./externalMotionAtlasAdditions9";
+import { externalMotionAtlasAdditions10 } from "./externalMotionAtlasAdditions10";
 
 const combinedSources = [
   externalMotionAtlasBase,
@@ -23,19 +24,23 @@ const combinedSources = [
   externalMotionAtlasAdditions7,
   externalMotionAtlasAdditions8,
   externalMotionAtlasAdditions9,
+  externalMotionAtlasAdditions10,
 ];
 
 const ids = new Set<string>();
 const sourceKeys = new Set<string>();
+const previewKeys = new Set<string>();
 const combined: ExternalMotionAtlasItem[] = [];
 
 for (const source of combinedSources) {
   for (const item of source) {
     const normalizedUrl = item.sourceUrl.trim().replace(/\/$/, "");
     const sourceKey = `${normalizedUrl}::${item.titleOriginal.trim().toLowerCase()}`;
-    if (ids.has(item.id) || sourceKeys.has(sourceKey)) continue;
+    const previewKey = item.previewUrl?.trim().replace(/\?.*$/, "") ?? "";
+    if (ids.has(item.id) || sourceKeys.has(sourceKey) || (previewKey && previewKeys.has(previewKey))) continue;
     ids.add(item.id);
     sourceKeys.add(sourceKey);
+    if (previewKey) previewKeys.add(previewKey);
     combined.push(item);
   }
 }
