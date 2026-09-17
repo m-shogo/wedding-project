@@ -22,6 +22,7 @@ import { externalMotionAtlasAdditions17 } from "./externalMotionAtlasAdditions17
 import { externalMotionAtlasAdditions18 } from "./externalMotionAtlasAdditions18";
 import { externalMotionAtlasAdditions19 } from "./externalMotionAtlasAdditions19";
 import { externalMotionAtlasAdditions20 } from "./externalMotionAtlasAdditions20";
+import { externalMotionAtlasAdditions21 } from "./externalMotionAtlasAdditions21";
 
 const combinedSources = [
   externalMotionAtlasBase,
@@ -45,6 +46,7 @@ const combinedSources = [
   externalMotionAtlasAdditions18,
   externalMotionAtlasAdditions19,
   externalMotionAtlasAdditions20,
+  externalMotionAtlasAdditions21,
 ];
 
 const ids = new Set<string>();
