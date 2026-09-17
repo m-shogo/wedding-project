@@ -10,6 +10,8 @@ export interface ExternalMotionAtlasItem {
   sourceName: string;
   sourceUrl: string;
   previewUrl?: string;
+  /** 公式プレビューの静止画。直接MP4の待機表示や、埋め込めない動画ページのサムネイルに使う。 */
+  posterUrl?: string;
   youtubeId?: string;
   descriptionJa: string;
   difficulty: 1 | 2 | 3;
@@ -207,6 +209,8 @@ export const externalMotionAtlas: ExternalMotionAtlasItem[] = [
     mediaType: "VIDEO_PAGE",
     sourceName: "Mixkit",
     sourceUrl: "https://mixkit.co/free-davinci-resolve-templates/fast-text-transition-title-684/",
+    previewUrl: "https://assets.mixkit.co/video-templates/684/mixkit-684-360.mp4",
+    posterUrl: "https://assets.mixkit.co/video-templates/684/thumbnails/preview-0002.jpg",
     descriptionJa: "背景色と文字が素早く切り替わるタイトル。曲の頭や一瞬のアクセントに向く。",
     difficulty: 1,
     tags: ["高速", "タイトル", "切替", "カラー"],
@@ -295,7 +299,9 @@ export const externalMotionAtlas: ExternalMotionAtlasItem[] = [
     titleOriginal: "Motion Blur Swipe Transition",
     mediaType: "VIDEO_PAGE",
     sourceName: "Mixkit",
-    sourceUrl: "https://mixkit.co/free-davinci-resolve-templates/transitions/",
+    sourceUrl: "https://mixkit.co/free-davinci-resolve-templates/motion-blur-swipe-transition-746/",
+    previewUrl: "https://assets.mixkit.co/video-templates/746/mixkit-746-360.mp4",
+    posterUrl: "https://assets.mixkit.co/video-templates/746/thumbnails/preview-0005.jpg",
     descriptionJa: "前の画面を横へ高速で流し、次の画面を引き込むスワイプ。単純で使いやすく、旅行の移動感も出しやすい。",
     difficulty: 1,
     tags: ["スワイプ", "モーションブラー", "高速", "切替"],
@@ -307,7 +313,9 @@ export const externalMotionAtlas: ExternalMotionAtlasItem[] = [
     titleOriginal: "Distort And Twist Transition",
     mediaType: "VIDEO_PAGE",
     sourceName: "Mixkit",
-    sourceUrl: "https://mixkit.co/free-davinci-resolve-templates/transitions/",
+    sourceUrl: "https://mixkit.co/free-davinci-resolve-templates/distort-and-twist-transition-743/",
+    previewUrl: "https://assets.mixkit.co/video-templates/743/mixkit-743-360.mp4",
+    posterUrl: "https://assets.mixkit.co/video-templates/743/thumbnails/preview-0005.jpg",
     descriptionJa: "画面全体を歪ませ、ブラーと回転を加えて次のカットへ移る。強い場面転換に使うタイプ。",
     difficulty: 2,
     tags: ["歪み", "回転", "ブラー", "切替"],
