@@ -109,7 +109,7 @@ export const externalMotionAtlasAdditions2: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/704/thumbnails/preview-0005.jpg",
     descriptionJa: "図形がドロップして現れ、その中を動画マスクとして使いながら見出しも同時表示する。写真＋文字を一体化した短い演出。",
     difficulty: 2,
-    tags: ["動画マスク", "見出し", "図形", "写真＋文字"],
+    tags: ["動画マスク", "見出し", "図形", "写真＋文字", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "image-text-gradient-shape-story-mixkit",
@@ -123,7 +123,7 @@ export const externalMotionAtlasAdditions2: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/705/thumbnails/preview-0003.jpg",
     descriptionJa: "グラデーション図形、動画マスク、見出し、縦方向の短い文字を1画面に組み合わせる。誌面っぽい情報配置の参考。",
     difficulty: 2,
-    tags: ["動画マスク", "グラデーション", "縦文字", "写真＋文字"],
+    tags: ["動画マスク", "グラデーション", "縦文字", "写真＋文字", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "text-travel-titles-icons-motionarray",
@@ -161,7 +161,7 @@ export const externalMotionAtlasAdditions2: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/681/thumbnails/preview-0004.jpg",
     descriptionJa: "見出しをラインで分割し、文字が時間差で現れる。名前・地名・日付の短い情報表示に使いやすい。",
     difficulty: 1,
-    tags: ["文字", "分割", "ライン", "ローワーサード"],
+    tags: ["文字", "分割", "ライン", "ローワーサード", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "effect-vertical-split-frame-mixkit",
@@ -175,7 +175,7 @@ export const externalMotionAtlasAdditions2: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/747/thumbnails/preview-0001.jpg",
     descriptionJa: "画面を縦分割し、上下方向への移動と歪みで次の映像へ切り替える。通常のワイプより動きが強い。",
     difficulty: 1,
-    tags: ["分割", "縦", "歪み", "トランジション"],
+    tags: ["分割", "縦", "歪み", "トランジション", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "text-typography-intro-behance-2025",

@@ -97,7 +97,7 @@ export const externalMotionAtlasAdditions: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/683/thumbnails/preview-0007.jpg",
     descriptionJa: "大きな文字をマスクにして、その文字の中に動画を見せる。タイトルと映像を完全に一体化できる演出。",
     difficulty: 2,
-    tags: ["動画＋文字", "マスク", "巨大文字", "タイトル"],
+    tags: ["動画＋文字", "マスク", "巨大文字", "タイトル", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "text-quick-switch-title-mixkit",
@@ -111,7 +111,7 @@ export const externalMotionAtlasAdditions: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/682/thumbnails/preview-0002.jpg",
     descriptionJa: "文字列が高速で流れながら切り替わり、最後にロゴへ着地する。テンポの速い短いタイトル向き。",
     difficulty: 1,
-    tags: ["テキスト", "高速", "切替", "タイトル"],
+    tags: ["テキスト", "高速", "切替", "タイトル", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "text-kinetic-typography-behance-2022",
@@ -137,7 +137,7 @@ export const externalMotionAtlasAdditions: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/744/thumbnails/preview-0005.jpg",
     descriptionJa: "モーションブラーを伴って画面全体を放射状にねじる高速トランジション。強い場面転換用。",
     difficulty: 2,
-    tags: ["ねじり", "放射状", "モーションブラー", "トランジション"],
+    tags: ["ねじり", "放射状", "モーションブラー", "トランジション", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "effect-horizontal-split-frame-mixkit",
@@ -151,6 +151,6 @@ export const externalMotionAtlasAdditions: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/745/thumbnails/preview-0001.jpg",
     descriptionJa: "画面を水平に2分割し、それぞれを左右へ動かして次の映像へ切り替える。分割画面を活かした切替。",
     difficulty: 1,
-    tags: ["分割", "左右", "トランジション", "モーションブラー"],
+    tags: ["分割", "左右", "トランジション", "モーションブラー", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
 ];
