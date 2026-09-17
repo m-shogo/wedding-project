@@ -37,7 +37,7 @@ export const externalMotionAtlasAdditions3: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/701/thumbnails/preview-0005.jpg",
     descriptionJa: "細い枠線の中に文字を入れ、左からスライドして登場させる。短いコメントや一言メッセージ向き。",
     difficulty: 1,
-    tags: ["文字", "枠線", "スライド", "コメント"],
+    tags: ["文字", "枠線", "スライド", "コメント", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "text-hidden-text-box-lower-third-mixkit",
@@ -51,7 +51,7 @@ export const externalMotionAtlasAdditions3: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/679/thumbnails/preview-0002.jpg",
     descriptionJa: "見出しボックスの裏に隠れた文字が右方向へ展開して現れる。名前や肩書き、地名の補足に使いやすい。",
     difficulty: 1,
-    tags: ["文字", "ボックス", "リビール", "ローワーサード"],
+    tags: ["文字", "ボックス", "リビール", "ローワーサード", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "effect-twist-wheel-transition-mixkit",
@@ -65,7 +65,7 @@ export const externalMotionAtlasAdditions3: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/742/thumbnails/preview-0001.jpg",
     descriptionJa: "画面全体を車輪のようにねじり、深いモーションブラーで次の映像へつなぐ。強い転換用。",
     difficulty: 2,
-    tags: ["ねじり", "ブラー", "車輪", "トランジション"],
+    tags: ["ねじり", "ブラー", "車輪", "トランジション", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "text-location-pin-titles-colorful-motionarray",

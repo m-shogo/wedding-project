@@ -213,7 +213,7 @@ export const externalMotionAtlas: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/684/thumbnails/preview-0002.jpg",
     descriptionJa: "背景色と文字が素早く切り替わるタイトル。曲の頭や一瞬のアクセントに向く。",
     difficulty: 1,
-    tags: ["高速", "タイトル", "切替", "カラー"],
+    tags: ["高速", "タイトル", "切替", "カラー", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "text-creative-typography-motionarray",
@@ -304,7 +304,7 @@ export const externalMotionAtlas: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/746/thumbnails/preview-0005.jpg",
     descriptionJa: "前の画面を横へ高速で流し、次の画面を引き込むスワイプ。単純で使いやすく、旅行の移動感も出しやすい。",
     difficulty: 1,
-    tags: ["スワイプ", "モーションブラー", "高速", "切替"],
+    tags: ["スワイプ", "モーションブラー", "高速", "切替", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "effect-distort-twist-mixkit",
@@ -318,7 +318,7 @@ export const externalMotionAtlas: ExternalMotionAtlasItem[] = [
     posterUrl: "https://assets.mixkit.co/video-templates/743/thumbnails/preview-0005.jpg",
     descriptionJa: "画面全体を歪ませ、ブラーと回転を加えて次のカットへ移る。強い場面転換に使うタイプ。",
     difficulty: 2,
-    tags: ["歪み", "回転", "ブラー", "切替"],
+    tags: ["歪み", "回転", "ブラー", "切替", "DaVinci Resolveテンプレ", "無料テンプレ"],
   },
   {
     id: "effect-polaroid-transition-motionarray",
