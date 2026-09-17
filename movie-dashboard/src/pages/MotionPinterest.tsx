@@ -94,6 +94,9 @@ const previewPriority: Record<ResolvedPreview["kind"], number> = {
   LINK_ONLY: 3,
 };
 
+// よく使う絞り込み。タグ・説明文への部分一致検索なので、データ側のタグ名と揃える。
+const quickQueries = ["StaRt向き", "3点バースト候補", "旅行", "筆記体", "プリズム"];
+
 const mediaPriority: Record<ExternalMotionMediaType, number> = {
   GIF: 0,
   YOUTUBE: 1,
@@ -456,10 +459,23 @@ export function MotionPinterest() {
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="例：旅行 / 地名 / コラージュ / 紙 / グリッチ / パララックス"
+          placeholder="例：StaRt向き / 3点バースト / 旅行 / 筆記体 / プリズム / コラージュ"
           className="w-full rounded-full border border-sand-300 bg-white px-4 py-2.5 text-sm text-navy-900 outline-none dark:border-navy-600 dark:bg-navy-800 dark:text-sand-100"
         />
         <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
+          {quickQueries.map((value) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setQuery(query === value ? "" : value)}
+              aria-pressed={query === value}
+              className={`shrink-0 rounded-full border px-3 py-1.5 text-[10px] font-bold ${query === value ? "border-pink-600 bg-pink-600 text-white" : "border-pink-300 bg-white text-pink-700 dark:border-pink-500/60 dark:bg-navy-900 dark:text-pink-300"}`}
+            >
+              # {value}
+            </button>
+          ))}
+        </div>
+        <div className="mt-1.5 flex gap-1.5 overflow-x-auto pb-1">
           <button
             type="button"
             onClick={() => setMovingOnly((value) => !value)}
