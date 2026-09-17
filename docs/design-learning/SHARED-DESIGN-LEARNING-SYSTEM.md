@@ -9,6 +9,34 @@ Make each design run improve the next one without allowing one item's visual sty
 
 Rurubu WEDDING and non-Rurubu items remain separate production scopes. They may share only evidence-backed, generalizable design/process learning through the neutral project-wide learning surface defined here.
 
+## Mandatory routing before AI-assisted Figma work
+
+Before choosing a design or production method, classify the work by artifact type. This routing is a pre-design requirement, not optional background reading.
+
+### Editorial / magazine-like route
+
+Trigger this route when either condition is true:
+
+- the item is Rurubu WEDDING; or
+- generative AI is being used with Figma for a magazine-like, editorial, booklet, profile-book, travel-guide, catalog/editorial spread, zine, brochure-with-editorial-hierarchy, or comparable print/page composition.
+
+When triggered, read the accumulated editorial learning before designing or writing to Figma:
+
+1. the item's own current authority/manifest and live state;
+2. `01_paper-items/rurubu-wedding/RURUBU-MAGAZINE-EDITORIAL-DESIGN-KNOWLEDGE-BASE.md` as the canonical accumulated magazine/editorial judgment base;
+3. this `SHARED-DESIGN-LEARNING-SYSTEM.md`;
+4. `docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md`;
+5. the relevant shared-learning base feed and newer relevant `.append/` entries, including Rurubu lessons when the task is editorial/magazine-like;
+6. relevant failure fingerprints and prior verified/rejected experiments before selecting the implementation method.
+
+Do not treat the Rurubu knowledge base as a style template. Transfer editorial principles—hierarchy, reading order, dominant/support roles, controlled asymmetry, grid discipline, typography, photo-role semantics, density/quiet-space control, anti-UI/anti-template diagnostics, three-scale QA, print plausibility, and evidence-backed learning—not literal Rurubu colors, motifs, layouts, assets, or production state.
+
+This route is deliberately broader than Rurubu itself: accumulated Rurubu learning is the project's editorial-design training corpus and should inform future AI-assisted Figma magazine/page work. Conversely, verified editorial lessons from later items should flow back through the shared-learning state machine so the corpus improves rather than freezing at today's rules.
+
+### Non-editorial route
+
+For web UI, application screens, ordinary component systems, or other non-editorial Figma work, do not automatically import Rurubu magazine grammar. Continue to use the shared Figma authoring/process rules and only pull editorial lessons when the artifact genuinely has editorial reading-order or print-page characteristics.
+
 ## Scope firewall
 
 - Rurubu runs may edit only Rurubu production authorities/assets/Figma targets.
@@ -185,13 +213,15 @@ Cross-item transfer includes the method, QA gates, rollback discipline and failu
 At the beginning of each hourly visual run:
 
 1. Re-read its own current authority and live GitHub/Figma/Drive state first.
-2. Read this shared system and the opposite scope's base shared-learning feed plus relevant newer `.append/` entries only as neutral learning input.
-3. Read `docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md` for Figma-based design work; read the editable-SVG workflow only when vectorization is relevant.
-4. Select only the lessons relevant to the current visible defect.
-5. Treat transferred lessons as hypotheses unless already `PROMOTED_PROJECT_RULE`.
-6. Test on a rollback-safe duplicate or bounded semantic role.
-7. Review at whole-item, reading/page, and actual-size/detail scales.
-8. Record success or failure in the receiving scope's own base feed or canonical `.append/` extension.
+2. Apply the mandatory routing above. If editorial/magazine-like, read the accumulated Rurubu magazine/editorial knowledge base before selecting a design method.
+3. Read this shared system and the opposite scope's base shared-learning feed plus relevant newer `.append/` entries only as neutral learning input.
+4. Read `docs/design-learning/AI-FIGMA-HYBRID-AUTHORING-POLICY.md` for Figma-based design work; read the editable-SVG workflow only when vectorization is relevant.
+5. Select only the lessons relevant to the current visible defect.
+6. Treat transferred lessons as hypotheses unless already `PROMOTED_PROJECT_RULE`.
+7. Test on a rollback-safe duplicate or bounded semantic role.
+8. Review at whole-item, reading/page, and actual-size/detail scales.
+9. Record success or failure in the receiving scope's own base feed or canonical `.append/` extension.
+10. If the result teaches a reusable editorial or production lesson, feed it back through the state machine so future Rurubu and other editorial AI/Figma work starts from stronger accumulated knowledge.
 
 This makes cross-item learning bidirectional: Rurubu can teach typography, hierarchy, crop, editorial-density and print lessons; non-Rurubu items can teach physical-artifact realism, restrained motif usage, information hierarchy, editability, or asset-production lessons back to Rurubu—only after local verification.
 
@@ -215,7 +245,7 @@ Learning is part of production, not a separate documentation exercise. Each run 
 - record only meaningful experiments or failures;
 - publish a cross-item lesson only when it can change future decisions;
 - never create filler lessons merely to consume runtime;
-- keep production progress and learning evidence distinguishable;
+- keep production progress and learning evidence distinguishishable;
 - use waiting time for comparison, root-cause analysis, failure deduplication, typography/crop QA, or evidence reconciliation.
 
 ## Source-of-truth roles
