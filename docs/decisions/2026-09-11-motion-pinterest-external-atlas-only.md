@@ -57,7 +57,7 @@ Those may continue to exist elsewhere in the project but are not Pinterest conte
 - UI: `movie-dashboard/src/pages/MotionPinterest.tsx`
 - Contract: `pnpm check:external-motion-atlas`（CIで実行）
 
-`MotionPinterestStable.tsx` は 2026-09-11 の `9f0533d3` 以降どこからも読まれていない旧実装。正本ではない。
+旧実装 `MotionPinterestStable.tsx` は 2026-09-11 の `9f0533d3` 以降どこからも読まれていなかったため、2026-09-17 に削除した。
 
 Initial external corpus: 36 real-world references
 - 画像: 8
@@ -84,3 +84,22 @@ Draft PR #882 / #883 / #884 の意図を現行 `MotionPinterest.tsx` へ統合�
 | Behance | 27 | robots.txtが `ClaudeBot` / `anthropic-ai` を明示拒否。AIで取得しない。人が確認して `posterUrl` に入れる |
 
 結果: 196件中「一覧で動く」119 → 133件、元ページのみ 76 → 62件。素材ファイル自体はGitに入れず、公式URLの参照だけ持つ。
+
+## 2026-09-17 update — GIF登録（Additions15）
+
+GIPHY（robots.txtで全体許可、Claude向けの拒否なし）の検索ページ25語から650件の候補を集め、次の手順で43件を登録した。
+
+1. テレビ番組・企業告知・有名人の切り抜きなど、動きの参考にならないものを除外（約60件へ）
+2. 各GIFを6コマに分解したコンタクトシートで動きを目視確認
+3. 実際に見えた動きだけを日本語説明に書く。重複した動き・色替えだけのもの・判別しにくい抽象映像は不採用
+4. 元ページとGIF本体がHTTP 200で開けることを確認
+
+| genre | 追加 |
+|---|---:|
+| 画像 | 7 |
+| テキスト | 17 |
+| エフェクト | 10 |
+| 画像＋テキスト | 9 |
+
+結果: 196 → 239件、GIF 85 → 128件。ウェディング寄りでは、筆記体の書き順・ポラロイド・パスポート・手描きルート地図・旅ログカード・紙の花・Save the Date などを優先した。
+youmotion.com 由来の3件はテンプレート販売元のデモなので、説明文にその旨を書いている。
