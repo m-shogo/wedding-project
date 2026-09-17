@@ -95,7 +95,7 @@ const previewPriority: Record<ResolvedPreview["kind"], number> = {
 };
 
 // よく使う絞り込み。タグ・説明文への部分一致検索なので、データ側のタグ名と揃える。
-const quickQueries = ["StaRt向き", "3点バースト候補", "旅行", "筆記体", "プリズム"];
+const quickQueries = ["StaRt向き", "3点バースト候補", "ウェディング", "旅行", "マッチカット", "筆記体", "プリズム"];
 
 const mediaPriority: Record<ExternalMotionMediaType, number> = {
   GIF: 0,
