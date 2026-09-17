@@ -58,6 +58,9 @@ jobs:
       - name: Movie Coach registry contracts
         run: pnpm check:media-qa-policy && pnpm check:motion-zukan-media && pnpm check:movie-coach
 
+      - name: External motion atlas (映像Pinterest) contracts
+        run: pnpm check:external-motion-atlas
+
       - name: Wedding real-media preview review contracts
         run: node scripts/verify-wedding-real-media-preview-review-contracts.mjs
 

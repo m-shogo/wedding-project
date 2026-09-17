@@ -90,7 +90,7 @@ function sectionLabels(sections: string[]) {
     TRAVEL: "旅行パート",
     ENDING: "横浜〜END",
   };
-  const labels = sections.map((section) => map[section] ?? section.replaceAll("_", " "));
+  const labels = sections.map((section) => map[section] ?? section.replace(/_/g, " "));
   return Array.from(new Set(labels)).slice(0, 5);
 }
 
