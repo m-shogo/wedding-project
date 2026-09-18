@@ -123,6 +123,14 @@ if (!page.includes('from "../data/externalMotionAtlasRuntime"')) {
 for (const forbidden of ["visualMotionLibrary", "startMotionKit", "directorRecipeCatalog", "motionPreviewEvidence"]) {
   if (page.includes(forbidden)) errors.push(`MotionPinterest.tsx が内部カタログ ${forbidden} を参照している`);
 }
+// runtime の dedupe で黙って消える項目を残さない。データファイル側で重複を潰す。
+if (rawCount !== atlas.length) {
+  errors.push(
+    `データファイルに重複がある: raw=${rawCount} runtime=${atlas.length} (${rawCount - atlas.length}件がdedupeで落ちている)。` +
+      "同じ id / sourceUrl+titleOriginal / previewUrl の項目を残さない",
+  );
+}
+
 const app = read("src/App.tsx");
 if (!/path="movie-coach\/motion-pinterest" element=\{<MotionPinterest \/>\}/.test(app)) {
   errors.push("App.tsx の /movie-coach/motion-pinterest が MotionPinterest を描画していない");
