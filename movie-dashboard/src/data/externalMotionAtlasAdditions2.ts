@@ -189,16 +189,4 @@ export const externalMotionAtlasAdditions2: ExternalMotionAtlasItem[] = [
     difficulty: 2,
     tags: ["巨大文字", "タイポ", "サイズ差", "オープナー"],
   },
-  {
-    id: "image-text-friends-aboard-travel-blog-intro-behance",
-    genre: "IMAGE_TEXT",
-    titleJa: "写真・ランドマーク・太字を重ねた旅行ミックスメディア",
-    titleOriginal: "Friends Aboard — Travel Blog Intro",
-    mediaType: "VIDEO_PAGE",
-    sourceName: "Behance",
-    sourceUrl: "https://www.behance.net/gallery/234605105/Friends-Aboard-Travel-Blog-Intro",
-    descriptionJa: "写真切り抜き、ランドマーク、太字、3D地図、テクスチャを重ねて旅の高揚感を出す。旅行テーマOPの完成形に近い参考。",
-    difficulty: 3,
-    tags: ["旅行", "ミックスメディア", "写真＋文字", "3D地図", "コラージュ"],
-  },
 ];
