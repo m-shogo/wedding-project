@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Editページ操作図</title>
+  <desc id="desc">DaVinci Resolve編集画面下部のEditボタンを強調した簡略図</desc>
+  <rect width="1280" height="720" fill="#171a1f"/>
+  <rect x="38" y="40" width="1204" height="605" rx="18" fill="#252a31" stroke="#4b525b" stroke-width="2"/>
+  <rect x="60" y="65" width="430" height="230" rx="10" fill="#313842"/>
+  <rect x="510" y="65" width="700" height="360" rx="10" fill="#101317"/>
+  <rect x="60" y="315" width="1130" height="300" rx="10" fill="#20252b"/>
+  <line x1="60" y1="500" x2="1190" y2="500" stroke="#4c5560" stroke-width="2"/>
+  <line x1="430" y1="315" x2="430" y2="615" stroke="#4c5560" stroke-width="2"/>
+  <g font-family="sans-serif" font-size="17" fill="#aeb7c2" text-anchor="middle">
+    <text x="250" y="680">Media</text>
+    <text x="390" y="680">Cut</text>
+    <text x="525" y="680" fill="#ffffff" font-weight="700">Edit</text>
+    <text x="660" y="680">Fusion</text>
+    <text x="810" y="680">Color</text>
+    <text x="970" y="680">Fairlight</text>
+    <text x="1120" y="680">Deliver</text>
+  </g>
+  <rect x="474" y="650" width="102" height="46" rx="12" fill="#d94b3d" opacity="0.95"/>
+  <text x="525" y="680" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="800">Edit</text>
+  <path d="M535 570 L530 645" stroke="#ffd966" stroke-width="7" stroke-linecap="round"/>
+  <polygon points="516,628 531,653 545,627" fill="#ffd966"/>
+  <rect x="392" y="475" width="280" height="84" rx="14" fill="#fff7d6"/>
+  <text x="532" y="510" text-anchor="middle" fill="#1f2328" font-family="sans-serif" font-size="19" font-weight="700">画面下の「Edit」</text>
+  <text x="532" y="540" text-anchor="middle" fill="#4d5258" font-family="sans-serif" font-size="16">今はここだけ使います</text>
+  <text x="55" y="32" fill="#b6bdc6" font-family="sans-serif" font-size="14">※ 実画面を理解しやすくするための簡略操作図です。</text>
+</svg>

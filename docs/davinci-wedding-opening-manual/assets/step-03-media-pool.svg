@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Media Pool操作図</title>
+  <desc id="desc">DaVinci Resolve Edit画面左上のMedia Poolを強調した簡略図</desc>
+  <rect width="1280" height="720" fill="#171a1f"/>
+  <rect x="38" y="45" width="1204" height="620" rx="18" fill="#252a31" stroke="#4b525b" stroke-width="2"/>
+  <rect x="62" y="72" width="390" height="260" rx="12" fill="#313842" stroke="#d94b3d" stroke-width="6"/>
+  <text x="88" y="112" fill="#ffffff" font-family="sans-serif" font-size="25" font-weight="800">Media Pool</text>
+  <rect x="88" y="140" width="150" height="92" rx="10" fill="#444d58"/>
+  <rect x="255" y="140" width="150" height="92" rx="10" fill="#444d58"/>
+  <text x="163" y="260" text-anchor="middle" fill="#aeb7c2" font-family="sans-serif" font-size="15">素材</text>
+  <text x="330" y="260" text-anchor="middle" fill="#aeb7c2" font-family="sans-serif" font-size="15">素材</text>
+  <rect x="480" y="72" width="730" height="360" rx="12" fill="#101317"/>
+  <rect x="62" y="360" width="1148" height="275" rx="12" fill="#20252b"/>
+  <line x1="62" y1="520" x2="1210" y2="520" stroke="#4c5560" stroke-width="2"/>
+  <path d="M535 180 C500 165 470 160 445 160" fill="none" stroke="#ffd966" stroke-width="7" stroke-linecap="round"/>
+  <polygon points="458,145 430,160 458,176" fill="#ffd966"/>
+  <rect x="540" y="120" width="320" height="110" rx="14" fill="#fff7d6"/>
+  <text x="700" y="158" text-anchor="middle" fill="#1f2328" font-family="sans-serif" font-size="20" font-weight="800">左上が素材置き場</text>
+  <text x="700" y="190" text-anchor="middle" fill="#4d5258" font-family="sans-serif" font-size="17">音楽・写真・動画をここに入れる</text>
+  <text x="700" y="216" text-anchor="middle" fill="#4d5258" font-family="sans-serif" font-size="17">＝ Media Pool</text>
+  <text x="55" y="32" fill="#b6bdc6" font-family="sans-serif" font-size="14">※ 実画面を理解しやすくするための簡略操作図です。</text>
+</svg>
