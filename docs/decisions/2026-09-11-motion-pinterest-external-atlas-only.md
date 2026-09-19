@@ -271,3 +271,13 @@ Favorite/Maybe/Rejectだけでは「合いそうか」が分からず選びに�
 ファイル名は最初`externalMotionAtlasStartFit.ts`にしていたが、`verify-external-motion-atlas-contracts.mjs`の`externalMotionAtlas*.ts`グロブに誤って一致し、コンタクトチェックが`startExtendedRhythmMap`を解決できず落ちた。`startExternalMotionFit.ts`へ改名して解消した。
 
 この機能はAI_SUGGESTEDであり、Favorite/Maybe/Rejectという人間の最終決定とは別物。`startSectionRecipeMap.ts`側の正式なsection⇄recipe割当も置き換えない。
+
+## 2026-09-19 update — 収集の追加試行と、GIPHY枯渇の再確認（Additions27）
+
+「収集も」との指示を受け、3点バースト系（`triple-hit` `impact-frame` `three-hit-combo` `speed-lines-burst` `stamp-effect` `punch-impact` `burst-reveal` `three-flash` `double-punch` `rapid-fire-flash`）の10語でGIPHY候補234件を追加収集した。
+
+目視確認のため12件をコマ送りで見たところ、実在の人物・スポーツ選手・TV番組・ゲームキャラクターの切り抜みがほとんどで、**抽象的な打点素材として使えたのは1件のみ**（黄色い稲妻が連なるエネルギー表現）。これは2026-09-18時点で既に記録していた「GIPHY検索はテレビ番組の切り抜きが増えて候補が尽きてきた」という所見を、3点バーストというより狭いテーマでも再確認する結果になった。
+
+結果: 606 → 607件。
+
+**この時点でのGIPHY/Mixkitからの新規収集は、実務上ほぼ限界に達している。** 追加収集より、既に登録済みの607件からFavorite/Maybe/RejectとStaRtセクション適合（♪バッジ）を使って実際にOpeningへ使う演出を選ぶ作業のほうが、今後の時間対効果が高い。
