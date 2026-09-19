@@ -6,6 +6,20 @@ import type {
   ExternalMotionGenre,
   ExternalMotionMediaType,
 } from "../data/externalMotionAtlas";
+import {
+  EXTERNAL_MOTION_ATLAS_HUMAN_REVIEW_STORAGE_KEY,
+  readHumanReviewDecisions,
+  writeHumanReviewDecisions,
+  type HumanReviewDecision,
+} from "../data/startHumanReview";
+
+type ReviewFilter = HumanReviewDecision | "unreviewed" | "ALL";
+
+const reviewLabel: Record<HumanReviewDecision, string> = {
+  favorite: "☆ Favorite",
+  maybe: "? Maybe",
+  reject: "✕ Reject",
+};
 
 type Genre = "ALL" | ExternalMotionGenre;
 type Media = "ALL" | ExternalMotionMediaType;
@@ -302,12 +316,16 @@ function AtlasCard({
   autoplayOnScroll,
   playLabel,
   onOpen,
+  decision,
+  onDecide,
 }: {
   item: ExternalMotionAtlasItem;
   hoverCapable: boolean;
   autoplayOnScroll: boolean;
   playLabel: string;
   onOpen: () => void;
+  decision: HumanReviewDecision | undefined;
+  onDecide: (decision: HumanReviewDecision) => void;
 }) {
   const previewRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
@@ -327,6 +345,17 @@ function AtlasCard({
           <span className="rounded-full bg-white/95 px-2 py-1 text-[9px] font-black text-[#101820]">{genreLabel(item.genre)}</span>
           <span className="rounded-full bg-black/70 px-2 py-1 text-[9px] font-bold text-white">{mediaLabel(item.mediaType)}</span>
         </div>
+        {decision && (
+          <div className="pointer-events-none absolute right-2 top-2">
+            <span
+              className={`rounded-full px-2 py-1 text-[9px] font-black text-white ${
+                decision === "favorite" ? "bg-emerald-600/95" : decision === "maybe" ? "bg-amber-600/95" : "bg-red-600/90"
+              }`}
+            >
+              {reviewLabel[decision]}
+            </span>
+          </div>
+        )}
         <button
           type="button"
           onClick={onOpen}
@@ -360,6 +389,32 @@ function AtlasCard({
             元URL ↗
           </a>
         </div>
+        <div className="mt-2 flex gap-1.5 border-t border-sand-100 pt-2 dark:border-navy-700">
+          <button
+            type="button"
+            onClick={() => onDecide("favorite")}
+            aria-pressed={decision === "favorite"}
+            className={`flex-1 rounded-md border py-1 text-[9px] font-bold ${decision === "favorite" ? "border-emerald-500 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200" : "border-sand-200 text-navy-400 dark:border-navy-700"}`}
+          >
+            ☆
+          </button>
+          <button
+            type="button"
+            onClick={() => onDecide("maybe")}
+            aria-pressed={decision === "maybe"}
+            className={`flex-1 rounded-md border py-1 text-[9px] font-bold ${decision === "maybe" ? "border-amber-500 bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200" : "border-sand-200 text-navy-400 dark:border-navy-700"}`}
+          >
+            ?
+          </button>
+          <button
+            type="button"
+            onClick={() => onDecide("reject")}
+            aria-pressed={decision === "reject"}
+            className={`flex-1 rounded-md border py-1 text-[9px] font-bold ${decision === "reject" ? "border-red-500 bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-200" : "border-sand-200 text-navy-400 dark:border-navy-700"}`}
+          >
+            ✕
+          </button>
+        </div>
       </div>
     </article>
   );
@@ -371,6 +426,20 @@ export function MotionPinterest() {
   const [query, setQuery] = useState("");
   const [movingOnly, setMovingOnly] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("ALL");
+  const [decisions, setDecisions] = useState<Record<string, HumanReviewDecision>>(() =>
+    readHumanReviewDecisions(EXTERNAL_MOTION_ATLAS_HUMAN_REVIEW_STORAGE_KEY),
+  );
+
+  function decide(itemId: string, decision: HumanReviewDecision) {
+    setDecisions((current) => {
+      const next = { ...current };
+      if (next[itemId] === decision) delete next[itemId];
+      else next[itemId] = decision;
+      writeHumanReviewDecisions(next, EXTERNAL_MOTION_ATLAS_HUMAN_REVIEW_STORAGE_KEY);
+      return next;
+    });
+  }
 
   const hoverCapable = useMediaQuery("(hover: hover) and (pointer: fine)");
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
@@ -398,6 +467,9 @@ export function MotionPinterest() {
         if (genre !== "ALL" && item.genre !== genre) return false;
         if (media !== "ALL" && item.mediaType !== media) return false;
         if (movingOnly && !movesInList(item)) return false;
+        if (reviewFilter !== "ALL") {
+          if (reviewFilter === "unreviewed" ? decisions[item.id] : decisions[item.id] !== reviewFilter) return false;
+        }
         if (!q) return true;
         return [item.titleJa, item.titleOriginal, item.sourceName, item.descriptionJa, ...item.tags]
           .join(" ")
@@ -409,16 +481,22 @@ export function MotionPinterest() {
           previewPriority[resolvePreview(a).kind] - previewPriority[resolvePreview(b).kind] ||
           mediaPriority[a.mediaType] - mediaPriority[b.mediaType],
       );
-  }, [genre, media, query, movingOnly]);
+  }, [genre, media, query, movingOnly, reviewFilter, decisions]);
 
   const selected = selectedId ? externalMotionAtlas.find((item) => item.id === selectedId) ?? null : null;
-  const isFiltered = genre !== "ALL" || media !== "ALL" || query !== "" || movingOnly;
+  const isFiltered = genre !== "ALL" || media !== "ALL" || query !== "" || movingOnly || reviewFilter !== "ALL";
   const resetFilters = () => {
     setGenre("ALL");
     setMedia("ALL");
     setQuery("");
     setMovingOnly(false);
+    setReviewFilter("ALL");
   };
+  const decisionCounts = useMemo(() => {
+    const counts: Record<HumanReviewDecision, number> = { favorite: 0, maybe: 0, reject: 0 };
+    for (const value of Object.values(decisions)) counts[value] += 1;
+    return counts;
+  }, [decisions]);
 
   useEffect(() => {
     if (!selected) return;
@@ -498,9 +576,26 @@ export function MotionPinterest() {
             );
           })}
         </div>
+        <div className="mt-1.5 flex gap-1.5 overflow-x-auto pb-1">
+          {(["ALL", "favorite", "maybe", "reject", "unreviewed"] as ReviewFilter[]).map((value) => {
+            const label = value === "ALL" ? "全部" : value === "unreviewed" ? "未選定" : reviewLabel[value];
+            const count = value === "ALL" ? externalMotionAtlas.length : value === "unreviewed" ? externalMotionAtlas.length - Object.keys(decisions).length : decisionCounts[value];
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setReviewFilter(value)}
+                aria-pressed={reviewFilter === value}
+                className={`shrink-0 rounded-full border px-3 py-1.5 text-[10px] font-bold ${reviewFilter === value ? "border-emerald-700 bg-emerald-700 text-white" : "border-emerald-300 bg-white text-emerald-700 dark:border-emerald-500/60 dark:bg-navy-900 dark:text-emerald-300"}`}
+              >
+                {label} {count}
+              </button>
+            );
+          })}
+        </div>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[10px] text-navy-400">
           <span>
-            表示 {filtered.length} / 外部実例 {externalMotionAtlas.length}件 · 一覧で動く {movingCount}件 · 自作モーション 0件
+            表示 {filtered.length} / 外部実例 {externalMotionAtlas.length}件 · 一覧で動く {movingCount}件 · 選定済み {Object.keys(decisions).length}件
           </span>
           {isFiltered ? (
             <button type="button" onClick={resetFilters} className="shrink-0 font-bold text-sky-700 dark:text-sky-300">
@@ -530,6 +625,8 @@ export function MotionPinterest() {
               autoplayOnScroll={autoplayOnScroll}
               playLabel={playLabel}
               onOpen={() => setSelectedId(item.id)}
+              decision={decisions[item.id]}
+              onDecide={(decision) => decide(item.id, decision)}
             />
           ))}
         </section>
@@ -560,7 +657,36 @@ export function MotionPinterest() {
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {selected.tags.map((tag) => <span key={tag} className="rounded-full border border-sand-200 px-2 py-1 text-[10px] text-navy-500 dark:border-navy-700 dark:text-navy-300">#{tag}</span>)}
                 </div>
-                <a href={selected.sourceUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-sky-700 px-4 py-3 text-sm font-black text-white">元の実例を開く ↗</a>
+                <div className="mt-5 border-t border-sand-200 pt-4 dark:border-navy-700">
+                  <p className="text-[10px] font-bold text-navy-500 dark:text-navy-300">この実例をStaRtの候補として選ぶ（このブラウザだけに保存。AIが勝手にfavorite/採用へ昇格させない）</p>
+                  <div className="mt-2 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => decide(selected.id, "favorite")}
+                      aria-pressed={decisions[selected.id] === "favorite"}
+                      className={`flex-1 rounded-lg border px-3 py-2 text-xs font-bold ${decisions[selected.id] === "favorite" ? "border-emerald-500 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200" : "border-emerald-300 text-emerald-700 dark:border-emerald-600 dark:text-emerald-300"}`}
+                    >
+                      ☆ Favorite
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => decide(selected.id, "maybe")}
+                      aria-pressed={decisions[selected.id] === "maybe"}
+                      className={`flex-1 rounded-lg border px-3 py-2 text-xs font-bold ${decisions[selected.id] === "maybe" ? "border-amber-500 bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200" : "border-amber-300 text-amber-700 dark:border-amber-600 dark:text-amber-300"}`}
+                    >
+                      ? Maybe
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => decide(selected.id, "reject")}
+                      aria-pressed={decisions[selected.id] === "reject"}
+                      className={`flex-1 rounded-lg border px-3 py-2 text-xs font-bold ${decisions[selected.id] === "reject" ? "border-red-500 bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-200" : "border-red-300 text-red-700 dark:border-red-600 dark:text-red-300"}`}
+                    >
+                      ✕ Reject
+                    </button>
+                  </div>
+                </div>
+                <a href={selected.sourceUrl} target="_blank" rel="noreferrer" className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-sky-700 px-4 py-3 text-sm font-black text-white">元の実例を開く ↗</a>
                 <p className="mt-2 text-[9px] leading-4 text-navy-400">YouTube / Vimeo / 公式プレビューMP4は図鑑内で再生。埋め込みを禁止している外部サイトは元ページで再生します。</p>
               </div>
             </div>
