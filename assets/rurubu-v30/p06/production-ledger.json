@@ -9,6 +9,13 @@
     "frameId": "3535:17",
     "updateInPlace": true
   },
+  "googleDrive": {
+    "root": "https://drive.google.com/drive/folders/1_WTIl18wz8oB8IhPaOKPJv3A4H00KLr8",
+    "rgbaFolder": "https://drive.google.com/drive/folders/1auIHRPQaKN3RjWSTKYDupmmVo2GdmA5M",
+    "photoFolder": "https://drive.google.com/drive/folders/1c61yn0HFJUbWUC83BXhIGEDgnlC4n4q-",
+    "qaFolder": "https://drive.google.com/drive/folders/1BPp9TNc7-ociTO2bcNxMuYDybgSybZOy",
+    "uploadState": "VERIFIED_8_OF_8"
+  },
   "canonicalOwnerSource": {
     "name": "P06_OWNER_VISUAL_MASTER_HQ_UNCOMPRESSED_20260906.png",
     "dimensions": [1055,1491],

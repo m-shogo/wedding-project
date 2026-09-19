@@ -36,4 +36,12 @@ Fresh review images and generated source assets are stored under:
 
 `assets/rurubu-v30/p06/production/full-build-20260919/`
 
+## Google Drive
+
+- [P06 production RGBA](https://drive.google.com/drive/folders/1auIHRPQaKN3RjWSTKYDupmmVo2GdmA5M)
+- [P06 replaceable photo sources](https://drive.google.com/drive/folders/1c61yn0HFJUbWUC83BXhIGEDgnlC4n4q-)
+- [P06 QA export and production record](https://drive.google.com/drive/folders/1BPp9TNc7-ociTO2bcNxMuYDybgSybZOy)
+
+Drive readback verified all eight uploaded files.
+
 `PRINT_READY` remains `false` until the normal final print proof/export pass.
