@@ -2,7 +2,7 @@
 
 Date: 2026-09-19  
 Scope: existing P06 Figma frame `3535:17` only  
-Result: `FIGMA_DESIGN_COMPLETE = YES`
+Result: `FIGMA_DESIGN_COMPLETE = YES`, `PRINT_READY = YES`
 
 ## Assembly
 
@@ -31,6 +31,9 @@ Result: `FIGMA_DESIGN_COMPLETE = YES`
 - `CROSS_PAGE_STYLE_FAMILY_PASS = PASS` against fresh P02/P03/P04/P05 screenshots
 - `DUPLICATE_FRAME_CHECK = PASS`
 - `P01/P02/P03/P04/P05/P07/P08_MUTATION_CHECK = PASS` (P06-only write scope)
+- `PRINT_EXPORT_PASS = PASS` (`2236 × 3176`, 4× PNG)
+- `TEXT_BOUNDS_PASS = PASS` (33/33 visible text layers; no missing fonts or out-of-frame text)
+- `PHOTO_SOURCE_RESOLUTION_PASS = PASS` (4/4 photo sources are `1536 × 1024`)
 
 Fresh review images and generated source assets are stored under:
 
@@ -41,7 +44,8 @@ Fresh review images and generated source assets are stored under:
 - [P06 production RGBA](https://drive.google.com/drive/folders/1auIHRPQaKN3RjWSTKYDupmmVo2GdmA5M)
 - [P06 replaceable photo sources](https://drive.google.com/drive/folders/1c61yn0HFJUbWUC83BXhIGEDgnlC4n4q-)
 - [P06 QA export and production record](https://drive.google.com/drive/folders/1BPp9TNc7-ociTO2bcNxMuYDybgSybZOy)
+- [P06 4× print proof](https://drive.google.com/file/d/1JNgNdmSKiK-gnkIhhNfMMTT-h2sz1iT-/view?usp=drivesdk)
 
-Drive readback verified all eight uploaded files.
+Drive readback verified all nine uploaded files.
 
-`PRINT_READY` remains `false` until the normal final print proof/export pass.
+The Figma frame keeps a reusable `4x PNG` export setting for repeatable final output.

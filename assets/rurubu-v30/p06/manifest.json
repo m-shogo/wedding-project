@@ -252,7 +252,14 @@
     "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_COPY_QA_PENDING": false,
     "FINAL_PHOTO_QA_PENDING": false,
-    "PRINT_READY": false,
+    "PRINT_READY": true,
+    "printProof": {
+      "figmaFrameId": "3535:17",
+      "exportScale": 4,
+      "pixelDimensions": [2236, 3176],
+      "sha256": "c56cd4c00160e060115e4fdcc31df0a689e68dcae2ed6e8508fa42987e27f321",
+      "driveUrl": "https://drive.google.com/file/d/1JNgNdmSKiK-gnkIhhNfMMTT-h2sz1iT-/view?usp=drivesdk"
+    },
     "currentBlocker": null
   }
 }

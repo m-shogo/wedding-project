@@ -14,7 +14,8 @@
     "rgbaFolder": "https://drive.google.com/drive/folders/1auIHRPQaKN3RjWSTKYDupmmVo2GdmA5M",
     "photoFolder": "https://drive.google.com/drive/folders/1c61yn0HFJUbWUC83BXhIGEDgnlC4n4q-",
     "qaFolder": "https://drive.google.com/drive/folders/1BPp9TNc7-ociTO2bcNxMuYDybgSybZOy",
-    "uploadState": "VERIFIED_8_OF_8"
+    "printProof": "https://drive.google.com/file/d/1JNgNdmSKiK-gnkIhhNfMMTT-h2sz1iT-/view?usp=drivesdk",
+    "uploadState": "VERIFIED_9_OF_9"
   },
   "canonicalOwnerSource": {
     "name": "P06_OWNER_VISUAL_MASTER_HQ_UNCOMPRESSED_20260906.png",
@@ -49,6 +50,6 @@
   "completion": {
     "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_PHOTO_QA_PENDING": false,
-    "PRINT_READY": false
+    "PRINT_READY": true
   }
 }
