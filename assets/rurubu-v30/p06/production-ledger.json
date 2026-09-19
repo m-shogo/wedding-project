@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P06",
+  "date": "2026-09-19",
+  "status": "FIGMA_DESIGN_COMPLETE",
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "frameId": "3535:17",
+    "updateInPlace": true
+  },
+  "googleDrive": {
+    "root": "https://drive.google.com/drive/folders/1_WTIl18wz8oB8IhPaOKPJv3A4H00KLr8",
+    "rgbaFolder": "https://drive.google.com/drive/folders/1auIHRPQaKN3RjWSTKYDupmmVo2GdmA5M",
+    "photoFolder": "https://drive.google.com/drive/folders/1c61yn0HFJUbWUC83BXhIGEDgnlC4n4q-",
+    "qaFolder": "https://drive.google.com/drive/folders/1BPp9TNc7-ociTO2bcNxMuYDybgSybZOy",
+    "printProof": "https://drive.google.com/file/d/1JNgNdmSKiK-gnkIhhNfMMTT-h2sz1iT-/view?usp=drivesdk",
+    "uploadState": "VERIFIED_9_OF_9"
+  },
+  "canonicalOwnerSource": {
+    "name": "P06_OWNER_VISUAL_MASTER_HQ_UNCOMPRESSED_20260906.png",
+    "dimensions": [1055,1491],
+    "format": "PNG",
+    "bytes": 3682318,
+    "sha256": "13bed2e07d66803d67cd6a117a57bc67dbdd9677b9ba54f4b9dd634910747103"
+  },
+  "stateModel": ["PLANNED","REUSE_CHECKED","PREPARED_FROM_OWNER_VM","ART_QUALITY_PASS","ALPHA_MATERIAL_PASS","DRIVE_SAVED","FIGMA_PLACED","SCREENSHOT_QA_PASS","ACCEPTED"],
+  "jobs": [
+    {"id":"P06_HEADER_ECOLOGY","role":"representative ecology / identity anchor","state":"ACCEPTED","sourceMode":"GENERATED_TRUE_ALPHA_PLUS_NATIVE_EDITABLE","expectedPath":"assets/rurubu-v30/p06/production/full-build-20260919/decor/P06_DECOR_HEADER.png","figmaNodeId":"4830:56","gate":"PASS"},
+    {"id":"P06_INTRO_BUBBLE_ECOLOGY","role":"top-right intro ecology","state":"ACCEPTED","sourceMode":"NATIVE_EDITABLE","figmaNodeId":"4830:65"},
+    {"id":"P06_Q5_EDITORIAL_ECOLOGY","role":"Q5 authored vessel","state":"ACCEPTED","sourceMode":"NATIVE_EDITABLE","figmaNodeId":"4831:56"},
+    {"id":"P06_MAIN_CAPTION_ECOLOGY","role":"main photo caption","state":"ACCEPTED","sourceMode":"NATIVE_EDITABLE","figmaNodeId":"4832:57"},
+    {"id":"P06_FOOD_CAPTION_ECOLOGY","role":"food caption","state":"ACCEPTED","sourceMode":"NATIVE_EDITABLE","figmaNodeId":"4832:59"},
+    {"id":"P06_PETS_CAPTION_ECOLOGY","role":"pets caption","state":"ACCEPTED","sourceMode":"NATIVE_EDITABLE","figmaNodeId":"4832:61"},
+    {"id":"P06_TRAVEL_CAPTION_ECOLOGY","role":"travel caption","state":"ACCEPTED","sourceMode":"NATIVE_EDITABLE","figmaNodeId":"4832:65"},
+    {"id":"P06_Q6_BOTTOM_ECOLOGY","role":"bottom closure / Q6","state":"ACCEPTED","sourceMode":"GENERATED_TRUE_ALPHA_PLUS_NATIVE_EDITABLE","expectedPath":"assets/rurubu-v30/p06/production/full-build-20260919/decor/P06_DECOR_BOTTOM.png","figmaNodeId":"4832:56"},
+    {"id":"P06_PHOTO_MAIN","role":"replaceable photo","state":"ACCEPTED","maskNodeId":"4000:52","imageNodeId":"4000:53","imageHash":"4331ceaaafd93c1e389cc870c444b54c3afb35a6","preserve":true},
+    {"id":"P06_PHOTO_FOOD","role":"replaceable photo","state":"ACCEPTED","maskNodeId":"4000:55","imageNodeId":"4000:56","imageHash":"5135ce585dc638e6f2c1f2bb80fc174e02169375","preserve":true},
+    {"id":"P06_PHOTO_PETS","role":"replaceable photo","state":"ACCEPTED","maskNodeId":"4000:58","imageNodeId":"4000:59","imageHash":"5b833086bc690412485fcfcaaeed875a89ef0147","preserve":true},
+    {"id":"P06_PHOTO_TRAVEL","role":"replaceable photo","state":"ACCEPTED","maskNodeId":"4000:61","imageNodeId":"4000:62","imageHash":"d2d57b5082958fc2b264fbd0751dd2f527138378","preserve":true},
+    {"id":"P06_PAGE_BADGE","role":"shared publication component","state":"REUSE_CHECKED","nodeId":"4000:44","preserve":true}
+  ],
+  "transport": {
+    "officialFigmaUpload": "PASS",
+    "exactLosslessSourceRequired": false,
+    "proxyFallbackForbidden": true,
+    "fullPageTargetNode": "4249:56",
+    "note": "Owner-requested generated/editable rebuild uploaded through the official Figma asset path; the Visual Master was used as composition authority, not as a photo proxy."
+  },
+  "completion": {
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_PHOTO_QA_PENDING": false,
+    "PRINT_READY": true
+  }
+}

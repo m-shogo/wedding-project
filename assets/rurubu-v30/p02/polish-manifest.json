@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 4,
+  "project": "Rurubu WEDDING V30",
+  "page": "P02",
+  "status": "P02_DESIGN_LOCKED_AFTER_FINAL_DISPLAY_AND_SHARED_COMPONENT_REWORK",
+  "inherits": [
+    "assets/rurubu-v30/manifest.json",
+    "assets/rurubu-v30/visual-polish-manifest.json",
+    "assets/rurubu-v30/p02/manifest.json"
+  ],
+  "purpose": "Current P02 authority after final display-role, shared PAGE badge and page-specific fingerprint correction.",
+  "authorityPrecedence": "This page-polish manifest overrides conflicting execution/render-mode assumptions in the older P02 main manifest. Root canonical facts remain inherited.",
+  "currentFigma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "currentNode": "3535:9",
+    "frameName": "V30 P02 / PROFILE / CURRENT"
+  },
+  "visualMaster": {
+    "path": "assets/rurubu-v30/p02/P02.png",
+    "status": "DIRECT_REREVIEW_COMPLETE",
+    "threeSecondRead": ["ふたりのプロフィール header/title", "SHOGO/SHIORI portrait pair", "blue/pink profile sheets", "Q1/Q2 lower modules", "PAGE 02 + travel/tropical accents"],
+    "asymmetry": "SHOGO left/blue and SHIORI right/pink form a semantic pair but are not mechanically mirrored. Q1 owns one inset couple photo; Q2 owns none."
+  },
+  "assetRoleClassification": {
+    "status": "OWNER_CORRECTED_AND_LIVE_VERIFIED_2026_09_03",
+    "hardRule": "Do not decide image generation from visual prominence alone. Follow Root assetRoleClassificationPolicy before generation or review.",
+    "NATIVE_TEXT": [
+      "profile row labels and variable profile values",
+      "Q1/Q2 question and answer copy while not copy-locked"
+    ],
+    "GENERATED_DISPLAY_ASSET": [
+      "P02_HEADER_TITLE / ふたりのプロフィール",
+      "P02_HEADER_RIBBON / 私たちのこと、少しだけ紹介します♪",
+      "P02_SHOGO_NAME_LABEL / SHOGO",
+      "P02_SHIORI_NAME_LABEL / SHIORI"
+    ],
+    "SHARED_PUBLICATION_COMPONENT": [
+      "P02_PAGE_BADGE / instance 3773:9 of PAGE_BADGE_SHARED_MASTER 3772:2"
+    ],
+    "GENERATED_OR_PREPARED_SHELLS": [
+      "warm paper/background field where raster treatment is useful",
+      "profile paper shells/backings where authored tactile art materially improves fidelity",
+      "Q1/Q2 paper shells/backings where authored tactile art materially improves fidelity",
+      "profile/Q1/Q2 paper shells that remain independent from variable native copy"
+    ],
+    "PHOTO": [
+      "P02_PHOTO_SHOGO",
+      "P02_PHOTO_SHIORI",
+      "P02_Q1_INSET_COUPLE_PHOTO"
+    ],
+    "PAGE_SPECIFIC_ORNAMENT": [
+      "P02_Q2_PLANE_AND_ROUTE",
+      "P02_TOP_AIRPLANE_ROUTE",
+      "P02_Q2_SUITCASE",
+      "P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER",
+      "P02_TOP_LEFT_TROPICAL_CLUSTER",
+      "other local hearts/flowers/routes/icons whose overlap matters"
+    ],
+    "hardRejects": [
+      "leaving the four owner-authorized high-saliency display roles as generic native reconstruction",
+      "treating PAGE 02 as an independent page-specific generated badge instead of a shared common component family",
+      "bundling Q2 plane/route/suitcase into the Q2 shell merely for convenience"
+    ]
+  },
+  "copySafety": {
+    "lockedFacts": ["Shogo", "Shiori", "2026.10.24", "PAGE 02 page number"],
+    "generatedDisplayCopyLocked": ["ふたりのプロフィール", "私たちのこと、少しだけ紹介します♪", "SHOGO", "SHIORI"],
+    "referenceOrTbd": ["Japanese name readings", "personal profile values", "Q1 question until owner copy-lock", "Q1 answer", "Q2 question until owner copy-lock", "Q2 answer"],
+    "hardRule": "Unapproved copy may remain visible only as separately controllable native REFERENCE_ONLY/TBD text. It must not be factized or baked into generated art."
+  },
+  "photoProxyPolicy": {
+    "status": "PASS_PRESERVED",
+    "hardRule": "P02.png and page screenshots are comparison references only, never photo-fill sources.",
+    "roles": {
+      "P02_PHOTO_SHOGO": "clean standalone one-person SHOGO-role portrait",
+      "P02_PHOTO_SHIORI": "clean standalone one-person SHIORI-role portrait",
+      "P02_Q1_INSET_COUPLE_PHOTO": "clean standalone two-person couple photo"
+    },
+    "q1InsetPhotoSlotCount": 1,
+    "q2PhotoSlotCount": 0
+  },
+  "sharedPageBadgePolicy": {
+    "status": "PASS_LIVE_MASTER_3772_2",
+    "componentFamily": "P01-P08 PAGE badge family",
+    "currentValue": "02",
+    "rule": "P01 instance 3773:2 and P02 instance 3773:9 share master 3772:2; only the Page Number text property differs."
+  },
+  "ornamentQualityDebtLatest": {
+    "status": "CLOSED / PASS_AFTER_CALIBRATED_FAMILY_REBUILD",
+    "reason": "Owner review found generic/weak icon quality and obvious reuse/carry-over feel. Previous REQUALIFIED_CARRYOVER status was too permissive and is revoked for the affected ornaments.",
+    "targets": [
+      {
+        "id": "P02_Q2_PLANE_AND_ROUTE",
+        "status": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+        "problem": "generic/simple airplane-route icon and reuse feel",
+        "requirement": "replace with a distinct Q2-specific editorial travel ornament; do not reuse the top airplane-route geometry"
+      },
+      {
+        "id": "P02_TOP_AIRPLANE_ROUTE",
+        "status": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+        "problem": "generic/simple airplane-route icon and reuse feel",
+        "requirement": "top-header route must be a separate authored composition supporting the title ecology"
+      },
+      {
+        "id": "P02_Q2_SUITCASE",
+        "status": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+        "problem": "stock/clipart-like suitcase treatment",
+        "requirement": "replace with a more editorial/travel-magazine treatment matching current page line/detail quality"
+      },
+      {
+        "id": "P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER",
+        "status": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+        "problem": "carry-over/reuse feel and insufficient current-page specificity",
+        "requirement": "redesign as a P02 top-right role-specific cluster; do not pass by moving/resizing the old asset"
+      },
+      {
+        "id": "P02_TOP_LEFT_TROPICAL_CLUSTER / REQUALIFIED_CARRYOVER",
+        "status": "PASS_AFTER_TARGETED_ORNAMENT_ART_DIRECTION_REBUILD",
+        "problem": "carry-over/reuse feel and insufficient current-page specificity",
+        "requirement": "redesign as a P02 top-left role-specific cluster; coordinate with top-right but do not mirror or duplicate it"
+      }
+    ],
+    "qualityBar": [
+      "authored Japanese travel-magazine/editorial ornament, not generic stock icon",
+      "distinct local roles with one coherent family",
+      "no same/near-identical prominent plane/route/cluster repeated within the page",
+      "line weight, color, detail and silhouette must match title/photo/paper-module quality",
+      "ornaments support composition and narrative rather than merely fill empty space"
+    ],
+    "doNotTouch": [
+      "P02 overall composition",
+      "SHOGO/SHIORI portrait/photo slots",
+      "profile structure",
+      "Q1 photo count and Q2 no-photo asymmetry",
+      "native/title/copy classification",
+      "shared PAGE 02 component behavior",
+      "clean proxies",
+      "paper alpha",
+      "background-adjacent border",
+      "P01 or P03-P08"
+    ]
+  },
+  "acceptedBaselineDoNotRegress": {
+    "SHOGO_left_blue": true,
+    "SHIORI_right_pink": true,
+    "nonMirroredPair": true,
+    "q1InsetPhotoOnly": true,
+    "cleanStandaloneProxies": true,
+    "opaquePaperInteriors": true,
+    "borderBackgroundAdjacent": true,
+    "copySafety": true,
+    "hiddenObsoleteLayerCount": 0,
+    "duplicateSameJobLiveLayerCount": 0
+  },
+  "executionQa": [
+    "verify role classification first: native/common/ornament/generated/photo",
+    "verify PAGE 02 matches the shared P01-P08 page-badge family",
+    "verify the five reopened ornaments no longer look generic, stock, copied or near-duplicated",
+    "verify top and Q2 airplane/route ornaments are distinct compositions",
+    "verify left/right top clusters are coordinated but not mirrored/reused",
+    "verify Q1 has one inset photo and Q2 has none",
+    "verify unapproved copy remains native and separately controllable",
+    "run one full-page Visual Master/current-quality comparison after the targeted ornament patch"
+  ],
+  "currentAcceptanceState": {
+    "FIGMA_STRUCTURE_READY": "PASS_PRESERVED",
+    "CLEAN_PROXY_PASS": "PASS_PRESERVED",
+    "ALPHA_INTEGRITY_PASS": "PASS_PRESERVED",
+    "COPY_SAFETY_PASS": "PASS_PRESERVED",
+    "BORDER_Z_ORDER_PASS": "PASS_PRESERVED",
+    "ASSET_ROLE_CLASSIFICATION_PASS": "PASS_AFTER_OWNER_CORRECTION",
+    "DISPLAY_ROLE_CLASSIFICATION_PASS": "PASS",
+    "LIVE_ROLE_IMPLEMENTATION_PASS": "PASS",
+    "DISPLAY_ART_QUALITY_PASS": "PASS",
+    "SHARED_PUBLICATION_COMPONENT_PASS": "PASS_MASTER_3772_2",
+    "PAGE_SPECIFIC_ASSET_FINGERPRINT_PASS": "PASS",
+    "RURUBU_EDITORIAL_DNA_PASS": "PASS",
+    "V30_ART_DIRECTION_PASS": "PASS",
+    "PAGE_ROLE_FIT_PASS": "PASS",
+    "ORNAMENT_FAMILY_COHERENCE_PASS": "PASS",
+    "ORNAMENT_OBJECT_QUALITY_PASS": "PASS",
+    "ORNAMENT_ORIGINALITY_PASS": "PASS",
+    "REUSE_INTENT_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "VISUAL_CARRYOVER_PASS": "PASS_AFTER_P02_SPECIFIC_BOTTOM_LEFT_REPLACEMENT",
+    "REFERENCE_DELTA_PASS": "PASS_AFTER_FINAL_INTEGRATED_REVIEW",
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  },
+  "previousProductionEvidence": {
+    "firstProductionCommit": "021d1565ca558ab66b7a7f19c2b7256928c47963",
+    "productionManifest": "assets/rurubu-v30/p02/production/manifest.json",
+    "note": "Structural/photo/copy/alpha work from the first production remains accepted. This evidence does not grandfather the reopened ornament-quality debt."
+  }
+}

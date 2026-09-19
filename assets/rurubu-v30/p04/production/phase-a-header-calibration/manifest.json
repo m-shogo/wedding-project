@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P04",
+  "phase": "PHASE_A_HEADER_CALIBRATION_ONLY",
+  "status": "PASS_STOPPED_BEFORE_PHASE_B",
+  "assetId": "P04_HEADER_ECOLOGY_V30_ALIGNED",
+  "matte": {
+    "nominalColor": "#6C00A8",
+    "reason": "Extraction-only violet is absent from the approved hot-pink, blue, yellow, green, cyan, white and navy artwork palette.",
+    "sourcePath": "assets/rurubu-v30/p04/production/phase-a-header-calibration/P04_HEADER_ECOLOGY_V30_ALIGNED_SOURCE_MATTE.png",
+    "sourceSha256": "545ba06dec60d2a30f57db9bf8d8d5e06843f2d4c05283cd29863da891eb7cf7"
+  },
+  "productionRgba": {
+    "path": "assets/rurubu-v30/p04/production/phase-a-header-calibration/P04_HEADER_ECOLOGY_V30_ALIGNED.png",
+    "sha256": "2dee5af97936dafea0f2b306151f8c80435958aa009f19a3646dbe4a7e1388b4",
+    "dimensions": [1921, 766],
+    "mode": "RGBA",
+    "alpha": {
+      "min": 0,
+      "max": 255,
+      "uniqueCount": 256,
+      "transparentPixels": 537439,
+      "partialPixels": 14164,
+      "opaquePixels": 919883,
+      "cornerValues": [0, 0, 0, 0]
+    },
+    "edgeTreatment": "Cubic 2D matte-field fit, smoothstep alpha transition and inverse matte-compositing RGB decontamination on partial-alpha pixels."
+  },
+  "gates": {
+    "ART_QUALITY_PASS": "PASS",
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS",
+    "ALPHA_INTERIOR_OPACITY_PASS": "PASS",
+    "EDGE_ALPHA_QUALITY_PASS": "PASS",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": "PASS"
+  },
+  "qa": {
+    "lightGrayDarkComposite": "assets/rurubu-v30/p04/production/phase-a-header-calibration/qa/composite-contact-sheet.jpg",
+    "alphaMask": "assets/rurubu-v30/p04/production/phase-a-header-calibration/qa/alpha-mask.png",
+    "a5PlacementPreview": "assets/rurubu-v30/p04/production/phase-a-header-calibration/qa/a5-placement-preview.png",
+    "freshScreenshots": {
+      "P01": "assets/rurubu-v30/p04/production/phase-a-header-calibration/qa/fresh-p01.png",
+      "P02": "assets/rurubu-v30/p04/production/phase-a-header-calibration/qa/fresh-p02.png",
+      "P03": "assets/rurubu-v30/p04/production/phase-a-header-calibration/qa/fresh-p03.png",
+      "P04": "assets/rurubu-v30/p04/production/phase-a-header-calibration/qa/fresh-p04.png"
+    },
+    "crossPageComparison": "assets/rurubu-v30/p04/production/phase-a-header-calibration/qa/cross-page-comparison.png",
+    "comparisonReasons": [
+      "Hot pink, vivid blue, yellow, green and cyan match the live V30 saturation family.",
+      "Dark navy outlines plus white/yellow keylines match the P01-P03 high-saliency display grammar.",
+      "Controlled depth and crisp sticker silhouette remain clean at A5 placement size.",
+      "Tropical art is a glossy editorial cutout cluster rather than watercolor, vintage or generic clipart.",
+      "The title, ribbon, airplane/heart route and stamp read as one P04-specific ecology without copying another page layout."
+    ]
+  },
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "targetFrameId": "3535:13",
+    "nodeId": "3831:20",
+    "imageHash": "a2808765642b9333e2bcf7b7aa0874ddf4ca4568",
+    "placement": {"x": 12, "y": 10, "width": 535, "height": 213.32},
+    "protectedFramesUntouched": ["3535:7", "3535:9", "3535:11", "3535:15", "3535:17", "3535:19", "3535:21"]
+  },
+  "drive": {
+    "sourceFileId": "17OON1fAiOOcyimF_VwXcZpizjrwBkIty",
+    "productionRgbaFileId": "1d6WDJgCTH31nMGnsvfM5tMzwbmUsI5O4",
+    "qaFolderId": "1oQFMk9FrDTvF7z3HgMMSWZWkyxvrwTKa",
+    "qaCompositeFileId": "1kjq69oeGl3zw0fXekkMe0yGtVX_Ej4yk",
+    "crossPageComparisonFileId": "1PCk98YHTN8GfjlRsZWEZtPfiCODN1Rs8"
+  },
+  "phaseB": "NOT_OPENED_REQUIRES_LATER_OWNER_INSTRUCTION"
+}

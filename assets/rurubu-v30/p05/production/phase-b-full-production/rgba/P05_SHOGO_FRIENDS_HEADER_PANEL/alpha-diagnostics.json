@@ -1,0 +1,62 @@
+{
+  "asset_id": "P05_SHOGO_FRIENDS_HEADER_PANEL",
+  "input": "assets/rurubu-v30/p05/production/phase-b-full-production/generated-source/P05_SHOGO_FRIENDS_HEADER_PANEL_SOURCE_GENERATED.png",
+  "input_sha256": "97fe1ab967d92fef804ac5097afd46a27b16057a8c376d8544a8731671a4719e",
+  "normalized_flat_matte": "assets/rurubu-v30/p05/production/phase-b-full-production/rgba/P05_SHOGO_FRIENDS_HEADER_PANEL/P05_SHOGO_FRIENDS_HEADER_PANEL_SOURCE_MATTE.png",
+  "normalized_flat_matte_sha256": "a593f5b2a604731954afcad2a6b3f75a0e199dae34ec56ce4952cbfa008fa357",
+  "matte_nominal_hex": "#6C00A8",
+  "normalization": {
+    "method": "violet-only cubic field fit, edge-aware foreground recovery, exact flat matte recomposite",
+    "generated_field_fit": {
+      "violet_pixels": 749090,
+      "fit_residual_p50": 1.62,
+      "fit_residual_p95": 6.009,
+      "fit_residual_p99": 25.922
+    },
+    "first_distance_low": 28.922,
+    "first_distance_high": 105.0
+  },
+  "production_extraction": {
+    "input": "normalized exact flat matte",
+    "distance_low": 7.0,
+    "distance_high": 105.0,
+    "edge_rgb_treatment": "inverse flat-matte compositing plus narrow violet-spill suppression on partial-alpha pixels",
+    "violet_spill_pixels_suppressed": 754095,
+    "violet_partial_pixels_removed": 753791,
+    "opaque_violet_shadow_pixels_recolored_navy": 350,
+    "final_violet_edge_pixels_removed": 753902,
+    "final_violet_opaque_pixels_recolored_navy": 356,
+    "crop_box": [
+      32,
+      4,
+      2142,
+      690
+    ]
+  },
+  "output": "assets/rurubu-v30/p05/production/phase-b-full-production/rgba/P05_SHOGO_FRIENDS_HEADER_PANEL/P05_SHOGO_FRIENDS_HEADER_PANEL.png",
+  "output_sha256": "75470b40c1ca4d124357ecfc8cd7a8a9c68c5d144b630d9f22e33f298aed464c",
+  "output_mode": "RGBA",
+  "output_dimensions": [
+    2110,
+    686
+  ],
+  "alpha": {
+    "min": 0,
+    "max": 255,
+    "unique_count": 252,
+    "transparent_pixels": 628834,
+    "partial_pixels": 6559,
+    "opaque_pixels": 812067,
+    "opaque_or_near_opaque_pixels": 813814,
+    "corner_values": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "qa": {
+    "light_gray_dark_contact": "assets/rurubu-v30/p05/production/phase-b-full-production/rgba/P05_SHOGO_FRIENDS_HEADER_PANEL/qa/composite-contact-sheet.jpg",
+    "alpha_mask": "assets/rurubu-v30/p05/production/phase-b-full-production/rgba/P05_SHOGO_FRIENDS_HEADER_PANEL/qa/alpha-mask.png"
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P06",
+  "phase": "OWNER_VM_MODULE_REBUILD",
+  "date": "2026-09-08",
+  "status": "SOURCE_MODULE_MAP_PREPARED / FIGMA_BINARY_TRANSFER_PENDING",
+  "canonicalOwnerSource": {
+    "name": "P06_OWNER_VISUAL_MASTER_HQ_UNCOMPRESSED_20260906.png",
+    "dimensions": [1055, 1491],
+    "format": "PNG",
+    "bytes": 3682318,
+    "sha256": "13bed2e07d66803d67cd6a117a57bc67dbdd9677b9ba54f4b9dd634910747103"
+  },
+  "preparationRule": "All source crops are original-pixel PNG crops from the canonical owner source. No resize, downsample, JPEG conversion or lossy recompression is allowed. Source-crop SHA values below are runtime evidence for deterministic regeneration; they are not claims that the binary files are already committed to Git.",
+  "representativeFirst": "P06_HEADER_ECOLOGY",
+  "modules": [
+    {
+      "id": "P06_HEADER_ECOLOGY",
+      "sourceBox": [0, 0, 1055, 340],
+      "sourceCropDimensions": [1055, 340],
+      "runtimeSourceCropBytes": 709592,
+      "runtimeSourceCropSha256": "46073efaab39c12a86c4f3434eae693d045ae643cd1fe53276098ac1db374e11",
+      "state": "SOURCE_CROP_REPRODUCIBLE / ART_AND_ALPHA_QA_PENDING",
+      "expectedBinaryPath": "assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_HEADER_ECOLOGY_OWNER_VM_SOURCE.png"
+    },
+    {
+      "id": "P06_Q5_EDITORIAL_ECOLOGY",
+      "sourceBox": [595, 285, 1055, 820],
+      "sourceCropDimensions": [460, 535],
+      "runtimeSourceCropBytes": 440088,
+      "runtimeSourceCropSha256": "34b33fa938c0fb3f4e38616c0f6133b82f3f5842b3261013374fa2e8799c21df",
+      "state": "SOURCE_CROP_REPRODUCIBLE / ART_AND_ALPHA_QA_PENDING",
+      "expectedBinaryPath": "assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_Q5_EDITORIAL_ECOLOGY_OWNER_VM_SOURCE.png"
+    },
+    {
+      "id": "P06_MAIN_CAPTION_ECOLOGY",
+      "sourceBox": [20, 665, 380, 825],
+      "sourceCropDimensions": [360, 160],
+      "runtimeSourceCropBytes": 108810,
+      "runtimeSourceCropSha256": "2fb20452d83222174ebfc70b302d5210c62388fbbed0b44fc223aa7068fb5901",
+      "state": "SOURCE_CROP_REPRODUCIBLE / ART_AND_ALPHA_QA_PENDING",
+      "expectedBinaryPath": "assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_MAIN_CAPTION_ECOLOGY_OWNER_VM_SOURCE.png"
+    },
+    {
+      "id": "P06_FOOD_CAPTION_ECOLOGY",
+      "sourceBox": [20, 1020, 395, 1185],
+      "sourceCropDimensions": [375, 165],
+      "runtimeSourceCropBytes": 129326,
+      "runtimeSourceCropSha256": "f1ed0872b22af16166f76e09a1d0cc622f49a6a95db77fdcabef958adb0c010d",
+      "state": "SOURCE_CROP_REPRODUCIBLE / ART_AND_ALPHA_QA_PENDING",
+      "expectedBinaryPath": "assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_FOOD_CAPTION_ECOLOGY_OWNER_VM_SOURCE.png"
+    },
+    {
+      "id": "P06_PETS_CAPTION_ECOLOGY",
+      "sourceBox": [370, 1015, 730, 1185],
+      "sourceCropDimensions": [360, 170],
+      "runtimeSourceCropBytes": 127641,
+      "runtimeSourceCropSha256": "65b0a7a0fca5b62de2c3a0cf7dd852475eef2bb08481b5cf65e1bec6567c75d9",
+      "state": "SOURCE_CROP_REPRODUCIBLE / ART_AND_ALPHA_QA_PENDING",
+      "expectedBinaryPath": "assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_PETS_CAPTION_ECOLOGY_OWNER_VM_SOURCE.png"
+    },
+    {
+      "id": "P06_TRAVEL_CAPTION_ECOLOGY",
+      "sourceBox": [680, 1015, 1055, 1195],
+      "sourceCropDimensions": [375, 180],
+      "runtimeSourceCropBytes": 132466,
+      "runtimeSourceCropSha256": "228bc577cf71010a1a491824bcb3c57530d1d82a9d38653c8cdc735371db1ce3",
+      "state": "SOURCE_CROP_REPRODUCIBLE / ART_AND_ALPHA_QA_PENDING",
+      "expectedBinaryPath": "assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_TRAVEL_CAPTION_ECOLOGY_OWNER_VM_SOURCE.png"
+    },
+    {
+      "id": "P06_Q6_BOTTOM_ECOLOGY",
+      "sourceBox": [0, 1130, 1055, 1491],
+      "sourceCropDimensions": [1055, 361],
+      "runtimeSourceCropBytes": 744767,
+      "runtimeSourceCropSha256": "23b1b91c6c1c109ab9392b537f5615d50658ee3849e26c2a52159166fcd786a9",
+      "state": "SOURCE_CROP_REPRODUCIBLE / ART_AND_ALPHA_QA_PENDING",
+      "expectedBinaryPath": "assets/rurubu-v30/p06/production/rebuild-20260908/modules/P06_Q6_BOTTOM_ECOLOGY_OWNER_VM_SOURCE.png"
+    }
+  ],
+  "keepSeparate": {
+    "replaceablePhotos": ["4000:52", "4000:55", "4000:58", "4000:61"],
+    "sharedPageBadge": "4000:44"
+  },
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "frameId": "3535:17",
+    "currentFrameName": "V30 P06 / VM LOCKED / MODULE REBUILD IN PROGRESS",
+    "hqTransferStagingNode": "4249:56",
+    "hqTransferStagingVisible": false,
+    "binaryTransfer": "BLOCKED_CURRENT_RUNTIME"
+  },
+  "qualityGates": {
+    "lossyRecompression": "FORBIDDEN",
+    "sourcePlacementScaleMax": 0.70,
+    "representativeHeaderCrossPageComparison": "PENDING",
+    "alphaMaterialQa": "PENDING",
+    "liveFigmaReadback": "PENDING_MODULE_UPLOAD",
+    "FIGMA_DESIGN_COMPLETE": false,
+    "PRINT_READY": false
+  }
+}

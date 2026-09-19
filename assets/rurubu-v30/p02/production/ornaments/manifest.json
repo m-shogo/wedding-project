@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "project": "Rurubu WEDDING V30",
+  "page": "P02",
+  "date": "2026-09-03",
+  "status": "ORNAMENT_ART_DIRECTION_PATCH_COMPLETE",
+  "strategy": "CALIBRATE_THEN_CONTEXTUAL_VARIANTS",
+  "calibration": {
+    "lockedTreatment": "Medium-thick imperfect navy contour, simplified bright gouache blocks, restrained risograph/print scuff, warm-white sticker keyline, light-to-medium editorial weight.",
+    "anchors": [
+      {"family": "TRAVEL_VEHICLE + TRAVEL_ROUTE_DOODLE", "path": "assets/rurubu-v30/p02/production/ornaments/calibration/V30_P02_TRAVEL_VEHICLE_CALIBRATION_ANCHOR.png", "sha256": "2ade819cd34bbe30dad20bfd335fc920f8a993c80b04e7993e7f821c13139af4"},
+      {"family": "TROPICAL_BOTANICAL", "path": "assets/rurubu-v30/p02/production/ornaments/calibration/V30_P02_TROPICAL_BOTANICAL_CALIBRATION_ANCHOR.png", "sha256": "2172eda174e7505e27662e7a37a1b5b3e70839a07556b0d47adcecc58a6ca018"}
+    ]
+  },
+  "finalAssets": [
+    {"role": "P02_TOP_AIRPLANE_ROUTE", "path": "assets/rurubu-v30/p02/production/ornaments/final/V30_P02_TOP_AIRPLANE_ROUTE.png", "sha256": "909661441f0d0da445be47cfa8bcd58073bce6c2943c948144f36eb8b47f3779", "figmaNodeId": "3753:128", "figmaImageHash": "5cf0da976925e4ef25c53d629d9f99e723a1e7b2"},
+    {"role": "P02_Q2_PLANE_AND_ROUTE", "path": "assets/rurubu-v30/p02/production/ornaments/final/V30_P02_Q2_PLANE_AND_ROUTE.png", "sha256": "fb96c6a673f7f62ca79be731202483e33331fab35fb0d206f958a8daf82efb34", "figmaNodeId": "3753:135", "figmaImageHash": "e3098ee5fc3a410487bff12cb150433c870b5abc"},
+    {"role": "P02_Q2_SUITCASE", "path": "assets/rurubu-v30/p02/production/ornaments/final/V30_P02_Q2_SUITCASE.png", "sha256": "52a2d6460a3dcc797a95243848bf9adfe81c0bb4c6e6a401d64a1a18649d2bfe", "figmaNodeId": "3753:138", "figmaImageHash": "68d10f73e70d18e7d154c9ea701903a8966dec90"},
+    {"role": "P02_TOP_LEFT_TROPICAL_CLUSTER", "path": "assets/rurubu-v30/p02/production/ornaments/final/V30_P02_TOP_LEFT_TROPICAL_CLUSTER.png", "sha256": "c37cb23ec5cb24a6fa7eb3755adbc6f4450c0e68ace7a503f5de893231418819", "figmaNodeId": "3753:111", "figmaImageHash": "8051c66bf16e5461e3131b6f37903fb0a40f75ce"},
+    {"role": "P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER", "path": "assets/rurubu-v30/p02/production/ornaments/final/V30_P02_TOP_RIGHT_TRAVEL_TROPICAL_CLUSTER.png", "sha256": "39e7d8428b88ad0aba7b7f8897f76bb3263e8dfe42ce9865772d51bcc1a4b1a3", "figmaNodeId": "3753:112", "figmaImageHash": "83d296ed7f46d7fae993298ab9506de42fb335cd"}
+  ],
+  "alpha": {
+    "directAlphaAttempt": "GENERATION_ALPHA_FAIL",
+    "fallback": "ONE_SAFE_VIOLET_MATTE_EXTRACTION",
+    "lightBackgroundComposite": "PASS",
+    "darkBackgroundComposite": "PASS",
+    "thinRoutePreserved": true,
+    "lightArtworkPreserved": true,
+    "TRUE_ALPHA_PREFLIGHT_PASS": "PASS"
+  },
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "frame": "3535:9",
+    "childCount": 76,
+    "supersededInternalNodesRemoved": ["3753:129", "3753:130", "3753:136", "3753:137", "3753:139", "3753:140", "3753:141", "3753:142"]
+  },
+  "qa": {
+    "firstFullScreenshotSha256": "93317041c31e01e80b69b3bc3eb1ba876d8b488845bffa67ed8a3a8dc2b55e50",
+    "finalScreenshotSha256": "93317041c31e01e80b69b3bc3eb1ba876d8b488845bffa67ed8a3a8dc2b55e50",
+    "visibleDefectsAfterFirstScreenshot": 0,
+    "acceptedStructurePreserved": true,
+    "p01AndP03ToP08Untouched": true,
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "PRINT_READY": false
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 3,
+  "project": "Rurubu WEDDING V30",
+  "page": "P03",
+  "date": "2026-09-03",
+  "status": "DESIGN_LOCKED_TIMELINE_VIOLET_REMOVED_OTHER_EDGE_ALPHA_SWAPS_PENDING",
+  "figma": {
+    "fileKey": "bfM0d4c9dCeBv5pCkJ3TNM",
+    "page": "V30_FINAL_PRODUCTION",
+    "frameId": "3535:11",
+    "frameName": "V30 P03 / OUR STORY / V30 STYLE REALIGNMENT LOCKED"
+  },
+  "calibration": {
+    "representativeEcology": "calibration/V30_P03_HEADER_ECOLOGY_CALIBRATION.png",
+    "liveComparison": "qa/V30_P03_HEADER_STYLE_CALIBRATION_COMPARISON.jpg",
+    "result": "CROSS_PAGE_STYLE_FAMILY_PASS"
+  },
+  "acceptedAssets": [
+    {
+      "role": "HEADER_ECOLOGY",
+      "path": "final/V30_P03_HEADER_ECOLOGY_V30_ALIGNED.png",
+      "figmaNode": "3793:20",
+      "imageHash": "bf12ac7d4fcc31ef94fe9d5d5fa4f8a197e532d8",
+      "sha256": "b2e1994bbca1f8cce4c346bc808a98916c8db6221da920bf150e9104298ac20e"
+    },
+    {
+      "role": "Q3_EDITORIAL_FAMILY",
+      "path": "final/V30_P03_Q3_EDITORIAL_FAMILY_V30_ALIGNED.png",
+      "figmaNode": "3794:21",
+      "imageHash": "ebc227edc224e6e7ee5a8d10a89a38b58bb3d766",
+      "sha256": "6e71af1c1e2c68eee20da16c20ecc7decb6263d1fcdd78dc8b43526186b2c6d1"
+    },
+    {
+      "role": "Q4_EDITORIAL_FAMILY",
+      "path": "final/V30_P03_Q4_EDITORIAL_FAMILY_V30_ALIGNED.png",
+      "figmaNode": "3794:20",
+      "imageHash": "77bb6a1f40c5029ab0d10872d472c0ffad580cbb",
+      "sha256": "4fe7bccaba03c351fec7d213d6b3f838cfa991a88b787e1ee4882d35e55f40be"
+    },
+    {
+      "role": "STORY_TIMELINE_ECOLOGY_V2",
+      "path": "final/V30_P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED_V2.png",
+      "figmaNode": "3797:20",
+      "imageHash": "2a39d3633049098680ecdcb7494e4049e8309fad",
+      "sha256": "f08bea13c26cfbae5210157226267168fea9e5b8cfde50650e7cb28c77bed744",
+      "alphaMode": "TRUE_ALPHA / OUTER_AND_ENCLOSED_VIOLET_REMOVED / VIOLET_FRINGE_REMOVED / BORDER_NONZERO_0"
+    },
+    {
+      "role": "BOTTOM_CLOSURE",
+      "path": "final/V30_P03_BOTTOM_CLOSURE_V30_ALIGNED.png",
+      "figmaNode": "3794:22",
+      "imageHash": "6329d981fcbf4b1d9d95db4e66b70fdefc8225ae",
+      "sha256": "0c161539d7df38e7bdbc4033d27c9773fd41675a07747fe81cc95c9876dc1866"
+    }
+  ],
+  "edgeAlphaCorrection": {
+    "diagnosis": "All five accepted grouped PNGs had real outside transparency and opaque interiors, but their alpha channels were binary {0,255} only. This is true alpha with weak edge antialiasing, not a design failure.",
+    "designReopen": false,
+    "rgbArtworkPreserved": true,
+    "method": "edge-only alpha refinement at original source resolution; nearest opaque RGB extended into newly partial edge pixels to reduce matte/fringe contamination; no interior blur or redesign",
+    "sourceAlphaState": {
+      "HEADER_ECOLOGY": {"uniqueAlphaValues": 2},
+      "Q3_EDITORIAL_FAMILY": {"uniqueAlphaValues": 2},
+      "Q4_EDITORIAL_FAMILY": {"uniqueAlphaValues": 2},
+      "STORY_TIMELINE_ECOLOGY_V2": {"uniqueAlphaValues": 2},
+      "BOTTOM_CLOSURE": {"uniqueAlphaValues": 2}
+    },
+    "preparedAssets": [
+      {
+        "role": "HEADER_ECOLOGY",
+        "driveFileId": "1m61wsQCUGWP4kMKLj-aEeidp5SYLmtRB",
+        "fileName": "V30_P03_HEADER_ECOLOGY_V30_ALIGNED_EDGEAA.png",
+        "sha256": "05f100778bd28b9e31bdcd76ac8b392dcb1e29cf4b930b311b2c67818b342737",
+        "uniqueAlphaValues": 24,
+        "partialAlphaPixels": 17962,
+        "targetFigmaNode": "3793:20"
+      },
+      {
+        "role": "Q3_EDITORIAL_FAMILY",
+        "driveFileId": "14VLtZzigJBoTqjepgezmIxEzgpQF0Coj",
+        "fileName": "V30_P03_Q3_EDITORIAL_FAMILY_V30_ALIGNED_EDGEAA.png",
+        "sha256": "516a8b42246c4c479c3d654fefa44c7e9b9f4ad2897eac40437231d9231107cb",
+        "uniqueAlphaValues": 37,
+        "partialAlphaPixels": 6062,
+        "targetFigmaNode": "3794:21"
+      },
+      {
+        "role": "Q4_EDITORIAL_FAMILY",
+        "driveFileId": "1T9zvRgWY8GBlmrA4_zgimXkT6XCFyPTr",
+        "fileName": "V30_P03_Q4_EDITORIAL_FAMILY_V30_ALIGNED_EDGEAA.png",
+        "sha256": "d66b6ed62940081be9d25726594d60ed7458f8daf8035e9460e568bba3e4b800",
+        "uniqueAlphaValues": 42,
+        "partialAlphaPixels": 7063,
+        "targetFigmaNode": "3794:20"
+      },
+      {
+        "role": "STORY_TIMELINE_ECOLOGY_V2",
+        "driveFileId": "1rItZVU-AvtGMkIPpCQUTEIqm14aRyjIF",
+        "fileName": "V30_P03_STORY_TIMELINE_ECOLOGY_V30_ALIGNED_V2_EDGEAA.png",
+        "sha256": "c387379dca6f2f75da7630ea41f49c398c4c52484d4b0caafada4c273799798c",
+        "uniqueAlphaValues": 31,
+        "partialAlphaPixels": 20075,
+        "targetFigmaNode": "3797:20"
+      },
+      {
+        "role": "BOTTOM_CLOSURE",
+        "driveFileId": "1KEe5YeVHNu5v0sztqxhKbnwcM3ltiEok",
+        "fileName": "V30_P03_BOTTOM_CLOSURE_V30_ALIGNED_EDGEAA.png",
+        "sha256": "87800844a38f059c2dbe0f63fc19554757b46f3bfd2facdcc7943eec762f0312",
+        "uniqueAlphaValues": 38,
+        "partialAlphaPixels": 13847,
+        "targetFigmaNode": "3794:22"
+      }
+    ],
+    "timelineVioletCorrection": {
+      "status": "APPLIED_TO_FIGMA_AND_LIVE_QA_PASS",
+      "targetFigmaNode": "3797:20",
+      "imageHash": "2a39d3633049098680ecdcb7494e4049e8309fad",
+      "sha256": "f08bea13c26cfbae5210157226267168fea9e5b8cfde50650e7cb28c77bed744",
+      "transparentPixels": 494405,
+      "opaquePixels": 432301,
+      "borderNonzeroPixels": 0,
+      "note": "Removed the edge-connected matte plus six enclosed violet background islands and adjacent violet fringe without changing the approved artwork or geometry. The previously prepared timeline EDGEAA candidate is not approved for swap unless regenerated from this violet-free source."
+    },
+    "EDGE_ALPHA_QUALITY_PASS": "TIMELINE_VIOLET_PASS / OTHER_EDGEAA_FIGMA_SWAPS_PENDING",
+    "figmaSwapStatus": "TIMELINE_APPLIED / OTHER_ACCEPTED_GROUPED_ASSETS_PENDING",
+    "finalQaRequired": [
+      "light background",
+      "mid-gray background",
+      "dark background",
+      "actual P03 A5/full-page view"
+    ],
+    "systemicAuthority": "docs/rurubu-v30/TRUE-ALPHA-ASSET-GENERATION-POLICY.md"
+  },
+  "qa": {
+    "finalScreenshot": "qa/V30_P03_V30_REALIGNMENT_FINAL.png",
+    "crossPageComparison": "qa/V30_P01_P02_P03_FINAL_STYLE_COMPARISON.png",
+    "referenceDelta": "qa/V30_P03_VISUAL_MASTER_REFERENCE_DELTA.png",
+    "a5Review": "qa/V30_P03_A5_REVIEW.png",
+    "grayscaleReview": "qa/V30_P03_GRAYSCALE_REVIEW.png",
+    "alphaLight": "qa/V30_P03_V30_ALIGNED_ALPHA_LIGHT_QA.jpg",
+    "alphaDark": "qa/V30_P03_V30_ALIGNED_ALPHA_DARK_QA.jpg",
+    "timelineTrueAlpha": "qa/V30_P03_STORY_TIMELINE_TRUE_ALPHA_QA.png",
+    "CROSS_PAGE_STYLE_FAMILY_PASS": true,
+    "ECOLOGY_FIT_PASS": true,
+    "ANTI_FLOWCHART_PASS": true,
+    "ANTI_CANVA_SVG_PASS": true,
+    "ANTI_CLIPART_PASS": true,
+    "ORNAMENT_FAMILY_PASS": true,
+    "REFERENCE_DELTA_PASS": true,
+    "PHOTO_ROLE_PASS": true,
+    "COPY_SAFETY_PASS": true,
+    "ALPHA_INTEGRITY_PASS": "TIMELINE_VIOLET_MATTE_PASS / OTHER_ASSETS_UNCHANGED",
+    "TIMELINE_VIOLET_MATTE_PASS": true,
+    "EDGE_ALPHA_QUALITY_PASS": "TIMELINE_VIOLET_PASS / OTHER_EDGEAA_FIGMA_SWAPS_PENDING",
+    "FINGERPRINT_COLLISION_PASS": true,
+    "hiddenObsoleteNodeCount": 0,
+    "duplicateSameJobCount": 0
+  },
+  "preserved": {
+    "photoRoles": 5,
+    "supportPhotosReplaceable": 4,
+    "step5HasPhoto": false,
+    "pendingCopyIsNativeText": true,
+    "pageBadgeInstance": "3782:16",
+    "pageBadgeMaster": "3772:2",
+    "protectedPagesUntouched": ["3535:7", "3535:9", "3535:13", "3535:15", "3535:17", "3535:19", "3535:21"]
+  },
+  "removedLiveNodes": ["3786:20", "3786:21", "3786:22", "3786:23", "3779:20", "3780:14", "3780:15", "3780:17", "3780:19", "3780:21", "3780:23", "3780:25", "3780:26", "3780:27", "3782:14", "3794:23"],
+  "completion": {
+    "FIGMA_DESIGN_COMPLETE": true,
+    "FINAL_COPY_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": true,
+    "FINAL_ASSET_ALPHA_QA_PENDING": true,
+    "PRINT_READY": false
+  }
+}

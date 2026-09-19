@@ -1,0 +1,62 @@
+{
+  "asset_id": "P04_TRAVEL_ROUTE_CONNECTOR",
+  "input": "assets/rurubu-v30/p04/production/phase-b-full-production/sources/raw-generated/P04_TRAVEL_ROUTE_CONNECTOR_RAW.png",
+  "input_sha256": "bf1243bb6810035a025ef4ee1612ba96c5d478f068889ed4859b275fb1204588",
+  "normalized_flat_matte": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_TRAVEL_ROUTE_CONNECTOR/P04_TRAVEL_ROUTE_CONNECTOR_SOURCE_MATTE.png",
+  "normalized_flat_matte_sha256": "398349c90fb235b1c1cf752cc213548774ffa50927ecfb8ba124d678ff584873",
+  "matte_nominal_hex": "#6C00A8",
+  "normalization": {
+    "method": "violet-only cubic field fit, edge-aware foreground recovery, exact flat matte recomposite",
+    "generated_field_fit": {
+      "violet_pixels": 1395548,
+      "fit_residual_p50": 2.654,
+      "fit_residual_p95": 7.586,
+      "fit_residual_p99": 66.895
+    },
+    "first_distance_low": 69.895,
+    "first_distance_high": 105.0
+  },
+  "production_extraction": {
+    "input": "normalized exact flat matte",
+    "distance_low": 7.0,
+    "distance_high": 105.0,
+    "edge_rgb_treatment": "inverse flat-matte compositing plus narrow violet-spill suppression on partial-alpha pixels",
+    "violet_spill_pixels_suppressed": 1396580,
+    "violet_partial_pixels_removed": 1396554,
+    "opaque_violet_shadow_pixels_recolored_navy": 35,
+    "final_violet_edge_pixels_removed": 1396606,
+    "final_violet_opaque_pixels_recolored_navy": 10,
+    "crop_box": [
+      59,
+      235,
+      1664,
+      634
+    ]
+  },
+  "output": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_TRAVEL_ROUTE_CONNECTOR/P04_TRAVEL_ROUTE_CONNECTOR.png",
+  "output_sha256": "e3bed00efa2e33733be3d411ea3b4448c7dfb88cf3882648d31e1e050c1aaf9c",
+  "output_mode": "RGBA",
+  "output_dimensions": [
+    1605,
+    399
+  ],
+  "alpha": {
+    "min": 0,
+    "max": 255,
+    "unique_count": 252,
+    "transparent_pixels": 463313,
+    "partial_pixels": 6148,
+    "opaque_pixels": 170934,
+    "opaque_or_near_opaque_pixels": 171546,
+    "corner_values": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "qa": {
+    "light_gray_dark_contact": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_TRAVEL_ROUTE_CONNECTOR/qa/composite-contact-sheet.jpg",
+    "alpha_mask": "assets/rurubu-v30/p04/production/phase-b-full-production/assets/P04_TRAVEL_ROUTE_CONNECTOR/qa/alpha-mask.png"
+  }
+}
