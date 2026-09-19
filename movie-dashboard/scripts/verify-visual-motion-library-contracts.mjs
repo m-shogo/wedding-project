@@ -42,9 +42,6 @@ requireAll(handoff, [
   'schemaVersion: "motion-handoff/v1"', 'expectedFormat: "NLE_XML"', 'xmlGeneratedExternally: true',
   'companionFileName: `palmier-${patternId}-timeline.xml`', 'markerIdFor', '`VML_${slug}_${section}`',
   'buildMaskRevealExecutionOutputs', 'nleXmlHandoff', 'verificationChecklist',
-  // patternId/implementationId are now taken from MaskRevealPromptInput (any registered
-  // PRODUCTION_READY pattern, not only type-mask-reveal) so this checks the fallback default
-  // used when a caller omits them, not a hardcoded literal in the manifest itself.
   'implementationId ?? "impl-type-mask-reveal-davinci-text-plus"', '"opened-in-davinci"', '"render-tested"',
   '"visual-QA"', '"resolve-version-recorded"', 'canonicalTarget: "ACTUAL_DAVINCI_RENDER"', 'productionReady: false',
   'schemaVersion: "motion-verification/v1"', 'sampleAssetSetId: "sample-generic-hero-photo-v1"',
@@ -136,7 +133,7 @@ requireAll(page, [
   'COMPLETION / HONEST GATES', 'Native App Actual', 'Implementation TESTED', '外部確認待ち',
   'completion.remaining.join(" / ")', 'Pexels列車窓2本の同方向camera motionでTESTED',
   'MotionActualVerificationWorkspace onShowPattern={showPattern}',
-  'aria-label="実装状態で絞り込み"', 'EXTERNAL_GATE',
+  'aria-label="演出を絞り込み"', '制作・検証情報を見る（必要なときだけ）', 'EXTERNAL_GATE',
   'Previewの検証とImplementationの検証は別判定',
   '永続representative previewを表示中。見た目の説明用で、Implementation検証証拠ではありません。',
   '期限付きartifactで検証済み。永続MP4がないため、この画面では静止placeholderのまま。',
