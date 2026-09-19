@@ -257,3 +257,17 @@ Mixkit公式サイトマップの未登録候補は412件残っていたが、�
 `startHumanReview.ts`の`readHumanReviewDecisions` / `writeHumanReviewDecisions`に`storageKey`引数を追加し、Director Recipe Catalogと同じ実装を再利用した（新規実装を増やさない）。
 
 次にやること: 606件から実際にStaRt Extendedの14 sectionへ使う候補をFavoriteへ絞り込み、`startSectionRecipeMap.ts`側の実装検討へつなげる。
+
+## 2026-09-19 update — StaRtのどこに合うかを見て分かるようにする（AI提案）
+
+Favorite/Maybe/Rejectだけでは「合いそうか」が分からず選びにくいという声を受け、各実例が**StaRt Extended 14 sectionのどこに合いそうか**をタグから機械的に提案する層を追加した（`movie-dashboard/src/data/startExternalMotionFit.ts`）。
+
+- 既存の`startExtendedRhythmMap.ts`（14 section・`weddingDirection`・`energy`等）をそのまま参照し、新しいsection定義は作らない
+- タグ→section対応表（例: `3点バースト候補`→1サビ/2サビの3-hit区間、`ウェディング`→ラスト・2サビ頭・冒頭、`旅行`→イントロ・1番/2番、`インク`/`トランジション`→間奏）で機械判定
+- 歌詞本文は一切参照・保存しない（Gitへ歌詞本文を入れないルールに従い、`weddingDirection`という人間向けの短い意味づけだけを使う）
+- カードに♪バッジ、詳細モーダルに「♪ StaRtのここに合いそう（AI提案・タグからの機械判定。人間の最終決定ではない）」という明記付きで表示
+- 検索バーに「♪ StaRtのどこに合う？」の14 section絞り込み（件数付き）を追加
+
+ファイル名は最初`externalMotionAtlasStartFit.ts`にしていたが、`verify-external-motion-atlas-contracts.mjs`の`externalMotionAtlas*.ts`グロブに誤って一致し、コンタクトチェックが`startExtendedRhythmMap`を解決できず落ちた。`startExternalMotionFit.ts`へ改名して解消した。
+
+この機能はAI_SUGGESTEDであり、Favorite/Maybe/Rejectという人間の最終決定とは別物。`startSectionRecipeMap.ts`側の正式なsection⇄recipe割当も置き換えない。

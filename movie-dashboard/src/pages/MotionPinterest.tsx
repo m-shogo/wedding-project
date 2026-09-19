@@ -12,6 +12,12 @@ import {
   writeHumanReviewDecisions,
   type HumanReviewDecision,
 } from "../data/startHumanReview";
+import {
+  startSectionShortLabel,
+  startSectionWeddingDirection,
+  suggestStartSections,
+  type StartExtendedSectionId,
+} from "../data/startExternalMotionFit";
 
 type ReviewFilter = HumanReviewDecision | "unreviewed" | "ALL";
 
@@ -110,6 +116,25 @@ const previewPriority: Record<ResolvedPreview["kind"], number> = {
 
 // よく使う絞り込み。タグ・説明文への部分一致検索なので、データ側のタグ名と揃える。
 const quickQueries = ["StaRt向き", "3点バースト候補", "ウェディング", "旅行", "写真の見せ方", "DaVinci Resolveテンプレ", "地名ラベル", "マッチカット", "シネマグラフ", "筆記体", "プリズム", "インク", "トランジション"];
+
+type SectionFilter = "ALL" | StartExtendedSectionId;
+const sectionFilterOptions: Array<[SectionFilter, string]> = [
+  ["ALL", "全部"],
+  ["opening-pickup", "冒頭"],
+  ["intro", "イントロ"],
+  ["verse-1-a", "1番A"],
+  ["verse-1-b", "1番B"],
+  ["chorus-1-a", "1サビ頭"],
+  ["chorus-1-b", "1サビ・3点バースト"],
+  ["interlude-1", "間奏1"],
+  ["verse-2-a", "2番A"],
+  ["verse-2-b", "2番B"],
+  ["chorus-2-a", "2サビ頭"],
+  ["chorus-2-b", "2サビ・3点バースト"],
+  ["post-chorus-interlude-a", "間奏2A"],
+  ["post-chorus-interlude-b", "間奏2B・上昇"],
+  ["end-before-c-section", "ラスト"],
+];
 
 const mediaPriority: Record<ExternalMotionMediaType, number> = {
   GIF: 0,
@@ -331,6 +356,7 @@ function AtlasCard({
   const [hovered, setHovered] = useState(false);
   const inCenterBand = useInCenterBand(previewRef, autoplayOnScroll);
   const active = hoverCapable ? hovered : inCenterBand;
+  const startSections = useMemo(() => suggestStartSections(item), [item]);
 
   return (
     <article className="min-w-0 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-sand-200 dark:bg-navy-800 dark:ring-navy-700">
@@ -375,6 +401,15 @@ function AtlasCard({
           <p className="mt-1 line-clamp-1 text-[9px] text-navy-400">{item.titleOriginal}</p>
           <p className="mt-2 hidden text-[10px] leading-4 text-navy-600 dark:text-navy-300 sm:line-clamp-2">{item.descriptionJa}</p>
         </button>
+        {startSections.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {startSections.map((section) => (
+              <span key={section} className="rounded-full bg-pink-50 px-2 py-0.5 text-[9px] font-bold text-pink-700 dark:bg-pink-900/30 dark:text-pink-300">
+                ♪ {startSectionShortLabel[section]}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="mt-2 flex items-center justify-between gap-2 border-t border-sand-100 pt-2 dark:border-navy-700">
           <span className="text-[11px] font-bold text-amber-600 dark:text-amber-300" aria-label={`難易度 ${item.difficulty} / 3`}>
             <span className="mr-1 text-[9px] font-normal text-navy-400">難易度</span>
@@ -427,6 +462,7 @@ export function MotionPinterest() {
   const [movingOnly, setMovingOnly] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("ALL");
+  const [sectionFilter, setSectionFilter] = useState<SectionFilter>("ALL");
   const [decisions, setDecisions] = useState<Record<string, HumanReviewDecision>>(() =>
     readHumanReviewDecisions(EXTERNAL_MOTION_ATLAS_HUMAN_REVIEW_STORAGE_KEY),
   );
@@ -470,6 +506,7 @@ export function MotionPinterest() {
         if (reviewFilter !== "ALL") {
           if (reviewFilter === "unreviewed" ? decisions[item.id] : decisions[item.id] !== reviewFilter) return false;
         }
+        if (sectionFilter !== "ALL" && !suggestStartSections(item).includes(sectionFilter)) return false;
         if (!q) return true;
         return [item.titleJa, item.titleOriginal, item.sourceName, item.descriptionJa, ...item.tags]
           .join(" ")
@@ -481,17 +518,23 @@ export function MotionPinterest() {
           previewPriority[resolvePreview(a).kind] - previewPriority[resolvePreview(b).kind] ||
           mediaPriority[a.mediaType] - mediaPriority[b.mediaType],
       );
-  }, [genre, media, query, movingOnly, reviewFilter, decisions]);
+  }, [genre, media, query, movingOnly, reviewFilter, decisions, sectionFilter]);
 
   const selected = selectedId ? externalMotionAtlas.find((item) => item.id === selectedId) ?? null : null;
-  const isFiltered = genre !== "ALL" || media !== "ALL" || query !== "" || movingOnly || reviewFilter !== "ALL";
+  const isFiltered = genre !== "ALL" || media !== "ALL" || query !== "" || movingOnly || reviewFilter !== "ALL" || sectionFilter !== "ALL";
   const resetFilters = () => {
     setGenre("ALL");
     setMedia("ALL");
     setQuery("");
     setMovingOnly(false);
     setReviewFilter("ALL");
+    setSectionFilter("ALL");
   };
+  const sectionCounts = useMemo(() => {
+    const counts: Partial<Record<StartExtendedSectionId, number>> = {};
+    for (const item of externalMotionAtlas) for (const section of suggestStartSections(item)) counts[section] = (counts[section] ?? 0) + 1;
+    return counts;
+  }, []);
   const decisionCounts = useMemo(() => {
     const counts: Record<HumanReviewDecision, number> = { favorite: 0, maybe: 0, reject: 0 };
     for (const value of Object.values(decisions)) counts[value] += 1;
@@ -593,6 +636,24 @@ export function MotionPinterest() {
             );
           })}
         </div>
+        <div className="mt-1.5 flex items-center gap-2">
+          <span className="shrink-0 text-[10px] font-bold text-pink-700 dark:text-pink-300">♪ StaRtのどこに合う？</span>
+          <select
+            value={sectionFilter}
+            onChange={(event) => setSectionFilter(event.target.value as SectionFilter)}
+            className="rounded-full border border-pink-300 bg-white px-3 py-1.5 text-[10px] font-bold text-pink-700 outline-none dark:border-pink-500/60 dark:bg-navy-900 dark:text-pink-300"
+          >
+            {sectionFilterOptions.map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+                {value !== "ALL" ? ` (${sectionCounts[value] ?? 0})` : ""}
+              </option>
+            ))}
+          </select>
+          {sectionFilter !== "ALL" && (
+            <span className="text-[9px] leading-4 text-navy-400">{startSectionWeddingDirection(sectionFilter)}</span>
+          )}
+        </div>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[10px] text-navy-400">
           <span>
             表示 {filtered.length} / 外部実例 {externalMotionAtlas.length}件 · 一覧で動く {movingCount}件 · 選定済み {Object.keys(decisions).length}件
@@ -657,6 +718,20 @@ export function MotionPinterest() {
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {selected.tags.map((tag) => <span key={tag} className="rounded-full border border-sand-200 px-2 py-1 text-[10px] text-navy-500 dark:border-navy-700 dark:text-navy-300">#{tag}</span>)}
                 </div>
+                {suggestStartSections(selected).length > 0 && (
+                  <div className="mt-4 rounded-xl bg-pink-50 p-3 dark:bg-pink-900/20">
+                    <p className="text-[10px] font-black text-pink-700 dark:text-pink-300">♪ StaRtのここに合いそう（AI提案・タグからの機械判定。人間の最終決定ではない）</p>
+                    <ul className="mt-2 space-y-1.5">
+                      {suggestStartSections(selected).map((section) => (
+                        <li key={section} className="text-[10px] leading-4 text-navy-600 dark:text-navy-300">
+                          <span className="font-black text-pink-700 dark:text-pink-300">{startSectionShortLabel[section]}</span>
+                          {" — "}
+                          {startSectionWeddingDirection(section)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <div className="mt-5 border-t border-sand-200 pt-4 dark:border-navy-700">
                   <p className="text-[10px] font-bold text-navy-500 dark:text-navy-300">この実例をStaRtの候補として選ぶ（このブラウザだけに保存。AIが勝手にfavorite/採用へ昇格させない）</p>
                   <div className="mt-2 flex gap-2">
