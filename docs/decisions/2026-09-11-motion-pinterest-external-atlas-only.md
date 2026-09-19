@@ -243,3 +243,17 @@ Mixkit公式サイトマップの未登録候補は412件残っていたが、�
 結果: 597 → 606件。
 
 以後、Mixkitの残り候補は汎用テロップ・広告系が中心のため、明確な必要性（StaRtの実装で「この場面にこの動きが要る」という具体的な要求）が出るまで、この探索は一区切りとする。
+
+## 2026-09-19 update — 収集から選定への切り替え（Favorite / Maybe / Reject）
+
+606件を集めた段階で、次にやるべきことは件数を増やすことではなく「実際にOpeningで使う演出を選ぶ」ことだと判断した。`docs/prompts/2026-08-25-visual-motion-library-palmier-davinci-complete.md` #68（A/B Comparison: Favorite / Maybe / Reject）と、Director Recipe Catalogに既にある同じ仕組みを踏襲し、映像Pinterestにも人間の選定状態を追加した。
+
+- 各カードに ☆ Favorite / ? Maybe / ✕ Reject の3ボタンを追加（もう一度押すと解除）
+- 詳細モーダルにも同じ3ボタンをフルサイズで表示
+- 選定状態は`localStorage`のこのブラウザだけに保存（`external-motion-atlas-human-decisions-v1`）。Director Recipe Catalogの選定（`start-director-human-decisions-v1`）とはid名前空間が違うため、キーを分離した
+- フィルタ行に「全部 / ☆Favorite / ?Maybe / ✕Reject / 未選定」の件数付きチップを追加し、選んだものだけ絞り込める
+- AIは`favorite`へ勝手に昇格させない。ボタンは常に人間が押す前提
+
+`startHumanReview.ts`の`readHumanReviewDecisions` / `writeHumanReviewDecisions`に`storageKey`引数を追加し、Director Recipe Catalogと同じ実装を再利用した（新規実装を増やさない）。
+
+次にやること: 606件から実際にStaRt Extendedの14 sectionへ使う候補をFavoriteへ絞り込み、`startSectionRecipeMap.ts`側の実装検討へつなげる。
