@@ -3,9 +3,9 @@
   "project": "Rurubu WEDDING V30",
   "page": "P06",
   "role": "REAL LIFE / FAVORITES / BEST SHOTS + Q5/Q6",
-  "status": "VISUAL_MASTER_LOCKED",
-  "productionState": "PART_MAP_APPROVED_REBUILD_FROM_OWNER_VM",
-  "reviewRevision": "2026-09-08_FROM_OWNER_VM_P06_2",
+  "status": "FIGMA_DESIGN_COMPLETE",
+  "productionState": "FULL_PRODUCTION_EDITABLE",
+  "reviewRevision": "2026-09-19_GENERATED_EDITABLE_FULL_BUILD",
   "inherits": "assets/rurubu-v30/manifest.json",
   "visualPolishPolicy": "assets/rurubu-v30/visual-polish-manifest.json",
   "ornamentArtDirectionPolicy": "assets/rurubu-v30/ornament-art-direction-manifest.json",
@@ -190,7 +190,7 @@
   },
   "groupedEcologyPlan": {
     "representativeEcology": "P06_HEADER_ECOLOGY",
-    "productionStrategy": "OWNER_VM_DERIVED_MODULES_FIRST; do not re-generate already owner-approved visual character unless source extraction fails quality QA",
+    "productionStrategy": "CLEAN_STANDALONE_GENERATED_PHOTOS + TRUE_ALPHA_DECOR + NATIVE_EDITABLE_COPY, following the owner-supplied Visual Master composition",
     "keepSeparate": ["four replaceable photos", "shared PAGE 06 badge"],
     "why": "The owner master already contains the correct authored magazine character. Rebuilding it from generic native pieces caused the rejected Phase B/C look."
   },
@@ -214,7 +214,7 @@
     "sharedPageBadgeNodeId": "4000:44",
     "hqFullMasterTargetNodeId": "4249:56",
     "hqFullMasterTargetRole": "comparison/proof only until modular final assembly; do not use as a flattened final page",
-    "currentState": "VM_LOCKED_MODULE_PRODUCTION_PENDING_BINARY_TRANSFER"
+    "currentState": "FULL_PRODUCTION_ASSEMBLED_EDITABLE"
   },
   "hardExecutionRejects": [
     "V31 creation",
@@ -249,10 +249,10 @@
   "completion": {
     "VISUAL_MASTER_LOCKED": true,
     "PART_MAP_APPROVED": true,
-    "FIGMA_DESIGN_COMPLETE": false,
+    "FIGMA_DESIGN_COMPLETE": true,
     "FINAL_COPY_QA_PENDING": false,
-    "FINAL_PHOTO_QA_PENDING": true,
+    "FINAL_PHOTO_QA_PENDING": false,
     "PRINT_READY": false,
-    "currentBlocker": "Exact lossless binary transport of prepared owner-VM modules into Figma is not yet proven in the current connector runtime."
+    "currentBlocker": null
   }
 }
